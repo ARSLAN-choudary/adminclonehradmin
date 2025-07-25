@@ -1,0 +1,675 @@
+<!-- Start Content -->
+<div class="content">
+
+    <!-- Page Header -->
+    <div class="d-flex align-items-center justify-content-between gap-2 mb-4 flex-wrap">
+        <div>
+            <h4 class="mb-1">Settings</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Settings</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="gap-2 d-flex align-items-center flex-wrap">
+            <a href="javascript:void(0);" class="btn btn-icon btn-outline-light shadow" data-bs-toggle="tooltip"
+                data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
+                    class="ti ti-refresh"></i></a>
+            <app-collapse-header></app-collapse-header>
+        </div>
+    </div>
+    <!-- End Page Header -->
+
+    <div class="card border-0">
+        <div class="card-body pb-0 pt-0 px-2">
+            <ul class="nav nav-tabs nav-bordered nav-bordered-primary">
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.profileSettings" class="nav-link p-2 active">
+                        <i class="ti ti-settings-cog me-2"></i>General Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.companySettings" class="nav-link p-2">
+                        <i class="ti ti-world-cog me-2"></i>Website Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.invoiceSettings" class="nav-link p-2">
+                        <i class="ti ti-apps me-2"></i>App Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.emailSettings" class="nav-link p-2">
+                        <i class="ti ti-device-laptop me-2"></i>System Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.paymentGatewaySettings" class="nav-link p-2">
+                        <i class="ti ti-moneybag me-2"></i>Financial Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a [routerLink]="routes.siteMap" class="nav-link p-2">
+                        <i class="ti ti-flag-cog me-2"></i>Other Settings
+                    </a>
+                </li>
+            </ul>
+        </div> <!-- end card body -->
+    </div> <!-- end card -->
+
+    <!-- start row -->
+    <div class="row">
+
+        <div class="col-xl-3 col-lg-12 theiaStickySidebar">
+
+            <div class="card mb-3 mb-xl-0">
+                <div class="card-body">
+                    <div class="settings-sidebar">
+                        <h5 class="mb-3 fs-17">General Settings</h5>
+                        <div class="list-group list-group-flush settings-sidebar">
+                            <a [routerLink]="routes.profileSettings" class="d-block p-2 fw-medium">Profile</a>
+                            <a [routerLink]="routes.securitySettings" class="d-block p-2 fw-medium active">Security</a>
+                            <a [routerLink]="routes.settingsNotification" class="d-block p-2 fw-medium">Notifications</a>
+                            <a [routerLink]="routes.connectedApps" class="d-block p-2 fw-medium">Connected Apps</a>
+                        </div>
+                    </div>
+                </div> <!-- end card body -->
+            </div> <!-- end card -->
+
+        </div> <!-- end col -->
+
+        <div class="col-xl-9 col-lg-12">
+
+            <div class="card mb-0">
+                <div class="card-body pb-0">
+                    <div class="border-bottom mb-3 pb-3">
+                        <h5 class="mb-0 fs-17">Security Settings</h5>
+                    </div>
+
+                    <!-- start row -->
+                    <div class="row">
+
+                        <div class="col-lg-4 col-md-6 d-flex">
+                            <div class="card border shadow-none flex-fill mb-3">
+                                <div class="card-body d-flex justify-content-between flex-column">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="fs-14 fw-semibold mb-0">Password</h6>
+                                        </div>
+                                        <p class="fs-13 mb-0">Last Changed 03 Jan 2025, 09:00 AM</p>
+                                    </div>
+                                    <div>
+                                        <a href="javascript:void(0)" class="btn btn-xs btn-light" data-bs-toggle="modal"
+                                            data-bs-target="#change_password">
+                                            Change Password
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                        <div class="col-lg-4 col-md-6 d-flex">
+                            <div class="card border shadow-none flex-fill mb-3">
+                                <div class="card-body d-flex justify-content-between flex-column">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="fs-14 fw-semibold mb-0">Two Factor</h6>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" checked>
+                                            </div>
+                                        </div>
+                                        <p class="fs-13 mb-0">Receive codes via SMS or email every time you login</p>
+                                    </div>
+                                    <div>
+                                        <span class="badge badge-soft-success">Enabled</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                        <div class="col-lg-4 col-md-6 d-flex">
+                            <div class="card border shadow-none flex-fill mb-3">
+                                <div class="card-body d-flex justify-content-between flex-column">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="fs-14 fw-semibold mb-0">Google Authenticator</h6>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" checked>
+                                            </div>
+                                        </div>
+                                        <p class="fs-13 mb-0">Google Authenticator adds an extra layer of security</p>
+                                    </div>
+                                    <div>
+                                        <span class="badge badge-soft-success">Connected</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                        <div class="col-lg-4 col-md-6 d-flex">
+                            <div class="card border shadow-none flex-fill mb-3">
+                                <div class="card-body d-flex justify-content-between flex-column">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="fs-14 fw-semibold mb-0">Phone Number Verification<i
+                                                    class="ti ti-discount-check-filled text-success ms-1"></i>
+                                            </h6>
+                                        </div>
+                                        <p class="fs-13 mb-0">Verified Mobile Number : <span
+                                                class="text-dark">+99264710583</span></p>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <a href="javascript:void(0)" class="btn btn-xs btn-light me-2"
+                                            data-bs-toggle="modal" data-bs-target="#change_phone_number">Change</a>
+                                        <a href="javascript:void(0)" class="link-primary fs-12 fw-medium">Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                        <div class="col-lg-4 col-md-6 d-flex">
+                            <div class="card border shadow-none flex-fill mb-3">
+                                <div class="card-body d-flex justify-content-between flex-column">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="fs-14 fw-semibold mb-0">Email Verification<i
+                                                    class="ti ti-discount-check-filled text-success ms-1"></i>
+                                            </h6>
+                                        </div>
+                                        <p class="fs-13 mb-0">Verified Email : <span
+                                                class="text-dark">info&#64;example.com</span></p>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <a href="javascript:void(0)" class="btn btn-xs btn-light me-2"
+                                            data-bs-toggle="modal" data-bs-target="#change_email">Change</a>
+                                        <a href="javascript:void(0)" class="link-primary fs-12 fw-medium">Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                        <div class="col-lg-4 col-md-6 d-flex">
+                            <div class="card border shadow-none flex-fill mb-3">
+                                <div class="card-body d-flex justify-content-between flex-column">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="fs-14 fw-semibold mb-0">Device Management</h6>
+                                        </div>
+                                        <p class="fs-13 mb-0">Last Changed 15 Jan 2025, 12:00 AM</p>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <a href="javascript:void(0)" class="btn btn-xs btn-light" data-bs-toggle="modal"
+                                            data-bs-target="#device_management">Manage</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                        <div class="col-lg-4 col-md-6 d-flex">
+                            <div class="card border shadow-none flex-fill mb-3">
+                                <div class="card-body d-flex justify-content-between flex-column">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="fs-14 fw-semibold mb-0">Account Activity</h6>
+                                        </div>
+                                        <p class="fs-13 mb-0">Last Changed 20 Jan 2025, 11:30 AM</p>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <a href="javascript:void(0)" class="btn btn-xs btn-light" data-bs-toggle="modal"
+                                            data-bs-target="#account_activity">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                        <div class="col-lg-4 col-md-6 d-flex">
+                            <div class="card border shadow-none flex-fill mb-3">
+                                <div class="card-body d-flex justify-content-between flex-column">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="fs-14 fw-semibold mb-0">Deactive Account</h6>
+                                        </div>
+                                        <p class="fs-13 mb-0">Last Changed 04 Mar 2023, 08:40 AM</p>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <a href="javascript:void(0)" class="btn btn-xs btn-light" data-bs-toggle="modal"
+                                            data-bs-target="#deactive_account">Deactive</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                        <div class="col-lg-4 col-md-6 d-flex">
+                            <div class="card border shadow-none flex-fill mb-3">
+                                <div class="card-body d-flex justify-content-between flex-column">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="fs-14 fw-semibold mb-0">Delete Account</h6>
+                                        </div>
+                                        <p class="fs-13 mb-0">Last Changed 13 Mar 2023, 02:40 PM</p>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <a href="javascript:void(0)" class="btn btn-xs btn-light" data-bs-toggle="modal"
+                                            data-bs-target="#delete_account">Delete Account</a>
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+
+                        </div>
+                        <!-- end row -->
+
+                    </div>
+                </div> <!-- end card body -->
+            </div> <!-- end card -->
+
+        </div> <!-- end col -->
+
+    </div>
+    <!-- end row -->
+
+</div>
+<!-- End Content -->
+
+<!-- Change Password -->
+<div class="modal fade" id="change_password" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Password</h5>
+                <button
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Current Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">New Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Change Password -->
+
+<!-- Phone Number Password -->
+<div class="modal fade" id="change_phone_number" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Phone Number Verify</h5>
+                <button
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="input-blocks">
+                            <label class="form-label">Current Phone Number <span class="text-danger">*</span></label>
+                            <input class="form-control phone" name="phone" type="text">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div>
+                            <label class="form-label">New Phone Number <span class="text-danger">*</span></label>
+                            <input class="form-control phone" name="phone" type="text">
+                        </div>
+                        <p class="mt-2"><i class="ti ti-info-circle me-1"></i>New phone number only updated once you
+                            verified </p>
+                    </div>
+                    <div>
+                        <label class="form-label">Current Password <span class="text-danger">*</span></label>
+                        <div class="input-group input-group-flat pass-group">
+                            <input type="password" class="form-control pass-input">
+                            <span class="input-group-text toggle-password ">
+                                <i class="ti ti-eye-off"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Phone Number Password -->
+
+<!-- Change Email Password -->
+<div class="modal fade" id="change_email" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Email Address</h5>
+                <button
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="input-blocks">
+                            <label class="form-label">Current Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div>
+                            <label class="form-label">New Email Address<span class="text-danger">*</span></label>
+                            <input class="form-control" type="email">
+                        </div>
+                        <p class="d-inline-flex align-items-center mt-1 mb-0"><i class="ti ti-info-circle me-1"></i>New
+                            email address only updated once you verified </p>
+                    </div>
+                    <div>
+                        <label class="form-label">Confirm Password<span class="text-danger">*</span></label>
+                        <div class="input-group input-group-flat pass-group">
+                            <input type="password" class="form-control pass-input">
+                            <span class="input-group-text toggle-password ">
+                                <i class="ti ti-eye-off"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="btn btn-sm btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Change Email Password -->
+
+<!-- Change Device Password -->
+<div class="modal fade" id="device_management" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Device Management</h5>
+                <button
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <!-- Start Table -->
+                    <div class="table-responsive custom-table">
+                        <table class="table table-nowrap dataTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Device</th>
+                                    <th>Date</th>
+                                    <th>Location</th>
+                                    <th>IP Address</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Chrome - Windows</td>
+                                    <td>15 May 2025, 10:30AM</td>
+                                    <td>New York / USA</td>
+                                    <td>232.222.12.72</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light ">
+                                                <i class="ti ti-logout"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Safari Macos</td>
+                                    <td>10 Apr 2025, 05:15 PM</td>
+                                    <td>New York / USA</td>
+                                    <td>224.111.12.75</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light ">
+                                                <i class="ti ti-logout"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Firefox Windows</td>
+                                    <td>15 Mar 2025, 02:40 PM</td>
+                                    <td>New York / USA</td>
+                                    <td>111.222.13.28</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light ">
+                                                <i class="ti ti-logout"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Safari Macos</td>
+                                    <td>15 Jan 2025, 08:00AM</td>
+                                    <td>New York / USA</td>
+                                    <td>120.517.26.17</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light ">
+                                                <i class="ti ti-logout"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Change Device Password -->
+
+<!-- Change Account Activity -->
+<div class="modal fade" id="account_activity" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Account Activity</h5>
+                <button
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <!-- Start Table -->
+                    <div class="table-responsive custom-table">
+                        <table class="table table-nowrap dataTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Device</th>
+                                    <th>IP Address</th>
+                                    <th>Location</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>15 May 2025, 10:30AM</td>
+                                    <td>Chrome - Windows</td>
+                                    <td>232.222.12.72</td>
+                                    <td>New York / USA</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-logout"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>10 Apr 2025, 05:15 PM</td>
+                                    <td>Safari Macos</td>
+                                    <td>224.111.12.75</td>
+                                    <td>New York / USA</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-logout"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>15 Mar 2025, 02:40 PM</td>
+                                    <td>Firefox Windows</td>
+                                    <td>111.222.13.28</td>
+                                    <td>New York / USA</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-logout"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>15 Jan 2025, 08:00AM</td>
+                                    <td>Safari Macos</td>
+                                    <td>120.517.26.17</td>
+                                    <td>New York / USA</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-logout"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Change Device Password -->
+
+<!-- Deactivate Account modal -->
+<div class="modal fade" id="deactive_account">
+    <div class="modal-dialog modal-dialog-centered modal-sm rounded-0">
+        <div class="modal-content rounded-0">
+            <div class="modal-body p-4 text-center position-relative">
+                <div class="mb-3 position-relative z-1">
+                    <span class="avatar avatar-xl badge-soft-danger border-0 text-danger rounded-circle"><i
+                            class="ti ti-trash fs-24"></i></span>
+                </div>
+                <h5 class="mb-1">Deactive Account Confirmation</h5>
+                <p class="mb-3">Are you sure you want to deactivate your account.</p>
+                <div class="d-flex justify-content-center">
+                    <a href="#" class="btn btn-sm btn-light position-relative z-1 me-2 w-100"
+                        data-bs-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-sm btn-primary position-relative z-1 w-100" data-bs-dismiss="modal">Yes,
+                        Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Deactivate Account modal -->
+
+<!-- Delete Account -->
+<div class="modal fade" id="delete_account" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Deleting Your Account</h5>
+                <button
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" data-select2-id="6">
+                    <p class="fw-medium fs-16 mb-1 text-dark">Why Are You Deleting Your Account?</p>
+                    <p class="fs-16 mb-3">We're sorry to see you go! To help us improve, please let us know your reason
+                        for deleting your account</p>
+                    <div class="row" data-select2-id="5">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Reason<span class="text-danger ms-1">*</span></label>
+                                <mat-select class="select custom-mat-select" placeholder="Choose">
+                                    <mat-option value="1">Select</mat-option>
+                                    <mat-option value="no_use">No longer using the service</mat-option>
+                                    <mat-option value="privacy">Privacy concerns</mat-option>
+                                    <mat-option value="notifications">Too many notifications/emails</mat-option>
+                                    <mat-option value="ux">Poor user experience</mat-option>
+                                    <mat-option value="others">Others</mat-option>
+                                </mat-select>
+                            </div>
+                        </div><!-- end col -->
+                        <div class="col-md-12" id="otherReasonBox" style="display: none;">
+                            <label class="form-label">Please Specify<span class="text-danger ms-1">*</span></label>
+                            <textarea class="form-control" rows="3" placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="btn btn-sm btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Delete Password -->

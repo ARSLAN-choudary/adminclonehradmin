@@ -1,0 +1,122 @@
+<!-- Page Header -->
+                <div class="mb-4">
+                    <h4 class="mb-1">Form Picker</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0 p-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Form Picker</li>
+                        </ol>
+                    </nav>
+				</div>
+				<!-- End Page Header -->
+
+<div class="row">
+<!-- Date Picker -->
+<div class="col-12 mb-6">
+  <div class="card">
+    <h5 class="card-header">Datepickr</h5>
+    <div class="card-body">
+      <div class="row">
+        <!-- Date Picker-->
+        <div class="col-md-6 col-12 mb-6">
+            <div class="ngx-date3">
+                <label class="form-label">Date Picker</label>
+                <div class="input-icon-end position-relative">
+                    <input
+                      type="text"
+                      class="form-control datetimepicker"
+                      bsDatepicker
+                      container=".ngx-date3"
+                      [bsConfig]="{ adaptivePosition: true }"
+                      placeholder="dd/mm/yyyy"
+                      value="02-05-2024"
+                    />
+                    <span class="input-icon-addon">
+                      <i class="ti ti-calendar text-gray-7"></i>
+                    </span>
+                  </div>
+
+            </div>
+        </div>
+        <!-- /Date Picker -->
+
+        <!-- Time Picker-->
+        <div class="col-md-6 col-12 mb-6">
+          <label for="flatpickr-time" class="form-label">Time Picker</label>
+          <p-calendar class="timepick form-control" placeholder="HH : MM" inputId="calendar-timeonly" [(ngModel)]="time"  [timeOnly]="true" />
+        </div>
+        <!-- /Time Picker -->
+
+        <!-- Date Range Picker-->
+        <div class="col-md-6 col-12 mb-6">
+            <div class="mb-3">
+                <label class="form-label">Date Range Picker</label>
+                <input type="text" placeholder="Daterangepicker" class="form-control" bsDaterangepicker>
+            </div>
+        </div>
+        <!-- /Date Range Picker-->
+
+        <!-- Range Picker-->
+        <div class="col-md-6 col-12 mb-6">
+            <div class="ngx-year">
+                <label class="form-label">Year Picker</label>
+                <div class="input-icon position-relative">
+                <span class="input-icon-addon">
+                    <i class="ti ti-calendar text-gray-9"></i>
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="yyyy"
+                    class="form-control yearpicker"
+                    container=".ngx-year"
+                    bsDatepicker
+                    [bsConfig]="bsConfig"
+                    [(ngModel)]="selectedYear"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                </div>
+              </div>
+        </div>
+        <!-- /Range Picker-->
+
+        <!-- Human Friendly Date Picker-->
+        <div class="col-md-6 col-12 mb-6">
+          <div class="inline-datepicker">
+
+            <bs-datepicker-inline [bsValue]="bsInlineValue"></bs-datepicker-inline>
+          </div>
+        </div>
+        <!-- /Human Friendly Date Picker-->
+
+        <!-- Disabled Range-->
+        <div class="col-md-6 col-12 mb-md-0 mb-6">
+          <label for="flatpickr-disabled-range" class="form-label">Month Range</label>
+          <input type="text"
+           class="form-control"
+           [bsConfig]="bsConfig"
+           #dp="bsDatepicker"
+           bsDatepicker [(bsValue)]="datePickerValue">
+        </div>
+        <!-- /Disabled Range-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Datepickr -->
+
+<!-- Color Picker -->
+<div class="col-12">
+  <div class="card">
+    <h5 class="card-header">Color Picker</h5>
+    <div class="card-body">
+      <div class="row">
+        <div class="classic col col-sm-3 col-lg-2">
+            <p-colorPicker [(ngModel)]="color" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Color Picker-->
+</div>

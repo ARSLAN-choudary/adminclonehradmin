@@ -1,0 +1,37 @@
+{
+ "data" :[
+  {
+    "Title": "Had conversation with Fred regarding task",
+    "Image": "avatar-06.jpg",
+    "ActivityType": "Calls",
+    "DueDate": "29 Sep 2025, 04:12 pm",
+    "Owner": "Guilory Berggren",
+    "CreatedAt": "27 Sep 2025, 03:26 pm"
+  },
+  {
+    "Title": "Call John and discuss about project",
+    "Image": "avatar-13.jpg",
+    "ActivityType": "Calls",
+    "DueDate": "12 Nov 2025, 10:20 pm",
+    "Owner": "Jami Carlile",
+    "CreatedAt": "02 Nov 2025, 05:35 pm"
+  },
+  {
+    "Title": "Discussed budget proposal with Edwin",
+    "Image": "avatar-17.jpg",
+    "ActivityType": "Calls",
+    "DueDate": "08 Dec 2025, 04:35 pm",
+    "Owner": "Theresa Nelson",
+    "CreatedAt": "01 Dec 2025, 10:45 am"
+  },
+  {
+    "Title": "Discussed budget proposal with Edwin",
+    "Image": "avatar-14.jpg",
+    "ActivityType": "Calls",
+    "DueDate": "26 Dec 2025, 08:30 am",
+    "Owner": "Smith Cooper",
+    "CreatedAt": "18 Dec 2025, 05:00 pm"
+  }
+],
+  "totalData": 4
+}

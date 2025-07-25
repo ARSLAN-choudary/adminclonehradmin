@@ -1,0 +1,42 @@
+<div [ngClass]="{
+    'expand-menu': expandMenu === 'true' && miniSidebar === 'true',
+    'mini-sidebar': miniSidebar === 'true',
+    
+}" [class.header-collapse]="isCollapsed">
+<div class="main-wrapper">
+
+
+
+  @if (page !== 'coming-soon' && page !== 'under-maintenance') {
+  <app-header></app-header>
+
+  <app-sidebar></app-sidebar>
+
+
+  } 
+  
+    <app-layout [hidden]="base ==='layout-fullwidth' || base === 'layout-hoverview' ||base === 'layout-rtl' 
+        ||base ==='layout-mini' || base === 'layout-hidden' ||base === 'layout-dark' "></app-layout>
+    
+    <!-- Page Wrapper -->
+<div class="page-wrapper">
+  <router-outlet></router-outlet>
+<!-- Start Footer -->
+        <footer class="footer d-block d-md-flex justify-content-between text-md-start text-center">
+            <p class="mb-md-0 mb-1">Copyright &copy; 2025 <a href="javascript:void(0);" class="link-primary text-decoration-underline">CRMS</a></p>
+            <div class="d-flex align-items-center gap-2 footer-links justify-content-center justify-content-md-end">
+              <a href="javascript:void(0);">About</a>
+              <a href="javascript:void(0);">Terms</a>
+              <a href="javascript:void(0);">Contact Us</a>
+            </div>
+        </footer>
+        <!-- End Footer -->
+         </div>
+</div>
+ <div
+class="sidebar-overlay"
+[ngClass]="{
+  opened: mobileSidebar === 'true',
+  'd-none':mobileSidebar === 'false'
+}" (click)="sidebarClose()"
+></div>

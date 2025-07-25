@@ -1,0 +1,65 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "CategoryName": "Sales Optimization",
+            "CreatedDate": "17 Dec 2025",
+            "Status": "Active"
+        },
+        {
+            "id": "2",
+            "CategoryName": "Automation",
+            "CreatedDate": "11 Dec 2025",
+            "Status": "Active"
+        },
+        {
+            "id": "3",
+            "CategoryName": "Marketing",
+            "CreatedDate": "23 Nov 2025",
+            "Status": "Active"
+        },
+        {
+            "id": "4",
+            "CategoryName": "Implementation",
+            "CreatedDate": "12 Nov 2025",
+            "Status": "Active"
+        },
+        {
+            "id": "5",
+            "CategoryName": "Product Features",
+            "CreatedDate": "07 Nov 2025",
+            "Status": "Active"
+        },
+        {
+            "id": "6",
+            "CategoryName": "Data & Analytics",
+            "CreatedDate": "15 Oct 2025",
+            "Status": "Inactive"
+        },
+        {
+            "id": "7",
+            "CategoryName": "Customization",
+            "CreatedDate": "04 Oct 2025",
+            "Status": "Inactive"
+        },
+        {
+            "id": "8",
+            "CategoryName": "Future & Trends",
+            "CreatedDate": "29 Sep 2025",
+            "Status": "Active"
+        },
+        {
+            "id": "9",
+            "CategoryName": "Training & Adoption",
+            "CreatedDate": "25 Sep 2025",
+            "Status": "Inactive"
+        },
+        {
+            "id": "10",
+            "CategoryName": "Security",
+            "CreatedDate": "17 Sep 2025",
+            "Status": "Active"
+        }
+    ],
+    "totalData": 10
+}

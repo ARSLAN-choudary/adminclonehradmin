@@ -1,0 +1,389 @@
+<!-- Start Content -->
+<div class="content">
+
+    <!-- Page Header -->
+    <div class="d-flex align-items-center justify-content-between gap-2 mb-4 flex-wrap">
+        <div>
+            <h4 class="mb-1">Settings</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Settings</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="gap-2 d-flex align-items-center flex-wrap">
+            <a href="javascript:void(0);" class="btn btn-icon btn-outline-light shadow" data-bs-toggle="tooltip"
+                data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
+                    class="ti ti-refresh"></i></a>
+            <app-collapse-header></app-collapse-header>
+        </div>
+    </div>
+    <!-- End Page Header -->
+
+    <!-- Settings Menu -->
+    <div class="card border-0">
+        <div class="card-body pb-0 pt-0 px-2">
+            <ul class="nav nav-tabs nav-bordered nav-bordered-primary">
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.profileSettings" class="nav-link p-2">
+                        <i class="ti ti-settings-cog me-2"></i>General Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.companySettings" class="nav-link p-2">
+                        <i class="ti ti-world-cog me-2"></i>Website Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.invoiceSettings" class="nav-link p-2">
+                        <i class="ti ti-apps me-2"></i>App Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.emailSettings" class="nav-link p-2">
+                        <i class="ti ti-device-laptop me-2"></i>System Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.paymentGatewaySettings" class="nav-link p-2 active">
+                        <i class="ti ti-moneybag me-2"></i>Financial Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a [routerLink]="routes.siteMap" class="nav-link p-2">
+                        <i class="ti ti-flag-cog me-2"></i>Other Settings
+                    </a>
+                </li>
+            </ul>
+        </div> <!-- end card body -->
+    </div> <!-- end card -->
+    <!-- /Settings Menu -->
+
+    <!-- start row -->
+    <div class="row">
+        <div class="col-xl-3 col-lg-12 theiaStickySidebar">
+
+            <!-- Settings Sidebar -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="settings-sidebar">
+                        <h4 class="fw-bold mb-3 fs-17">Financial Settings</h4>
+                        <div class="list-group list-group-flush settings-sidebar">
+                            <a [routerLink]="routes.paymentGatewaySettings" class="d-block p-2 fw-medium">Payment
+                                Gateways</a>
+                            <a [routerLink]="routes.bankAccounts" class="d-block p-2 fw-medium">Bank Accounts</a>
+                            <a [routerLink]="routes.taxRates" class="d-block p-2 fw-medium">Tax Rates</a>
+                            <a [routerLink]="routes.currencySettings"
+                                class="d-block p-2 fw-medium active">Currencies</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Settings Sidebar -->
+
+        </div>
+
+        <div class="col-xl-9 col-lg-12">
+
+            <!-- Settings Info -->
+            <div class="card mb-0">
+                <div class="card-body">
+                    <div
+                        class="border-bottom mb-3 pb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <h4 class="fs-17 mb-0">Currencies</h4>
+                        <a href="javascript:void(0)" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#add_currency"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add New
+                            Currency</a>
+                    </div>
+
+                    <!-- Start Table -->
+                    <div class="table-responsive custom-table">
+                        <table class="table table-nowrap">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Currency</th>
+                                    <th>Code</th>
+                                    <th>Symbol</th>
+                                    <th>Exchange Rate</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Dollar<a href="javascript:void(0);" class="badge badge-tag badge-soft-info ms-2"
+                                            data-bs-toggle="modal" data-bs-target="#default">Default</a></td>
+                                    <td>USD</td>
+                                    <td>$</td>
+                                    <td>01</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit_currency">
+                                                    <i class="ti ti-edit text-blue me-1"></i>Edit
+                                                </a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_currency">
+                                                    <i class="ti ti-trash text-blue me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Rupee</td>
+                                    <td>INR</td>
+                                    <td>₹</td>
+                                    <td>86.62</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit_currency">
+                                                    <i class="ti ti-edit text-blue me-1"></i>Edit
+                                                </a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_currency">
+                                                    <i class="ti ti-trash text-blue me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Pound</td>
+                                    <td>GBP</td>
+                                    <td>£</td>
+                                    <td>0.81</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit_currency">
+                                                    <i class="ti ti-edit text-blue me-1"></i>Edit
+                                                </a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_currency">
+                                                    <i class="ti ti-trash text-blue me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Euro</td>
+                                    <td>EUR</td>
+                                    <td>€</td>
+                                    <td>0.96</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit_currency">
+                                                    <i class="ti ti-edit text-blue me-1"></i>Edit
+                                                </a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_currency">
+                                                    <i class="ti ti-trash text-blue me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Dhirams</td>
+                                    <td>AED</td>
+                                    <td>د.إ</td>
+                                    <td>3.67</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit_currency">
+                                                    <i class="ti ti-edit text-blue me-1"></i>Edit
+                                                </a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_currency">
+                                                    <i class="ti ti-trash text-blue me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table -->
+                </div>
+            </div>
+            <!-- /Settings Info -->
+
+        </div>
+    </div>
+    <!-- end row -->
+
+</div>
+<!-- End Content -->
+
+<!-- Add Tax Rate -->
+<div class="modal fade" id="add_currency" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Currency</h5>
+                <button type="button"
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Currency Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Exchange Rate<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="d-flex flex-lg-row flex-column align-items-center justify-content-between gap-3 mb-3">
+                        <div class="w-100">
+                            <label class="form-label">Code<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="w-100">
+                            <label class="form-label">Symbol<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <label class="form-label mb-0">Make as Default</label>
+                        <div class="form-check form-switch p-0">
+                            <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
+                                    role="switch">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center justify-content-end m-0">
+                        <a href="#" class="btn btn-sm btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Create New</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Add Tax Rate -->
+
+<!-- Edit Tax Rate -->
+<div class="modal fade" id="edit_currency" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Currency</h5>
+                <button type="button"
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Currency Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" value="Rupee">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Exchange Rate<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" value="86.62">
+                    </div>
+                    <div class="d-flex flex-lg-row flex-column align-items-center justify-content-between gap-3 mb-3">
+                        <div class="w-100">
+                            <label class="form-label">Code<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" value="INR">
+                        </div>
+                        <div class="w-100">
+                            <label class="form-label">Symbol<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" value="₹">
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <label class="form-label mb-0">Make as Default</label>
+                        <div class="form-check form-switch p-0">
+                            <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                <input class="form-check-input switchCheckDefault ms-auto" type="checkbox" role="switch"
+                                    checked>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center justify-content-end m-0">
+                        <a href="#" class="btn btn-sm btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Edit Tax Rate -->
+
+<!-- delete modal -->
+<div class="modal fade" id="delete_currency">
+    <div class="modal-dialog modal-dialog-centered modal-sm rounded-0">
+        <div class="modal-content rounded-0">
+            <div class="modal-body p-4 text-center position-relative">
+                <div class="mb-3 position-relative z-1">
+                    <span class="avatar avatar-xl badge-soft-danger border-0 text-danger rounded-circle"><i
+                            class="ti ti-trash fs-24"></i></span>
+                </div>
+                <h5 class="mb-1">Delete Confirmation</h5>
+                <p class="mb-3">Are you sure you want to remove currency you selected.</p>
+                <div class="d-flex justify-content-center">
+                    <a href="#" class="btn btn-sm btn-light position-relative z-1 me-2 w-100"
+                        data-bs-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-sm btn-primary position-relative z-1 w-100" data-bs-dismiss="modal">Yes,
+                        Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delete modal -->

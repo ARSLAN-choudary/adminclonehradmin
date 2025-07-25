@@ -1,0 +1,443 @@
+<!-- Start Content -->
+<div class="content">
+
+    <!-- Page Header -->
+    <div class="d-flex align-items-center justify-content-between gap-2 mb-4 flex-wrap">
+        <div>
+            <h4 class="mb-1">Settings</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Settings</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="gap-2 d-flex align-items-center flex-wrap">
+            <a href="javascript:void(0);" class="btn btn-icon btn-outline-light shadow" data-bs-toggle="tooltip"
+                data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
+                    class="ti ti-refresh"></i></a>
+            <app-collapse-header></app-collapse-header>
+        </div>
+    </div>
+    <!-- End Page Header -->
+
+    <!-- Settings Menu -->
+    <div class="card border-0">
+        <div class="card-body pb-0 pt-0 px-2">
+            <ul class="nav nav-tabs nav-bordered nav-bordered-primary">
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.profileSettings" class="nav-link p-2">
+                        <i class="ti ti-settings-cog me-2"></i>General Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.companySettings" class="nav-link p-2">
+                        <i class="ti ti-world-cog me-2"></i>Website Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.invoiceSettings" class="nav-link p-2">
+                        <i class="ti ti-apps me-2"></i>App Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.emailSettings" class="nav-link p-2">
+                        <i class="ti ti-device-laptop me-2"></i>System Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.paymentGatewaySettings" class="nav-link p-2 active">
+                        <i class="ti ti-moneybag me-2"></i>Financial Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a [routerLink]="routes.siteMap" class="nav-link p-2">
+                        <i class="ti ti-flag-cog me-2"></i>Other Settings
+                    </a>
+                </li>
+            </ul>
+        </div> <!-- end card body -->
+    </div> <!-- end card -->
+    <!-- /Settings Menu -->
+
+    <!-- start row -->
+    <div class="row">
+        <div class="col-xl-3 col-lg-12 theiaStickySidebar">
+
+            <!-- Settings Sidebar -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="settings-sidebar">
+                        <h4 class="fw-bold mb-3 fs-17">Financial Settings</h4>
+                        <div class="list-group list-group-flush settings-sidebar">
+                            <a [routerLink]="routes.paymentGatewaySettings" class="d-block p-2 fw-medium">Payment
+                                Gateways</a>
+                            <a [routerLink]="routes.bankAccounts" class="d-block p-2 fw-medium">Bank Accounts</a>
+                            <a [routerLink]="routes.taxRates" class="d-block p-2 fw-medium active">Tax Rates</a>
+                            <a [routerLink]="routes.currencySettings" class="d-block p-2 fw-medium">Currencies</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Settings Sidebar -->
+
+        </div>
+
+        <div class="col-xl-9 col-lg-12">
+
+            <!-- Settings Info -->
+            <div class="card mb-0">
+                <div class="card-body">
+                    <div
+                        class="border-bottom mb-3 pb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <h4 class="fs-17 mb-0">Tax Rate</h4>
+                        <a href="javascript:void(0)" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#add_tax"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add New Tax
+                            Rate</a>
+                    </div>
+
+                    <!-- Start Table -->
+                    <div class="table-responsive custom-table mb-4">
+                        <table class="table table-nowrap">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Tax Rate</th>
+                                    <th>Created On</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>VAT</td>
+                                    <td>10%</td>
+                                    <td>22 Feb 2025</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit_tax">
+                                                    <i class="ti ti-edit text-blue me-1"></i>Edit
+                                                </a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_tax">
+                                                    <i class="ti ti-trash text-blue me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>CGST</td>
+                                    <td>08%</td>
+                                    <td>17 Jan 2025</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit_tax">
+                                                    <i class="ti ti-edit text-blue me-1"></i>Edit
+                                                </a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_tax">
+                                                    <i class="ti ti-trash text-blue me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>SGST</td>
+                                    <td>10%</td>
+                                    <td>07 Jan 2025</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit_tax">
+                                                    <i class="ti ti-edit text-blue me-1"></i>Edit
+                                                </a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_tax">
+                                                    <i class="ti ti-trash text-blue me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table -->
+
+                    <div class="mb-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <h4 class="fs-17 mb-0">Tax Group</h4>
+                        <a href="javascript:void(0)" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#add_tax_group"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add New
+                            Group</a>
+                    </div>
+                    <!-- Start Table -->
+                    <div class="table-responsive custom-table">
+                        <table class="table table-nowrap">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Tax Rate</th>
+                                    <th>Created On</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>GST</td>
+                                    <td>18%</td>
+                                    <td>18 Jan 2025</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit_tax_group">
+                                                    <i class="ti ti-edit text-blue me-1"></i>Edit
+                                                </a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_tax_group">
+                                                    <i class="ti ti-trash text-blue me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table -->
+
+                </div>
+            </div>
+            <!-- /Settings Info -->
+
+        </div>
+    </div>
+    <!-- end row -->
+
+
+</div>
+<!-- End Content -->
+
+
+<!-- Add Tax Rate -->
+<div class="modal fade" id="add_tax" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Tax Rate</h5>
+                <button type="button"
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tax Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Tax Rate(%)<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center justify-content-end m-0">
+                        <a href="#" class="btn btn-sm btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-sm btn-primary">Create New</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Add Tax Rate -->
+
+<!-- Edit Tax Rate -->
+<div class="modal fade" id="edit_tax" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Tax Rate</h5>
+                <button type="button"
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tax Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" value="VAT">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Tax Rate(%)<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" value="10%">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center justify-content-end m-0">
+                        <a href="#" class="btn btn-sm btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-sm btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Edit Tax Rate -->
+
+<!-- delete modal -->
+<div class="modal fade" id="delete_tax">
+    <div class="modal-dialog modal-dialog-centered modal-sm rounded-0">
+        <div class="modal-content rounded-0">
+            <div class="modal-body p-4 text-center position-relative">
+                <div class="mb-3 position-relative z-1">
+                    <span class="avatar avatar-xl badge-soft-danger border-0 text-danger rounded-circle"><i
+                            class="ti ti-trash fs-24"></i></span>
+                </div>
+                <h5 class="mb-1">Delete Confirmation</h5>
+                <p class="mb-3">Are you sure you want to remove tax rate you selected.</p>
+                <div class="d-flex justify-content-center">
+                    <a href="#" class="btn btn-light position-relative z-1 me-2 w-100"
+                        data-bs-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-primary position-relative z-1 w-100" data-bs-dismiss="modal">Yes,
+                        Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delete modal -->
+
+<!-- Add Tax Group -->
+<div class="modal fade" id="add_tax_group" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Tax Group</h5>
+                <button type="button"
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tax Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Sub Taxes<span class="text-danger">*</span></label>
+                        <input class="input-tags form-control border-0 h-100" data-choices data-choices-limit="infinite"
+                            data-choices-removeItem type="text">
+                        <p class="mb-0 fs-12 mt-1">Enter value separated by comma</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center justify-content-end m-0">
+                        <a href="#" class="btn btn-sm btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Create New</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Add Tax Group -->
+
+<!-- Edit Tax Group -->
+<div class="modal fade" id="edit_tax_group" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Tax Group</h5>
+                <button type="button"
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tax Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" value="GST">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Sub Taxes<span class="text-danger">*</span></label>
+                        <input class="input-tags form-control border-0 h-100" data-choices data-choices-limit="infinite"
+                            data-choices-removeItem type="text" value="CGST, SGST">
+                        <p class="mb-0 fs-12 mt-1">Enter value separated by comma</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex align-items-center justify-content-end m-0">
+                        <a href="#" class="btn btn-sm btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Save
+                            Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Edit Tax Group -->
+
+<!-- delete modal -->
+<div class="modal fade" id="delete_tax_group">
+    <div class="modal-dialog modal-dialog-centered modal-sm rounded-0">
+        <div class="modal-content rounded-0">
+            <div class="modal-body p-4 text-center position-relative">
+                <div class="mb-3 position-relative z-1">
+                    <span class="avatar avatar-xl badge-soft-danger border-0 text-danger rounded-circle"><i
+                            class="ti ti-trash fs-24"></i></span>
+                </div>
+                <h5 class="mb-1">Delete Confirmation</h5>
+                <p class="mb-3">Are you sure you want to remove rate group you selected..</p>
+                <div class="d-flex justify-content-center">
+                    <a href="#" class="btn btn-sm btn-light position-relative z-1 me-2 w-100"
+                        data-bs-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-sm btn-primary position-relative z-1 w-100" data-bs-dismiss="modal">Yes,
+                        Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delete modal -->

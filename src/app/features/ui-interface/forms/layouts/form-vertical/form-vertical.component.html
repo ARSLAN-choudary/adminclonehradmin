@@ -1,0 +1,373 @@
+<!-- Page Header -->
+                <div class="mb-4">
+                    <h4 class="mb-1">Vertical Form</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0 p-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Vertical Form</li>
+                        </ol>
+                    </nav>
+				</div>
+				<!-- End Page Header -->
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Basic Form</h5>
+        </div>
+        <div class="card-body">
+          <form action="#">
+            <div class="mb-3">
+               <label class="form-label" for="last">First Name</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="first">First Name</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="tag">Email Address</label>
+              <input type="email" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="tag">Username</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="tag">Password</label>
+              <input type="password" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="tag">Repeat Password</label>
+              <input type="password" class="form-control">
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Address Form</h5>
+        </div>
+        <div class="card-body">
+          <form action="#">
+            <div class="mb-3">
+              <label class="form-label" for="tag">Address Line 1</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="tag">Address Line 2</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="tag">City</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="tag">State</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="tag">Country</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="tag">Postal Code</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Two Column Vertical Form</h5>
+        </div>
+        <div class="card-body">
+          <form action="#">
+            <h5 class="card-title">Personal Information</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                   <label class="form-label" for="last">First Name</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="first">First Name</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Blood Group</label>
+                  <mat-select [(ngModel)]="selectedValue1" [ngModelOptions]="{standalone: true}" class="select custom-mat-select"  placeholder="Select">
+                    @for (data of selectedList1; track data) {
+                      <mat-option [value]="data.value">
+                        {{data.value}}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </div>
+                <div class="mb-3">
+                  <label class="d-block" for="gender">Gender:</label>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="gender_male" value="option1">
+                    <label class="form-check-label" for="gender_male">Male</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="gender_female" value="option2">
+                    <label class="form-check-label" for="gender_female">Female</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Username</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Email</label>
+                  <input type="text" class="form-control">
+                </div>
+  
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Password</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Repeat Password</label>
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+            </div>
+            <h5 class="card-title">Postal Address</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Address Line 1</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Address Line 2</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">State</label>
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label" for="tag">City</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Country</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Postal Code</label>
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Two Column Vertical Form</h5>
+        </div>
+        <div class="card-body">
+          <form action="#">
+            <div class="row">
+              <div class="col-md-6">
+                <h5 class="card-title">Personal details</h5>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Name:</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Password:</label>
+                  <input type="password" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">State:</label>
+                  <mat-select [(ngModel)]="selectedValue2" [ngModelOptions]="{standalone: true}" class="select custom-mat-select"  placeholder="Select State">
+                    @for (data of selectedList2; track data) {
+                      <mat-option [value]="data.value">
+                        {{data.value}}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="tag">Your Message:</label>
+                  <textarea rows="5" cols="5" class="form-control" placeholder="Enter message"></textarea>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h5 class="card-title">Personal details</h5>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label" for="tag">First Name:</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label" for="tag">Last Name:</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label" for="tag">Email:</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label" for="tag">Phone:</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label class="form-label" for="tag">Address line:</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label" for="tag">Country:</label>
+                      <mat-select [(ngModel)]="selectedValue3" [ngModelOptions]="{standalone: true}" class="select custom-mat-select"  placeholder="Select Country">
+                        @for (data of selectedList3; track data) {
+                          <mat-option [value]="data.value">
+                            {{data.value}}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="state">State/Province:</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label" for="tag">ZIP code:</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label" for="tag">City:</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header justify-content-between">
+          <div class="card-title">
+            Vertical Forms with icon
+          </div>
+  
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="form-text1" class="form-label fs-14">Enter name</label>
+            <div class="input-group">
+              <div class="input-group-text"><i class="feather icon-user feather-user"></i></div>
+              <input type="text" class="form-control" id="form-text1" placeholder="">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="form-password1" class="form-label fs-14">Enter
+              Password</label>
+            <div class="input-group">
+              <div class="input-group-text"><i class="feather icon-lock feather-lock"></i></div>
+              <input type="password" class="form-control" id="form-password1" placeholder="">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="form-password1" class="form-label fs-14">Enter Repeat Password</label>
+            <div class="input-group">
+              <div class="input-group-text"><i class="feather-lock"></i></div>
+              <input type="password" class="form-control" id="form-password1" placeholder="">
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+  
+      </div>
+    </div>
+  
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header justify-content-between">
+          <div class="card-title">
+            Horizontal form label sizing
+          </div>
+  
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="colFormLabelSm" class="col-form-label col-form-label-sm">Email</label>
+            <input type="email" class="form-control form-control-sm" id="colFormLabelSm" placeholder="col-form-label-sm">
+          </div>
+          <div class="mb-3">
+            <label for="colFormLabel" class="col-form-label">Email</label>
+            <input type="email" class="form-control" id="colFormLabel" placeholder="col-form-label">
+          </div>
+          <div>
+            <label for="colFormLabelLg" class="col-form-label col-form-label-lg">Email</label>
+            <input type="email" class="form-control form-control-lg" id="colFormLabelLg" placeholder="col-form-label-lg">
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,272 @@
+<!-- Page Header -->
+                <div class="mb-4">
+                    <h4 class="mb-1">Form Select 2</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0 p-0">
+                            <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Form Select 2</li>
+                        </ol>
+                    </nav>
+				</div>
+				<!-- End Page Header -->
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Basic Select2</h5>
+      </div>
+      <div class="card-body">
+        <mat-select [(ngModel)]="selectedValue1" [ngModelOptions]="{ standalone: true }"
+          class="select custom-mat-select" placeholder="Selection-1">
+          @for (data of selectedList1; track data) {
+            <mat-option [value]="data.value">
+              {{ data.value }}
+            </mat-option>
+          }
+        </mat-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Multiple Select</h5>
+      </div>
+      <div class="card-body">
+        <mat-select class="custom-mat-select height-add" placeholder="Select options"
+          [(value)]="matSelectChipDataSelected" multiple>
+          <mat-select-trigger>
+            <mat-chip-set>
+              @for (option of matSelectChipDataSelected; track option) {
+                <mat-chip [removable]="true"
+                  (removed)="removeOptionUnique(option)">
+                  {{ option }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+              }
+            </mat-chip-set>
+          </mat-select-trigger>
+          @for (option of matSelectChipData; track option) {
+            <mat-option class="img-mat-select-mat-chip-options"
+            [value]="option">{{ option }}</mat-option>
+          }
+        </mat-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Single Select With Placeholder</h5>
+      </div>
+      <div class="card-body">
+        <mat-select [(ngModel)]="selectedValue2" [ngModelOptions]="{ standalone: true }"
+          class="select custom-mat-select" placeholder="California">
+          @for (data of selectedList2; track data) {
+            <mat-option [value]="data.value">
+              {{ data.value }}
+            </mat-option>
+          }
+        </mat-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Multiple Select With Placeholder</h5>
+      </div>
+      <div class="card-body">
+        <mat-select class="custom-mat-select height-add"
+          [(value)]="matSelectChipDataSelected2" multiple>
+          <mat-select-trigger>
+            <mat-chip-set>
+              @for (option of matSelectChipDataSelected2; track option) {
+                <mat-chip [removable]="true"
+                  (removed)="removeOptionUnique2(option)">
+                  {{ option }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+              }
+            </mat-chip-set>
+          </mat-select-trigger>
+          @for (option of matSelectChipData2; track option) {
+            <mat-option class="img-mat-select-mat-chip-options"
+            [value]="option">{{ option }}</mat-option>
+          }
+        </mat-select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <!-- Basic -->
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Basic</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p>
+              Use select2() function on select element to convert it to Select
+              2.
+            </p>
+
+            <mat-select [(ngModel)]="selectedValue3" [ngModelOptions]="{ standalone: true }"
+              class="select custom-mat-select" placeholder="California">
+              @for (data of selectedList3; track data) {
+                <mat-option [value]="data.value">
+                  {{ data.value }}
+                </mat-option>
+              }
+            </mat-select>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /Basic -->
+
+    <!-- Nested -->
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Nested</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p>Add options inside the optgroups to for group options.</p>
+            <select class="form-control nested">
+              <optgroup label="Group1">
+                <option selected="selected">orange</option>
+                <option>white</option>
+                <option>purple</option>
+              </optgroup>
+              <optgroup label="Group2">
+                <option>purple</option>
+                <option>orange</option>
+                <option>white</option>
+              </optgroup>
+              <optgroup label="Group3">
+                <option>white</option>
+                <option>purple</option>
+                <option>orange</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /Nested -->
+
+    <!-- Placeholder -->
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Placeholder</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p>Apply Placeholder by setting option placeholder option.</p>
+            <select class="placeholder js-states form-control">
+              <option>Choose...</option>
+              <option value="one">First</option>
+              <option value="two">Second</option>
+              <option value="three">Third</option>
+              <option value="four">Fourth</option>
+              <option value="five">Fifth</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /Placeholder -->
+
+    <!-- Tagging with multi-value -->
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Tagging with multi-value select boxes</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p>Set tags: true to convert select 2 in Tag mode.</p>
+            <select class="form-control tagging" multiple="multiple">
+              <option>orange</option>
+              <option>white</option>
+              <option>purple</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /Tagging with multi-value -->
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Small Select2</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p>Use data('select2') function to get container of select2.</p>
+            <select class="form-control form-small select">
+              <option selected="selected">orange</option>
+              <option>white</option>
+              <option>purple</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Disabling options</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p>Disable Select using disabled attribute.</p>
+            <select class="form-control disabled-results">
+              <option value="one">First</option>
+              <option value="two" disabled="disabled">Second</option>
+              <option value="three">Third</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Limiting the number of Tagging</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p>
+              Set maximumSelectionLength: 2 with tags: true to limit selectin in
+              Tag mode.
+            </p>
+            <select class="form-control tagging" multiple="multiple">
+              <option>orange</option>
+              <option>white</option>
+              <option>purple</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

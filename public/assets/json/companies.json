@@ -1,0 +1,105 @@
+{
+  "data" : [
+    {
+      "CompanyName": "NovaWave LLC",
+      "Email": "robertson@gmail.com",
+      "AccountURL": "nw.example.com",
+      "Plan": "Advanced (Monthly)",
+      "CreatedDate": "25 Sep 2023",
+      "Image": "company-icon-01.svg",
+      "Status": "Active"
+      
+  },
+  {
+      "CompanyName": "BlueSky Industries",
+      "Email": "sharon@example.com",
+      "AccountURL": "bsi.example.com",
+      "Plan": "Basic (Yearly)",
+      "CreatedDate": "29 Sep 2023",
+      "Image": "company-icon-02.svg",
+      "Status": "Inactive"
+      
+  },
+  {
+      "CompanyName": "Silver Hawk",
+      "Email": "vaughan12@gmail.com",
+      "AccountURL": "sh.example.com",
+      "Plan": "Advanced (Monthly)",
+      "CreatedDate": "04 Oct 2023",
+      "Image": "company-icon-03.svg",
+      "Status": "Active"
+      
+  },
+  {
+      "CompanyName": "Summit Peak",
+      "Email": "jessica13@gmail.com",
+      "AccountURL": "sp.example.com",
+      "Plan": "Advanced (Monthly)",
+      "CreatedDate": "04 Oct 2023",
+      "Image": "company-icon-04.svg",
+      "Status": "Active"
+      
+  },
+  {
+      "CompanyName": "RiverStone Venture",
+      "Email": "carolTho3@gmail.com",
+      "AccountURL": "rsv.example.com",
+      "Plan": "Enterprise (Monthly)",
+      "CreatedDate": "27 Oct 2023",
+      "Image": "company-icon-05.svg",
+      "Status": "Active"
+      
+  },
+  {
+      "CompanyName": "Bright Bridge Group",
+      "Email": "dawnmercha@gmail.com",
+      "AccountURL": "bbg.example.com",
+      "Plan": "Advanced (Monthly)",
+      "CreatedDate": "28 Oct 2023",
+      "Image": "company-icon-06.svg",
+      "Status": "Active"
+      
+  },
+  {
+      "CompanyName": "CoastalStar Co.",
+      "Email": "rachel@gmail.com",
+      "AccountURL": "csc.example.com",
+      "Plan": "Enterprise (Yearly)",
+      "CreatedDate": "29 Oct 2023",
+      "Image": "company-icon-07.svg",
+      "Status": "Active"
+      
+  },
+  {
+      "CompanyName": "HarborView",
+      "Email": "jonelle@gmail.com",
+      "AccountURL": "hv.example.com",
+      "Plan": "Basic (Monthly)",
+      "CreatedDate": "30 Oct 2023",
+      "Image": "company-icon-08.svg",
+      "Status": "Active"
+      
+  },
+  {
+      "CompanyName": "Golden Gate Ltd",
+      "Email": "jonathan@gmail.com",
+      "AccountURL": "ggl.example.com",
+      "Plan": "Basic (Monthly)",
+      "CreatedDate": "11 Dec 2023",
+      "Image": "company-icon-09.svg",
+      "Status": "Active"
+      
+  },
+  {
+      "CompanyName": "Redwood Inc",
+      "Email": "brook@gmail.com",
+      "AccountURL": "ri.example.com",
+      "Plan": "Advanced (Monthly)",
+      "CreatedDate": "15 Dec 2023",
+      "Image": "company-icon-10.svg",
+      "Status": "Active"
+      
+  }
+  ],
+  "totalData": 10
+}

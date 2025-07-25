@@ -1,0 +1,94 @@
+{
+"data" : [
+  {
+    "DealName": "Collins",
+    "Stage": "Qualify To Buy",
+    "DealValue": "$04,51,000",
+    "Tags": "Collab",
+    "ExpectedCloseDate": "25 Sep 2025",
+    "Probability": "90%",
+    "Status": "Won"
+  },
+  {
+    "DealName": "Konopelski",
+    "Stage": "Proposal Made",
+    "DealValue": "$03,12,500",
+    "Tags": "Rated",
+    "ExpectedCloseDate": "29 Sep 2025",
+    "Probability": "15 %",
+    "Status": "Lost"
+  },
+  {
+    "DealName": "Adams",
+    "Stage": "Contact Made",
+    "DealValue": "$04,14,800",
+    "Tags": "Rejected",
+    "ExpectedCloseDate": "04 Oct 2025",
+    "Probability": "95 %",
+    "Status": "Won"
+  },
+  {
+    "DealName": "Schumm",
+    "Stage": "Qualify To Buy",
+    "DealValue": "$11,14,400",
+    "Tags": "Collab",
+    "ExpectedCloseDate": "15 Oct 2025",
+    "Probability": "99 %",
+    "Status": "Won"
+  },
+  {
+    "DealName": "Wisozk",
+    "Stage": "Presentation",
+    "DealValue": "$16,11,400",
+    "Tags": "Rated",
+    "ExpectedCloseDate": "27 Oct 2025",
+    "Probability": "10 %",
+    "Status": "Open"
+  },
+  {
+    "DealName": "Heller",
+    "Stage": "Appointment",
+    "DealValue": "$78,11,800",
+    "Tags": "Rated",
+    "ExpectedCloseDate": "07 Nov 2025",
+    "Probability": "70 %",
+    "Status": "Won"
+  },
+  {
+    "DealName": "Gutkowski",
+    "Stage": "Proposal Made",
+    "DealValue": "$09,05,947",
+    "Tags": "Promotion",
+    "ExpectedCloseDate": "12 Nov 2025",
+    "Probability": "10 %",
+    "Status": "Open"
+  },
+  {
+    "DealName": "Walter",
+    "Stage": "Qualify To Buy",
+    "DealValue": "$04,51,000",
+    "Tags": "Rejected",
+    "ExpectedCloseDate": "23 Nov 2025",
+    "Probability": "90 %",
+    "Status": "Won"
+  },
+  {
+    "DealName": "Hansen",
+    "Stage": "Appointment",
+    "DealValue": "$72,14,078",
+    "Tags": "Collab",
+    "ExpectedCloseDate": "11 Dec 2025",
+    "Probability": "40 %",
+    "Status": "Won"
+  },
+  {
+    "DealName": "Leuschke",
+    "Stage": "Proposal Made",
+    "DealValue": "$09,05,947",
+    "Tags": "Rated",
+    "ExpectedCloseDate": "17 Dec 2025",
+    "Probability": "47 %",
+    "Status": "Lost"
+  }
+],"totalData": 10
+}

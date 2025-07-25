@@ -1,0 +1,21 @@
+{
+  "data" : [
+  {
+    "Title": "We scheduled a meeting for next week",
+    "ActivityType": "Meeting",
+    "DueDate": "25 Sep 2025, 12:12 pm",
+    "Owner": "Hendry Milner",
+    "CreatedAt": "22 Sep 2025, 10:14 am",
+    "Image": "avatar-17.jpg"
+  },
+  {
+    "Title": "Will have a meeting before project start",
+    "ActivityType": "Meeting",
+    "DueDate": "27 Oct 2025, 12:30 pm",
+    "Owner": "Theresa Nelson",
+    "CreatedAt": "21 Oct 2025, 03:00 pm",
+    "Image": "avatar-14.jpg"
+  }
+],
+  "totalData":2
+}

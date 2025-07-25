@@ -1,0 +1,771 @@
+<!-- Start Content -->
+<div class="content pb-0">
+  <!-- Page Header -->
+  <div
+    class="d-flex align-items-center justify-content-between gap-2 mb-4 flex-wrap"
+  >
+    <div>
+      <h4 class="mb-0">Project Dashboard</h4>
+    </div>
+    <div class="gap-2 d-flex align-items-center flex-wrap">
+      <div class="daterangepick form-control w-auto d-flex align-items-center">
+        <app-date-range-picker></app-date-range-picker>
+      </div>
+      <a
+        href="javascript:void(0);"
+        class="btn btn-icon btn-outline-light shadow"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        aria-label="Refresh"
+        data-bs-original-title="Refresh"
+        ><i class="ti ti-refresh"></i
+      ></a>
+      <app-collapse-header></app-collapse-header>
+    </div>
+  </div>
+  <!-- End Page Header -->
+
+  <!-- start row -->
+  <div class="row">
+    <div class="col-md-12 col-xl-6 d-flex">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <div
+            class="d-flex align-items-center justify-content-between flex-wrap row-gap-3"
+          >
+            <h6 class="mb-0">Recent Projects</h6>
+            <div class="d-flex align-items-center flex-wrap row-gap-3">
+              <div class="dropdown me-2">
+                <a
+                  class="dropdown-toggle btn btn-outline-light shadow"
+                  data-bs-toggle="dropdown"
+                  href="javascript:void(0);"
+                >
+                  Last 30 days
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 15 days
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 30 days
+                  </a>
+                </div>
+              </div>
+              <a
+                class="btn btn-primary d-inline-flex align-items-center"
+                href="javascript:void(0);"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvas_add"
+              >
+                <i class="ti ti-square-rounded-plus-filled me-1"></i>Add Project
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive custom-table">
+            <table class="table table-nowrap dataTable" id="recent-project">
+              <thead class="table-light">
+                <tr>
+                  <th>Name</th>
+                  <th>Company Name</th>
+                  <th>Priority</th>
+                  <th>Due Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd">
+                  <td>
+                    <h2 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                      <a
+                        [routerLink]="routes.projectDetails"
+                        class="avatar avatar-rounded border me-2"
+                        ><img
+                          class="w-auto h-auto"
+                          src="assets/img/priority/truellysel.svg"
+                          alt="User Image" /></a
+                      ><a [routerLink]="routes.projectDetails">Truelysell</a>
+                    </h2>
+                  </td>
+                  <td>
+                    <h6 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                      <a
+                        [routerLink]="routes.companiesDetails"
+                        class="avatar avatar-rounded border me-2"
+                        ><img
+                          class="w-auto h-auto"
+                          src="assets/img/icons/company-icon-01.svg"
+                          alt="User Image" /></a
+                      ><a [routerLink]="routes.companiesDetails">NovaWave LLC</a>
+                    </h6>
+                  </td>
+                  <td>
+                    <span
+                      class="d-inline-flex align-items-center badge badge-pill badge-soft-danger border border-danger"
+                      ><i class="ti ti-square-rounded-filled me-1"></i>
+                      High</span
+                    >
+                  </td>
+                  <td>23 Nov 2025</td>
+                </tr>
+                <tr class="even">
+                  <td>
+                    <h2 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                      <a
+                        [routerLink]="routes.projectDetails"
+                        class="avatar avatar-rounded border me-2"
+                        ><img
+                          class="w-auto h-auto"
+                          src="assets/img/priority/dreamchat.svg"
+                          alt="User Image" /></a
+                      ><a [routerLink]="routes.projectDetails">Dreamschat</a>
+                    </h2>
+                  </td>
+                  <td>
+                    <h6 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                      <a
+                        [routerLink]="routes.companiesDetails"
+                        class="avatar avatar-rounded border me-2"
+                        ><img
+                          class="w-auto h-auto"
+                          src="assets/img/icons/company-icon-02.svg"
+                          alt="User Image" /></a
+                      ><a [routerLink]="routes.companiesDetails">BlueSky</a>
+                    </h6>
+                  </td>
+                  <td>
+                    <span
+                      class="d-inline-flex align-items-center badge badge-pill badge-soft-warning border border-warning"
+                      ><i class="ti ti-square-rounded-filled me-1"></i>
+                      Medium</span
+                    >
+                  </td>
+                  <td>07 Nov 2025</td>
+                </tr>
+                <tr class="odd">
+                  <td>
+                    <h2 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                      <a
+                        [routerLink]="routes.projectDetails"
+                        class="avatar avatar-rounded border me-2"
+                        ><img
+                          class="w-auto h-auto"
+                          src="assets/img/priority/truellysell.svg"
+                          alt="User Image" /></a
+                      ><a [routerLink]="routes.projectDetails">DreamGigs</a>
+                    </h2>
+                  </td>
+                  <td>
+                    <h6 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                      <a
+                        [routerLink]="routes.companiesDetails"
+                        class="avatar avatar-rounded border me-2"
+                        ><img
+                          class="w-auto h-auto"
+                          src="assets/img/icons/company-icon-03.svg"
+                          alt="User Image" /></a
+                      ><a [routerLink]="routes.companiesDetails">Silve Hawk</a>
+                    </h6>
+                  </td>
+                  <td>
+                    <span
+                      class="d-inline-flex align-items-center badge badge-pill badge-soft-danger border border-danger"
+                      ><i class="ti ti-square-rounded-filled me-1"></i>
+                      High</span
+                    >
+                  </td>
+                  <td>15 Oct 2025</td>
+                </tr>
+                <tr class="even">
+                  <td>
+                    <h2 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                      <a
+                        [routerLink]="routes.projectDetails"
+                        class="avatar avatar-rounded border me-2"
+                        ><img
+                          class="w-auto h-auto"
+                          src="assets/img/priority/servbook.svg"
+                          alt="User Image" /></a
+                      ><a [routerLink]="routes.projectDetails">Servbook</a>
+                    </h2>
+                  </td>
+                  <td>
+                    <h6 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                      <a
+                        [routerLink]="routes.companiesDetails"
+                        class="avatar avatar-rounded border me-2"
+                        ><img
+                          class="w-auto h-auto"
+                          src="assets/img/icons/company-icon-04.svg"
+                          alt="User Image" /></a
+                      ><a [routerLink]="routes.companiesDetails">Summit Peak</a>
+                    </h6>
+                  </td>
+                  <td>
+                    <span
+                      class="d-inline-flex align-items-center badge badge-pill badge-soft-danger border border-danger"
+                      ><i class="ti ti-square-rounded-filled me-1"></i>
+                      High</span
+                    >
+                  </td>
+                  <td>29 Sep 2025</td>
+                </tr>
+                <tr class="odd">
+                  <td>
+                    <h2 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                      <a
+                        [routerLink]="routes.projectDetails"
+                        class="avatar avatar-rounded border me-2"
+                        ><img
+                          class="w-auto h-auto"
+                          src="assets/img/priority/dream-pos.svg"
+                          alt="User Image" /></a
+                      ><a [routerLink]="routes.projectDetails">DreamPOS</a>
+                    </h2>
+                  </td>
+                  <td>
+                    <h6 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                      <a
+                        [routerLink]="routes.companiesDetails"
+                        class="avatar avatar-rounded border me-2"
+                        ><img
+                          class="w-auto h-auto"
+                          src="assets/img/icons/company-icon-05.svg"
+                          alt="User Image" /></a
+                      ><a [routerLink]="routes.companiesDetails">RiverStone Ltd</a>
+                    </h6>
+                  </td>
+                  <td>
+                    <span
+                      class="d-inline-flex align-items-center badge badge-pill badge-soft-warning border border-warning"
+                      ><i class="ti ti-square-rounded-filled me-1"></i>
+                      Medium</span
+                    >
+                  </td>
+                  <td>25 Sep 2025</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+
+    <div class="col-md-12 col-xl-6 d-flex">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <div
+            class="d-flex align-items-center justify-content-between flex-wrap row-gap-3"
+          >
+            <h6 class="mb-0">Project By Stage</h6>
+            <div class="dropdown">
+              <a
+                class="dropdown-toggle btn btn-outline-light shadow"
+                data-bs-toggle="dropdown"
+                href="javascript:void(0);"
+              >
+                Last 30 days
+              </a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <a href="javascript:void(0);" class="dropdown-item">
+                  Last 15 days
+                </a>
+                <a href="javascript:void(0);" class="dropdown-item">
+                  Last 30 days
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="contacts-analysis">
+            <apx-chart
+                    [series]="chartOptions3.series"
+                    [chart]="chartOptions3.chart"
+                    [labels]="chartOptions3.labels"
+                    [fill]="chartOptions3.fill"
+                    [dataLabels]="chartOptions3.dataLabels"
+                    [responsive]="chartOptions3.responsive"
+                    [colors]="chartOptions3.colors"
+                    [legend]="chartOptions3.legend"
+                    [plotOptions]="chartOptions3.plotOptions"
+                  ></apx-chart>
+          </div>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+  </div>
+  <!-- end row -->
+
+  <!-- start row -->
+  <div class="row">
+    <div class="col-md-12 col-xl-6 d-flex">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <div
+            class="d-flex align-items-center justify-content-between flex-wrap row-gap-3"
+          >
+            <h6 class="mb-0">Projects By Stage</h6>
+            <div class="d-flex align-items-center flex-wrap row-gap-3">
+              <div class="dropdown me-2">
+                <a
+                  class="dropdown-toggle btn btn-outline-light shadow"
+                  data-bs-toggle="dropdown"
+                  href="javascript:void(0);"
+                >
+                  Sales Pipeline
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Marketing Pipeline
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Sales Pipeline
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Email
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Chats
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Operational
+                  </a>
+                </div>
+              </div>
+              <div class="dropdown">
+                <a
+                  class="dropdown-toggle btn btn-outline-light shadow"
+                  data-bs-toggle="dropdown"
+                  href="javascript:void(0);"
+                >
+                  Last 3 months
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 30 Days
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 15 Days
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 7 Days
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body center pt-0">
+          <div id="project-stage">
+            <apx-chart
+                    [series]="chartOptions4.series"
+                    [chart]="chartOptions4.chart"
+                    [dataLabels]="chartOptions4.dataLabels"
+                    [plotOptions]="chartOptions4.plotOptions"
+                    [xaxis]="chartOptions4.xaxis"
+                    [colors]="chartOptions4.colors"
+                    [legend]="chartOptions4.legend"
+                  ></apx-chart>
+          </div>
+          <p class="fw-medium mb-0">
+            This data collected based on the Projects for last 30 days
+          </p>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+
+    <div class="col-md-12 col-xl-6 d-flex flex-column">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <div
+            class="d-flex align-items-center justify-content-between flex-wrap row-gap-3"
+          >
+            <h6 class="mb-0">Leads By Stage</h6>
+            <div class="d-flex align-items-center flex-wrap row-gap-3">
+              <div class="dropdown me-2">
+                <a
+                  class="dropdown-toggle btn btn-outline-light shadow"
+                  data-bs-toggle="dropdown"
+                  href="javascript:void(0);"
+                >
+                  Marketing Pipeline
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Marketing Pipeline
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Sales Pipeline
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Email
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Chats
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Operational
+                  </a>
+                </div>
+              </div>
+              <div class="dropdown">
+                <a
+                  class="dropdown-toggle btn btn-outline-light shadow"
+                  data-bs-toggle="dropdown"
+                  href="javascript:void(0);"
+                >
+                  Last 3 months
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 30 Days
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 15 Days
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 7 Days
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body py-0">
+          <div id="last-chart">
+             <apx-chart
+                    [series]="chartOptions.series"
+                    [chart]="chartOptions.chart"
+                    [dataLabels]="chartOptions.dataLabels"
+                    [plotOptions]="chartOptions.plotOptions"
+                    [xaxis]="chartOptions.xaxis"
+                    [colors]="chartOptions.colors"
+                  ></apx-chart>
+          </div>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+
+      <div class="card w-100">
+        <div class="card-header">
+          <div
+            class="d-flex align-items-center justify-content-between flex-wrap row-gap-3"
+          >
+            <h6 class="mb-0">Won Deals Stage</h6>
+            <div class="d-flex align-items-center flex-wrap row-gap-3">
+              <div class="dropdown me-2">
+                <a
+                  class="dropdown-toggle btn btn-outline-light shadow"
+                  data-bs-toggle="dropdown"
+                  href="javascript:void(0);"
+                >
+                  Marketing Pipeline
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Marketing Pipeline
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Sales Pipeline
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Email
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Chats
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Operational
+                  </a>
+                </div>
+              </div>
+              <div class="dropdown">
+                <a
+                  class="dropdown-toggle btn btn-outline-light shadow"
+                  data-bs-toggle="dropdown"
+                  href="javascript:void(0);"
+                >
+                  Last 3 months
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 30 Days
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 15 Days
+                  </a>
+                  <a href="javascript:void(0);" class="dropdown-item">
+                    Last 7 Days
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body py-0">
+          <div id="won-chart">
+             <apx-chart
+                    [series]="chartOptions2.series"
+                    [chart]="chartOptions2.chart"
+                    [dataLabels]="chartOptions2.dataLabels"
+                    [plotOptions]="chartOptions2.plotOptions"
+                    [xaxis]="chartOptions2.xaxis"
+                    [colors]="chartOptions2.colors"
+                  ></apx-chart>
+          </div>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+  </div>
+  <!-- end row -->
+</div>
+<!-- End Content -->
+
+
+		<!-- Add Canvas -->
+    <div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="mb-0">Add New Project</h5>
+            <button type="button"
+                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                data-bs-dismiss="offcanvas" aria-label="Close">
+            </button>
+        </div>
+        <div class="offcanvas-body">
+            <form>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label">Name <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Project ID<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Project Type <span
+                                    class="text-danger">*</span></label>
+                                    <p-select  [options]="selectedValue1" [(ngModel)]="selectedValue1" [ngModelOptions]="{standalone: true}" optionLabel="name" placeholder="Select" [filter]="true"  class="form-control" />
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-6">											
+                        <div class="mb-3">
+                            <label class="form-label">Client <span class="text-danger">*</span></label>
+                            <mat-select class="select custom-mat-select" placeholder="Select">
+                                <mat-option value="1">Select</mat-option>
+                                <mat-option value="1">NovaWave LLC</mat-option>
+                                <mat-option value="1">Silver Hawk</mat-option>
+                                <mat-option value="1">Harbor View</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Category <span class="text-danger">*</span></label>
+                            <mat-select class="select custom-mat-select" placeholder="Select">
+                                <mat-option value="1">Select</mat-option>
+                                <mat-option value="1">Harbor View</mat-option>
+                                <mat-option value="1">LLC</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Project Timing <span
+                                    class="text-danger">*</span></label>
+                            <mat-select class="select custom-mat-select" placeholder="Select">
+                                <mat-option value="1">Select</mat-option>
+                                <mat-option value="1">Hourly</mat-option>
+                                <mat-option value="1">Weekly</mat-option>
+                                <mat-option value="1">Monthly</mat-option>
+                                <mat-option value="1">Less than 1 Month</mat-option>
+                                <mat-option value="1">Less than 3 months</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Price <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Responsible Persons <span class="text-danger">*</span></label>
+                             <mat-select
+                  [(value)]="selectedOption3"
+                  class="custom-mat-select img-mat-select-mat-chip"
+                  placeholder="Select"
+                  multiple
+                >
+                  <mat-select-trigger>
+                    <mat-chip-set>
+                      @for (user of selectedOption3; track user) {
+                      <mat-chip>
+                        <img
+                          [src]="user.image"
+                          alt="{{ user.name }}"
+                          width="24"
+                          height="24"
+                          style="margin-right: 5px"
+                        />
+                        {{ user.name }}
+                        <mat-icon
+                          class="cancel-icon"
+                          (click)="removeOption3(user)"
+                          >cancel</mat-icon
+                        >
+                      </mat-chip>
+                      }
+                    </mat-chip-set>
+                  </mat-select-trigger>
+                  @for (user of option3; track user) {
+                  <mat-option
+                    [value]="user"
+                    class="img-mat-select-mat-chip-options"
+                  >
+                    <img
+                      src="{{ user.image }}"
+                      alt="{{ user.name }}"
+                      width="24"
+                      height="24"
+                      style="margin-right: 5px"
+                    />
+                    {{ user.name }}
+                  </mat-option>
+                  }
+                </mat-select>
+                           
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Team Leader <span class="text-danger">*</span></label>
+                              <mat-select
+                  [(value)]="selectedOption4"
+                  class="custom-mat-select img-mat-select-mat-chip"
+                  placeholder="Select"
+                  multiple
+                >
+                  <mat-select-trigger>
+                    <mat-chip-set>
+                      @for (user of selectedOption4; track user) {
+                      <mat-chip>
+                        <img
+                          [src]="user.image"
+                          alt="{{ user.name }}"
+                          width="24"
+                          height="24"
+                          style="margin-right: 5px"
+                        />
+                        {{ user.name }}
+                        <mat-icon
+                          class="cancel-icon"
+                          (click)="removeOption4(user)"
+                          >cancel</mat-icon
+                        >
+                      </mat-chip>
+                      }
+                    </mat-chip-set>
+                  </mat-select-trigger>
+                  @for (user of option4; track user) {
+                  <mat-option
+                    [value]="user"
+                    class="img-mat-select-mat-chip-options"
+                  >
+                    <img
+                      src="{{ user.image }}"
+                      alt="{{ user.name }}"
+                      width="24"
+                      height="24"
+                      style="margin-right: 5px"
+                    />
+                    {{ user.name }}
+                  </mat-option>
+                  }
+                </mat-select>
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Start Date <span class="text-danger">*</span></label>
+                            <div class="input-group w-auto input-group-flat ngxdate">
+                                <input type="text" class="form-control" bsDatepicker [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate" placeholder="dd/mm/yyyy">
+                                <span class="input-group-text">
+                                    <i class="ti ti-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Due Date <span class="text-danger">*</span></label>
+                            <div class="input-group w-auto input-group-flat ngxdate2">
+                                <input type="text" class="form-control" bsDatepicker [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate2" placeholder="dd/mm/yyyy">
+                                <span class="input-group-text">
+                                    <i class="ti ti-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Priority</label>
+                            <mat-select class="select custom-mat-select" placeholder="Select">
+                                <mat-option value="1">Select</mat-option>
+                                <mat-option value="1">High</mat-option>
+                                <mat-option value="1">Low</mat-option>
+                                <mat-option value="1">Medium</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                       <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <mat-select class="select custom-mat-select" placeholder="Select">
+                                <mat-option value="1">Select</mat-option>
+                                <mat-option value="1">Active</mat-option>
+                                <mat-option value="1">Inactive</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label">Description <span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control" rows="3" placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-end">
+                    <button type="button" data-bs-dismiss="offcanvas" class="btn btn-light me-2">Cancel</button>
+                    <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#create_success">Create New</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /Add Canvas -->

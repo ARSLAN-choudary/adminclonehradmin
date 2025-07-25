@@ -1,0 +1,298 @@
+<!-- Start Content -->
+<div class="content">
+
+    <!-- Page Header -->
+    <div class="d-flex align-items-center justify-content-between gap-2 mb-4 flex-wrap">
+        <div>
+            <h4 class="mb-1">Settings</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Settings</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="gap-2 d-flex align-items-center flex-wrap">
+            <a href="javascript:void(0);" class="btn btn-icon btn-outline-light shadow" data-bs-toggle="tooltip"
+                data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
+                    class="ti ti-refresh"></i></a>
+            <app-collapse-header></app-collapse-header>
+        </div>
+    </div>
+    <!-- End Page Header -->
+
+    <!-- Settings Menu -->
+    <div class="card border-0">
+        <div class="card-body pb-0 pt-0 px-2">
+            <ul class="nav nav-tabs nav-bordered nav-bordered-primary">
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.profileSettings" class="nav-link p-2">
+                        <i class="ti ti-settings-cog me-2"></i>General Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.companySettings" class="nav-link p-2">
+                        <i class="ti ti-world-cog me-2"></i>Website Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.invoiceSettings" class="nav-link p-2">
+                        <i class="ti ti-apps me-2"></i>App Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.emailSettings" class="nav-link p-2">
+                        <i class="ti ti-device-laptop me-2"></i>System Settings
+                    </a>
+                </li>
+                <li class="nav-item me-3">
+                    <a [routerLink]="routes.paymentGatewaySettings" class="nav-link p-2">
+                        <i class="ti ti-moneybag me-2"></i>Financial Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a [routerLink]="routes.siteMap" class="nav-link p-2 active">
+                        <i class="ti ti-flag-cog me-2"></i>Other Settings
+                    </a>
+                </li>
+            </ul>
+        </div> <!-- end card body -->
+    </div> <!-- end card -->
+    <!-- /Settings Menu -->
+
+    <!-- start row -->
+    <div class="row row-gap-3">
+        <div class="col-xl-3 col-lg-12 theiaStickySidebar">
+
+             <!-- Settings Sidebar -->
+            <div class="card mb-0">
+                <div class="card-body">
+                    <div class="settings-sidebar">
+                        <h4 class="fs-17 mb-3">Other Settings</h4>
+                        <div class="list-group list-group-flush settings-sidebar">
+                            <a [routerLink]="routes.siteMap" class="d-block p-2 fw-">Sitemap</a>
+                            <a [routerLink]="routes.clearCache" class="d-block p-2 fw-medium">Clear Cache </a>
+                            <a [routerLink]="routes.storage" class="d-block p-2 fw-medium">Storage</a>
+                            <a [routerLink]="routes.cronJob" class="d-block p-2 fw-medium">Cronjob</a>
+                            <a [routerLink]="routes.banIpAddress" class="d-block p-2 fw-medium active">Ban IP Address</a>
+                            <a [routerLink]="routes.systemBackup" class="d-block p-2 fw-medium">System Backup</a>
+                            <a [routerLink]="routes.databaseBackup" class="d-block p-2 fw-medium">Database Backup</a>
+                            <a [routerLink]="routes.systemUpdate" class="d-block p-2 fw-medium">System Update</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Settings Sidebar -->
+
+        </div>
+
+        <div class="col-xl-9 col-lg-12">
+
+            <!-- Settings Info -->
+            <div class="card mb-0">
+                <div class="card-body">
+                    <div
+                        class="border-bottom mb-3 pb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <h4 class="fs-17 mb-0">Ban IP Address</h4>
+                        <a href="javascript:void(0)" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#add_ip"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add New Ban IP
+                        </a>
+                    </div>
+
+                    <!-- start table -->
+                    <div class="table-responsive">
+                        <table class="table table-nowrap">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Ban Ip Address</th>
+                                    <th>Reason</th>
+                                    <th>Created On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>211.11.0.25</td>
+                                    <td>Suspicious Activity</td>
+                                    <td>22 Feb 2025</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow d-inline-flex btn-outline-light"
+                                                data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                    class="ti ti-dots-vertical"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="javascript:void(0);"
+                                                    data-bs-toggle="modal" data-bs-target="#edit_ip"><i
+                                                        class="ti ti-edit text-blue"></i> Edit</a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_ip"><i class="ti ti-trash"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>211.03.0.11</td>
+                                    <td>Spam or Abuse</td>
+                                    <td>10 Feb 2025</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow d-inline-flex btn-outline-light"
+                                                data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                    class="ti ti-dots-vertical"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="javascript:void(0);"
+                                                    data-bs-toggle="modal" data-bs-target="#edit_ip"><i
+                                                        class="ti ti-edit text-blue"></i> Edit</a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_ip"><i class="ti ti-trash"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>211.24.0.17</td>
+                                    <td>Unauthorized Access</td>
+                                    <td>17 Jan 2025</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow d-inline-flex btn-outline-light"
+                                                data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                    class="ti ti-dots-vertical"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="javascript:void(0);"
+                                                    data-bs-toggle="modal" data-bs-target="#edit_ip"><i
+                                                        class="ti ti-edit text-blue"></i> Edit</a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_ip"><i class="ti ti-trash"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>211.12.0.34</td>
+                                    <td>Violation of Terms</td>
+                                    <td>07 Jan 2025</td>
+                                    <td>
+                                        <div class="dropdown table-action">
+                                            <a href="#"
+                                                class="action-icon btn btn-xs shadow d-inline-flex btn-outline-light"
+                                                data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                    class="ti ti-dots-vertical"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="javascript:void(0);"
+                                                    data-bs-toggle="modal" data-bs-target="#edit_ip"><i
+                                                        class="ti ti-edit text-blue"></i> Edit</a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_ip"><i class="ti ti-trash"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- end table -->
+
+                </div>
+            </div>
+            <!-- /Settings Info -->
+
+        </div>
+    </div>
+    <!-- end row -->
+
+</div>
+<!-- End Content -->
+
+
+<!-- Add Ban IP Address -->
+<div class="modal custom-modal fade" id="add_ip" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Ban IP Address</h5>
+                <button type="button"
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">IP Address <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Reason <span class="text-danger">*</span></label>
+                        <textarea class="form-control" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex align-items-center justify-content-end gap-2">
+                    <a href="#" class="btn btn-sm btn-light" data-bs-dismiss="modal">Cancel</a>
+                    <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Create New</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Add Ban IP Address -->
+
+<!-- Edit Ban IP Address -->
+<div class="modal custom-modal fade" id="edit_ip" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Ban IP Address</h5>
+                <button type="button"
+                    class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">IP Address <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" value="211.11.0.25	">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Reason <span class="text-danger">*</span></label>
+                        <textarea class="form-control" rows="4">Suspicious Activity	</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex align-items-center justify-content-end gap-2">
+                    <a href="#" class="btn btn-sm btn-light" data-bs-dismiss="modal">Cancel</a>
+                    <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Edit Ban IP Address -->
+
+<!-- Delete IP Address -->
+<div class="modal fade" id="delete_ip">
+    <div class="modal-dialog modal-dialog-centered modal-sm rounded-0">
+        <div class="modal-content rounded-0">
+            <div class="modal-body p-4 text-center position-relative">
+                <div class="mb-3 position-relative z-1">
+                    <span class="avatar avatar-xl badge-soft-danger border-0 text-danger rounded-circle"><i
+                            class="ti ti-trash fs-24"></i></span>
+                </div>
+                <h5 class="mb-1">Delete Confirmation</h5>
+                <p class="mb-3">Are you sure you want to remove ban IP address you selected.</p>
+                <div class="d-flex justify-content-center">
+                    <a href="#" class="btn btn-sm btn-light position-relative z-1 me-2 w-100"
+                        data-bs-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-sm btn-primary position-relative z-1 w-100" data-bs-dismiss="modal">Yes,
+                        Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Delete IP Address -->
