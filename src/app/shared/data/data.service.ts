@@ -452,6 +452,19 @@ export class DataService {
               route: routes.projectDashboard,
             },
           ],
+        }, {
+          menuValue: 'Administration',
+          hasSubRoute: true,
+          showSubRoute: false,
+          icon: 'dashboard',
+          base: 'administration',
+          subMenus: [
+            {
+              menuValue: 'New Application',
+              base: 'administratorApplication',
+              route: routes.administratorApplication,
+            },
+          ],
         },
         {
           menuValue: 'Applications',

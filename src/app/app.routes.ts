@@ -38,6 +38,12 @@ export const routes: Routes = [
             {path: 'index', loadComponent: () => import('./features/main-menu/dashboards/deals-dashboard/deals-dashboard.component').then((m) => m.DealsDashboardComponent),},
             {path: 'lead-dashboard', loadComponent: () => import('./features/main-menu/dashboards/lead-dashboard/lead-dashboard.component').then((m) => m.LeadDashboardComponent),},
             {path: 'project-dashboard', loadComponent: () => import('./features/main-menu/dashboards/project-dashboard/project-dashboard.component').then((m) => m.ProjectDashboardComponent),},
+            {path: 'new-application', loadComponent: () => import('./features/new-application/new-application.component').then((m) => m.NewApplicationComponent),
+                children: [
+                    {path: 'new-application', loadComponent: () => import('./features/new-application/new-application.component').then((m) => m.NewApplicationComponent),},
+
+                ],
+            },
             //Application
             {path: 'application', loadComponent: () => import('./features/main-menu/application/application.component').then((m) => m.ApplicationComponent),
                 children: [
