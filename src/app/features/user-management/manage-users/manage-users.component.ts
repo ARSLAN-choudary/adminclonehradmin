@@ -100,6 +100,7 @@ export class ManageUsersComponent {
         }
       });
       this.dataSource = new MatTableDataSource<manageUsers>(this.actualData);
+      debugger
       this.pagination.calculatePageSize.next({
         totalData: this.totalData,
         pageSize: this.pageSize,
