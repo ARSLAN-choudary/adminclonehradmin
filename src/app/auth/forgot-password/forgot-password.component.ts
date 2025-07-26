@@ -1,27 +1,42 @@
-import {Component} from '@angular/core';
-import {routes} from '../../shared/routes/routes';
-import {Router, RouterLink} from '@angular/router';
-import {FormsModule} from '@angular/forms';
+import { Component } from "@angular/core";
+import { routes } from "../../shared/routes/routes";
+import { Router, RouterLink } from "@angular/router";
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 
 @Component({
-    selector: 'app-forgot-password',
-    imports: [RouterLink, FormsModule],
-    templateUrl: './forgot-password.component.html',
-    styleUrl: './forgot-password.component.scss'
+  selector: "app-forgot-password",
+  imports: [RouterLink, FormsModule, ReactiveFormsModule],
+  templateUrl: "./forgot-password.component.html",
+  styleUrl: "./forgot-password.component.scss",
 })
 export class ForgotPasswordComponent {
-    currentYear: any;
+  currentYear: any;
 
-    public routes = routes
+  forgotForm!: FormGroup;
+  public routes = routes;
+  constructor(private fb: FormBuilder, private router: Router) {
+    this.currentYear = new Date().getFullYear();
+    this.forgotForm = this.fb.group({
+      email: ["", [Validators.required, Validators.email]],
+    });
+  }
 
-    constructor(private router: Router) {
+  get email() {
+    return this.forgotForm.get("email")!;
+  }
 
+  onSubmit() {
+    console.log(this.forgotForm.value);
 
-        this.currentYear = new Date().getFullYear();
+    this.forgotForm.markAllAsTouched();
+    if (this.forgotForm.invalid) return;
 
-    }
-
-    public navigate() {
-        this.router.navigate([routes.emailVerification]);
-    }
+    this.router.navigate([routes.emailVerification]);
+  }
 }
