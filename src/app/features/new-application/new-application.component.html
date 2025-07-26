@@ -429,12 +429,12 @@
                                         <span class="checkmarks"></span>
                                     </div>
                                 </td>
-<!--                                <td>-->
-<!--                                    <div class="set-star rating-select" tabindex="0" (keydown.enter)="onClickStar(data)"-->
-<!--                                         (click)="onClickStar(data)" [class.filled]="data.isStarActive">-->
-<!--                                        <i class="ti ti-star-filled fs-16"></i>-->
-<!--                                    </div>-->
-<!--                                </td>-->
+                                <!--                                <td>-->
+                                <!--                                    <div class="set-star rating-select" tabindex="0" (keydown.enter)="onClickStar(data)"-->
+                                <!--                                         (click)="onClickStar(data)" [class.filled]="data.isStarActive">-->
+                                <!--                                        <i class="ti ti-star-filled fs-16"></i>-->
+                                <!--                                    </div>-->
+                                <!--                                </td>-->
                                 <td>{{ data.reference_no }}</td>
                                 <td>{{ data.employer_name }}</td>
                                 <td>{{ data.job_title }}</td>
@@ -449,11 +449,13 @@
                                 </td>
 
                                 <td>
-                                    <div class="dropdown table-action"><a href="javascript:void(0);"
-                                                                          class="action-icon btn btn-xs shadow btn-icon btn-outline-light"
-                                                                          data-bs-toggle="dropdown"
-                                                                          aria-expanded="false"><i
-                                            class="ti ti-dots-vertical"></i></a>
+                                    <div class="dropdown table-action">
+                                        <a href="javascript:void(0);"
+                                           class="action-icon btn btn-xs shadow btn-icon btn-outline-light"
+                                           data-bs-toggle="dropdown"
+                                           aria-expanded="false"><i
+                                                class="ti ti-dots-vertical"></i>
+                                        </a>
                                         <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
                                                                                           href="javascript:void(0);"
                                                                                           data-bs-toggle="offcanvas"
@@ -606,18 +608,20 @@
                                     <form #f="ngForm" [formGroup]="form">
                                         <ngx-intl-tel-input
                                                 [cssClass]="'form-control'"
-                                                [preferredCountries]="[CountryISO.UnitedStates, CountryISO.UnitedKingdom]"
+                                                [preferredCountries]="preferredCountries"
+                                                [onlyCountries]="onlyCountries"
                                                 [enableAutoCountrySelect]="false"
                                                 [enablePlaceholder]="true"
                                                 [searchCountryFlag]="true"
                                                 [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
                                                 [selectFirstCountry]="false"
-                                                [selectedCountryISO]="CountryISO.India"
+                                                [selectedCountryISO]="CountryISO.Pakistan"
                                                 [maxLength]="15"
                                                 [phoneValidation]="true"
-                                                name="phone"
+                                                [separateDialCode]="true"
                                                 formControlName="phone">
                                         </ngx-intl-tel-input>
+
                                     </form>
 
 
@@ -663,7 +667,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label">Email <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control"/>
                     </div>
                 </div>
 
@@ -687,7 +691,8 @@
                                 formControlName="phone">
                         </ngx-intl-tel-input>
 
-                        <div class="text-danger mt-1" *ngIf="form.get('phone')?.invalid && (form.get('phone')?.touched || form.get('phone')?.dirty)">
+                        <div class="text-danger mt-1"
+                             *ngIf="form.get('phone')?.invalid && (form.get('phone')?.touched || form.get('phone')?.dirty)">
                             Invalid phone number
                         </div>
                     </div>
