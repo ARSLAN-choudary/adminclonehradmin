@@ -25,6 +25,7 @@ import {
     SearchCountryField,
     PhoneNumberFormat
 } from 'ngx-intl-tel-input';
+import {MatInput} from "@angular/material/input";
 
 @Component({
     selector: 'app-new-application',
@@ -43,7 +44,7 @@ import {
         DateRangePickerComponent,
         CollapseHeaderComponent,
         ReactiveFormsModule,
-        NgxIntlTelInputModule
+        NgxIntlTelInputModule,
     ],
     templateUrl: './new-application.component.html',
     styleUrl: './new-application.component.scss'
@@ -204,5 +205,10 @@ export class NewApplicationComponent {
 
     trackById(_: number, item: manageUsers) {
         return (item as any).id ?? item.customer_no ?? item.email;
+    }
+
+    gotoLink() {
+        const baseUrl = window.location.origin;
+        window.open(`${baseUrl}/goto`, '_blank');
     }
 }

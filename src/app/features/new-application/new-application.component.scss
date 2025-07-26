@@ -1,0 +1,23 @@
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  stroke: #6fac44 !important;
+}
+
+::ng-deep .mat-form-field.mat-focused .mat-form-field-outline {
+  color: #6fac44 !important;
+  border-color: #6fac44 !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  stroke: rgba(0, 0, 0, 0.12); // optional default
+}
+
+::ng-deep .mat-select.mat-select-focused .mat-select-arrow {
+  color: #6fac44 !important;
+}
+
+::ng-deep .mat-select-panel {
+  border: 1px solid #6fac44;
+}
+::ng-deep .mat-select.custom-mat-select .mat-mdc-select-trigger{
+  border: 1px solid #6fac44;
+}

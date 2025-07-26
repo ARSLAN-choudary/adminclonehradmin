@@ -462,7 +462,7 @@ export class DataService {
           menuValue: 'Administration',
           hasSubRoute: true,
           showSubRoute: false,
-          icon: 'dashboard',
+          icon: 'user-star',
           base: 'administration',
           subMenus: [
             {
