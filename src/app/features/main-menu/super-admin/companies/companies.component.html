@@ -4,8 +4,8 @@
     <!-- Page Header -->
     <div class="d-flex align-items-center justify-content-between gap-2 mb-4 flex-wrap">
         <div>
-            <h4 class="mb-1">Companies<span class="badge badge-soft-primary ms-2">152</span></h4>
-            <nav aria-label="breadcrumb">
+            <h4 class="mb-1">Companies<span class="badge badge-soft-success ms-2">152</span><span
+                    class="badge badge-soft-primary ms-2">152</span></h4>            <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Companies</li>
@@ -439,18 +439,11 @@
                 <table matSort (matSortChange)="sortData($event)" class="table table-nowrap dataTable">
                     <thead class="table-light">
                     <tr>
-                        <th class="no-sort">
-                            <div class="form-check form-check-md" (click)="selectAll(initChecked)">
-                                <input class="form-check-input" type="checkbox" id="select-all"
-                                       [(ngModel)]="initChecked">
-                            </div>
-                        </th>
-                        <th class="no-sort"></th>
                         <th mat-sort-header="name">Name</th>
-                        <th mat-sort-header="email">Email</th>
-                        <th mat-sort-header="acc">Account URL</th>
-                        <th mat-sort-header="plan">Plan</th>
-                        <th mat-sort-header="date">Created Dated</th>
+                        <th mat-sort-header="email">Registration No</th>
+                        <th mat-sort-header="acc">VAT No</th>
+                        <th mat-sort-header="plan">Website</th>
+                        <th mat-sort-header="date">Inc Date</th>
                         <th mat-sort-header="sts">Status</th>
                         <th class="text-end">Action</th>
                     </tr>
@@ -458,11 +451,6 @@
                     <tbody>
                         @for (data of tableData; track data) {
                             <tr>
-                                <td>
-                                    <div class="form-check form-check-md">
-                                        <input class="form-check-input" type="checkbox" [(ngModel)]="data.isSelected">
-                                    </div>
-                                </td>
                                 <td>
                                     <div class="set-star rating-select" (click)="onClickStar(data)"
                                          [class.filled]="data.isStarActive">
@@ -505,10 +493,7 @@
                                                data-bs-target="#delete_company">
                                                 <i class="ti ti-trash text-blue me-1"></i>Delete
                                             </a>
-                                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                               data-bs-target="#company_detail">
-                                                <i class="ti ti-eye text-blue me-1"></i>View
-                                            </a>
+
                                         </div>
                                     </div>
                                 </td>
@@ -832,6 +817,19 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3 ">
+                                <label class="form-label"> Password <span
+                                        class="text-danger"> *</span></label>
+                                <div class="input-group input-group-flat pass-group">
+                                    <input type="password" [type]="password[2]?'text':'password'"
+                                           class="form-control pass-input">
+                                    <span class="input-group-text toggle-password" (click)="togglePassword(2)">
+                                                <i class="ti " [ngClass]="password[2]?'ti-eye':'ti-eye-off'"></i>
+                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 ">
                                 <label class="form-label">Confirm Password <span
                                         class="text-danger"> *</span></label>
                                 <div class="input-group input-group-flat pass-group">
@@ -844,42 +842,6 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <div class="mb-3 ">
-                                <label class="form-label">Plan Name <span class="text-danger"> *</span></label>
-                                <p-select [options]="select" [(ngModel)]="selected"
-                                          [ngModelOptions]="{standalone: true}"
-                                          optionLabel="data" placeholder="Select" [filter]="true"
-                                          class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3 ">
-                                <label class="form-label">Plan Type <span class="text-danger"> *</span></label>
-                                <p-select [options]="select2" [(ngModel)]="selected2"
-                                          [ngModelOptions]="{standalone: true}"
-                                          optionLabel="data" placeholder="Select" [filter]="true"
-                                          class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3 ">
-                                <label class="form-label">Currency <span class="text-danger"> *</span></label>
-                                <p-select [options]="select3" [(ngModel)]="selected3"
-                                          [ngModelOptions]="{standalone: true}"
-                                          optionLabel="data" placeholder="Select" [filter]="true"
-                                          class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3 ">
-                                <label class="form-label">Language <span class="text-danger"> *</span></label>
-                                <p-select [options]="select4" [(ngModel)]="selected4"
-                                          [ngModelOptions]="{standalone: true}"
-                                          optionLabel="data" placeholder="Select" [filter]="true"
-                                          class="form-control"/>
-                            </div>
-                        </div>
                         <div class="col-md-12">
                             <div class="mb-0">
                                 <div class="radio-wrap">
@@ -904,12 +866,11 @@
                 </form>
             </div>
         </div>
+        <div class="d-flex align-items-center justify-content-end">
+            <button type="button" data-bs-dismiss="offcanvas" class="btn btn-sm btn-light me-2">Cancel</button>
+            <button type="submit" class="btn btn-sm btn-primary">Create New</button>
+        </div>
     </div>
-    <div class="d-flex align-items-center justify-content-end">
-        <button type="button" data-bs-dismiss="offcanvas" class="btn btn-sm btn-light me-2">Cancel</button>
-        <button type="submit" class="btn btn-sm btn-primary">Create New</button>
-    </div>
-
     <!-- End Add Company -->
 
     <!-- Start Edit Company -->
