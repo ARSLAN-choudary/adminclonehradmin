@@ -731,16 +731,24 @@
 
                             </div>
                         </div>
+
                         <div class="col-md-6 align-items-end">
                             <div class="mb-3 ">
                                 <label class="form-label">Country <span class="text-danger"> *</span></label>
-                                <p-select [options]="select5" [(ngModel)]="selected4"
-                                          [ngModelOptions]="{standalone: true}"
-                                          optionLabel="data" placeholder="Select" [filter]="true"
-                                          class="form-control"/>
+                                <p-select
+                                        [options]="select5"
+                                        [(ngModel)]="selectedCountry"
+                                        [ngModelOptions]="{standalone: true}"
+                                        optionLabel="label"
+                                        optionValue="value"
+                                        placeholder="Select"
+                                        [filter]="true"
+                                        class="form-control">
+                                </p-select>
+
                             </div>
                         </div>
-
+                        <!--                        <div *ngIf="this.selectedCountry=='Malta'">-->
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Company Name <span class="text-danger"> *</span></label>
@@ -762,23 +770,34 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Employment Number <span class="text-danger"> *</span></label>
-                                <input type="email" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
                                 <label class="form-label">PE Number <span class="text-danger"> *</span></label>
                                 <input type="email" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Employment Number <span class="text-danger"> *</span></label>
+                                <label class="form-label">JobsPlus Employer Number <span
+                                        class="text-danger"> *</span></label>
                                 <input type="email" class="form-control">
                             </div>
                         </div>
 
+                        <!--                        <div class="col-md-6">-->
+                        <!--                            <div class="mb-3">-->
+                        <!--                                <label class="form-label">Employment Number <span-->
+                        <!--                                        class="text-danger"> *</span></label>-->
+                        <!--                                <input type="email" class="form-control">-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <div class="col-md-6">
+                            <div class="mb-3 ">
+                                <label class="form-label">Currency <span class="text-danger"> *</span></label>
+                                <p-select [options]="select3" [(ngModel)]="selected3"
+                                          [ngModelOptions]="{standalone: true}"
+                                          optionLabel="data" placeholder="Select" [filter]="true"
+                                          class="form-control"/>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Phone Number <span class="text-danger"> *</span></label>
@@ -805,19 +824,16 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3 ">
-                                <label class="form-label">Password <span class="text-danger"> *</span></label>
+                                <label class="form-label">Incorporaton Date <span class="text-danger"> *</span></label>
                                 <div class="input-group input-group-flat pass-group">
-                                    <input type="password" [type]="password[1]?'text':'password'"
-                                           class="form-control pass-input">
-                                    <span class="input-group-text toggle-password" (click)="togglePassword(1)">
-                                                <i class="ti " [ngClass]="password[1]?'ti-eye':'ti-eye-off'"></i>
-                                            </span>
+                                    <input type="date" class="form-control pass-input">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3 ">
-                                <label class="form-label">Confirm Password <span class="text-danger"> *</span></label>
+                                <label class="form-label">Confirm Password <span
+                                        class="text-danger"> *</span></label>
                                 <div class="input-group input-group-flat pass-group">
                                     <input type="password" [type]="password[2]?'text':'password'"
                                            class="form-control pass-input">
@@ -833,7 +849,8 @@
                                 <label class="form-label">Plan Name <span class="text-danger"> *</span></label>
                                 <p-select [options]="select" [(ngModel)]="selected"
                                           [ngModelOptions]="{standalone: true}"
-                                          optionLabel="data" placeholder="Select" [filter]="true" class="form-control"/>
+                                          optionLabel="data" placeholder="Select" [filter]="true"
+                                          class="form-control"/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -841,7 +858,8 @@
                                 <label class="form-label">Plan Type <span class="text-danger"> *</span></label>
                                 <p-select [options]="select2" [(ngModel)]="selected2"
                                           [ngModelOptions]="{standalone: true}"
-                                          optionLabel="data" placeholder="Select" [filter]="true" class="form-control"/>
+                                          optionLabel="data" placeholder="Select" [filter]="true"
+                                          class="form-control"/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -849,7 +867,8 @@
                                 <label class="form-label">Currency <span class="text-danger"> *</span></label>
                                 <p-select [options]="select3" [(ngModel)]="selected3"
                                           [ngModelOptions]="{standalone: true}"
-                                          optionLabel="data" placeholder="Select" [filter]="true" class="form-control"/>
+                                          optionLabel="data" placeholder="Select" [filter]="true"
+                                          class="form-control"/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -857,7 +876,8 @@
                                 <label class="form-label">Language <span class="text-danger"> *</span></label>
                                 <p-select [options]="select4" [(ngModel)]="selected4"
                                           [ngModelOptions]="{standalone: true}"
-                                          optionLabel="data" placeholder="Select" [filter]="true" class="form-control"/>
+                                          optionLabel="data" placeholder="Select" [filter]="true"
+                                          class="form-control"/>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -879,6 +899,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <!--                    </div>-->
                 </form>
             </div>
         </div>
