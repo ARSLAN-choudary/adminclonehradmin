@@ -16,7 +16,6 @@ export class ForgotPasswordComponent {
 
     constructor(private router: Router) {
 
-
         this.currentYear = new Date().getFullYear();
 
     }
