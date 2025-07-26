@@ -1,34 +1,93 @@
-import {Component, OnInit} from '@angular/core';
-import {routes} from '../../shared/routes/routes';
-import {Router, RouterLink} from '@angular/router';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import { Component, OnInit, signal, WritableSignal } from "@angular/core";
+import { routes } from "../../shared/routes/routes";
+import { Router, RouterLink } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
+import { AuthService } from "../../Services/auth.service";
 
 @Component({
-    selector: 'app-login',
-    imports: [CommonModule, RouterLink, FormsModule],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss'
+  selector: "app-login",
+  imports: [CommonModule, RouterLink, FormsModule, ReactiveFormsModule],
+
+  templateUrl: "./login.component.html",
+  styleUrl: "./login.component.scss",
 })
 export class LoginComponent implements OnInit {
-     currentYear: any;
-    ngOnInit() {
-        this.currentYear = new Date().getFullYear();
+  loginForm!: FormGroup;
+  hidePassword: boolean = true;
+  routes = routes;
+  errorMsg: WritableSignal<string> = signal("");
+  successMsg: WritableSignal<string> = signal("");
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private auth: AuthService
+  ) {
+    this.loginForm = this.fb.group({
+      email: ["", [Validators.required]],
+      password: ["", Validators.required],
+    });
+  }
 
+  currentYear: any;
+  ngOnInit() {
+    this.currentYear = new Date().getFullYear();
+    // this.checkIfAlreadyLogin();
+  }
+
+  // checkIfAlreadyLogin() {
+  //   if (this.auth.isLoggedIn()) {
+  //     this.router.navigate(["/"]);
+  //   }
+  //   localStorage.clear();
+  // }
+
+  public navigate() {
+    this.router.navigate([routes.index]);
+  }
+
+  public togglePassword() {
+    this.hidePassword = !this.hidePassword;
+  }
+
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      return;
     }
 
-    routes = routes;
+    const { email, password } = this.loginForm.value;
 
-    constructor(private router: Router) {
-    }
+    this.auth.login(email, password).subscribe(
+      (data) => {
+        console.log(data);
+        if (data.data.token) {
+          this.successMsg.set(data.message);
+          this.router.navigate(["/"]);
+        }
+      },
+      (error) => {
+        console.log(error.error.message);
 
-    public navigate() {
-        this.router.navigate([routes.index]);
-    }
+        this.errorMsg.set(error.error.message);
 
-    public password: boolean[] = [false];
+        setTimeout(() => {
+          this.errorMsg.set("");
+        }, 3000);
+      }
+    );
+  }
 
-    public togglePassword(index: any) {
-        this.password[index] = !this.password[index]
-    }
+  // for template convenience
+  get email() {
+    return this.loginForm.get("email")!;
+  }
+  get password() {
+    return this.loginForm.get("password")!;
+  }
 }

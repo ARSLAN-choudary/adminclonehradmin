@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
-import { routes } from '../routes/routes';
-import { HttpClient } from '@angular/common/http';
-import { apiResultFormat } from '../model/pages.model';
-import { MainMenu } from '../model/sidebar.model';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable, map } from "rxjs";
+import { routes } from "../routes/routes";
+import { HttpClient } from "@angular/common/http";
+import { apiResultFormat } from "../model/pages.model";
+import { MainMenu } from "../model/sidebar.model";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class DataService {
   constructor(private http: HttpClient) {}
@@ -19,7 +19,7 @@ export class DataService {
   }
 
   public getContactList(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/contact-list.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/contact-list.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
@@ -27,7 +27,7 @@ export class DataService {
   }
   public getCompaniesList(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/companies-list.json')
+      .get<apiResultFormat>("assets/json/companies-list.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -36,7 +36,7 @@ export class DataService {
   }
   public getLanguageSetting(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/language-setting.json')
+      .get<apiResultFormat>("assets/json/language-setting.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -44,35 +44,35 @@ export class DataService {
       );
   }
   public getFile(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/files.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/files.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getCallHistory(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/call-history.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/call-history.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getFileShared(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/file-shared.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/file-shared.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getLeadsList(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/leads.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/leads.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getDealsList(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/deals.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/deals.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
@@ -81,7 +81,7 @@ export class DataService {
 
   public getLanguageSettingsWeb(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/language-settings-web.json')
+      .get<apiResultFormat>("assets/json/language-settings-web.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -89,84 +89,90 @@ export class DataService {
       );
   }
   public getBlogCategories(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/blog-categories.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
+    return this.http
+      .get<apiResultFormat>("assets/json/blog-categories.json")
+      .pipe(
+        map((res: apiResultFormat) => {
+          return res;
+        })
+      );
   }
   public getBlogTags(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/blog-tags.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/blog-tags.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getBlogComments(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/blog-comments.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
+    return this.http
+      .get<apiResultFormat>("assets/json/blog-comments.json")
+      .pipe(
+        map((res: apiResultFormat) => {
+          return res;
+        })
+      );
   }
   public getFaq(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/faq.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/faq.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getDataTable() {
-    return this.http.get<apiResultFormat>('assets/json/data-tables.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/data-tables.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getTestimonials(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/testimonials.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/testimonials.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getCountries(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/countries.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/countries.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getStates(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/states.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/states.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getCities(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/city.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/city.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getSource(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/sources.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/sources.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getSuperAdminCompanies(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/superadmincompanies.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
+    return this.http
+      .get<apiResultFormat>("assets/json/superadmincompanies.json")
+      .pipe(
+        map((res: apiResultFormat) => {
+          return res;
+        })
+      );
   }
   public getLostReason(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/lost-reason.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/lost-reason.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
@@ -174,7 +180,7 @@ export class DataService {
   }
   public getContactStage(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/contact-stage.json')
+      .get<apiResultFormat>("assets/json/contact-stage.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -182,21 +188,21 @@ export class DataService {
       );
   }
   public getIndustry(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/industry.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/industry.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getCalls(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/calls.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/calls.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getTaskReport(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/task.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/task.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
@@ -204,7 +210,7 @@ export class DataService {
   }
   public getMembershipTransactions(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/membership-transactions.json')
+      .get<apiResultFormat>("assets/json/membership-transactions.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -212,21 +218,24 @@ export class DataService {
       );
   }
   public getManageUsers(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/manage-users.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  } public getNewApplication(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/new-application.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/manage-users.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
+  public getNewApplication(): Observable<apiResultFormat> {
+    return this.http
+      .get<apiResultFormat>("assets/json/new-application.json")
+      .pipe(
+        map((res: apiResultFormat) => {
+          return res;
+        })
+      );
+  }
   public getRolesPermissions(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/roles-permissions.json')
+      .get<apiResultFormat>("assets/json/roles-permissions.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -235,7 +244,7 @@ export class DataService {
   }
   public getDeleteRequest(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/delete-request.json')
+      .get<apiResultFormat>("assets/json/delete-request.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -243,35 +252,31 @@ export class DataService {
       );
   }
   public getLeadReports(): Observable<apiResultFormat> {
-    return this.http
-      .get<apiResultFormat>('assets/json/lead-reports.json')
-      .pipe(
-        map((res: apiResultFormat) => {
-          return res;
-        })
-      );
+    return this.http.get<apiResultFormat>("assets/json/lead-reports.json").pipe(
+      map((res: apiResultFormat) => {
+        return res;
+      })
+    );
   }
   public getDealReports(): Observable<apiResultFormat> {
+    return this.http.get<apiResultFormat>("assets/json/deal-reports.json").pipe(
+      map((res: apiResultFormat) => {
+        return res;
+      })
+    );
+  }
+  public getContactReports() {
     return this.http
-      .get<apiResultFormat>('assets/json/deal-reports.json')
+      .get<apiResultFormat>("assets/json/contact-reports.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
         })
       );
   }
-    public getContactReports() {
+  public getCompanyReports() {
     return this.http
-      .get<apiResultFormat>('assets/json/contact-reports.json')
-      .pipe(
-        map((res: apiResultFormat) => {
-          return res;
-        })
-      );
-  }
-    public getCompanyReports() {
-    return this.http
-      .get<apiResultFormat>('assets/json/companies-reports.json')
+      .get<apiResultFormat>("assets/json/companies-reports.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -279,7 +284,7 @@ export class DataService {
       );
   }
   public getPages(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/pages.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/pages.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
@@ -287,7 +292,7 @@ export class DataService {
   }
   public getProjectLists(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/project-lists.json')
+      .get<apiResultFormat>("assets/json/project-lists.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -296,7 +301,7 @@ export class DataService {
   }
   public getActivitiesList(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/activities-list.json')
+      .get<apiResultFormat>("assets/json/activities-list.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -305,7 +310,7 @@ export class DataService {
   }
   public getProjectReports(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/project-reports.json')
+      .get<apiResultFormat>("assets/json/project-reports.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -314,7 +319,7 @@ export class DataService {
   }
   public getCompaignList(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/campaign-list.json')
+      .get<apiResultFormat>("assets/json/campaign-list.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -323,7 +328,7 @@ export class DataService {
   }
   public getCompaignArchive(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/campaign-archive.json')
+      .get<apiResultFormat>("assets/json/campaign-archive.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -331,7 +336,7 @@ export class DataService {
       );
   }
   public getPipeline(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/pipeline.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/pipeline.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
@@ -339,7 +344,7 @@ export class DataService {
   }
   public getActivityCalls(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/activity-calls.json')
+      .get<apiResultFormat>("assets/json/activity-calls.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -348,7 +353,7 @@ export class DataService {
   }
   public getActivityMail(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/activity-mail.json')
+      .get<apiResultFormat>("assets/json/activity-mail.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -357,7 +362,7 @@ export class DataService {
   }
   public getActivityMeeting(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/activity-meeting.json')
+      .get<apiResultFormat>("assets/json/activity-meeting.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -366,7 +371,7 @@ export class DataService {
   }
   public getActivityTask(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/activity-task.json')
+      .get<apiResultFormat>("assets/json/activity-task.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -375,7 +380,7 @@ export class DataService {
   }
   public getCompaniesReports(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/companies-reports.json')
+      .get<apiResultFormat>("assets/json/companies-reports.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -384,7 +389,7 @@ export class DataService {
   }
 
   public getPackage(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/package-list.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/package-list.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
@@ -392,28 +397,30 @@ export class DataService {
   }
 
   public getSubscription(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/subscription.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/subscription.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getPurchaseTransaction(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/purchase-transaction.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
+    return this.http
+      .get<apiResultFormat>("assets/json/purchase-transaction.json")
+      .pipe(
+        map((res: apiResultFormat) => {
+          return res;
+        })
+      );
   }
   public getDomain(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/domain.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/domain.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
   public getPackages(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/packages.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/packages.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
@@ -421,90 +428,95 @@ export class DataService {
   }
 
   public getCompanies(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/companies.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/companies.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
     );
   }
 
-  public sidebarData1:any[] = [
+  public sidebarData1: any[] = [
     {
-      tittle: 'Main MENU',
+      tittle: "Main MENU",
       showAsTab: false,
       separateRoute: false,
       hasSubRoute: false,
       menu: [
         {
-          menuValue: 'Dashboard',
+          menuValue: "Dashboard",
           hasSubRoute: true,
           showSubRoute: false,
-          icon: 'dashboard',
-          base: 'dashboard',
+          icon: "dashboard",
+          base: "dashboard",
           subMenus: [
             {
-              menuValue: 'Deals Dashboard',
-              base: 'index',
+              menuValue: "Deals Dashboard",
+              base: "index",
               route: routes.index,
             },
             {
-              menuValue: 'Leads Dashboard',
-              base: 'lead-dashboard',
+              menuValue: "Leads Dashboard",
+              base: "lead-dashboard",
               route: routes.leadsDashboard,
             },
             {
-              menuValue: 'Project Dashboard',
-              base: 'project-dashboard',
+              menuValue: "Project Dashboard",
+              base: "project-dashboard",
               route: routes.projectDashboard,
             },
           ],
-        },      {
-          menuValue: 'Super Admin',
+
+        },
+        {
+          menuValue: "Super Admin",
           hasSubRoute: true,
           showSubRoute: false,
-          base: 'super-admin',
-          icon: 'user-star',
+          base: "super-admin",
+          icon: "user-star",
           subMenus: [
             {
-              menuValue: 'Dashboard',
+              menuValue: "Dashboard",
               route: routes.superAdminDash,
-              base:'dashboard',
+              base: "dashboard",
               hasSubRoute: false,
               showSubRoute: false,
               customSubmenuTwo: false,
             },
             {
-              menuValue: 'Companies',
+              menuValue: "Companies",
               route: routes.superAdminCompanies,
-              base:'companies',
+              base: "companies",
+
               hasSubRoute: false,
               showSubRoute: false,
               customSubmenuTwo: false,
             },
             {
-              menuValue: 'Subscription',
+              menuValue: "Subscription",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.superAdminSubscriptions,
-              base:'subscriptions',
+              base: "subscriptions",
               customSubmenuTwo: false,
               subRoutes: [],
             },
             {
-              menuValue: 'Packages',
+              menuValue: "Packages",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.superAdminPackages,
-              base:'packages',
+              base: "packages",
+
               customSubmenuTwo: false,
               subRoutes: [],
             },
             {
-              menuValue: 'Domain',
+              menuValue: "Domain",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.superAdminDomain,
-              base:'domain',
+              base: "domain",
+
               customSubmenuTwo: false,
               subRoutes: [],
             },
@@ -523,128 +535,136 @@ export class DataService {
           menuValue: 'Administration',
           hasSubRoute: true,
           showSubRoute: false,
-          icon: 'user-star',
-          base: 'administration',
+          icon: "user-star",
+          base: "administration",
           subMenus: [
             {
-              menuValue: 'New Application',
-              base: 'administratorApplication',
+              menuValue: "New Application",
+              base: "administratorApplication",
               route: routes.administratorApplication,
+            },
+            {
+              menuValue: "Manage Users",
+              // icon: "users",
+              route: routes.manageUsers,
+              // hasSubRoute: false,
+              // showSubRoute: false,
+              base: "manage-users",
             },
           ],
         },
         {
-          menuValue: 'Applications',
+          menuValue: "Applications",
           hasSubRouteTwo: true,
           showSubRoute: false,
-          base: 'application',
-          icon: 'brand-airtable',
+          base: "application",
+          icon: "brand-airtable",
           subMenus: [
             {
-              menuValue: 'Chat',
+              menuValue: "Chat",
               route: routes.chat,
-              base:'chat',
+              base: "chat",
               hasSubRoute: false,
               showSubRoute: false,
               customSubmenuTwo: false,
             },
             {
-              menuValue: 'Call',
+              menuValue: "Call",
               customSubmenuTwo: true,
               hasSubRoute: true,
               showSubRoute: false,
               subMenusTwo: [
                 {
-                  menuValue: 'Video Call',
+                  menuValue: "Video Call",
                   route: routes.videoCall,
                   hasSubRoute: false,
                   showSubRoute: false,
-                  base: 'video-call',
+                  base: "video-call",
                 },
                 {
-                  menuValue: 'Audio Call',
+                  menuValue: "Audio Call",
                   route: routes.audioCall,
                   hasSubRoute: false,
                   showSubRoute: false,
-                  base: 'audio-call',
+                  base: "audio-call",
                 },
                 {
-                  menuValue: 'Call History',
+                  menuValue: "Call History",
                   route: routes.callHistory,
                   hasSubRoute: false,
                   showSubRoute: false,
-                  base: 'call-history',
+                  base: "call-history",
                 },
               ],
             },
             {
-              menuValue: 'Calendar',
+              menuValue: "Calendar",
               route: routes.calendar,
-              base:'calendar',
+              base: "calendar",
               hasSubRoute: false,
               showSubRoute: false,
               customSubmenuTwo: false,
             },
             {
-              menuValue: 'Email',
+              menuValue: "Email",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.email,
-              base:'email',
+              base: "email",
               customSubmenuTwo: false,
               subRoutes: [],
             },
             {
-              menuValue: 'To Do',
+              menuValue: "To Do",
               hasSubRoute: false,
               showSubRoute: false,
-              base:'todo',
+              base: "todo",
               route: routes.toDo,
               customSubmenuTwo: false,
               subRoutes: [],
             },
             {
-              menuValue: 'Notes',
+              menuValue: "Notes",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.notes,
-              base:'notes',
+              base: "notes",
               customSubmenuTwo: false,
               subRoutes: [],
             },
             {
-              menuValue: 'File Manager',
+              menuValue: "File Manager",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.fileManager,
-              base:'file-manager',
+              base: "file-manager",
               customSubmenuTwo: false,
               subRoutes: [],
             },
             {
-              menuValue: 'Kanban',
+              menuValue: "Kanban",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.kanban,
-              base:'kanban',
+              base: "kanban",
               customSubmenuTwo: false,
               subRoutes: [],
             },
             {
-              menuValue: 'Social Feed',
+              menuValue: "Social Feed",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.socialFeed,
-              base:'social-feed',
+              base: "social-feed",
               customSubmenuTwo: false,
               subRoutes: [],
             },
             {
-              menuValue: 'Invoices',
+              menuValue: "Invoices",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.invoices,
-              base:'invoices',
+              base: "invoices",
               customSubmenuTwo: false,
               subRoutes: [],
             },
@@ -652,6 +672,74 @@ export class DataService {
         },
 
         {
+          menuValue: "Layout",
+          hasSubRoute: true,
+          showSubRoute: false,
+          icon: "layout-grid",
+          base1: "layout",
+          subMenus: [
+            {
+              menuValue: "Mini",
+              route: routes.Mini,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "layout-mini",
+              icon: "layout-navbar",
+              materialicons: "confirmation_number",
+              subMenus: [],
+            },
+            {
+              menuValue: "Hover View",
+              route: routes.hoverView,
+              hasSubRoute: false,
+              showSubRoute: false,
+              icon: "layout-navbar-inactive",
+              base: "layout-hoverview",
+              materialicons: "shopping_bag",
+              subMenus: [],
+            },
+            {
+              menuValue: "Hidden",
+              route: routes.hidden,
+              hasSubRoute: false,
+              showSubRoute: false,
+              icon: "layout-sidebar",
+              base: "layout-hidden",
+              materialicons: "shopping_bag",
+              subMenus: [],
+            },
+            {
+              menuValue: "Full Width",
+              route: routes.fullWidth,
+              hasSubRoute: false,
+              showSubRoute: false,
+              icon: "layout-sidebar",
+              base: "layout-fullwidth",
+              materialicons: "shopping_bag",
+              subMenus: [],
+            },
+            {
+              menuValue: "RTL",
+              route: routes.RTL,
+              hasSubRoute: false,
+              showSubRoute: false,
+              icon: "text-direction-rtl",
+              base: "layout-rtl",
+              materialicons: "shopping_bag",
+              subMenus: [],
+            },
+
+            {
+              menuValue: "Dark",
+              route: routes.Dark,
+              hasSubRoute: false,
+              showSubRoute: false,
+              icon: "moon",
+              base: "layout-dark",
+              materialicons: "shopping_bag",
+              subMenus: [],
+            },
+          ],
         menuValue: 'Layout',
         hasSubRoute: true,
         showSubRoute: false,
@@ -721,207 +809,205 @@ export class DataService {
         },
       ],
     },
-      ],
-    },
-    
+
     {
-      tittle: 'CRM',
+      tittle: "CRM",
       showAsTab: true,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Contacts',
-          icon: 'user-up',
+          menuValue: "Contacts",
+          icon: "user-up",
           route: routes.contactGrid,
-          base: 'contacts',
+          base: "contacts",
           hasSubRoute: false,
           showSubRoute: false,
         },
         {
-          menuValue: 'Companies',
-          icon: 'building-community',
+          menuValue: "Companies",
+          icon: "building-community",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.companiesGrid,
-          base: 'companies',
+          base: "companies",
           subRoutes: [],
         },
         {
-          menuValue: 'Deals',
-          icon: 'medal',
+          menuValue: "Deals",
+          icon: "medal",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.dealsKanban,
-          base: 'deals',
+          base: "deals",
           subRoutes: [],
         },
         {
-          menuValue: 'Leads',
-          icon: 'chart-arcs',
+          menuValue: "Leads",
+          icon: "chart-arcs",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.leadsKanban,
-          base: 'leads',
+          base: "leads",
           subRoutes: [],
         },
         {
-          menuValue: 'Pipeline',
-          icon: 'timeline-event-exclamation',
+          menuValue: "Pipeline",
+          icon: "timeline-event-exclamation",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.pipeline,
-          base: 'pipeline',
+          base: "pipeline",
           subRoutes: [],
         },
         {
-          menuValue: 'Campaign',
-          icon: 'brand-campaignmonitor',
+          menuValue: "Campaign",
+          icon: "brand-campaignmonitor",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.campaignList,
-          base: 'campaign',
+          base: "campaign",
           subRoutes: [],
         },
         {
-          menuValue: 'Projects',
-          icon: 'atom-2',
+          menuValue: "Projects",
+          icon: "atom-2",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.projectGrid,
-          base: 'projects',
+          base: "projects",
           subRoutes: [],
         },
         {
-          menuValue: 'Tasks',
-          icon: 'list-check',
+          menuValue: "Tasks",
+          icon: "list-check",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.allTasks,
-          base: 'tasks',
+          base: "tasks",
           subRoutes: [],
         },
         {
-          menuValue: 'Proposals',
-          icon: 'file-star',
+          menuValue: "Proposals",
+          icon: "file-star",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.proposalsGrid,
-          base: 'proposals',
+          base: "proposals",
           subRoutes: [],
         },
         {
-          menuValue: 'Contracts',
-          icon: 'file-check',
+          menuValue: "Contracts",
+          icon: "file-check",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.contractGrid,
-          base: 'contracts',
+          base: "contracts",
           subRoutes: [],
         },
         {
-          menuValue: 'Estimations',
-          icon: 'file-report',
+          menuValue: "Estimations",
+          icon: "file-report",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.estimationKanban,
-          base: 'estimations',
+          base: "estimations",
           subRoutes: [],
         },
         {
-          menuValue: 'Invoices',
-          icon: 'file-invoice',
+          menuValue: "Invoices",
+          icon: "file-invoice",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.invoiceGrid,
-          base: 'invoice',
+          base: "invoice",
           subRoutes: [],
         },
         {
-          menuValue: 'Payments',
-          icon: 'report-money',
+          menuValue: "Payments",
+          icon: "report-money",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.payments,
-          base: 'payments',
+          base: "payments",
           subRoutes: [],
         },
         {
-          menuValue: 'Analytics',
-          icon: 'chart-bar',
+          menuValue: "Analytics",
+          icon: "chart-bar",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.analytics,
-          base: 'analytics',
+          base: "analytics",
           subRoutes: [],
         },
         {
-          menuValue: 'Activities',
-          icon: 'bounce-right',
+          menuValue: "Activities",
+          icon: "bounce-right",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.activitiesList,
-          base: 'activities',
+          base: "activities",
           subRoutes: [],
         },
       ],
     },
     {
-      tittle: 'Reports',
+      tittle: "Reports",
       showAsTab: true,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Reports',
-          base: 'reports',
-          icon: 'file-invoice',
+          menuValue: "Reports",
+          base: "reports",
+          icon: "file-invoice",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'Lead Reports',
-              icon: 'package',
+              menuValue: "Lead Reports",
+              icon: "package",
               route: routes.leadReports,
-              base:'lead-reports',
+              base: "lead-reports",
               hasSubRoute: false,
               showSubRoute: false,
             },
             {
-              menuValue: 'Deals Reports',
-              icon: 'clipboard',
+              menuValue: "Deals Reports",
+              icon: "clipboard",
               route: routes.dealReports,
-              base:'deal-reports',
+              base: "deal-reports",
               hasSubRoute: false,
               showSubRoute: false,
             },
             {
-              menuValue: 'Contact Reports',
-              icon: 'truck',
+              menuValue: "Contact Reports",
+              icon: "truck",
               route: routes.contactReports,
-              base:'contact-reports',
+              base: "contact-reports",
               hasSubRoute: false,
               showSubRoute: false,
             },
             {
-              menuValue: 'Company Reports',
-              icon: 'truck',
+              menuValue: "Company Reports",
+              icon: "truck",
               route: routes.companyReports,
-              base:'company-reports',
+              base: "company-reports",
               hasSubRoute: false,
               showSubRoute: false,
             },
             {
-              menuValue: 'Project Reports',
-              icon: 'truck',
+              menuValue: "Project Reports",
+              icon: "truck",
               route: routes.projectReports,
-              base:'project-reports',
+              base: "project-reports",
               hasSubRoute: false,
               showSubRoute: false,
             },
             {
-              menuValue: 'Task Reports',
-              icon: 'truck',
+              menuValue: "Task Reports",
+              icon: "truck",
               route: routes.taskReports,
-              base:'task-reports',
+              base: "task-reports",
               hasSubRoute: false,
               showSubRoute: false,
             },
@@ -931,199 +1017,199 @@ export class DataService {
     },
 
     {
-      tittle: 'CRM SETTINGS',
+      tittle: "CRM SETTINGS",
       showAsTab: true,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Sources',
-          icon: 'artboard',
+          menuValue: "Sources",
+          icon: "artboard",
           route: routes.source,
           hasSubRoute: false,
           showSubRoute: false,
-          base: 'sources',
+          base: "sources",
         },
         {
-          menuValue: 'Lost Reason',
-          icon: 'message-exclamation',
+          menuValue: "Lost Reason",
+          icon: "message-exclamation",
           route: routes.LostReason,
           hasSubRoute: false,
           showSubRoute: false,
-          base: 'lost-reason',
+          base: "lost-reason",
         },
         {
-          menuValue: 'Contact Stage',
-          icon: 'steam',
+          menuValue: "Contact Stage",
+          icon: "steam",
           route: routes.contactStage,
           hasSubRoute: false,
           showSubRoute: false,
-          base: 'contact-stage',
+          base: "contact-stage",
         },
         {
-          menuValue: 'Industry',
-          icon: 'building-factory',
+          menuValue: "Industry",
+          icon: "building-factory",
           route: routes.industry,
           hasSubRoute: false,
           showSubRoute: false,
-          base: 'industry',
+          base: "industry",
         },
         {
-          menuValue: 'Calls',
-          icon: 'phone-check',
+          menuValue: "Calls",
+          icon: "phone-check",
           route: routes.calls,
           hasSubRoute: false,
           showSubRoute: false,
-          base: 'calls',
+          base: "calls",
         },
       ],
     },
 
     {
-      tittle: 'USER MANAGEMENT',
+      tittle: "USER MANAGEMENT",
       showAsTab: true,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Manage Users',
-          icon: 'users',
+          menuValue: "Manage Users",
+          icon: "users",
           route: routes.manageUsers,
           hasSubRoute: false,
           showSubRoute: false,
-          base: 'manage-users',
+          base: "manage-users",
         },
         {
-          menuValue: 'Roles & Permissions',
-          icon: 'user-shield',
+          menuValue: "Roles & Permissions",
+          icon: "user-shield",
           route: routes.rolesPermissions,
           hasSubRoute: false,
           showSubRoute: false,
-          base: 'roles-permissions',
+          base: "roles-permissions",
         },
         {
-          menuValue: 'Delete Request',
-          icon: 'flag-question',
+          menuValue: "Delete Request",
+          icon: "flag-question",
           route: routes.deleteRequest,
           hasSubRoute: false,
           showSubRoute: false,
-          base: 'delete-request',
+          base: "delete-request",
         },
       ],
     },
     {
-      tittle: 'MEMBERSHIP',
+      tittle: "MEMBERSHIP",
       showAsTab: true,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Membership',
-          base: 'membership',
-          icon: 'brand-apple-podcast',
+          menuValue: "Membership",
+          base: "membership",
+          icon: "brand-apple-podcast",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'Membership Plans',
+              menuValue: "Membership Plans",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.membershipPlans,
-              base:'membership-plans',
+              base: "membership-plans",
             },
             {
-              menuValue: 'Membership Addons',
+              menuValue: "Membership Addons",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.membershipAddons,
-               base:'membership-addons',
+              base: "membership-addons",
             },
             {
-              menuValue: 'Transactions',
+              menuValue: "Transactions",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.membershipTransactions,
-               base:'membership-transactions',
+              base: "membership-transactions",
             },
           ],
         },
       ],
     },
     {
-      tittle: 'CONTENT',
+      tittle: "CONTENT",
       showAsTab: true,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Pages',
-          base: 'pages',
-          icon: 'page-break',
+          menuValue: "Pages",
+          base: "pages",
+          icon: "page-break",
           hasSubRoute: false,
           showSubRoute: false,
           route: routes.pages,
         },
         {
-          menuValue: 'Blogs',
-          base: 'blogs',
-          icon: 'brand-blogger',
+          menuValue: "Blogs",
+          base: "blogs",
+          icon: "brand-blogger",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'All Blogs',
+              menuValue: "All Blogs",
               route: routes.blogList,
-              base:'blog-list',
+              base: "blog-list",
             },
             {
-              menuValue: 'Blog Categories',
+              menuValue: "Blog Categories",
               route: routes.blogCategories,
-              base:'blog-categories',
+              base: "blog-categories",
             },
             {
-              menuValue: 'Blog Comments',
+              menuValue: "Blog Comments",
               route: routes.blogComments,
-              base:'blog-comments',
+              base: "blog-comments",
             },
             {
-              menuValue: 'Blog Tags',
+              menuValue: "Blog Tags",
               route: routes.blogTags,
-              base:'blog-tags',
+              base: "blog-tags",
             },
           ],
         },
         {
-          menuValue: 'Location',
-          base: 'location',
-          icon: 'map-pin-pin',
+          menuValue: "Location",
+          base: "location",
+          icon: "map-pin-pin",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'Countries',
+              menuValue: "Countries",
               route: routes.countries,
-              base:'countries',
+              base: "countries",
             },
             {
-              menuValue: 'States',
+              menuValue: "States",
               route: routes.states,
-              base:'states',
+              base: "states",
             },
             {
-              menuValue: 'Cities',
+              menuValue: "Cities",
               route: routes.cities,
-              base:'cities',
+              base: "cities",
             },
           ],
         },
         {
-          menuValue: 'Testimonials',
-          base: 'testimonials',
-          icon: 'quote',
+          menuValue: "Testimonials",
+          base: "testimonials",
+          icon: "quote",
           route: routes.testimonials,
           hasSubRoute: false,
           showSubRoute: false,
         },
         {
-          menuValue: 'FAQ',
-          base: 'faq',
-          icon: 'question-mark',
+          menuValue: "FAQ",
+          base: "faq",
+          icon: "question-mark",
           route: routes.faq,
           hasSubRoute: false,
           showSubRoute: false,
@@ -1131,988 +1217,981 @@ export class DataService {
       ],
     },
     {
-      tittle: 'SUPPORT',
+      tittle: "SUPPORT",
       showAsTab: true,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Contact Messages',
-          icon: 'message-check',
+          menuValue: "Contact Messages",
+          icon: "message-check",
           route: routes.contactMessage,
           hasSubRoute: false,
           showSubRoute: false,
-          base: 'contact-messages',
+          base: "contact-messages",
         },
         {
-          menuValue: 'Tickets',
-          icon: 'ticket',
+          menuValue: "Tickets",
+          icon: "ticket",
           route: routes.tickets,
           hasSubRoute: false,
           showSubRoute: false,
-          base: 'tickets',
+          base: "tickets",
         },
       ],
     },
     {
-      tittle: 'Settings',
+      tittle: "Settings",
       showAsTab: true,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'General Settings',
-          icon: 'settings-cog',
+          menuValue: "General Settings",
+          icon: "settings-cog",
           hasSubRoute: true,
           showSubRoute: false,
-          page: 'general-settings',
+          page: "general-settings",
           subMenus: [
             {
-              menuValue: 'Profile',
+              menuValue: "Profile",
               route: routes.profileSettings,
               hasSubRoute: false,
               showSubRoute: false,
-              base:'profile-settings'
+              base: "profile-settings",
             },
             {
-              menuValue: 'Security',
+              menuValue: "Security",
               route: routes.securitySettings,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'security-settings'
+              base: "security-settings",
             },
             {
-              menuValue: 'Notifications',
+              menuValue: "Notifications",
               route: routes.settingsNotification,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'notifications-settings'
+              base: "notifications-settings",
             },
             {
-              menuValue: 'Connected Apps',
+              menuValue: "Connected Apps",
               route: routes.connectedApps,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'connected-apps'
+              base: "connected-apps",
             },
           ],
         },
         {
-          menuValue: 'Website Settings',
-          page: 'website-settings',
-          icon: 'world-cog',
+          menuValue: "Website Settings",
+          page: "website-settings",
+          icon: "world-cog",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'Company Settings',
+              menuValue: "Company Settings",
               route: routes.companySettings,
               hasSubRoute: false,
               showSubRoute: false,
-              base:'company-settings',
+              base: "company-settings",
             },
             {
-              menuValue: 'Localization',
+              menuValue: "Localization",
               route: routes.localizationSettings,
               hasSubRoute: false,
               showSubRoute: false,
-              base:'localization-settings',
+              base: "localization-settings",
             },
             {
-              menuValue: 'Prefixes',
+              menuValue: "Prefixes",
               route: routes.prefixes,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'prefixes-settings',
-              
+              base: "prefixes-settings",
             },
             {
-              menuValue: 'Preference',
+              menuValue: "Preference",
               route: routes.preference,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'preference-settings',
+              base: "preference-settings",
             },
             {
-              menuValue: 'Appearance',
+              menuValue: "Appearance",
               route: routes.appearance,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'appearance-settings',
+              base: "appearance-settings",
             },
             {
-              menuValue: 'Language',
+              menuValue: "Language",
               route: routes.languageSettings,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'language-settings',
+              base: "language-settings",
             },
           ],
         },
         {
-          menuValue: 'App Settings',
-          page: 'app-settings',
-          icon: 'apps',
+          menuValue: "App Settings",
+          page: "app-settings",
+          icon: "apps",
           hasSubRoute: true,
           showSubRoute: false,
-          base: 'app-settings',
+          base: "app-settings",
           subMenus: [
             {
-              menuValue: 'Invoice Settings',
+              menuValue: "Invoice Settings",
               route: routes.invoiceSettings,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'invoice-settings',
+              base: "invoice-settings",
             },
             {
-              menuValue: 'Printers',
+              menuValue: "Printers",
               route: routes.printerSettings,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'printers-settings',
+              base: "printers-settings",
             },
 
             {
-              menuValue: 'Custom Fields',
+              menuValue: "Custom Fields",
               route: routes.customFields,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'custom-fields-setting',
+              base: "custom-fields-setting",
             },
           ],
         },
         {
-          menuValue: 'System Settings',
-          page: 'system-settings',
-          icon: 'device-laptop',
+          menuValue: "System Settings",
+          page: "system-settings",
+          icon: "device-laptop",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'Email Settings',
+              menuValue: "Email Settings",
               route: routes.emailSettings,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'email-settings',
+              base: "email-settings",
             },
             {
-              menuValue: 'SMS Gateways',
+              menuValue: "SMS Gateways",
               route: routes.smsGateway,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'sms-gateways',
+              base: "sms-gateways",
             },
             {
-              menuValue: 'GDPR Cookies',
+              menuValue: "GDPR Cookies",
               route: routes.gdprSettings,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'gdpr-cookies',
+              base: "gdpr-cookies",
             },
           ],
         },
         {
-          menuValue: 'Financial Settings',
-          page: 'financial-settings',
-          icon: 'moneybag',
+          menuValue: "Financial Settings",
+          page: "financial-settings",
+          icon: "moneybag",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'Payment Gateways',
+              menuValue: "Payment Gateways",
               route: routes.paymentGatewaySettings,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'payment-gateways',
+              base: "payment-gateways",
             },
             {
-              menuValue: 'Bank Accounts',
+              menuValue: "Bank Accounts",
               route: routes.bankAccounts,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'bank-accounts',
+              base: "bank-accounts",
             },
             {
-              menuValue: 'Tax Rates',
+              menuValue: "Tax Rates",
               route: routes.taxRates,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'tax-rates',
+              base: "tax-rates",
             },
             {
-              menuValue: 'Currencies',
+              menuValue: "Currencies",
               route: routes.currencySettings,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'currencies',
+              base: "currencies",
             },
           ],
         },
         {
-          menuValue: 'Other Settings',
-          page: 'other-settings',
-          icon: 'settings-2',
+          menuValue: "Other Settings",
+          page: "other-settings",
+          icon: "settings-2",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'Sitemap',
+              menuValue: "Sitemap",
               route: routes.siteMap,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'sitemap',
+              base: "sitemap",
             },
             {
-              menuValue: 'Clear Cache',
+              menuValue: "Clear Cache",
               route: routes.clearCache,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'clear-cache',
+              base: "clear-cache",
             },
             {
-              menuValue: 'Storage',
+              menuValue: "Storage",
               route: routes.storage,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'storage',
+              base: "storage",
             },
             {
-              menuValue: 'Cronjob',
+              menuValue: "Cronjob",
               route: routes.cronJob,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'cronjob',
+              base: "cronjob",
             },
             {
-              menuValue: 'Ban Ip Address',
+              menuValue: "Ban Ip Address",
               route: routes.banIpAddress,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'ban-ip-address',
+              base: "ban-ip-address",
             },
             {
-              menuValue: 'System Backup',
+              menuValue: "System Backup",
               route: routes.systemBackup,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'system-backup',
+              base: "system-backup",
             },
             {
-              menuValue: 'Database Backup',
+              menuValue: "Database Backup",
               route: routes.databaseBackup,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'database-backup',
+              base: "database-backup",
             },
             {
-              menuValue: 'System Update',
+              menuValue: "System Update",
               route: routes.systemUpdate,
               hasSubRoute: false,
               showSubRoute: false,
-               base:'system-update',
+              base: "system-update",
             },
           ],
         },
       ],
     },
     {
-      tittle: 'Pages',
+      tittle: "Pages",
       showAsTab: true,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Authentication',
-          icon: 'lock-square-rounded',
+          menuValue: "Authentication",
+          icon: "lock-square-rounded",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'Login',
+              menuValue: "Login",
               route: routes.login,
-              base:'login'
+              base: "login",
             },
             {
-              menuValue: 'Register',
+              menuValue: "Register",
               route: routes.register,
-              base:'register'
+              base: "register",
             },
             {
-              menuValue: 'Forgot Password',
+              menuValue: "Forgot Password",
               route: routes.forgotPassword,
-              base:'forgot-password'
+              base: "forgot-password",
             },
             {
-              menuValue: 'Reset Password',
+              menuValue: "Reset Password",
               route: routes.resetPassword,
-              base:'reset-password'
+              base: "reset-password",
             },
             {
-              menuValue: 'Email Verification',
+              menuValue: "Email Verification",
               route: routes.emailVerification,
-              base:'email-verification'
+              base: "email-verification",
             },
             {
-              menuValue: '2 Step Verification',
+              menuValue: "2 Step Verification",
               route: routes.twoStepVerfication,
-              base:'two-step-verification'
+              base: "two-step-verification",
             },
             {
-              menuValue: 'Lock Screen',
+              menuValue: "Lock Screen",
               route: routes.lockScreen,
               hasSubRoute: false,
               showSubRoute: false,
               customSubmenuTwo: false,
-              base:'lock-screen'
+              base: "lock-screen",
             },
           ],
         },
         {
-          menuValue: 'Error Pages',
-          icon: 'error-404',
+          menuValue: "Error Pages",
+          icon: "error-404",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: '404 Error',
+              menuValue: "404 Error",
               route: routes.error404,
               hasSubRoute: false,
               showSubRoute: false,
-              base:'error-404'
+              base: "error-404",
             },
             {
-              menuValue: '500 Error',
+              menuValue: "500 Error",
               route: routes.error500,
               hasSubRoute: false,
               showSubRoute: false,
-              base:'error-500'
+              base: "error-500",
             },
           ],
         },
         {
-          menuValue: 'Blank Page',
-          icon: 'file',
+          menuValue: "Blank Page",
+          icon: "file",
           route: routes.blank,
           hasSubRoute: false,
           showSubRoute: false,
-          base:'blank'
+          base: "blank",
         },
         {
-          menuValue: 'Coming Soon',
-          icon: 'inner-shadow-top-right',
+          menuValue: "Coming Soon",
+          icon: "inner-shadow-top-right",
           route: routes.comingSoon,
           hasSubRoute: false,
           showSubRoute: false,
-          base:'coming-soon'
+          base: "coming-soon",
         },
         {
-          menuValue: 'Under Maintenance',
-          icon: 'info-triangle',
+          menuValue: "Under Maintenance",
+          icon: "info-triangle",
           route: routes.underMaintenance,
           hasSubRoute: false,
           showSubRoute: false,
-          base:'under-maintenance'
+          base: "under-maintenance",
         },
       ],
     },
     {
-      tittle: 'UI Interface',
+      tittle: "UI Interface",
       showAsTab: true,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Base UI',
-          base: 'base-ui',
-          icon: 'hierarchy',
+          menuValue: "Base UI",
+          base: "base-ui",
+          icon: "hierarchy",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
-  {
-    menuValue: 'Accordion',
-    route: routes.uiAccordion,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-accordion',
-  },
-  {
-    menuValue: 'Alerts',
-    route: routes.uiAlerts,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-alerts',
-  },
-  {
-    menuValue: 'Avatar',
-    route: routes.uiAvatar,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-avatar',
-  },
-  {
-    menuValue: 'Badges',
-    route: routes.uiBadges,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-badges',
-  },
-  {
-    menuValue: 'Breadcrumb',
-    route: routes.uiBreadcrumb,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-breadcrumb',
-  },
-  {
-    menuValue: 'Buttons',
-    route: routes.uiButtons,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-buttons',
-  },
-  {
-    menuValue: 'Button Group',
-    route: routes.uiButtonsGroup,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-buttons-group',
-  },
-  {
-    menuValue: 'Card',
-    route: routes.uiCards,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-cards',
-  },
-  {
-    menuValue: 'Carousel',
-    route: routes.uiCarousel,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-carousel',
-  },
-  {
-    menuValue: 'Collapse',
-    route: routes.uiCollapse,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-collapse',
-  },
-  {
-    menuValue: 'Dropdowns',
-    route: routes.uiDropdowns,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-dropdowns',
-  },
+            {
+              menuValue: "Accordion",
+              route: routes.uiAccordion,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-accordion",
+            },
+            {
+              menuValue: "Alerts",
+              route: routes.uiAlerts,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-alerts",
+            },
+            {
+              menuValue: "Avatar",
+              route: routes.uiAvatar,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-avatar",
+            },
+            {
+              menuValue: "Badges",
+              route: routes.uiBadges,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-badges",
+            },
+            {
+              menuValue: "Breadcrumb",
+              route: routes.uiBreadcrumb,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-breadcrumb",
+            },
+            {
+              menuValue: "Buttons",
+              route: routes.uiButtons,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-buttons",
+            },
+            {
+              menuValue: "Button Group",
+              route: routes.uiButtonsGroup,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-buttons-group",
+            },
+            {
+              menuValue: "Card",
+              route: routes.uiCards,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-cards",
+            },
+            {
+              menuValue: "Carousel",
+              route: routes.uiCarousel,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-carousel",
+            },
+            {
+              menuValue: "Collapse",
+              route: routes.uiCollapse,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-collapse",
+            },
+            {
+              menuValue: "Dropdowns",
+              route: routes.uiDropdowns,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-dropdowns",
+            },
 
-  {
-    menuValue: 'Grid',
-    route: routes.uiGrid,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-grid',
-  },
-  {
-    menuValue: 'Images',
-    route: routes.uiImages,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-images',
-  },
-  {
-    menuValue: 'Links',
-    route: routes.uiLinks,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-links',
-  },
-  {
-    menuValue: 'List Group',
-    route: routes.uiListGroup,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-list-group',
-  },
-  {
-    menuValue: 'Modals',
-    route: routes.uiModals,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-modals',
-  },
-  {
-    menuValue: 'Offcanvas',
-    route: routes.uiOffcanvas,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-offcanvas',
-  },
-  {
-    menuValue: 'Pagination',
-    route: routes.uiPagination,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-pagination',
-  },
-  {
-    menuValue: 'Placeholders',
-    route: routes.uiPlaceholders,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-placeholders',
-  },
-  {
-    menuValue: 'Progress',
-    route: routes.uiProgress,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-progress',
-  },
-  {
-    menuValue: 'Spinner',
-    route: routes.uiSpinner,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-spinner',
-  },
-  {
-    menuValue: 'Tabs',
-    route: routes.uiNavTabs,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-nav-tabs',
-  },
-  {
-    menuValue: 'Toasts',
-    route: routes.uiToasts,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-toasts',
-  },
-  {
-    menuValue: 'Tooltips',
-    route: routes.uiTooltips,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-tooltips',
-  },
-  {
-    menuValue: 'Typography',
-    route: routes.uiTypography,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-typography',
-  },
-  {
-    menuValue: 'Utilities',
-    route: routes.uiUtilities,
-    hasSubRoute: false,
-    showSubRoute: false,
-    base: 'ui-utilities',
-  },
-]
-
+            {
+              menuValue: "Grid",
+              route: routes.uiGrid,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-grid",
+            },
+            {
+              menuValue: "Images",
+              route: routes.uiImages,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-images",
+            },
+            {
+              menuValue: "Links",
+              route: routes.uiLinks,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-links",
+            },
+            {
+              menuValue: "List Group",
+              route: routes.uiListGroup,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-list-group",
+            },
+            {
+              menuValue: "Modals",
+              route: routes.uiModals,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-modals",
+            },
+            {
+              menuValue: "Offcanvas",
+              route: routes.uiOffcanvas,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-offcanvas",
+            },
+            {
+              menuValue: "Pagination",
+              route: routes.uiPagination,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-pagination",
+            },
+            {
+              menuValue: "Placeholders",
+              route: routes.uiPlaceholders,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-placeholders",
+            },
+            {
+              menuValue: "Progress",
+              route: routes.uiProgress,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-progress",
+            },
+            {
+              menuValue: "Spinner",
+              route: routes.uiSpinner,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-spinner",
+            },
+            {
+              menuValue: "Tabs",
+              route: routes.uiNavTabs,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-nav-tabs",
+            },
+            {
+              menuValue: "Toasts",
+              route: routes.uiToasts,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-toasts",
+            },
+            {
+              menuValue: "Tooltips",
+              route: routes.uiTooltips,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-tooltips",
+            },
+            {
+              menuValue: "Typography",
+              route: routes.uiTypography,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-typography",
+            },
+            {
+              menuValue: "Utilities",
+              route: routes.uiUtilities,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "ui-utilities",
+            },
+          ],
         },
         {
-          menuValue: 'Advanced UI',
-          base: 'advanced-ui',
-          icon: 'whirl',
+          menuValue: "Advanced UI",
+          base: "advanced-ui",
+          icon: "whirl",
           hasSubRoute: true,
           showSubRoute: false,
-         subMenus: [
+          subMenus: [
             {
-              menuValue: 'Clipboard',
+              menuValue: "Clipboard",
               route: routes.clipboard,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'ui-clipboard',
+              base: "ui-clipboard",
             },
             {
-              menuValue: 'Drag & Drop',
+              menuValue: "Drag & Drop",
               route: routes.dragDrop,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'ui-drag-drop',
+              base: "ui-drag-drop",
             },
             {
-              menuValue: 'Rating',
+              menuValue: "Rating",
               route: routes.rating,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'ui-rating',
+              base: "ui-rating",
             },
             {
-              menuValue: 'Text Editor',
+              menuValue: "Text Editor",
               route: routes.textEditor,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'ui-text-editor',
+              base: "ui-text-editor",
             },
             {
-              menuValue: 'Range Slider',
+              menuValue: "Range Slider",
               route: routes.uiRangeSlider,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'ui-rangeslider',
+              base: "ui-rangeslider",
             },
             {
-              menuValue: 'Counter',
+              menuValue: "Counter",
               route: routes.counter,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'ui-counter',
+              base: "ui-counter",
             },
             {
-              menuValue: 'Lightbox',
+              menuValue: "Lightbox",
               route: routes.uiLightbox,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'ui-lightbox',
+              base: "ui-lightbox",
             },
             {
-              menuValue: 'Scrollbar',
+              menuValue: "Scrollbar",
               route: routes.scrollbar,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'ui-scrollbar',
+              base: "ui-scrollbar",
             },
-          ]
+          ],
         },
         {
-          menuValue: 'Forms',
-          icon: 'forms',
-          base: 'forms',
+          menuValue: "Forms",
+          icon: "forms",
+          base: "forms",
           hasSubRouteTwo: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'Form Elements',
-              page1: 'form-basic-inputs',
-              page2: 'form-checkbox-radios',
-              page3: 'form-input-groups',
-              page4: 'form-grid-gutters',
-              page5: 'form-select',
-              page6: 'form-mask',
-              page7: 'form-fileupload',
-              page8: 'form-elements',
+              menuValue: "Form Elements",
+              page1: "form-basic-inputs",
+              page2: "form-checkbox-radios",
+              page3: "form-input-groups",
+              page4: "form-grid-gutters",
+              page5: "form-select",
+              page6: "form-mask",
+              page7: "form-fileupload",
+              page8: "form-elements",
               customSubmenuTwo: true,
               hasSubRoute: true,
               showSubRoute: false,
               subMenusTwo: [
                 {
-                  menuValue: 'Basic Inputs',
+                  menuValue: "Basic Inputs",
                   route: routes.formBasicInputs,
                   hasSubRoute: false,
                   showSubRoute: false,
-                  base: 'form-basic-inputs',
+                  base: "form-basic-inputs",
                 },
                 {
-                  menuValue: 'Checkbox & Radios',
+                  menuValue: "Checkbox & Radios",
                   route: routes.formCheckboxRadios,
                   hasSubRoute: false,
                   showSubRoute: false,
-                  base: 'form-checkbox-radios',
+                  base: "form-checkbox-radios",
                 },
                 {
-                  menuValue: 'Input Groups',
+                  menuValue: "Input Groups",
                   route: routes.formInputsGroups,
                   hasSubRoute: false,
                   showSubRoute: false,
-                  base: 'form-inputs-groups',
+                  base: "form-inputs-groups",
                 },
                 {
-                  menuValue: 'Grid & Gutters',
+                  menuValue: "Grid & Gutters",
                   route: routes.formGridGutters,
                   hasSubRoute: false,
                   showSubRoute: false,
-                  base: 'form-grid-gutters',
+                  base: "form-grid-gutters",
                 },
                 {
-                  menuValue: 'Form Select',
+                  menuValue: "Form Select",
                   route: routes.formSelect,
                   hasSubRoute: false,
                   showSubRoute: false,
-                  base: 'form-select',
+                  base: "form-select",
                 },
                 {
-                  menuValue: 'Input Masks',
+                  menuValue: "Input Masks",
                   route: routes.formMask,
                   hasSubRoute: false,
                   showSubRoute: false,
-                  base: 'form-mask',
+                  base: "form-mask",
                 },
                 {
-                  menuValue: 'File Uploads',
+                  menuValue: "File Uploads",
                   route: routes.formFileUpload,
                   hasSubRoute: false,
                   showSubRoute: false,
-                  base: 'form-file-upload',
+                  base: "form-file-upload",
                 },
-              ]
+              ],
             },
             {
-              menuValue: 'Layouts',
+              menuValue: "Layouts",
               customSubmenuTwo: true,
-              page1: 'form-horizontal',
-              page2: 'form-vertical',
-              page3: 'form-floating-labels',
+              page1: "form-horizontal",
+              page2: "form-vertical",
+              page3: "form-floating-labels",
               hasSubRoute: true,
               showSubRoute: false,
               subMenusTwo: [
-                  {
-                    menuValue: 'Horizontal Form',
-                    route: routes.formHorizontal,
-                    hasSubRoute: false,
-                    showSubRoute: false,
-                    base: 'form-horizontal',
-                  },
-                  {
-                    menuValue: 'Vertical Form',
-                    route: routes.formVertical,
-                    hasSubRoute: false,
-                    showSubRoute: false,
-                    base: 'form-vertical',
-                  },
-                  {
-                    menuValue: 'Floating Labels',
-                    route: routes.formFloatingLabels,
-                    hasSubRoute: false,
-                    showSubRoute: false,
-                    base: 'form-floating-labels',
-                  },
-                ]
+                {
+                  menuValue: "Horizontal Form",
+                  route: routes.formHorizontal,
+                  hasSubRoute: false,
+                  showSubRoute: false,
+                  base: "form-horizontal",
+                },
+                {
+                  menuValue: "Vertical Form",
+                  route: routes.formVertical,
+                  hasSubRoute: false,
+                  showSubRoute: false,
+                  base: "form-vertical",
+                },
+                {
+                  menuValue: "Floating Labels",
+                  route: routes.formFloatingLabels,
+                  hasSubRoute: false,
+                  showSubRoute: false,
+                  base: "form-floating-labels",
+                },
+              ],
             },
             {
-              menuValue: 'Form Validation',
+              menuValue: "Form Validation",
               route: routes.formValidation,
               hasSubRoute: false,
               showSubRoute: false,
               customSubmenuTwo: false,
-              base: 'form-validation',
+              base: "form-validation",
             },
             {
-              menuValue: 'Mat Select',
+              menuValue: "Mat Select",
               route: routes.formSelect2,
               hasSubRoute: false,
               showSubRoute: false,
               customSubmenuTwo: false,
-              base: 'form-select-2',
+              base: "form-select-2",
             },
             {
-              menuValue: 'Form Wizard',
+              menuValue: "Form Wizard",
               route: routes.formWizard,
               hasSubRoute: false,
               showSubRoute: false,
               customSubmenuTwo: false,
-              base: 'form-wizard',
+              base: "form-wizard",
             },
             {
-              menuValue: 'Form Pickers',
+              menuValue: "Form Pickers",
               route: routes.formPickers,
               hasSubRoute: false,
               showSubRoute: false,
               customSubmenuTwo: false,
-              base: 'form-pickers',
+              base: "form-pickers",
             },
-
           ],
         },
         {
-          menuValue: 'Tables',
-          icon: 'table',
-          base: 'table',
+          menuValue: "Tables",
+          icon: "table",
+          base: "table",
           hasSubRoute: true,
           showSubRoute: false,
           subMenus: [
             {
-              menuValue: 'Basic Tables',
+              menuValue: "Basic Tables",
               route: routes.basicTable,
               hasSubRoute: false,
               showSubRoute: false,
-              base:'basic-tables'
+              base: "basic-tables",
             },
             {
-              menuValue: 'Data Table',
+              menuValue: "Data Table",
               route: routes.dataTable,
               hasSubRoute: false,
               showSubRoute: false,
-              base:'data-tables'
+              base: "data-tables",
             },
           ],
         },
         {
-          menuValue: 'Charts',
-          icon: 'chart-pie-3',
+          menuValue: "Charts",
+          icon: "chart-pie-3",
           hasSubRoute: true,
           showSubRoute: false,
-          base: 'charts',
+          base: "charts",
           subMenus: [
             {
-              menuValue: 'Apex Charts',
+              menuValue: "Apex Charts",
               route: routes.chartApex,
               hasSubRoute: false,
               showSubRoute: false,
-              base:'apex-charts'
+              base: "apex-charts",
             },
             {
-              menuValue: 'Prime NG Charts',
+              menuValue: "Prime NG Charts",
               hasSubRoute: false,
               showSubRoute: false,
               route: routes.chartPrime,
-              base:'prime-ng',
+              base: "prime-ng",
               subRoutes: [],
             },
           ],
         },
         {
-          menuValue: 'Icons',
-          icon: 'icons',
+          menuValue: "Icons",
+          icon: "icons",
           hasSubRoute: true,
           showSubRoute: false,
-          base: 'icons',
-         subMenus: [
+          base: "icons",
+          subMenus: [
             {
-              menuValue: 'Fontawesome Icons',
+              menuValue: "Fontawesome Icons",
               route: routes.iconFontAwesome,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-fontawesome',
+              base: "icon-fontawesome",
             },
             {
-              menuValue: 'Feather Icons',
+              menuValue: "Feather Icons",
               route: routes.iconFeather,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-feather',
+              base: "icon-feather",
             },
             {
-              menuValue: 'Ionic Icons',
+              menuValue: "Ionic Icons",
               route: routes.iconIonic,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-ionic',
+              base: "icon-ionic",
             },
             {
-              menuValue: 'Material Icons',
+              menuValue: "Material Icons",
               route: routes.iconMaterial,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-material',
+              base: "icon-material",
             },
             {
-              menuValue: 'Pe7 Icons',
+              menuValue: "Pe7 Icons",
               route: routes.iconPe7,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-pe7',
+              base: "icon-pe7",
             },
             {
-              menuValue: 'Simpleline Icons',
+              menuValue: "Simpleline Icons",
               route: routes.iconSimpleline,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-simpleline',
+              base: "icon-simpleline",
             },
             {
-              menuValue: 'Themify Icons',
+              menuValue: "Themify Icons",
               route: routes.iconThemify,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-themify',
+              base: "icon-themify",
             },
             {
-              menuValue: 'Weather Icons',
+              menuValue: "Weather Icons",
               route: routes.iconWeather,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-weather',
+              base: "icon-weather",
             },
             {
-              menuValue: 'Typicon Icons',
+              menuValue: "Typicon Icons",
               route: routes.iconTypicon,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-typicon',
+              base: "icon-typicon",
             },
             {
-              menuValue: 'Flag Icons',
+              menuValue: "Flag Icons",
               route: routes.iconFlag,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-flag',
+              base: "icon-flag",
             },
             {
-              menuValue: 'Bootstrap Icons',
+              menuValue: "Bootstrap Icons",
               route: routes.bootstrap,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-bootstrap',
+              base: "icon-bootstrap",
             },
             {
-              menuValue: 'Tabler Icons',
+              menuValue: "Tabler Icons",
               route: routes.tabler,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-tabler',
+              base: "icon-tabler",
             },
             {
-              menuValue: 'Remix Icons',
+              menuValue: "Remix Icons",
               route: routes.remix,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'icon-remix',
+              base: "icon-remix",
             },
-          ]
-
+          ],
         },
         {
-          menuValue: 'Maps',
+          menuValue: "Maps",
           hasSubRoute: true,
           showSubRoute: false,
-          icon: 'map-star',
-          base: 'maps',
-          materialicons: 'people',
+          icon: "map-star",
+          base: "maps",
+          materialicons: "people",
           subMenus: [
             {
-              menuValue: 'Leaflets',
+              menuValue: "Leaflets",
               route: routes.leaflet,
               hasSubRoute: false,
               showSubRoute: false,
-              base: 'leaflet',
+              base: "leaflet",
             },
           ],
         },
       ],
     },
-
   ];
   public videocall = [
     {
-      img: 'assets/img/users/user-01.jpg',
-      name: 'Barbara',
+      img: "assets/img/users/user-01.jpg",
+      name: "Barbara",
     },
     {
-      img: 'assets/img/users/user-02.jpg',
-      name: 'Linnea',
+      img: "assets/img/users/user-02.jpg",
+      name: "Linnea",
     },
     {
-      img: 'assets/img/users/user-05.jpg',
-      name: 'Richard',
+      img: "assets/img/users/user-05.jpg",
+      name: "Richard",
     },
     {
-      img: 'assets/img/users/user-03.jpg',
-      name: 'Freda',
+      img: "assets/img/users/user-03.jpg",
+      name: "Freda",
     },
   ];
 
-
-
-// public resetData3(): void {
-//   this.sideBar.map((res: SideBar) => {
-//     res.showAsTab = false;
-//     res.menu.map((menus: SideBarMenu) => {
-//       menus.showSubRoute = false;
-//     });
-//   });
+  // public resetData3(): void {
+  //   this.sideBar.map((res: SideBar) => {
+  //     res.showAsTab = false;
+  //     res.menu.map((menus: SideBarMenu) => {
+  //       menus.showSubRoute = false;
+  //     });
+  //   });
   public getTickets(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/tickets.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/tickets.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
@@ -2120,7 +2199,7 @@ export class DataService {
   }
   public getContactMessage(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/contact-messages.json')
+      .get<apiResultFormat>("assets/json/contact-messages.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -2129,7 +2208,7 @@ export class DataService {
   }
   public getProposalsList(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/proposals-list.json')
+      .get<apiResultFormat>("assets/json/proposals-list.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -2138,7 +2217,7 @@ export class DataService {
   }
   public getProposalsView(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/proposal-view.json')
+      .get<apiResultFormat>("assets/json/proposal-view.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -2147,7 +2226,7 @@ export class DataService {
   }
   public getContractList(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/contract-list.json')
+      .get<apiResultFormat>("assets/json/contract-list.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -2155,7 +2234,7 @@ export class DataService {
       );
   }
   public getPaymentList(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/payment-list.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/payment-list.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
@@ -2163,7 +2242,7 @@ export class DataService {
   }
   public getEstimationList(): Observable<apiResultFormat> {
     return this.http
-      .get<apiResultFormat>('assets/json/estimation-list.json')
+      .get<apiResultFormat>("assets/json/estimation-list.json")
       .pipe(
         map((res: apiResultFormat) => {
           return res;
@@ -2171,7 +2250,7 @@ export class DataService {
       );
   }
   public getInvoiceList(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/invoice-list.json').pipe(
+    return this.http.get<apiResultFormat>("assets/json/invoice-list.json").pipe(
       map((res: apiResultFormat) => {
         return res;
       })
