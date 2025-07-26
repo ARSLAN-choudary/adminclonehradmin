@@ -1,4 +1,11 @@
-:host ::ng-deep .mat-mdc-select.custom-mat-select:not(.mat-mdc-select-empty) > .mat-mdc-select-trigger {
+:host
+  ::ng-deep
+  .mat-mdc-select.custom-mat-select:not(.mat-mdc-select-empty)
+  > .mat-mdc-select-trigger {
   border: 2px solid #6fac44 !important;
   border-radius: 4px !important;
+}
+
+::ng-deep .reportrange-picker .reportrange-picker-field {
+  width: 145px !important;
 }
