@@ -442,7 +442,9 @@
                                             data-bs-target="#offcanvas_edit"><i class="ti ti-edit text-blue"></i>
                                             Edit</a>
 
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="fa fa-share"></i>
+                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="offcanvas"
+                                            (click)="passResendApplicationData(data)"
+                                            data-bs-target="#offcanvas_resend"><i class="fa fa-share"></i>
                                             Resend</a>
                                         <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
                                             data-bs-target="#delete_contact"><i class="ti ti-trash"></i>
@@ -677,6 +679,8 @@
 </div>
 <!-- /Edit User -->
 
+
+
 <!-- delete modal -->
 <div class="modal fade" id="delete_contact">
     <div class="modal-dialog modal-dialog-centered modal-sm rounded-0">
@@ -699,3 +703,61 @@
     </div>
 </div>
 <!-- delete modal -->
+
+
+<!-- Resend Modal -->
+
+<!-- Resend Modal -->
+<div class="offcanvas offcanvas-end offcanvas-small" tabindex="-1" id="offcanvas_resend">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="fw-semibold">Resend Application</h5>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            data-bs-dismiss="offcanvas" aria-label="Close">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+
+    <div class="offcanvas-body">
+        <form>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Employer Name</label>
+                    <input type="text" class="form-control" [value]="resendApplicationData?.employer_name" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Job Title</label>
+                    <input type="text" class="form-control" [value]="resendApplicationData?.job_title" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Mobile</label>
+                    <input type="text" class="form-control" [value]="resendApplicationData?.mobile" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="text" class="form-control" [value]="resendApplicationData?.email" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Submission Date</label>
+                    <input type="text" class="form-control" [value]="resendApplicationData?.submission_date" readonly>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-end mt-5">
+                <button (click)="resendApplicationData=null" type="button" class="btn btn-light me-2"
+                    data-bs-dismiss="offcanvas">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary" (click)="onResendConfirm()">
+                    Resend Invitation
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- /Resend Application Ends here -->
