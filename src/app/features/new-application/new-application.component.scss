@@ -1,0 +1,7 @@
+:host
+  ::ng-deep
+  .mat-mdc-select.custom-mat-select:not(.mat-mdc-select-empty)
+  > .mat-mdc-select-trigger {
+  border: 2px solid #28a745 !important;
+  border-radius: 4px !important;
+}
