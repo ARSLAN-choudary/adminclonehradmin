@@ -1,0 +1,95 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "Name": "NovaWave LLC",
+            "DomainURL": "nw.nova.com",
+            "Image": "company-icon-01.svg",
+            "Plan": "Advanced (Monthly)",
+            "CreatedDate": "12 Sep 2025",
+            "Status": "Approved"
+        },
+        {
+            "id": "2",
+            "Name": "BlueSky Industries",
+            "DomainURL": "bl.blue.com",
+            "Image": "company-icon-02.svg",
+            "Plan": "Enterprise (Monthly)",
+            "CreatedDate": "24 Oct 2025",
+            "Status": "Pending"
+        },
+        {
+            "id": "3",
+            "Name": "Silver Hawk",
+            "DomainURL": "sh.silver.com",
+            "Image": "company-icon-03.svg",
+            "Plan": "Advanced (Monthly)",
+            "CreatedDate": "16 Feb 2025",
+            "Status": "Rejected"
+        },
+        {
+            "id": "4",
+            "Name": "Summit  Peak",
+            "DomainURL": "sp.summer.com",
+            "Image": "company-icon-04.svg",
+            "Plan": "Advanced (Monthly)",
+            "CreatedDate": "20 Jul 2025",
+            "Status": "Approved"
+        },
+        {
+            "id": "5",
+            "Name": "RiverStone Ventur",
+            "DomainURL": "ro.stone.com",
+            "Image": "company-icon-05.svg",
+            "Plan": "Basic (Monthly)",
+            "CreatedDate": "20 Jul 2025",
+            "Status": "Approved"
+        },
+        {
+            "id": "6",
+            "Name": "Bright Bridge Grp",
+            "DomainURL": "bb.bright.com",
+            "Image": "company-icon-06.svg",
+            "Plan": "Enterprise (Monthly)",
+            "CreatedDate": "28 May 2025",
+            "Status": "Pending"
+        },
+        {
+            "id": "7",
+            "Name": "CoastalStar Co.",
+            "DomainURL": "cs.coastal.com",
+            "Image": "company-icon-07.svg",
+            "Plan": "Advanced (Monthly)",
+            "CreatedDate": "12 May 2025",
+            "Status": "Approved"
+        },
+        {
+            "id": "8",
+            "Name": "HarborView",
+            "DomainURL": "hv.harbor.com",
+            "Image": "company-icon-08.svg",
+            "Plan": "Advanced (Monthly)",
+            "CreatedDate": "14 April 2025",
+            "Status": "Rejected"
+        },
+        {
+            "id": "9",
+            "Name": "Golden Gate Ltd",
+            "DomainURL": "ggt.golden.com",
+            "Image": "company-icon-09.svg",
+            "Plan": "Enterprise (Monthly)",
+            "CreatedDate": "03 Apr 2025",
+            "Status": "Approved"
+        },
+        {
+            "id": "10",
+            "Name": "Redwood Inc",
+            "DomainURL": "ri.redwood.com",
+            "Image": "company-icon-10.svg",
+            "Plan": "Basic (Monthly)",
+            "CreatedDate": "25 Feb 2025",
+            "Status": "Approved"
+        }
+    ],
+    "totalData": 10
+}

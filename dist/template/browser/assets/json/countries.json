@@ -1,0 +1,75 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "Image": "country-01.svg",
+            "CountryCode": "United States",
+            "CountryID": "Indiana",
+            "CountryName": "Indianapolis"
+        },
+        {
+            "id": "2",
+            "Image": "country-02.svg",
+            "CountryCode": "Canada",
+            "CountryID": "Alberta",
+            "CountryName": "Calgary"
+        },
+        {
+            "id": "3",
+            "Image": "country-03.svg",
+            "CountryCode": "Spain",
+            "CountryID": "Madrid",
+            "CountryName": "Bulgaria"
+        },
+        {
+            "id": "4",
+            "Image": "country-04.svg",
+            "CountryCode": "India",
+            "CountryID": "Tamil Nadu",
+            "CountryName": "Trichy"
+        },
+        {
+            "id": "5",
+            "Image": "country-05.svg",
+            "CountryCode": "Brazil",
+            "CountryID": "Alagoas",
+            "CountryName": "Porto Alegre"
+        },
+        {
+            "id": "6",
+            "Image": "country-06.svg",
+            "CountryCode": "Germany",
+            "CountryID": "Saarland",
+            "CountryName": "Hamburg"
+        },
+        {
+            "id": "7",
+            "Image": "country-07.svg",
+            "CountryCode": "Mexico",
+            "CountryID": "Durango",
+            "CountryName": "Guadalajara"
+        },
+        {
+            "id": "8",
+            "Image": "country-08.svg",
+            "CountryCode": "China",
+            "CountryID": "Shandong",
+            "CountryName": "Chengdu"
+        },
+        {
+            "id": "9",
+            "Image": "country-09.svg",
+            "CountryCode": "Russia",
+            "CountryID": "Kalmykia",
+            "CountryName": "Moscow"
+        },
+        {
+            "id": "10",
+            "Image": "country-10.svg",
+            "CountryCode": "Italy",
+            "CountryID": "Tuscany",
+            "CountryName": "Rome"
+        }
+    ],
+    "totalData": 10
+}

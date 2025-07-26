@@ -1,0 +1,34 @@
+import { EventEmitter, OnDestroy, ElementRef, AfterViewInit } from "@angular/core";
+import { NgxMatTimepickerClockFace } from "../../models/ngx-mat-timepicker-clock-face.interface";
+import { NgxMatTimepickerUnits } from "../../models/ngx-mat-timepicker-units.enum";
+import { NgxMatTimepickerParserPipe } from "../../pipes/ngx-mat-timepicker-parser.pipe";
+import * as i0 from "@angular/core";
+export declare class NgxMatTimepickerDialControlComponent implements AfterViewInit, OnDestroy {
+    private _elRef;
+    private _timeParserPipe;
+    private get _selectedTime();
+    disabled: boolean;
+    focused: EventEmitter<void>;
+    isActive: boolean;
+    isEditable: boolean;
+    minutesGap: number;
+    previousTime: number | string;
+    time: string;
+    timeChanged: EventEmitter<NgxMatTimepickerClockFace>;
+    timeList: NgxMatTimepickerClockFace[];
+    timeUnit: NgxMatTimepickerUnits;
+    timeUnitChanged: EventEmitter<NgxMatTimepickerUnits>;
+    unfocused: EventEmitter<void>;
+    constructor(_elRef: ElementRef, _timeParserPipe: NgxMatTimepickerParserPipe);
+    changeTimeByKeyboard(e: any): void;
+    ngAfterViewInit(): void;
+    ngOnDestroy(): void;
+    onKeydown(e: any): void;
+    onModelChange(value: string): void;
+    saveTimeAndChangeTimeUnit(event: FocusEvent, unit: NgxMatTimepickerUnits): void;
+    updateTime(): void;
+    private _addTime;
+    private _changeTimeByArrow;
+    static ɵfac: i0.ɵɵFactoryDeclaration<NgxMatTimepickerDialControlComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<NgxMatTimepickerDialControlComponent, "ngx-mat-timepicker-dial-control", never, { "disabled": { "alias": "disabled"; "required": false; }; "isActive": { "alias": "isActive"; "required": false; }; "isEditable": { "alias": "isEditable"; "required": false; }; "minutesGap": { "alias": "minutesGap"; "required": false; }; "time": { "alias": "time"; "required": false; }; "timeList": { "alias": "timeList"; "required": false; }; "timeUnit": { "alias": "timeUnit"; "required": false; }; }, { "focused": "focused"; "timeChanged": "timeChanged"; "timeUnitChanged": "timeUnitChanged"; "unfocused": "unfocused"; }, never, never, true, never>;
+}

@@ -1,0 +1,65 @@
+{
+	"data": [
+		{
+			"id": "1",
+			"Title": "Contacted",
+			"CreatedAt": "25 Sep 2025, 01:22 PM",
+			"Status": "Active"
+		},
+		{
+			"id": "2",
+			"Title": "Not Contacted",
+			"CreatedAt": "29 Sep 2025, 10:20 PM",
+			"Status": "Active"
+		},
+		{
+			"id": "3",
+			"Title": "Closed",
+			"CreatedAt": "04 Oct 2025, 08:30 AM",
+			"Status": "Active"
+		},
+		{
+			"id": "4",
+			"Title": "Lost",
+			"CreatedAt": "17 Oct 2025, 11:45 AM",
+			"Status": "Active"
+		},
+		{
+			"id": "5",
+			"Title": "Qualified",
+			"CreatedAt": "28 May 2025, 07:08 AM",
+			"Status": "Active"
+		},
+		{
+			"id": "6",
+			"Title": "Negotiation",
+			"CreatedAt": "01 July 2025, 02:15 AM",
+			"Status": "Inactive"
+		},
+		{
+			"id": "7",
+			"Title": "Subscriber",
+			"CreatedAt": "20 Jul 2025, 10:25 AM",
+			"Status": "Active"
+		},
+		{
+			"id": "8",
+			"Title": "Renewed",
+			"CreatedAt": "16 Sep 2025, 02:10 PM",
+			"Status": "Inactive"
+		},
+		{
+			"id": "9",
+			"Title": "Lead",
+			"CreatedAt": "10 Oct 2025, 10:15 AM",
+			"Status": "Active"
+		},
+		{
+			"id": "10",
+			"Title": "New Lead",
+			"CreatedAt": "01 Nov 2025, 01:32 PM",
+			"Status": "Active"
+		}
+	],
+	"totalData": 10
+}

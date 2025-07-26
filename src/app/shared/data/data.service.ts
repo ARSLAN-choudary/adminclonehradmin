@@ -217,6 +217,12 @@ export class DataService {
         return res;
       })
     );
+  } public getNewApplication(): Observable<apiResultFormat> {
+    return this.http.get<apiResultFormat>('assets/json/new-application.json').pipe(
+      map((res: apiResultFormat) => {
+        return res;
+      })
+    );
   }
   public getRolesPermissions(): Observable<apiResultFormat> {
     return this.http

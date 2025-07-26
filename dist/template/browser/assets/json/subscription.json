@@ -1,0 +1,168 @@
+{
+    "data":
+    [
+        {
+            "subscriber": "NovaWave LLC",
+            "plan": "Advanced (Monthly)",
+            "billingCycle": "30 Days",
+            "paymentMethod": "Credit Card",
+            "amount": "$200",
+            "createdDate": "12 Sep 2024",
+            "expiringOn": "11 Oct 2024",
+            "Image": "company-icon-01.svg",
+            "AccountURL":"nw.example.com",
+            "DomainStatus":"Approved",
+            "InvoiceID":"INV001",
+            "Email":"michael@example.com",
+            "status": "Paid"
+
+            
+        },
+        {
+            "subscriber": "BlueSky Industries",
+            "plan": "Basic (Yearly)",
+            "billingCycle": "365 Days",
+            "paymentMethod": "Paypal",
+            "amount": "$600",
+            "createdDate": "24 Oct 2024",
+            "expiringOn": "23 Oct 2025",
+            "Image": "company-icon-02.svg",
+            "AccountURL":"bsi.example.com",
+            "DomainStatus":"Pending",
+            "InvoiceID":"INV002",
+            "Email":"sophie@example.com",
+            "status": "Unpaid"
+            
+        },
+        {
+            "subscriber": "Silver Hawk",
+            "plan": "Advanced (Monthly)",
+            "billingCycle": "30 Days",
+            "paymentMethod": "Debit Card",
+            "amount": "$200",
+            "createdDate": "18 Feb 2024",
+            "expiringOn": "17 Mar 2024",
+            "Image": "company-icon-03.svg",
+            "AccountURL":"sh.example.com",
+            "DomainStatus":"Rejected",
+            "InvoiceID":"INV003",
+            "Email":"cameron@example.com",
+            "status": "Paid"
+            
+        },
+        {
+            "subscriber": "Summit  Peak",
+            "plan": "Advanced (Monthly)",
+            "billingCycle": "30 Days",
+            "paymentMethod": "Paypal",
+            "amount": "$200",
+            "createdDate": "17 Oct 2024",
+            "expiringOn": "16 Nov 2024",
+            "Image": "company-icon-04.svg",
+            "AccountURL":"sp.example.com",
+            "DomainStatus":"Approved",
+            "InvoiceID":"INV004",
+            "Email":"doris@example.com",
+            "status": "Paid"
+            
+        },
+        {
+            "subscriber": "RiverStone Ventur",
+            "plan": "Enterprise (Monthly)",
+            "billingCycle": "30 Days",
+            "paymentMethod": "Credit Card",
+            "amount": "$400",
+            "createdDate": "20 Jul 2024",
+            "expiringOn": "19 Aug 2024",
+            "Image": "company-icon-05.svg",
+            "AccountURL":"rsv.example.com",
+            "DomainStatus":"Approved",
+            "InvoiceID":"INV005",
+            "Email":"thomas@example.com",
+            "status": "Unpaid"
+            
+        },
+        {
+            "subscriber": "Bright Bridge Grp",
+            "plan": "Advanced (Monthly)",
+            "billingCycle": "30 Days",
+            "paymentMethod": "Paypal",
+            "amount": "$200",
+            "createdDate": "10 Apr 2024",
+            "expiringOn": "19 Aug 2024",
+            "Image": "company-icon-06.svg",
+            "AccountURL":"bbg.example.com",
+            "DomainStatus":"Pending",
+            "InvoiceID":"INV006",
+            "Email":"kathleen@example.com",
+            "status": "Paid"
+            
+        },
+        {
+            "subscriber": "CoastalStar Co.",
+            "plan": "Enterprise (Yearly)",
+            "billingCycle": "365 Days",
+            "paymentMethod": "Credit Card",
+            "amount": "$4800",
+            "createdDate": "29 Aug 2024",
+            "expiringOn": "28 Aug 2025",
+            "Image": "company-icon-07.svg",
+            "AccountURL":"csc.example.com",
+            "DomainStatus":"Approved",
+            "InvoiceID":"INV007",
+            "Email":"bruce@example.com",
+            "status": "Paid"
+            
+        },
+        {
+            "subscriber": "HarborView",
+            "plan": "Basic (Monthly)",
+            "billingCycle": "30 Days",
+            "paymentMethod": "Credit Card",
+            "amount": "$50",
+            "createdDate": "22 Feb 2024",
+            "expiringOn": "21 Mar 2024",
+            "Image": "company-icon-08.svg",
+            "AccountURL":"hv.example.com",
+            "DomainStatus":"Rejected",
+            "InvoiceID":"INV008",
+            "Email":"estelle@example.com",
+            "status": "Paid"
+            
+        },
+        {
+            "subscriber": "Golden Gate Ltd",
+            "plan": "Basic (Yearly)",
+            "billingCycle": "365 Days",
+            "paymentMethod": "Paypal",
+            "amount": "$600",
+            "createdDate": "03 Nov 2024",
+            "expiringOn": "02 Nov 2025",
+            "Image": "company-icon-09.svg",
+            "AccountURL":"ggl.example.com",
+            "DomainStatus":"Approved",
+            "InvoiceID":"INV009",
+            "Email":"stephen@example.com",
+            "status": "Paid"
+            
+        },
+        {
+            "subscriber": "Redwood Inc",
+            "plan": "Advanced (Monthly)",
+            "billingCycle": "30 Days",
+            "paymentMethod": "Credit Card",
+            "amount": "$200",
+            "createdDate": "17 Dec 2024",
+            "expiringOn": "16 Jan 2024",
+            "Image": "company-icon-10.svg",
+            "AccountURL":"ri.example.com",
+            "DomainStatus":"Approved",
+            "InvoiceID":"INV0010",
+            "Email":"angela@example.com",
+            "status": "Paid"
+            
+        }
+    ],
+    "totalData":10
+
+}

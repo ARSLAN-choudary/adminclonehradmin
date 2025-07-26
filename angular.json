@@ -21,8 +21,8 @@
               "base": "dist/template"
             },
             "polyfills": [
-                            "zone.js"
-                        ],
+              "zone.js"
+            ],
             "index": "src/index.html",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
@@ -34,7 +34,7 @@
               }
             ],
             "styles": [
-                            "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.snow.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -46,7 +46,7 @@
               "src/assets/icons/typicons/typicons.css",
               "src/assets/icons/weather/weathericons.css",
               "src/assets/icons/bootstrap/bootstrap-icons.min.css",
-              "src/assets/icons/remix/fonts/remixicon.css",   
+              "src/assets/icons/remix/fonts/remixicon.css",
               "src/assets/icons/flags/flags.css",
               "src/assets/icons/simpleline/simple-line-icons.css",
               "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
@@ -60,23 +60,23 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/leaflet/dist/leaflet.css",
               "src/assets/scss/main.scss",
+              "./node_modules/intl-tel-input/build/css/intlTelInput.css",
               "src/styles.scss"
             ],
-                        "scripts": [
-             "node_modules/quill/dist/quill.js",
+            "scripts": [
+              "node_modules/quill/dist/quill.js",
               "node_modules/plyr/dist/plyr.js",
               "node_modules/intl-tel-input/build/js/intlTelInput.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
-            
           },
           "configurations": {
             "production": {
-                "optimization": {
-                  "scripts": true,
-                  "styles": true,
-                  "fonts": false
-                },
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": false
+              },
               "budgets": [
                 {
                   "type": "initial",
@@ -117,8 +117,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": 
-            [
+            "polyfills": [
               "zone.js",
               "zone.js/testing",
               "@angular/localize/init"

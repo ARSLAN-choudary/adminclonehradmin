@@ -1,0 +1,105 @@
+{
+  "data": [
+    {
+      "reference_no": "REF001",
+      "employer_name": "Darlee Robertson",
+      "job_title": "Facility Manager",
+      "mobile": "1234567890",
+      "email": "robertson@example.com",
+      "submission_date": "25 Sep 2023, 12:12 pm",
+      "status": "Active",
+      "action": "Edit"
+    },
+    {
+      "reference_no": "REF002",
+      "employer_name": "Sharon Roy",
+      "job_title": "Installer",
+      "mobile": "+1 989757485",
+      "email": "sharon@example.com",
+      "submission_date": "27 Sep 2023, 07:40 am",
+      "status": "Inactive",
+      "action": "Edit"
+    },
+    {
+      "reference_no": "REF003",
+      "employer_name": "Vaughan",
+      "job_title": "Senior Manager",
+      "mobile": "+1 546555455",
+      "email": "vaughan12@example.com",
+      "submission_date": "29 Sep 2023, 08:20 am",
+      "status": "Active",
+      "action": "Edit"
+    },
+    {
+      "reference_no": "REF004",
+      "employer_name": "Jessica",
+      "job_title": "Test Engineer",
+      "mobile": "+1 454478787",
+      "email": "jessica13@example.com",
+      "submission_date": "25 Sep 2023, 12:12 pm",
+      "status": "Active",
+      "action": "Edit"
+    },
+    {
+      "reference_no": "REF005",
+      "employer_name": "Carol Thomas",
+      "job_title": "UI / UX Designer",
+      "mobile": "+1 124547845",
+      "email": "caroltho3@example.com",
+      "submission_date": "02 Oct 2023, 10:10 am",
+      "status": "Active",
+      "action": "Edit"
+    },
+    {
+      "reference_no": "REF006",
+      "employer_name": "Dawn Mercha",
+      "job_title": "Technician",
+      "mobile": "+1 478845447",
+      "email": "dawnmercha@example.com",
+      "submission_date": "17 Oct 2023, 04:25 pm",
+      "status": "Active",
+      "action": "Edit"
+    },
+    {
+      "reference_no": "REF007",
+      "employer_name": "Rachel Hampton",
+      "job_title": "Software Developer",
+      "mobile": "+1 215544845",
+      "email": "rachel@example.com",
+      "submission_date": "28 Oct 2023, 07:16 am",
+      "status": "Active",
+      "action": "Edit"
+    },
+    {
+      "reference_no": "REF008",
+      "employer_name": "Jonelle Curtiss",
+      "job_title": "Supervisor",
+      "mobile": "+1 121145471",
+      "email": "jonelle@example.com",
+      "submission_date": "08 Nov 2023, 06:10 am",
+      "status": "Active",
+      "action": "Edit"
+    },
+    {
+      "reference_no": "REF009",
+      "employer_name": "Jonathan",
+      "job_title": "Team Lead Dev",
+      "mobile": "+1 321454789",
+      "email": "jonathan@example.com",
+      "submission_date": "15 Nov 2023, 11:50 am",
+      "status": "Active",
+      "action": "Edit"
+    },
+    {
+      "reference_no": "REF010",
+      "employer_name": "Brook",
+      "job_title": "Team Lead Dev",
+      "mobile": "+1 278907145",
+      "email": "brook@example.com",
+      "submission_date": "25 Nov 2023, 06:34 pm",
+      "status": "Active",
+      "action": "Edit"
+    }
+  ],
+  "totalData": 10
+}

@@ -1,0 +1,29 @@
+{
+  "data" : [
+  {
+    "Image": "avatar-26.jpg",
+    "Title": "Analysing latest time estimation for new project",
+    "ActivityType": "Email",
+    "DueDate": "11 Oct 2025, 05:00 pm",
+    "Owner": "Theresa Nelson",
+    "CreatedAt": "03 Oct 2025, 03:53 pm"
+  },
+  {
+    "Image": "avatar-06.jpg",
+    "Title": "Regarding latest updates in project",
+    "ActivityType": "Email",
+    "DueDate": "30 Nov 2025, 09:20 pm",
+    "Owner": "Guilory Berggren",
+    "CreatedAt": "25 Nov 2025, 07:20 pm"
+  },
+  {
+    "Image": "avatar-13.jpg",
+    "Title": "Attach final proposal for upcoming project",
+    "ActivityType": "Email",
+    "DueDate": "19 Dec 2025, 02:20 pm",
+    "Owner": "Jami Carlile",
+    "CreatedAt": "10 Dec 2025, 06:30 pm"
+  }
+],
+  "totalData": 3
+}

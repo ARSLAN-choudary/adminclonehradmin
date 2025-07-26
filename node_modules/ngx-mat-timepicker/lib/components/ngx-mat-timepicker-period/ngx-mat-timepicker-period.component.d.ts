@@ -1,0 +1,32 @@
+import { EventEmitter } from "@angular/core";
+import { FlexibleConnectedPositionStrategy, Overlay, ScrollStrategy } from "@angular/cdk/overlay";
+import { NgxMatTimepickerFormatType } from "../../models/ngx-mat-timepicker-format.type";
+import { NgxMatTimepickerPeriods } from "../../models/ngx-mat-timepicker-periods.enum";
+import { NgxMatTimepickerUnits } from "../../models/ngx-mat-timepicker-units.enum";
+import { NgxMatTimepickerClockFace } from "../../models/ngx-mat-timepicker-clock-face.interface";
+import { DateTime } from "ts-luxon";
+import * as i0 from "@angular/core";
+export declare class NgxMatTimepickerPeriodComponent {
+    protected _overlay: Overlay;
+    activeTimeUnit: NgxMatTimepickerUnits;
+    format: NgxMatTimepickerFormatType;
+    hours: NgxMatTimepickerClockFace[];
+    isPeriodAvailable: boolean;
+    maxTime: DateTime;
+    meridiems: string[];
+    minTime: DateTime;
+    minutes: NgxMatTimepickerClockFace[];
+    overlayPositionStrategy: FlexibleConnectedPositionStrategy;
+    overlayScrollStrategy: ScrollStrategy;
+    periodChanged: EventEmitter<NgxMatTimepickerPeriods>;
+    selectedHour: number | string;
+    selectedPeriod: NgxMatTimepickerPeriods;
+    timePeriod: typeof NgxMatTimepickerPeriods;
+    constructor(_overlay: Overlay);
+    animationDone(): void;
+    changePeriod(period: NgxMatTimepickerPeriods): void;
+    private _getDisabledTimeByPeriod;
+    private _isSwitchPeriodAvailable;
+    static ɵfac: i0.ɵɵFactoryDeclaration<NgxMatTimepickerPeriodComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<NgxMatTimepickerPeriodComponent, "ngx-mat-timepicker-period", never, { "activeTimeUnit": { "alias": "activeTimeUnit"; "required": false; }; "format": { "alias": "format"; "required": false; }; "hours": { "alias": "hours"; "required": false; }; "maxTime": { "alias": "maxTime"; "required": false; }; "meridiems": { "alias": "meridiems"; "required": false; }; "minTime": { "alias": "minTime"; "required": false; }; "minutes": { "alias": "minutes"; "required": false; }; "selectedHour": { "alias": "selectedHour"; "required": false; }; "selectedPeriod": { "alias": "selectedPeriod"; "required": false; }; }, { "periodChanged": "periodChanged"; }, never, never, true, never>;
+}

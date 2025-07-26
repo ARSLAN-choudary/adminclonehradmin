@@ -20,7 +20,8 @@ import { DateRangePickerComponent } from '../../common/date-range-picker/date-ra
 
 @Component({
   selector: 'app-manage-users',
-  imports: [CommonModule,
+  imports: [
+      CommonModule,
     RouterLink,
     NgxEditorModule,
     MatSelectModule,

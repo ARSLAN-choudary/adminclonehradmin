@@ -1,0 +1,86 @@
+{
+  "data": [
+  {
+    "Name": "Distribution",
+    "Type": "Public Relations",
+    "Opened": "40.5%",
+    "Closed": "20.5%",
+    "Unsubscribe": "30.5%",
+    "Delivered": "70.5%",
+    "Conversation": "35.0%",
+    "Status": "Success"
+  },
+  {
+    "Name": "Merchandising",
+    "Type": "Content Marketing",
+    "Opened": "65.5%",
+    "Closed": "83.5%",
+    "Unsubscribe": "67.5%",
+    "Delivered": "32.0%",
+    "Conversation": "22.5%",
+    "Status": "Pending"
+  },
+  {
+    "Name": "Pricing",
+    "Type": "Social Marketing",
+    "Opened": "64.0%",
+    "Closed": "97.0%",
+    "Unsubscribe": "14.5%",
+    "Delivered": "38.5%",
+    "Conversation": "53.0%",
+    "Status": "Success"
+  },
+  {
+    "Name": "Increased sales",
+    "Type": "Brand",
+    "Opened": "32.5%",
+    "Closed": "57.0%",
+    "Unsubscribe": "26.3%",
+    "Delivered": "65.8%",
+    "Conversation": "17.4%",
+    "Status": "Bounced"
+  },
+  {
+    "Name": "Brand recognition",
+    "Type": "Sales",
+    "Opened": "72.6%",
+    "Closed": "53.5%",
+    "Unsubscribe": "16.5%",
+    "Delivered": "83.0%",
+    "Conversation": "29.3%",
+    "Status": "Running"
+  },
+  {
+    "Name": "Enhanced brand",
+    "Type": "Media",
+    "Opened": "56.3%",
+    "Closed": "20.5%",
+    "Unsubscribe": "30.5%",
+    "Delivered": "70.5%",
+    "Conversation": "35.0%",
+    "Status": "Paused"
+  },
+  {
+    "Name": "Repeat customers",
+    "Type": "Rebranding",
+    "Opened": "63.2%",
+    "Closed": "20.5%",
+    "Unsubscribe": "30.5%",
+    "Delivered": "70.5%",
+    "Conversation": "87.8%",
+    "Status": "Success"
+  },
+  {
+    "Name": "Competitor",
+    "Type": "Product launch",
+    "Opened": "40.5%",
+    "Closed": "52.7%",
+    "Unsubscribe": "13.5%",
+    "Delivered": "70.5%",
+    "Conversation": "35.0%",
+    "Status": "Paused"
+  }
+]
+,
+  "totalData": 4
+}
