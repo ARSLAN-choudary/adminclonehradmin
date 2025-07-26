@@ -19,41 +19,47 @@
                 <input type="text" class="form-control" required>
             </div>
             <div class="col-md-6">
-                <label class="form-label" >First Name(s) <span class="text-danger">*</span></label>
+                <label class="form-label">First Name(s) <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Current Nationality <span class="text-danger">*</span></label>
 
-                <mat-select class="custom-mat-select select" placeholder="Select">
-                    <mat-option value="1">Choose</mat-option>
-                    <mat-option value="1">Germany</mat-option>
-                    <mat-option value="1">USA</mat-option>
-                    <mat-option value="1">Canada</mat-option>
-                    <mat-option value="1">India</mat-option>
-                    <mat-option value="1">China</mat-option>
+                <mat-select class="custom-mat-select select" placeholder="Select"
+                    [formControl]="currentNationalityCtrl">
+                    <mat-option>
+                        <ngx-mat-select-search [formControl]="currentNationalityCtrl" placeholderLabel="Search country"
+                            noEntriesFoundLabel="No countries found">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let c of filteredCurrentNationality | async" [value]="c.id">
+                        {{ c.name }}
+                    </mat-option>
                 </mat-select>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Birth Nationality <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select">
-                    <mat-option value="1">Choose</mat-option>
-                    <mat-option value="1">Germany</mat-option>
-                    <mat-option value="1">USA</mat-option>
-                    <mat-option value="1">Canada</mat-option>
-                    <mat-option value="1">India</mat-option>
-                    <mat-option value="1">China</mat-option>
+                <mat-select class="custom-mat-select select" placeholder="Select" [formControl]="birthNationalityCtrl">
+                    <mat-option>
+                        <ngx-mat-select-search [formControl]="birthNationalityFilterCtrl"
+                            placeholderLabel="Search country" noEntriesFoundLabel="No countries found">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let c of filteredBirthNationality | async" [value]="c.id">
+                        {{ c.name }}
+                    </mat-option>
                 </mat-select>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Country of Birth <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select">
-                    <mat-option value="1">Choose</mat-option>
-                    <mat-option value="1">Germany</mat-option>
-                    <mat-option value="1">USA</mat-option>
-                    <mat-option value="1">Canada</mat-option>
-                    <mat-option value="1">India</mat-option>
-                    <mat-option value="1">China</mat-option>
+                <mat-select class="custom-mat-select select" placeholder="Select" [formControl]="birthCountryCtrl">
+                    <mat-option>
+                        <ngx-mat-select-search [formControl]="birthCountryFilterCtrl" placeholderLabel="Search country"
+                            noEntriesFoundLabel="No countries found">
+                        </ngx-mat-select-search> </mat-option>
+                    <mat-option *ngFor="let c of filteredBirthCountry | async" [value]="c.id">
+                        {{ c.name }}
+                    </mat-option>
                 </mat-select>
             </div>
             <div class="col-md-6">
@@ -122,7 +128,8 @@
                 <input type="text" class="form-control" required>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Building / Entrance / Staircase / Floor <span class="text-danger">*</span></label>
+                <label class="form-label">Building / Entrance / Staircase / Floor <span
+                        class="text-danger">*</span></label>
                 <input type="text" class="form-control">
             </div>
             <div class="col-md-6">
@@ -185,7 +192,8 @@
                         <span>JPG, GIF or PNG. Max size of 800K</span>
                     </div>
                 </div>
-            </div> <div class="col-md-12">
+            </div>
+            <div class="col-md-12">
                 <label class="form-label">Residence ID Card <span class="text-danger">*</span></label>
                 <div class="d-flex align-items-center mb-3">
                     <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
