@@ -37,6 +37,7 @@ export class ForgotPasswordComponent {
     this.forgotForm.markAllAsTouched();
     if (this.forgotForm.invalid) return;
 
+
     this.router.navigate([routes.emailVerification]);
   }
 }
