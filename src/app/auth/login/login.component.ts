@@ -11,8 +11,7 @@ import {FormsModule} from '@angular/forms';
     styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
-    currentYear: any;
-
+     currentYear: any;
     ngOnInit() {
         this.currentYear = new Date().getFullYear();
 
