@@ -6,7 +6,8 @@ out-tsc/
 .angular/
 .cache/
 coverage/
-
+dist/template
+.angular/cache/19.2.15/template
 # IDEs
 .vscode/
 .idea/
