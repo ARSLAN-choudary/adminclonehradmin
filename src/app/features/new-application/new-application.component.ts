@@ -56,14 +56,12 @@ import {
     CollapseHeaderComponent,
     ReactiveFormsModule,
     NgxIntlTelInputModule,
-    ReactiveFormsModule,
   ],
   templateUrl: "./new-application.component.html",
   styleUrl: "./new-application.component.scss",
 })
 export class NewApplicationComponent {
   public routes = routes;
-  companyCtrl = new FormControl<string | undefined>(undefined);
 
   public tableData: any[] = [];
   public tableDataCopy: manageUsers[] = [];
