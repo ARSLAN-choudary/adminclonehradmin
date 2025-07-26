@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, signal, WritableSignal } from "@angular/core";
 import { routes } from "../../shared/routes/routes";
 import { Router, RouterLink } from "@angular/router";
 import { CommonModule } from "@angular/common";
@@ -9,10 +9,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
+import { AuthService } from "../../Services/auth.service";
 
 @Component({
   selector: "app-login",
   imports: [CommonModule, RouterLink, FormsModule, ReactiveFormsModule],
+
   templateUrl: "./login.component.html",
   styleUrl: "./login.component.scss",
 })
@@ -20,18 +22,31 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   hidePassword: boolean = true;
   routes = routes;
-  constructor(private fb: FormBuilder, private router: Router) {
+  errorMsg: WritableSignal<string> = signal("");
+  successMsg: WritableSignal<string> = signal("");
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private auth: AuthService
+  ) {
     this.loginForm = this.fb.group({
       email: ["", [Validators.required]],
       password: ["", Validators.required],
-      rememberMe: [false],
     });
   }
 
   currentYear: any;
   ngOnInit() {
     this.currentYear = new Date().getFullYear();
+    // this.checkIfAlreadyLogin();
   }
+
+  // checkIfAlreadyLogin() {
+  //   if (this.auth.isLoggedIn()) {
+  //     this.router.navigate(["/"]);
+  //   }
+  //   localStorage.clear();
+  // }
 
   public navigate() {
     this.router.navigate([routes.index]);
@@ -42,16 +57,30 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    // mark controls so errors show
-    console.log(this.loginForm.value);
-
-    this.loginForm.markAllAsTouched();
-
     if (this.loginForm.invalid) {
       return;
     }
 
-    this.router.navigate(["/"]);
+    const { email, password } = this.loginForm.value;
+
+    this.auth.login(email, password).subscribe(
+      (data) => {
+        console.log(data);
+        if (data.data.token) {
+          this.successMsg.set(data.message);
+          this.router.navigate(["/"]);
+        }
+      },
+      (error) => {
+        console.log(error.error.message);
+
+        this.errorMsg.set(error.error.message);
+
+        setTimeout(() => {
+          this.errorMsg.set("");
+        }, 3000);
+      }
+    );
   }
 
   // for template convenience
