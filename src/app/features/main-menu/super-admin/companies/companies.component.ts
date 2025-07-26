@@ -31,6 +31,7 @@ export class CompaniesComponent {
   select2!: select[];
   select3!: select[];
   select4!: select[];
+  select5!: select[];
 selected!: select[];
 selected2!: select[];
 selected3!: select[];
@@ -64,6 +65,15 @@ ngOnInit():void{
           {data: 'French'},
           {data: 'German'}
       ];
+  this.select5 = [
+          { data: 'United Arab Emirates' },
+          { data: 'Georgia' },
+          { data: 'Malta' },
+          { data: 'United Kingdom' },
+          { data: 'USA' },
+          { data: 'Netherlands' },
+          { data: 'Serbia' }
+];
 }
 password:boolean[]=[false];
 togglePassword(i:number):void{
