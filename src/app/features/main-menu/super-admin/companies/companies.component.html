@@ -747,7 +747,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Company Name <span class="text-danger"> *</span></label>
-                                <input type="text" class="form-control" formControlName="companyName"/>
+                                <input type="text" class="form-control" formControlName="name"/>
                             </div>
                         </div>
 
@@ -756,7 +756,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Registration Number <span
                                         class="text-danger"> *</span></label>
-                                <input type="text" class="form-control" formControlName="registrationNumber"/>
+                                <input type="text" class="form-control" formControlName="registrationNo"/>
                             </div>
                         </div>
 
@@ -764,7 +764,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">VAT Number <span class="text-danger"> *</span></label>
-                                <input type="text" class="form-control" formControlName="vatNumber"/>
+                                <input type="text" class="form-control" formControlName="vatNo"/>
                             </div>
                         </div>
 
@@ -772,7 +772,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">PE Number <span class="text-danger"> *</span></label>
-                                <input type="text" class="form-control" formControlName="peNumber"/>
+                                <input type="text" class="form-control" formControlName="peNo"/>
                             </div>
                         </div>
 
@@ -781,7 +781,7 @@
                             <div class="mb-3">
                                 <label class="form-label">JobsPlus Employer Number <span
                                         class="text-danger"> *</span></label>
-                                <input type="text" class="form-control" formControlName="jobsPlusEmployerNumber"/>
+                                <input type="text" class="form-control" formControlName="jobpluswemployno"/>
                             </div>
                         </div>
 
@@ -805,7 +805,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Phone Number <span class="text-danger"> *</span></label>
-                                <input type="text" class="form-control" formControlName="phoneNumber"/>
+                                <input type="text" class="form-control" formControlName="phoneNO"/>
                             </div>
                         </div>
 
@@ -839,7 +839,7 @@
                                 <label class="form-label">Incorporation Date <span class="text-danger"> *</span></label>
                                 <div class="input-group input-group-flat pass-group">
                                     <input type="date" class="form-control pass-input"
-                                           formControlName="incorporationDate"/>
+                                           formControlName="incorporatonDate"/>
                                 </div>
                             </div>
                         </div>
@@ -861,8 +861,8 @@
                             <div class="mb-3 ">
                                 <label class="form-label">Confirm Password <span class="text-danger"> *</span></label>
                                 <div class="input-group input-group-flat pass-group">
-                                    <input type="password" [type]="password[2]?'text':'password'"
-                                           formControlName="confirmPassword" id="confirmPassword"
+                                    <input  type="password" [type]="password[2]?'text':'password'"
+                                           id="confirmPassword1"
                                            class="form-control pass-input">
                                     <span class="input-group-text toggle-password" (click)="togglePassword(2)">
                                                 <i class="ti " [ngClass]="password[2]?'ti-eye':'ti-eye-off'"></i>
@@ -986,7 +986,7 @@
                                     <label class="form-label">Password <span class="text-danger"> *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[3]?'text':'password'"
-                                               class="form-control pass-input">
+                                               formControlName="password" class="form-control pass-input">
                                         <span class="input-group-text toggle-password" (click)="togglePassword(3)">
                                                 <i class="ti " [ngClass]="password[3]?'ti-eye':'ti-eye-off'"></i>
                                             </span>
@@ -999,6 +999,7 @@
                                             class="text-danger"> *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[4]?'text':'password'"
+                                               formControlName="confirmPassword" id="confirmPassword"
                                                class="form-control pass-input">
                                         <span class="input-group-text toggle-password" (click)="togglePassword(4)">
                                                 <i class="ti " [ngClass]="password[4]?'ti-eye':'ti-eye-off'"></i>

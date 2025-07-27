@@ -75,27 +75,22 @@ export class CompaniesComponent {
             });
         });
         this.form = this.fb.group({
-                files: [[] as File[]],  // will store the selected PDFs
+                image: [[] as File[]],  // will store the selected PDFs
                 country: ['', Validators.required],
-                companyName: ['', Validators.required],
-                registrationNumber: ['', Validators.required],
-                vatNumber: ['', Validators.required],
-                peNumber: ['', Validators.required],
-                jobsPlusEmployerNumber: ['', Validators.required],
+                name: ['', Validators.required],
+                registrationNo: ['', Validators.required],
+                vatNo: ['', Validators.required],
+                peNo: ['', Validators.required],
+                jobpluswemployno: ['', Validators.required],
                 currency: ['', Validators.required],
-                phoneNumber: ['', [Validators.required,]],
+                phoneNO: ['', [Validators.required,]],
                 email: [''],
                 address: [''],
                 website: [''],
-
-                incorporationDate: ['', Validators.required],
-
+                incorporatonDate: ['', Validators.required],
                 password: ['', [Validators.required, Validators.minLength(8)]],
-                confirmPassword: [''],
-
                 status: ['active', Validators.required],
             },
-            {validators: passwordMatchValidator}
         );
 
     }
@@ -147,7 +142,7 @@ export class CompaniesComponent {
         const files = Array.from(input.files);
         // (optional) validate file type/size here
         this.form.patchValue({files});
-        this.form.get('files')?.updateValueAndValidity();
+        this.form.get('image')?.updateValueAndValidity();
     }
 
     ngOnInit(): void {
@@ -298,12 +293,4 @@ export class CompaniesComponent {
             });
         }
     }
-}
-
-export function passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
-    const password = group.get('password')?.value;
-    const confirm = group.get('confirmPassword')?.value;
-    return password && confirm && password !== confirm
-        ? {passwordMismatch: true}
-        : null;
 }
