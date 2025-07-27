@@ -80,33 +80,29 @@ export class SidebarComponent {
         }
     }
 
-    onToggleSidebar(): void {
-        const layout = document.documentElement.getAttribute('data-layout');
-
-        if (layout === 'hidden') {
-            this.settings.togglehidden();
-        } else {
-            this.toggleSidebarmini();
-        }
-    }
-
     toggleSidebar(): void {
-        const wrapper = document.getElementsByClassName('main-wrapper')[0];
-        const overlay = document.getElementsByClassName('sidebar-overlay')[0];
+        const wrapper = document.querySelector('.main-wrapper');
+        const overlay = document.querySelector('.sidebar-overlay');
 
-        if (wrapper) {
+        if (!wrapper || !overlay) return;
+
+        if (this.sidebar.isSidebarOpen) {
+            // Already open → close
             wrapper.classList.remove('slide-nav');
-        }
-
-        if (overlay) {
             overlay.classList.remove('opened');
+            this.sidebar.isSidebarOpen = false;
+        } else {
+            // Closed → open
+            wrapper.classList.add('slide-nav');
+            overlay.classList.add('opened');
+            this.sidebar.isSidebarOpen = true;
         }
-
     }
+
+
 
     public toggleSidebarmini(): void {
         this.sidebar.switchSideMenuPosition();
-
 
     }
 
