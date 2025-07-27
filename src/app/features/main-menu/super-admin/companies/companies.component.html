@@ -441,70 +441,52 @@
                     <thead class="table-light">
                     <tr>
                         <th mat-sort-header="name">Name</th>
-                        <th mat-sort-header="email">Registration No</th>
-                        <th mat-sort-header="acc">VAT No</th>
-                        <th mat-sort-header="plan">Website</th>
-                        <th mat-sort-header="date">Inc Date</th>
-                        <th mat-sort-header="sts">Status</th>
+                        <th mat-sort-header="registrationNo">Registration No</th>
+                        <th mat-sort-header="vatNo">VAT No</th>
+                        <th mat-sort-header="website">Website</th>
+                        <th mat-sort-header="incorporatonDate">Inc Date</th>
+                        <th mat-sort-header="status">Status</th>
                         <th class="text-end">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                        @for (data of tableData; track data) {
-                            <tr>
-                                <td>
-                                    <div class="set-star rating-select" (click)="onClickStar(data)"
-                                         [class.filled]="data.isStarActive">
-                                        <i class="ti ti-star-filled fs-16"></i>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="javascript:void(0);" class="avatar rounded-circle border p-1 me-2">
-                                            <img class="w-auto h-auto" src="assets/img/icons/{{data.Image}}"
-                                                 alt="User Image">
-                                        </a>
-                                        <a href="javascript:void(0);"
-                                           class="d-flex flex-column fw-medium">{{ data.Name }}</a>
-                                    </div>
-                                </td>
-                                <td>{{ data.Email }}</td>
-                                <td>{{ data.url }}</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span>{{ data.url }}</span>
-                                        <a href="javascript:void(0);" class="badge badge-tag badge-soft-info ms-2"
-                                           data-bs-toggle="offcanvas" data-bs-target="#upgrade_plan">Upgrade</a>
-                                    </div>
-                                </td>
-                                <td>{{ data.Created_Date }}</td>
-                                <td><span class="badge bg-success">{{ data.Status }}</span></td>
-                                <td>
-                                    <div class="dropdown table-action">
-                                        <a href="#" class="action-icon btn btn-xs shadow btn-icon btn-outline-light "
-                                           data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="ti ti-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#" data-bs-toggle="offcanvas"
-                                               data-bs-target="#offcanvas_edit">
-                                                <i class="ti ti-edit text-blue me-1"></i>Edit
-                                            </a>
-                                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                               data-bs-target="#delete_company">
-                                                <i class="ti ti-trash text-blue me-1"></i>Delete
-                                            </a>
+                    <tr *ngFor="let data of actualData;">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <a href="javascript:void(0);" class="d-flex flex-column fw-medium">
+                                    {{ data.name }}
+                                </a>
+                            </div>
+                        </td>
+                        <td>{{ data.registrationNo }}</td>
+                        <td>{{ data.vatNo }}</td>
+                        <td>{{ data.website }}</td>
+                        <td>{{ data.incorporatonDate }}</td>
+                        <td>
+                            <span class="badge bg-success">{{ data.status }}</span>
+                        </td>
+                        <td>
+                            <div class="dropdown table-action">
+                                <a href="#" class="action-icon btn btn-xs shadow btn-icon btn-outline-light"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ti ti-dots-vertical"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas_edit">
+                                        <i class="ti ti-edit text-blue me-1"></i>Edit
+                                    </a>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_company">
+                                        <i class="ti ti-trash text-blue me-1"></i>Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
 
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                        @if (tableData.length === 0) {
-                            <tr>
-                                <td class="text-center" colspan="12">No Matching Data Found</td>
-                            </tr>
-                        }
+                    <!-- Empty state -->
+                    <tr *ngIf="tableData.length === 0">
+                        <td class="text-center" colspan="12">No Matching Data Found</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

@@ -56,22 +56,22 @@ export class CompaniesComponent {
     countries: any;
 
     constructor(
-        private data: DataService,
         private pagination: PaginationService,
         private router: Router,
-        private sanitizer: DomSanitizer,
         private fb: FormBuilder,
-        private http: HttpClient,
         private backendService: BackendService,
         private cdRef: ChangeDetectorRef
     ) {
 
-        this.data.getSuperAdminCompanies().subscribe((apiRes: apiResultFormat) => {
-            this.actualData = apiRes.data;
-            this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-                if (this.router.url == this.routes.superAdminCompanies) {
-                    this.getTableData({skip: res.skip, limit: res.limit});
+        this.backendService.getCompany('').subscribe((apiRes: any) => {
+            this.actualData = apiRes.data.data;
+            debugger
+            this.totalData = apiRes.totalData;
+
+            this.pagination.tablePageSize.subscribe((res: any) => {
+                if (this.router.url === this.routes.superAdminCompanies) {
                     this.pageSize = res.pageSize;
+                    this.getTableData({ skip: res.skip, limit: res.limit });
                 }
             });
         });
@@ -172,11 +172,6 @@ export class CompaniesComponent {
 
     }
 
-    getSelectedCountry() {
-        console.log(this.selectedCountry); // full object
-        console.log(this.selectedCountry?.data); // just the label like 'Pakistan'
-        console.log(this.selectedCountry?.code); // the value/code like 'PK'
-    }
 
     password: boolean[] = [false];
 
@@ -185,15 +180,15 @@ export class CompaniesComponent {
     }
 
 // pagination variables
-    public tableData: superadmincompanies[] = [];
+    public tableData: any[] = [];
     public pageSize = 10;
     public serialNumberArray: number[] = [];
     public totalData = 0;
     showFilter = false;
     dataSource!: MatTableDataSource<superadmincompanies>;
     public searchDataValue = '';
-    public tableDataCopy: superadmincompanies[] = [];
-    public actualData: superadmincompanies[] = [];
+    public tableDataCopy: any[] = [];
+    public actualData: any[] = [];
     //** pagination variables
 
     initChecked = false;
@@ -205,28 +200,28 @@ export class CompaniesComponent {
 
 
     private getTableData(pageOption: pageSelection): void {
-        this.data.getSuperAdminCompanies().subscribe((apiRes: apiResultFormat) => {
-            this.tableData = [];
-            this.tableDataCopy = [];
-            this.serialNumberArray = [];
-            this.totalData = apiRes.totalData;
-            apiRes.data.map((res: superadmincompanies, index: number) => {
-                const serialNumber = index + 1;
-                if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-                    res.id = serialNumber;
-                    this.tableData.push(res);
-                    this.serialNumberArray.push(serialNumber);
-                    this.tableDataCopy.push(res);
-                }
-            });
-            this.dataSource = new MatTableDataSource<superadmincompanies>(this.actualData);
-            this.pagination.calculatePageSize.next({
-                totalData: this.totalData,
-                pageSize: this.pageSize,
-                tableData: this.tableData,
-                tableDataCopy: this.tableDataCopy,
-                serialNumberArray: this.serialNumberArray,
-            });
+        const { skip, limit } = pageOption;
+        this.tableData = [];
+        this.serialNumberArray = [];
+
+        const slicedData = this.actualData.slice(skip, skip + limit);
+
+        slicedData.forEach((res, index) => {
+            const serialNumber = skip + index + 1;
+            res.id = serialNumber;
+            this.tableData.push(res);
+            this.serialNumberArray.push(serialNumber);
+        });
+
+        this.tableDataCopy = [...this.tableData];
+        this.dataSource = new MatTableDataSource<any>(this.tableData);
+
+        this.pagination.calculatePageSize.next({
+            totalData: this.totalData,
+            pageSize: this.pageSize,
+            tableData: this.tableData,
+            tableDataCopy: this.tableDataCopy,
+            serialNumberArray: this.serialNumberArray
         });
     }
 
@@ -282,4 +277,5 @@ export class CompaniesComponent {
             });
         }
     }
+
 }

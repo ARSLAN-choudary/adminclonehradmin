@@ -14,4 +14,8 @@ export class BackendService {
     addCompany(parms: any): Observable<any> {
         return this.http.post(CONFIG.addCompany, parms);
     }
+
+    getCompany(parms: any): Observable<any> {
+        return this.http.post(CONFIG.getCompany, parms);
+    }
 }
