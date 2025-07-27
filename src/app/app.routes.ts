@@ -1187,5 +1187,6 @@ export const routes: Routes = [
         path: 'coming-soon',
         loadComponent: () => import('./features/pages/coming-soon/coming-soon.component').then((m) => m.ComingSoonComponent),
     },
+    {path: '**', component: LoginComponent},
 
 ] as const;
