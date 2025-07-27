@@ -65,7 +65,6 @@ export class CompaniesComponent {
 
         this.backendService.getCompany('').subscribe((apiRes: any) => {
             this.actualData = apiRes.data.data;
-            debugger
             this.totalData = apiRes.totalData;
 
             this.pagination.tablePageSize.subscribe((res: any) => {
