@@ -40,15 +40,15 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         this.currentYear = new Date().getFullYear();
-        // this.checkIfAlreadyLogin();
+        this.checkIfAlreadyLogin();
     }
 
-    // checkIfAlreadyLogin() {
-    //   if (this.auth.isLoggedIn()) {
-    //     this.router.navigate(["/"]);
-    //   }
-    //   localStorage.clear();
-    // }
+    checkIfAlreadyLogin() {
+        if (this.auth.isLoggedIn()) {
+            this.router.navigate(["/"]);
+        }
+        localStorage.clear();
+    }
 
     public navigate() {
         this.router.navigate([routes.index]);

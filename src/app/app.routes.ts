@@ -1,19 +1,23 @@
 import {Routes} from '@angular/router';
 import {AuthComponent} from './auth/auth.component';
 import {LoginComponent} from './auth/login/login.component';
+import {authGuard, loginRedirectGuard} from "./Services/auth.guard";
 
 export const routes: Routes = [
     {
         path: '',
         redirectTo: 'index',
-        pathMatch: 'full'
+        pathMatch: 'full',
     },
-
     {
         path: '',
         loadComponent: () => import('./auth/auth.component').then((m) => m.AuthComponent),
         children: [
-            {path: 'login', loadComponent: () => import('./auth/login/login.component').then((m) => m.LoginComponent),},
+            {
+                path: 'login',
+                loadComponent: () => import('./auth/login/login.component').then((m) => m.LoginComponent),
+                canActivate: [loginRedirectGuard],
+            },
             {
                 path: 'forgot-password',
                 loadComponent: () => import('./auth/forgot-password/forgot-password.component').then((m) => m.ForgotPasswordComponent),
@@ -65,6 +69,7 @@ export const routes: Routes = [
     {
         path: '',
         loadComponent: () => import('./features/features.component').then((m) => m.FeaturesComponent),
+        canActivate: [authGuard],
         children: [
             {
                 path: 'index',
@@ -88,8 +93,6 @@ export const routes: Routes = [
                         path: 'new-application',
                         loadComponent: () => import('./features/new-application/new-application.component').then((m) => m.NewApplicationComponent),
                     },
-
-
                 ],
             },
             //Application
