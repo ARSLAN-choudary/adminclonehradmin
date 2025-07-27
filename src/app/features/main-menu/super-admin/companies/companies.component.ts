@@ -23,6 +23,9 @@ import {MatSortModule, Sort} from '@angular/material/sort';
 import {CustomPaginationComponent} from '../../../../shared/custom-pagination/custom-pagination.component';
 import {Validators} from "ngx-editor";
 import {HttpClient} from "@angular/common/http";
+import {BackendService} from "../../../../Services/backend.service";
+
+BackendService
 
 interface select {
     data: string;
@@ -59,6 +62,7 @@ export class CompaniesComponent {
         private sanitizer: DomSanitizer,
         private fb: FormBuilder,
         private http: HttpClient,
+        private backendService: BackendService,
     ) {
 
         this.data.getSuperAdminCompanies().subscribe((apiRes: apiResultFormat) => {
@@ -117,8 +121,8 @@ export class CompaniesComponent {
 
         // append files
         files?.forEach((f: any, i: any) => formData.append('files', f, f.name));
-
-        this.http.post('/api/companies', formData).subscribe({
+        debugger
+        this.backendService.addCompany(formData).subscribe({
             next: (res) => {
                 console.log('Created!', res);
                 // reset or close modal/offcanvas here
