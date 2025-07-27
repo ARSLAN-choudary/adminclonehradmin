@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {CollapseHeaderComponent} from '../../../common/collapse-header/collapse-header.component';
 import {DateRangePickerComponent} from '../../../common/date-range-picker/date-range-picker.component';
 import {SelectModule} from 'primeng/select';
@@ -63,6 +63,7 @@ export class CompaniesComponent {
         private fb: FormBuilder,
         private http: HttpClient,
         private backendService: BackendService,
+        private cdRef: ChangeDetectorRef
     ) {
 
         this.data.getSuperAdminCompanies().subscribe((apiRes: apiResultFormat) => {
@@ -101,12 +102,6 @@ export class CompaniesComponent {
             this.form.markAllAsTouched();
             return;
         }
-
-        // If you want to send JSON (no files):
-        // const payload = this.form.getRawValue();
-        // delete payload.confirmPassword;
-
-        // Because you have files -> use FormData:
         const formData = new FormData();
         const value = this.form.getRawValue();
         const {files, confirmPassword, ...rest} = value;
@@ -146,18 +141,16 @@ export class CompaniesComponent {
     }
 
     ngOnInit(): void {
-        this.select = [
-            {data: 'Select'},
-            {data: 'NovaWave LLC'},
-            {data: 'BlueSky Industries'},
-            {data: 'Summit Peak'},
-            {data: 'RiverStone Ventur'}
-        ];
-        this.select2 = [
-            {data: 'Select'},
-            {data: 'Monthly'},
-            {data: 'Yearly'}
-        ];
+        this.form.get('country')?.valueChanges.subscribe((country) => {
+            console.log('Country changed to:', country);
+            if (country === 'malta') {
+                this.isMalta = true;
+                this.cdRef.detectChanges();
+            } else {
+                // hide/disable them
+                this.isMalta = false;
+            }
+        });
         this.currencies = [
 
             {label: 'EURO', value: 'EURO'},
@@ -165,13 +158,7 @@ export class CompaniesComponent {
             {label: 'USD', value: 'USD'},
             {label: 'POUND', value: 'POUND'},
         ];
-        this.select4 = [
-            {data: 'Choose'},
-            {data: 'English'},
-            {data: 'Arabic'},
-            {data: 'French'},
-            {data: 'German'}
-        ];
+
         this.countries = [
             {label: 'United Arab Emirates', value: 'uae'},
             {label: 'Georgia', value: 'georgia'},
@@ -181,6 +168,7 @@ export class CompaniesComponent {
             {label: 'Netherlands', value: 'netherlands'},
             {label: 'Serbia', value: 'serbia'}
         ];
+
 
     }
 
@@ -256,6 +244,7 @@ export class CompaniesComponent {
     }
 
     public row = true;
+    isMalta: any;
 
     public searchData(value: string): void {
         this.searchDataValue = value.trim().toLowerCase();
