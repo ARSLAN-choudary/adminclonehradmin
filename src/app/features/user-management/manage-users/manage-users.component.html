@@ -534,31 +534,23 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6 align-items-end">
+                            <div class="mb-3 ">
+                                <label class="form-label">Country <span class="text-danger"> *</span></label>
+                                <!-- <p-select [options]="select5" [(ngModel)]="selectedCountry"
+                                    [ngModelOptions]="{standalone: true}" optionLabel="label" optionValue="value"
+                                    placeholder="Select" [filter]="true" class="form-control">
+                                </p-select> -->
 
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label">Location <span class="text-danger">*</span></label>
-                                <mat-select class="custom-mat-select select" formControlName="location"
-                                    (openedChange)="f['location'].markAsTouched()" placeholder="Select">
-                                    <mat-option>
-                                        <ngx-mat-select-search [formControl]="currentNationalityFilterCtrl"
-                                            placeholderLabel="Search country" noEntriesFoundLabel="No countries found">
-                                        </ngx-mat-select-search>
-                                    </mat-option>
-                                    <mat-option *ngFor="let c of filteredCurrentNationality | async" [value]="c.id">
-                                        {{ c.name }}
-                                    </mat-option>
-                                </mat-select>
-                                <div class="text-danger fs-12 mt-1"
-                                    *ngIf="f['location'].touched && f['location'].invalid">
-                                    Location is required.
-                                </div>
                             </div>
                         </div>
+
                     </div>
+
+
                 </div>
-                <!-- /Basic Info -->
             </div>
+            <!-- /Basic Info -->
             <div class="d-flex align-items-center justify-content-end">
                 <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="offcanvas">Cancel</a>
                 <button type="submit" class="btn btn-primary">Create</button>
