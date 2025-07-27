@@ -61,7 +61,7 @@
                                             ">
                   @for (subMenus of menu.subMenus; track subMenus) {
                   <li>
-                    <a [routerLink]="subMenus.route" [class.active]="page===subMenus.base || base === subMenus.base">{{
+                    <a [routerLink]="subMenus.route" [class.active]="page===subMenus.base || base === subMenus.base" (click)="close()">{{
                       subMenus.menuValue }}</a>
                   </li>
                   }
