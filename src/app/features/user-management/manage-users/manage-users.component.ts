@@ -1,6 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
+  AbstractControl,
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -65,6 +67,7 @@ interface Country {
     NgxMatSelectSearchModule,
     MatOption,
     MatInputModule,
+    FormsModule
   ],
   templateUrl: "./manage-users.component.html",
   styleUrl: "./manage-users.component.scss",
@@ -133,7 +136,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       email: ["", [Validators.required, Validators.email]],
       role: ["", Validators.required],
       mobileNo: ["", Validators.required],
-      location: [null, Validators.required],
+      country: [null, Validators.required],
     });
     this.filteredCurrentNationality.next(this.countries.slice());
 
@@ -145,6 +148,8 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this._onDestroy.next();
     this._onDestroy.complete();
   }
+
+
 
   get f() {
     return this.userForm.controls;
