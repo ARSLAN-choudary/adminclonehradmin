@@ -11,6 +11,7 @@ import {
 } from "@angular/forms";
 import { AuthService } from "../../Services/auth.service";
 import { ToastrService } from "ngx-toastr";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-login",
@@ -72,19 +73,31 @@ export class LoginComponent implements OnInit {
         console.log(data);
         if (data.data.token) {
           localStorage.setItem("token", data.data.token);
-          debugger
+          debugger;
           this.toastr.success(data.message);
           this.successMsg.set(data.message);
           this.router.navigate(["/"]);
         }
       },
-      (error) => {
-        console.log(error.error.message);
-        this.errorMsg.set(error.error.message);
-        this.toastr.error(error.error.message);
-        setTimeout(() => {
-          this.errorMsg.set("");
-        }, 3000);
+      (error: HttpErrorResponse) => {
+        let backendMsg: string;
+
+        if (
+          error.error &&
+          typeof error.error === "object" &&
+          "message" in error.error
+        ) {
+          backendMsg = (error.error as any).message;
+        } else if (typeof error.error === "string") {
+          backendMsg = error.error;
+        } else {
+          backendMsg = error.message;
+        }
+
+        this.errorMsg.set(backendMsg);
+        this.toastr.error(backendMsg);
+
+        setTimeout(() => this.errorMsg.set(""), 3000);
       }
     );
   }
