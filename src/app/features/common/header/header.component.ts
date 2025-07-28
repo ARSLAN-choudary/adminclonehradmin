@@ -36,11 +36,11 @@ export class HeaderComponent {
   multiLevel3 = false;
 
   constructor(
-    private data: DataService,
-    private common: CommonService,
-    private sidebar: SidebarService,
-    public settings: SettingsService,
-    private sideBar: SidebarService
+      private data: DataService,
+      private common: CommonService,
+      private sidebar: SidebarService,
+      public settings: SettingsService,
+      private sideBar: SidebarService
   ) {
     this.common.base.subscribe((base: string) => {
       this.base = base;
@@ -76,7 +76,6 @@ export class HeaderComponent {
 
   public toggleSidebar(): void {
     this.sidebar.switchMobileSideBarPosition();
-    // this.addClass = !this.addClass;
     /* eslint no-var: off */
     var root = document.getElementsByTagName("html")[0];
     /* eslint no-var: off */
@@ -85,17 +84,11 @@ export class HeaderComponent {
     var mainwrapper: any = document.querySelector(".main-wrapper");
     const overlay = document.querySelector(".sidebar-overlay");
 
-    // if (this.addClass) {
     root.classList.add("menu-opened");
     mainwrapper.classList.add("slide-nav");
     if (overlay) {
       overlay.classList.add("opened");
     }
-    // }
-    // else {
-    //     root.classList.remove('menu-opened');
-    //     mainwrapper.classList.remove('slide-nav');
-    // }
   }
 
   public togglesMobileSideBar(): void {

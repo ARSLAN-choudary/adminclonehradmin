@@ -1,29 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Component} from '@angular/core';
-import {NavigationStart, Router, Event as RouterEvent, RouterLink} from '@angular/router';
-import {routes} from '../../../shared/routes/routes';
-import {SidebarService} from '../../../shared/sidebar/sidebar.service';
-import {DataService} from '../../../shared/data/data.service';
-import {CommonService} from '../../../shared/common/common.service';
-import {menu, MenuItem, sidebarDataone, SubMenu, subMenus, url} from '../../../shared/model/sidebar.model';
-import {CommonModule} from '@angular/common';
-import {NgScrollbarModule} from 'ngx-scrollbar';
-import {SettingsService} from '../../../shared/settings/settings.service';
+import { Component } from "@angular/core";
+import {
+    NavigationStart,
+    Router,
+    Event as RouterEvent,
+    RouterLink,
+} from "@angular/router";
+import { routes } from "../../../shared/routes/routes";
+import { SidebarService } from "../../../shared/sidebar/sidebar.service";
+import { DataService } from "../../../shared/data/data.service";
+import { CommonService } from "../../../shared/common/common.service";
+import {
+    menu,
+    MenuItem,
+    sidebarDataone,
+    SubMenu,
+    subMenus,
+    url,
+} from "../../../shared/model/sidebar.model";
+import { CommonModule } from "@angular/common";
+import { NgScrollbarModule } from "ngx-scrollbar";
+import { SettingsService } from "../../../shared/settings/settings.service";
 
 @Component({
-    selector: 'app-sidebar',
-    templateUrl: './sidebar.component.html',
-    styleUrl: './sidebar.component.scss',
-    imports: [CommonModule, RouterLink, NgScrollbarModule]
+    selector: "app-sidebar",
+    templateUrl: "./sidebar.component.html",
+    styleUrl: "./sidebar.component.scss",
+    imports: [CommonModule, RouterLink, NgScrollbarModule],
 })
 export class SidebarComponent {
     routes = routes;
-    base = '';
-    page = '';
-    last = '';
-    forbase = 'false';
-    currentUrl = '';
-
+    base = "";
+    page = "";
+    last = "";
+    forbase = "false";
+    currentUrl = "";
 
     public side_bar_data: any[] = [];
     public sidebardata: sidebarDataone[] = [];
@@ -38,15 +49,17 @@ export class SidebarComponent {
     ) {
         router.events.subscribe((event: RouterEvent) => {
             if (event instanceof NavigationStart) {
+                if (window.innerWidth < 768) {
+                    this.closeSidebar();
+                }
                 this.getRoutes(event);
-                const splitVal = event.url.split('/');
+                const splitVal = event.url.split("/");
                 this.currentUrl = event.url;
                 this.base = splitVal[1];
                 this.page = splitVal[2];
-                if (this.base === 'index') {
-                    this.page == 'index';
+                if (this.base === "index") {
+                    this.page == "index";
                 }
-
             }
         });
         this.getRoutes(this.router);
@@ -63,63 +76,65 @@ export class SidebarComponent {
     }
 
     private getRoutes(route: url): void {
-        const splitVal = route.url.split('/');
+        const splitVal = route.url.split("/");
         this.currentUrl = route.url;
         this.base = splitVal[1];
         this.page = splitVal[2];
-        if (this.base === 'index' || this.base === 'lead-dashboard') {
-            this.forbase = 'true'
+        if (this.base === "index" || this.base === "lead-dashboard") {
+            this.forbase = "true";
         }
     }
 
     public miniSideBarMouseHover(position: string): void {
-        if (position == 'over') {
-            this.sidebar.expandSideBar.next('true');
+        if (position == "over") {
+            this.sidebar.expandSideBar.next("true");
         } else {
-            this.sidebar.expandSideBar.next('false');
+            this.sidebar.expandSideBar.next("false");
         }
     }
 
-    toggleSidebar(): void {
-        const wrapper = document.querySelector('.main-wrapper');
-        const overlay = document.querySelector('.sidebar-overlay');
+    closeSidebar(): void {
 
-        if (!wrapper || !overlay) return;
 
-        if (this.sidebar.isSidebarOpen) {
-            // Already open → close
-            wrapper.classList.remove('slide-nav');
-            overlay.classList.remove('opened');
-            this.sidebar.isSidebarOpen = false;
-        } else {
-            // Closed → open
-            wrapper.classList.add('slide-nav');
-            overlay.classList.add('opened');
-            this.sidebar.isSidebarOpen = true;
+        this.sidebar.switchMobileSideBarPosition();
+        // this.addClass = !this.addClass;
+        /* eslint no-var: off */
+        var root = document.getElementsByTagName("html")[0];
+        /* eslint no-var: off */
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        var sidebar: any = document.getElementById("sidebar");
+        var mainwrapper: any = document.querySelector(".main-wrapper");
+        const overlay = document.querySelector(".sidebar-overlay");
+
+        // if (this.addClass) {
+        root.classList.remove("menu-opened");
+        mainwrapper.classList.remove("slide-nav");
+        if (overlay) {
+            overlay.classList.remove("opened");
         }
     }
 
     onToggleSidebar(): void {
-        const layout = document.documentElement.getAttribute('data-layout');
+        const layout = document.documentElement.getAttribute("data-layout");
 
-        if (layout === 'hidden') {
+        if (layout === "hidden") {
             this.settings.togglehidden();
         } else {
-            this.toggleSidebar(); // This is enough, no need to call toggleSidebarmini()
+            this.toggleSidebarmini();
         }
     }
 
-
     public toggleSidebarmini(): void {
         this.sidebar.switchSideMenuPosition();
-
     }
 
     currentOpenSecondMenu: MenuItem | null = null;
 
-    public expandSubMenus(menu: { menuValue: string; showSubRoute: boolean; }): void {
-
-        sessionStorage.setItem('menuValue', menu.menuValue);
+    public expandSubMenus(menu: {
+        menuValue: string;
+        showSubRoute: boolean;
+    }): void {
+        sessionStorage.setItem("menuValue", menu.menuValue);
 
         // Close open main menu when submenu is expanded
         this.openMenuItem = null;
@@ -158,7 +173,7 @@ export class SidebarComponent {
 
     openMenu(menu: MenuItem): void {
         // Close any expanded submenu when a main menu is clicked
-        this.toggleSidebar()
+        this.closeSidebar();
         this.side_bar_data.forEach((mainMenus: sidebarDataone) => {
             mainMenus.menu.forEach((resMenu: MenuItem) => {
                 resMenu.showSubRoute = false;
@@ -176,19 +191,18 @@ export class SidebarComponent {
     isOpen = false;
 
     public expandSubMenusActive(): void {
-
-        const activeMenu = sessionStorage.getItem('menuValue');
-        const activePage = sessionStorage.getItem('page'); // optional, for submenu match
+        const activeMenu = sessionStorage.getItem("menuValue");
+        const activePage = sessionStorage.getItem("page"); // optional, for submenu match
 
         if (!Array.isArray(this.side_bar_data)) {
-            console.warn('Sidebar data not initialized');
+            console.warn("Sidebar data not initialized");
             return;
         }
 
         this.side_bar_data.forEach((mainMenu: sidebarDataone) => {
             mainMenu.menu.forEach((resMenu: menu) => {
                 // Expand only the parent matching session value
-                resMenu.showSubRoute = (resMenu.menuValue === activeMenu);
+                resMenu.showSubRoute = resMenu.menuValue === activeMenu;
 
                 // Expand subMenus inside that menu
                 resMenu.subMenus?.forEach((sub) => {
@@ -206,7 +220,6 @@ export class SidebarComponent {
         }
     }
 
-
     multiLevelOne() {
         this.multiLevel1 = !this.multiLevel1;
     }
@@ -221,20 +234,19 @@ export class SidebarComponent {
     }
 
     ngOnInit(): void {
-        const menuValue = sessionStorage.getItem('menuValue');
+        const menuValue = sessionStorage.getItem("menuValue");
 
         if (!menuValue) {
             // Set to the parent menu of Deals Dashboard
-            sessionStorage.setItem('menuValue', 'Dashboard');
-            sessionStorage.setItem('menuValue', 'Dashboard');
-            sessionStorage.setItem('page', 'index'); // Optional: track which submenu is open
+            sessionStorage.setItem("menuValue", "Dashboard");
+            sessionStorage.setItem("menuValue", "Dashboard");
+            sessionStorage.setItem("page", "index"); // Optional: track which submenu is open
         }
 
         this.expandSubMenusActive();
         this.sidebar.collapseSubMenu$.subscribe(() => {
             this.collapseAllSubMenus();
         });
-
     }
 
     collapseAllSubMenus(): void {
@@ -246,6 +258,6 @@ export class SidebarComponent {
     }
 
     close() {
-        this.toggleSidebar()
+        this.closeSidebar();
     }
 }

@@ -8,13 +8,11 @@
             <div class="row vh-100 w-100 g-0">
 
                 <div class="col-lg-6 vh-100 overflow-y-auto overflow-x-hidden">
-
                     <!-- start row -->
                     <div class="row">
-
                         <div class="col-md-10 mx-auto">
                             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
-                                class=" vh-100 d-flex justify-content-start justify-content-md-between flex-column p-4 pb-0">
+                                  class=" vh-100 d-flex justify-content-start justify-content-md-between flex-column p-4 pb-0">
                                 <div class="text-center mb-4 auth-logo">
                                     <img src="assets/img/largeLogo.png" class="img-fluid" alt="Logo">
                                 </div>
@@ -37,10 +35,10 @@
                                         <label class="form-label">Password</label>
                                         <div class="input-group input-group-flat pass-group">
                                             <input [type]="!hidePassword ? 'text' : 'password' " id="password"
-                                                formControlName="password" class="pass-input form-control">
+                                                   formControlName="password" class="pass-input form-control">
                                             <span class="input-group-text toggle-password" (click)="togglePassword()"
-                                                tabindex="0"><i class="ti"
-                                                    [ngClass]=" hidePassword ? 'ti-eye' : 'ti-eye-off'"></i></span>
+                                                  tabindex="0"><i class="ti"
+                                                                  [ngClass]=" hidePassword ? 'ti-eye' : 'ti-eye-off'"></i></span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mb-3">
@@ -57,7 +55,7 @@
                                         <!-- this will always sit on the right -->
                                         <div>
                                             <a [routerLink]="routes.forgotPassword"
-                                                class="link-danger fw-medium link-hover">
+                                               class="link-danger fw-medium link-hover">
                                                 Forgot Password?
                                             </a>
                                         </div>
@@ -65,7 +63,9 @@
 
 
                                     <div class="mb-3">
-                                        <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">Sign In</button>
+                                        <button type="submit" class="btn btn-primary w-100"
+                                                [disabled]="loginForm.invalid">Sign In
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="text-center pb-4">
