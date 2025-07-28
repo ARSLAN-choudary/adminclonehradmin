@@ -1,4 +1,8 @@
 i {
-    cursor: pointer;
-  }
-  
+  cursor: pointer;
+}
+
+.btn:disabled {
+  background-color: #e32006;
+  border-color: #e32006;
+}
