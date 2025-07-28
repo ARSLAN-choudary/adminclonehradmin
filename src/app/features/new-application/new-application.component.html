@@ -49,8 +49,8 @@
                 <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
                     (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search">
             </div>
-            <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvas_add"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add Application</a>
+            <a href="javascript:void(0);" class="btn btn-primary" (click)="openAddApplication()"><i
+                    class="ti ti-square-rounded-plus-filled me-1"></i>Add Application</a>
         </div>
         <div class="card-body">
 
@@ -475,14 +475,20 @@
 </div>
 <!-- End Content -->
 <!-- Add User -->
-<div   #addCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
+<div #addCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Add New Application</h5>
-        <button type="button"
+        <!-- <button type="button"
             class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
             data-bs-dismiss="offcanvas" aria-label="Close">
             <i class="ti ti-x"></i>
+        </button> -->
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            (click)="closeAddApplication()" aria-label="Close">
+            <i class="ti ti-x"></i>
         </button>
+
     </div>
     <div class="offcanvas-body">
         <form [formGroup]="addNewApplicationForm" (ngSubmit)="createNewApplication()">

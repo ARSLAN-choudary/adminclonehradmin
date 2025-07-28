@@ -1,5 +1,12 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -80,6 +87,13 @@ interface Country {
   styleUrl: "./manage-users.component.scss",
 })
 export class ManageUsersComponent implements OnInit, OnDestroy {
+  @ViewChild("addUserCanvas", { static: true })
+  addUserCanvas!: ElementRef<HTMLElement>;
+  @ViewChild("editUserCanvas", { static: true })
+  editUserCanvas!: ElementRef<HTMLElement>;
+
+  private addBackdrop?: HTMLElement;
+  private editBackdrop?: HTMLElement;
   currentNationalityFilterCtrl = new FormControl<string>("");
   preferredCountries = [CountryISO.Pakistan, CountryISO.UnitedArabEmirates];
   onlyCountries = [
@@ -130,7 +144,8 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private backend: BackendService,
     private toastr: ToastrService,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private renderer: Renderer2
   ) {
     this.backend.getManageUsers("").subscribe((apiRes: any) => {
       this.actualData = apiRes.data.data;
@@ -202,12 +217,8 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.backend.addUser(this.userForm.value).subscribe({
       next: (res) => {
         this.toastr.success(res.message);
-        console.log("Created!", res);
         this.userForm.reset();
-        const offcanvasElement = document.getElementById("offcanvas_add");
-        const offcanvas =
-          this.bootstrap.Offcanvas.getInstance(offcanvasElement);
-        offcanvas?.hide();
+        this.closeAddUser();
       },
       error: (err) => {
         this.toastr.success(err.message);
@@ -308,6 +319,21 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   protected readonly SearchCountryField = SearchCountryField;
 
   onEditUser(user: any): void {
+    const panel = this.editUserCanvas.nativeElement;
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+    this.editBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.editBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.editBackdrop, "fade");
+    this.renderer.addClass(this.editBackdrop, "show");
+    if (this.editBackdrop) {
+      this.editBackdrop.addEventListener("click", () => this.closeEditUser());
+    }
+    this.renderer.appendChild(document.body, this.editBackdrop);
+
     this.selectedUser = user;
     this.editUserForm.patchValue({
       userName: user.userName,
@@ -376,5 +402,59 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         this.toaster.error("Please Try Again Later");
       }
     });
+  }
+
+  openAddUser() {
+    const panel = this.addUserCanvas.nativeElement;
+    // show
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+    this.addBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.addBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.addBackdrop, "fade");
+    this.renderer.addClass(this.addBackdrop, "show");
+    if (this.addBackdrop) {
+      this.addBackdrop.addEventListener("click", () => this.closeAddUser());
+    }
+    this.renderer.appendChild(document.body, this.addBackdrop);
+  }
+
+  closeAddUser() {
+    const panel = this.addUserCanvas.nativeElement;
+    // hide
+    this.renderer.removeClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "hidden");
+    this.renderer.removeAttribute(panel, "aria-modal");
+    this.renderer.setAttribute(panel, "aria-hidden", "true");
+    this.renderer.removeStyle(document.body, "overflow");
+    if (this.addBackdrop) {
+      this.renderer.removeChild(document.body, this.addBackdrop);
+      this.addBackdrop = undefined;
+    }
+  }
+
+  closeEditUser() {
+    const panel = this.editUserCanvas.nativeElement;
+
+    // … your existing hide logic …
+    this.renderer.removeClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "hidden");
+    this.renderer.removeAttribute(panel, "aria-modal");
+    this.renderer.setAttribute(panel, "aria-hidden", "true");
+    this.renderer.removeStyle(document.body, "overflow");
+    if (this.editBackdrop) {
+      this.renderer.removeChild(document.body, this.editBackdrop);
+      this.editBackdrop = undefined;
+    }
+
+    document
+      .querySelectorAll(".offcanvas-backdrop.fade.show")
+      .forEach((backdrop) =>
+        this.renderer.removeChild(document.body, backdrop)
+      );
+    this.renderer.removeStyle(panel, "transform");
   }
 }
