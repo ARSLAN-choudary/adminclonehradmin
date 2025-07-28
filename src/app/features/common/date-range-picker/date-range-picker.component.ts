@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
@@ -15,6 +15,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
   ],
 })
 export class DateRangePickerComponent {
+  @Output() dateRangeChange = new EventEmitter<{ startDate: Date; endDate: Date }>();
   bsValue = new Date();
   bsRangeValue: Date[];
   maxDate = new Date();
@@ -22,5 +23,11 @@ export class DateRangePickerComponent {
   constructor() {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
+  }
+  onDateRangeChange(): void {
+    if (this.bsRangeValue && this.bsRangeValue.length === 2) {
+      const [startDate, endDate] = this.bsRangeValue;
+      this.dateRangeChange.emit({ startDate, endDate });
+    }
   }
 }
