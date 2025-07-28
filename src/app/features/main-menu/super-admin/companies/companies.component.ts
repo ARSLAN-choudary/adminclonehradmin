@@ -57,9 +57,6 @@ interface select {
   styleUrl: "./companies.component.scss",
 })
 export class CompaniesComponent {
-  public dateRange: { start: Date; end: Date } | null = null;
-
-  public filteredData: any[] = [];
   routes = routes;
   select!: select[];
   select2!: select[];
@@ -86,9 +83,6 @@ export class CompaniesComponent {
   ) {
     this.backendService.getCompany("").subscribe((apiRes: any) => {
       this.actualData = apiRes.data.data;
-      this.filteredData = [...this.actualData];
-      this.totalData = this.filteredData.length;
-      this.getTableData({ skip: 0, limit: this.pageSize });
       this.totalData = apiRes.totalData;
 
       this.pagination.tablePageSize.subscribe((res: any) => {
@@ -100,41 +94,6 @@ export class CompaniesComponent {
     });
   }
 
-  applyFilters() {
-    let data = [...this.actualData];
-    const txt = this.searchDataValue.trim().toLowerCase();
-    if (txt) {
-      data = data.filter(
-        (item) =>
-          item.name.toLowerCase().includes(txt) ||
-          item.registrationNo.toLowerCase().includes(txt) ||
-          item.vatNo.toLowerCase().includes(txt)
-      );
-    }
-
-    if (this.dateRange) {
-      data = data.filter((item) => {
-        const d = new Date(item.incorporatonDate);
-        return d >= this.dateRange!.start && d <= this.dateRange!.end;
-      });
-    }
-
-    this.filteredData = data;
-    this.totalData = data.length;
-    this.getTableData({ skip: 0, limit: this.pageSize });
-  }
-
-  public onDateRangeChange(payload: any): void {
-    if (Array.isArray(payload) && payload.length === 2) {
-      this.dateRange = { start: payload[0], end: payload[1] };
-    } else if (payload && payload.start && payload.end) {
-      this.dateRange = { start: payload.start, end: payload.end };
-    } else {
-      this.dateRange = null;
-    }
-
-    this.applyFilters();
-  }
   pdfAndSizeValidator(control: AbstractControl): ValidationErrors | null {
     const files: File[] = control.value as File[];
     if (!files || files.length === 0) {
@@ -332,7 +291,7 @@ export class CompaniesComponent {
     this.tableData = [];
     this.serialNumberArray = [];
 
-    const slicedData = this.filteredData.slice(skip, skip + limit);
+    const slicedData = this.actualData.slice(skip, skip + limit);
 
     slicedData.forEach((res, index) => {
       const serialNumber = skip + index + 1;

@@ -47,8 +47,8 @@
         <div class="card-header d-flex align-items-center justify-content-between gap-2 flex-wrap">
             <div class="input-icon input-icon-start position-relative">
                 <span class="input-icon-addon text-dark"><i class="ti ti-search"></i></span>
-                <input [(ngModel)]="searchDataValue" (ngModelChange)="applyFilters()" type="search" class="form-control"
-                    placeholder="Search">
+                <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
+                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search">
             </div>
             <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvas_add"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add New Company</a>
@@ -326,7 +326,7 @@
                         </div>
                     </div>
                     <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">
-                        <app-date-range-picker  (rangeChange)="onDateRangeChange($event)"></app-date-range-picker>
+                        <app-date-range-picker></app-date-range-picker>
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -454,7 +454,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of tableData;">
+                        <tr *ngFor="let data of actualData;">
                             <td>
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="d-flex flex-column fw-medium">
