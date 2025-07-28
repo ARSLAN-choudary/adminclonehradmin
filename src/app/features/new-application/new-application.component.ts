@@ -38,6 +38,7 @@ import {
     PhoneNumberFormat,
 } from "ngx-intl-tel-input";
 import {MatInput} from "@angular/material/input";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
     selector: "app-new-application",
@@ -100,8 +101,10 @@ export class NewApplicationComponent {
         private data: DataService,
         private pagination: PaginationService,
         private router: Router,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        private toastr: ToastrService
     ) {
+
         this.data.getNewApplication().subscribe((apiRes: apiResultFormat) => {
             this.actualData = apiRes.data ?? [];
             this.totalData = apiRes.totalData ?? this.actualData.length;

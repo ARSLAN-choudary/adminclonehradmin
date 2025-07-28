@@ -99,6 +99,15 @@ export class SidebarComponent {
         }
     }
 
+    onToggleSidebar(): void {
+        const layout = document.documentElement.getAttribute('data-layout');
+
+        if (layout === 'hidden') {
+            this.settings.togglehidden();
+        } else {
+            this.toggleSidebar(); // This is enough, no need to call toggleSidebarmini()
+        }
+    }
 
 
     public toggleSidebarmini(): void {
