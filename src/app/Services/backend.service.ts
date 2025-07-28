@@ -25,5 +25,9 @@ export class BackendService {
     addUser(parms: any): Observable<any> {
         return this.http.post(CONFIG.addUser, parms);
     }
+    updateUser(parms: any): Observable<any> {
+        return this.http.post(CONFIG.updateUser, parms);
+    }
+
 
 }

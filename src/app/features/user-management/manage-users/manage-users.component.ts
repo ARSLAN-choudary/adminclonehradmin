@@ -68,7 +68,6 @@ interface Country {
         MatSortModule,
         MatFormFieldModule,
         NgxMatSelectSearchModule,
-        MatOption,
         MatInputModule,
         NgxIntlTelInputModule,
         Select,
@@ -86,6 +85,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     ];
     filteredCurrentNationality = new ReplaySubject<Country[]>(1);
     userForm!: FormGroup;
+    editUserForm!: FormGroup;
 
     bootstrap: any;
 
@@ -108,6 +108,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
 
     initChecked = false;
     countries: any[] = [];
+    selectedUser: any;
 
     public togglePassword(index: number) {
         this.password[index] = !this.password[index];
@@ -156,6 +157,14 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
             phone: ["", Validators.required],
             location: ['', Validators.required],
         });
+        this.editUserForm = this.fb.group({
+            userName: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            role: ['', Validators.required],
+            phone: [null, Validators.required],
+            location: [null, Validators.required],
+        });
+
         this.filteredCurrentNationality.next(this.countries.slice());
 
         this.currentNationalityFilterCtrl.valueChanges
@@ -289,4 +298,66 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
 
     protected readonly CountryISO = CountryISO;
     protected readonly SearchCountryField = SearchCountryField;
+
+    onEditUser(user: any): void {
+        this.selectedUser = user;
+        this.editUserForm.patchValue({
+            userName: user.userName,
+            email: user.email,
+            role: user.role,
+            phone: {
+                number: user.phone,
+                internationalNumber: user.phone,
+                nationalNumber: user.phone,
+                e164Number: user.phone,
+                countryCode: 'PK',
+                dialCode: '+92'
+            },
+            location: user.location
+        });
+        console.log(this.editUserForm.value);
+    }
+
+    onUpdateUser() {
+        if (this.editUserForm.invalid) return;
+
+        this.editUserForm.get('phone')?.setValue(
+            this.editUserForm.get('phone')?.value?.e164Number
+        );
+
+        this.backend.updateUser(this.editUserForm.value).subscribe({
+            next: (res: any) => {
+                this.toastr.success(res.message);
+                // Close offcanvas
+                const offcanvas = document.getElementById('offcanvas_edit');
+                // if (offcanvas) {
+                //     const instance = bootstrap.Offcanvas.getInstance(offcanvas);
+                //     instance?.hide();
+                // }
+                this.getTableData({skip: 0, limit: this.pageSize});
+            },
+            error: (err: any) => {
+                this.toastr.error(err.message);
+            }
+        });
+    }
+
+    onEditSubmit() {
+        if (this.editUserForm.invalid) return;
+
+        const payload = {
+            ...this.editUserForm.value,
+            phone: this.editUserForm.get('phone')?.value?.e164Number
+        };
+
+        this.backend.updateUser('').subscribe({
+            next: (res) => {
+                this.toastr.success("User updated");
+            },
+            error: (err) => {
+                this.toastr.error("Update failed");
+            }
+        });
+    }
+
 }

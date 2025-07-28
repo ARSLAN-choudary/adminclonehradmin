@@ -7,5 +7,7 @@ export const CONFIG = {
     getCompany: BASE_URL_API + "/api/company/getlist",
     getManageUsers: BASE_URL_API + "/api/users/userslist",
     addUser: BASE_URL_API + "/api/users/adduser",
+    updateUser: BASE_URL_API + '/api/users/updateuser',
+
 
 };
