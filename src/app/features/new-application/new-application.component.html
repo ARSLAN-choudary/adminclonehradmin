@@ -439,13 +439,15 @@
                                             class="ti ti-dots-vertical"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="offcanvas"
+                                        <a (click)="editApplication(data)" class="dropdown-item"
+                                            href="javascript:void(0);" data-bs-toggle="offcanvas"
                                             data-bs-target="#offcanvas_edit"><i class="ti ti-edit text-blue"></i>
                                             Edit</a>
 
                                         <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="offcanvas"
                                             (click)="passResendApplicationData(data)"
-                                            data-bs-target="#offcanvas_resend"><i class="fa fa-share"></i>
+                                            data-bs-target="#offcanvas_resend"> <i class="feather icon-rotate-ccw"
+                                                data-bs-toggle="tooltip" title="feather icon-rotate-ccw"></i>
                                             Resend</a>
                                         <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
                                             data-bs-target="#delete_contact"><i class="ti ti-trash"></i>
@@ -483,149 +485,145 @@
         </button>
     </div>
     <div class="offcanvas-body">
-        <form>
+        <form [formGroup]="addNewApplicationForm" (ngSubmit)="createNewApplication()">
             <div>
                 <!-- Basic Info -->
                 <div>
                     <div class="row">
 
-                        <!-- <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label">Company <span class="text-danger">*</span></label>
-                                <mat-select class="custom-mat-select select" placeholder="Select">
-                                    <mat-option>
-                                        <input matInput placeholder="Search…" [(ngModel)]="companyFilter"
-                                            (ngModelChange)="filterCompanies()" />
-                                    </mat-option>
-                                    <mat-option *ngFor="let c of companies" [id]="c._id"
-                                        [value]="c._id">{{c.name}}</mat-option>
 
-                                </mat-select>
-                            </div>
-                        </div> -->
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">Company <span class="text-danger"> *</span></label>
                                 <p-select [options]="companies" optionLabel="label" optionValue="value"
                                     placeholder="Select" [filter]="true" class="form-control" formControlName="company"
                                     id="company"></p-select>
-                                <!-- <div *ngIf="control('country').touched && control('country').invalid">
-                                    <small class="text-danger" *ngIf="control('country').hasError('required')">
-                                        Country is required
-                                    </small>
-                                </div> -->
+                                <small class="text-danger"
+                                    *ngIf="control('company').touched && control('company').hasError('required')">
+                                    Company is required
+                                </small>
+                            </div>
 
-                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label">Application Type <span class="text-danger">*</span></label>
-                                <mat-select class="custom-mat-select select" placeholder="Select">
-                                    <mat-option value="1">Choose</mat-option>
-                                    <mat-option value="1">Germany</mat-option>
-                                    <mat-option value="1">USA</mat-option>
-                                    <mat-option value="1">Canada</mat-option>
-                                    <mat-option value="1">India</mat-option>
-                                    <mat-option value="1">China</mat-option>
-                                </mat-select>
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Application Type <span class="text-danger">*</span>
+                            </label>
+                            <p-select formControlName="applicationType" [options]="applicationTypes" optionLabel="label"
+                                optionValue="value" placeholder="Select type" [filter]="true"
+                                class="form-control"></p-select>
+                            <small class="text-danger"
+                                *ngIf="control('applicationType').touched && control('applicationType').hasError('required')">
+                                Type is required
+                            </small>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label">Application Context <span class="text-danger">*</span></label>
-                                <mat-select class="custom-mat-select select" placeholder="Select">
-                                    <mat-option value="1">Choose</mat-option>
-                                    <mat-option value="1">Germany</mat-option>
-                                    <mat-option value="1">USA</mat-option>
-                                    <mat-option value="1">Canada</mat-option>
-                                    <mat-option value="1">India</mat-option>
-                                    <mat-option value="1">China</mat-option>
-                                </mat-select>
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Application Context <span class="text-danger">*</span>
+                            </label>
+                            <p-select formControlName="applicationContext" [options]="applicationContexts"
+                                optionLabel="label" optionValue="value" placeholder="Select context" [filter]="true"
+                                class="form-control"></p-select>
+                            <small class="text-danger"
+                                *ngIf="control('applicationContext').touched && control('applicationContext').hasError('required')">
+                                Context is required
+                            </small>
                         </div>
                     </div>
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label">Employment Sector Type <span
-                                        class="text-danger">*</span></label>
-                                <mat-select class="custom-mat-select select" placeholder="Select">
-                                    <mat-option value="1">Choose</mat-option>
-                                    <mat-option value="1">Germany</mat-option>
-                                    <mat-option value="1">USA</mat-option>
-                                    <mat-option value="1">Canada</mat-option>
-                                    <mat-option value="1">India</mat-option>
-                                    <mat-option value="1">China</mat-option>
-                                </mat-select>
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Employment Sector Type <span class="text-danger">*</span>
+                            </label>
+                            <p-select formControlName="sectorType" [options]="sectorTypes" optionLabel="label"
+                                optionValue="value" placeholder="Select sector" [filter]="true"
+                                class="form-control"></p-select>
+                            <small class="text-danger"
+                                *ngIf="control('sectorType').touched && control('sectorType').hasError('required')">
+                                Sector is required
+                            </small>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label">Job Title <span class="text-danger">*</span></label>
-                                <mat-select class="custom-mat-select select" placeholder="Select">
-                                    <mat-option value="1">Choose</mat-option>
-                                    <mat-option value="1">Germany</mat-option>
-                                    <mat-option value="1">USA</mat-option>
-                                    <mat-option value="1">Canada</mat-option>
-                                    <mat-option value="1">India</mat-option>
-                                    <mat-option value="1">China</mat-option>
-                                </mat-select>
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Job Title <span class="text-danger">*</span>
+                            </label>
+                            <p-select formControlName="jobTitle" [options]="jobTitles" optionLabel="label"
+                                optionValue="value" placeholder="Select title" [filter]="true"
+                                class="form-control"></p-select>
+                            <small class="text-danger"
+                                *ngIf="control('jobTitle').touched && control('jobTitle').hasError('required')">
+                                Job title is required
+                            </small>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label">Occupation <span class="text-danger">*</span></label>
-                                <mat-select class="custom-mat-select select" placeholder="Select">
-                                    <mat-option value="1">Choose</mat-option>
-                                    <mat-option value="1">Germany</mat-option>
-                                    <mat-option value="1">USA</mat-option>
-                                    <mat-option value="1">Canada</mat-option>
-                                    <mat-option value="1">India</mat-option>
-                                    <mat-option value="1">China</mat-option>
-                                </mat-select>
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Occupation <span class="text-danger">*</span>
+                            </label>
+                            <p-select formControlName="occupation" [options]="occupations" optionLabel="label"
+                                optionValue="value" placeholder="Select occupation" [filter]="true"
+                                class="form-control"></p-select>
+                            <small class="text-danger"
+                                *ngIf="control('occupation').touched && control('occupation').hasError('required')">
+                                Occupation is required
+                            </small>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Email <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control">
+                                <label class="form-label">
+                                    Email <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" class="form-control" formControlName="email" id="appEmail" />
+                                <small class="text-danger"
+                                    *ngIf="control('email').touched && control('email').hasError('required')">
+                                    Email is required
+                                </small>
+                                <small class="text-danger"
+                                    *ngIf="control('email').touched && control('email').hasError('email')">
+                                    Invalid email
+                                </small>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
-                                <form>
-                                    <form #f="ngForm" [formGroup]="form">
-                                        <ngx-intl-tel-input [cssClass]="'form-control'"
-                                            [preferredCountries]="preferredCountries" [onlyCountries]="onlyCountries"
-                                            [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
-                                            [searchCountryFlag]="true"
-                                            [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
-                                            [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan"
-                                            [maxLength]="15" [phoneValidation]="true" [separateDialCode]="true"
-                                            formControlName="phone">
-                                        </ngx-intl-tel-input>
-
-                                    </form>
+                                <ngx-intl-tel-input [cssClass]="'form-control'"
+                                    [preferredCountries]="preferredCountries" [onlyCountries]="onlyCountries"
+                                    [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                                    [searchCountryFlag]="true"
+                                    [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                    [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan"
+                                    [maxLength]="15" [phoneValidation]="true" [separateDialCode]="true"
+                                    formControlName="phone">
+                                </ngx-intl-tel-input>
 
 
-                                    <!--                                    <div class="text-danger mt-1" *ngIf="phone.invalid && (phone.dirty || phone.touched)">-->
-                                    <!--                                        Invalid phone number-->
-                                    <!--                                    </div>-->
 
-                                    <!--                                    <button class="btn btn-primary mt-3" [disabled]="form.invalid">Save</button>-->
-                                </form>
+                                <!--                                    <div class="text-danger mt-1" *ngIf="phone.invalid && (phone.dirty || phone.touched)">-->
+                                <!--                                        Invalid phone number-->
+                                <!--                                    </div>-->
+
+                                <!--                                    <button class="btn btn-primary mt-3" [disabled]="form.invalid">Save</button>-->
                             </div>
                         </div>
                     </div>
@@ -634,7 +632,7 @@
             </div>
             <div class="d-flex align-items-center justify-content-end">
                 <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="offcanvas">Cancel</a>
-                <button type="submit" (click)="gotoLink()" class="btn btn-primary">Create</button>
+                <button type="submit" class="btn btn-primary" [disabled]="addNewApplicationForm.invalid">Create</button>
             </div>
         </form>
     </div>
@@ -654,13 +652,13 @@
     </div>
 
     <div class="offcanvas-body">
-        <form [formGroup]="form">
+        <form [formGroup]="editForm" (ngSubmit)="onSaveChanges()">
             <!-- Basic Info -->
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label">Email <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" formControlName="email" id="emailEdit" />
                     </div>
                 </div>
 
@@ -673,11 +671,11 @@
                             [searchCountryFlag]="true"
                             [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
                             [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan" [maxLength]="15"
-                            [phoneValidation]="true" [separateDialCode]="true" formControlName="phone">
+                            [phoneValidation]="true" [separateDialCode]="true" formControlName="mobile">
                         </ngx-intl-tel-input>
 
                         <div class="text-danger mt-1"
-                            *ngIf="form.get('phone')?.invalid && (form.get('phone')?.touched || form.get('phone')?.dirty)">
+                            *ngIf="editForm.get('mobile')?.invalid && (editForm.get('mobile')?.touched || editForm.get('mobile')?.dirty)">
                             Invalid phone number
                         </div>
                     </div>
@@ -688,7 +686,7 @@
 
             <div class="d-flex align-items-center justify-content-end">
                 <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="offcanvas">Cancel</a>
-                <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Save Changes</button>
+                <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Save Changes</button>
             </div>
         </form>
     </div>

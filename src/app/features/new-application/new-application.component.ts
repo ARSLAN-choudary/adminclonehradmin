@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import {
+    FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -42,6 +43,16 @@ import { ToastrService } from "ngx-toastr";
 import { BackendService } from "../../Services/backend.service";
 import { DropdownModule } from "primeng/dropdown";
 import { SelectModule } from "primeng/select";
+
+interface PhoneInputValue {
+  number: string;
+  nationalNumber: string;
+  internationalNumber: string;
+  e164Number: string;
+  countryCode: string;
+  dialCode: string;
+}
+
 @Component({
   selector: "app-new-application",
   standalone: true,
@@ -67,8 +78,9 @@ import { SelectModule } from "primeng/select";
   styleUrl: "./new-application.component.scss",
 })
 export class NewApplicationComponent implements OnInit {
+    addNewApplicationForm!: FormGroup;
   public routes = routes;
-
+  editUserData!: any;
   companies: { label: string; value: string }[] = [];
   resendApplicationData!: any;
 
@@ -84,6 +96,35 @@ export class NewApplicationComponent implements OnInit {
   public row = true;
   initChecked = false;
 
+  applicationTypes = [
+    { label: "New",    value: "new" },
+    { label: "Renew",  value: "renew" },
+    { label: "Amend",  value: "amend" },
+  ];
+
+  applicationContexts = [
+    { label: "Internal", value: "internal" },
+    { label: "External", value: "external" },
+  ];
+
+  sectorTypes = [
+    { label: "Private",   value: "private" },
+    { label: "Government",value: "government" },
+    { label: "Non‑Profit",value: "nonprofit" },
+  ];
+
+  jobTitles = [
+    { label: "Manager",    value: "manager" },
+    { label: "Developer",  value: "developer" },
+    { label: "Analyst",    value: "analyst" },
+  ];
+
+  occupations = [
+    { label: "Engineering", value: "engineering" },
+    { label: "Finance",     value: "finance" },
+    { label: "Marketing",   value: "marketing" },
+  ];
+
   CountryISO = CountryISO;
   SearchCountryField = SearchCountryField;
   PhoneNumberFormat = PhoneNumberFormat;
@@ -93,6 +134,27 @@ export class NewApplicationComponent implements OnInit {
     CountryISO.UnitedArabEmirates,
     CountryISO.SaudiArabia,
   ];
+
+  editForm = new FormGroup({
+    mobile: new FormControl<PhoneInputValue | null>(null, Validators.required),
+    email: new FormControl("", [Validators.required, Validators.email]),
+  });
+
+  editApplication(data: any) {
+    const phoneObj: PhoneInputValue = {
+      number: data.mobile,
+      nationalNumber: data.mobile,
+      internationalNumber: `+92 ${data.mobile}`,
+      e164Number: `+92${data.mobile}`,
+      countryCode: "pk",
+      dialCode: "92",
+    };
+
+    this.editForm.patchValue({
+      mobile: phoneObj,
+      email: data.email,
+    });
+  }
 
   form: FormGroup = new FormGroup({
     phone: new FormControl(undefined, Validators.required),
@@ -112,7 +174,7 @@ export class NewApplicationComponent implements OnInit {
     private router: Router,
     private sanitizer: DomSanitizer,
     private toastr: ToastrService,
-    private backendService: BackendService
+    private backendService: BackendService,private fb: FormBuilder
   ) {
     this.data.getNewApplication().subscribe((apiRes: apiResultFormat) => {
       this.actualData = apiRes.data ?? [];
@@ -141,6 +203,16 @@ export class NewApplicationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.addNewApplicationForm = this.fb.group({
+        company:            [null, Validators.required],
+        applicationType:    [null, Validators.required],
+        applicationContext: [null, Validators.required],
+        sectorType:         [null, Validators.required],
+        jobTitle:           [null, Validators.required],
+        occupation:         [null, Validators.required],
+        email:              ["", [Validators.required, Validators.email]],
+        phone:              ["", Validators.required],
+      });
     this.backendService.getCompany("").subscribe((res: any) => {
       console.log("companies payload:", res.data.data);
       this.companies = res.data.data.map((c: any) => ({
@@ -149,6 +221,11 @@ export class NewApplicationComponent implements OnInit {
       }));
     });
   }
+
+  control(name: string) {
+    return this.addNewApplicationForm.get(name)!;
+  }
+
 
   private initDataSource(data: manageUsers[]): void {
     this.dataSource = new MatTableDataSource<manageUsers>(data);
@@ -256,4 +333,19 @@ export class NewApplicationComponent implements OnInit {
   }
 
   onResendConfirm() {}
+  onSaveChanges() {
+    if (this.editForm.invalid) return;
+    const updated = this.editForm.value;
+
+    console.log("Saving changes for", updated);
+  }
+
+  createNewApplication() {
+    if (this.addNewApplicationForm.invalid) {
+      this.addNewApplicationForm.markAllAsTouched();
+      return;
+    }
+    console.log("Form Value:", this.addNewApplicationForm.value);
+    // …call your API…
+  }
 }
