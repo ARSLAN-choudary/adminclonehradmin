@@ -92,23 +92,30 @@ export class CompaniesComponent {
         }
       });
     });
-    this.createNewCompanyForm = this.fb.group({
-      image: [[] as File[]], // will store the selected PDFs
-      country: ["", Validators.required],
-      name: ["", Validators.required],
-      registrationNo: ["", Validators.required],
-      vatNo: ["", Validators.required],
-      peNo: ["", Validators.required],
-      jobplusemployeryno: ["", Validators.required],
-      currency: ["", Validators.required],
-      phoneNO: ["", [Validators.required]],
-      email: [""],
-      address: [""],
-      website: [""],
-      incorporatonDate: ["", Validators.required],
-      password: ["", [Validators.required, Validators.minLength(8)]],
-      status: ["active", Validators.required],
-    });
+  }
+
+  pdfAndSizeValidator(control: AbstractControl): ValidationErrors | null {
+    const files: File[] = control.value as File[];
+    if (!files || files.length === 0) {
+      return { required: true };
+    }
+    for (let f of files) {
+      if (f.type !== "application/pdf") {
+        return { invalidType: true };
+      }
+      if (f.size > 5 * 1024 * 1024) {
+        return { fileTooLarge: true };
+      }
+    }
+    return null;
+  }
+
+  onFilesSelected(evt: Event) {
+    const input = evt.target as HTMLInputElement;
+    if (!input.files) return;
+    const files = Array.from(input.files);
+    this.control("files").setValue(files);
+    this.control("files").markAsTouched();
   }
 
   checkMatch(confirmValue: string) {
@@ -116,30 +123,58 @@ export class CompaniesComponent {
     this.passwordsDoNotMatch = pw !== confirmValue;
   }
 
+  //   onSubmit() {
+  //     if (this.createNewCompanyForm.invalid || this.passwordsDoNotMatch) {
+  //       this.createNewCompanyForm.markAllAsTouched();
+  //       this.confirmTouched = true;
+  //       return;
+  //     }
+  //     const formData = new FormData();
+  //     const value = this.createNewCompanyForm.getRawValue();
+  //     const { files, confirmPassword, ...rest } = value;
+
+  //     // append scalar fields
+  //     Object.entries(rest).forEach(([k, v]) =>
+  //       formData.append(k, String(v ?? ""))
+  //     );
+
+  //     // append files
+  //     files?.forEach((f: any, i: any) => formData.append("files", f, f.name));
+  //     debugger;
+  //     this.backendService.addCompany(formData).subscribe({
+  //       next: (res) => {
+  //         console.log("Created!", res);
+  //         // reset or close modal/offcanvas here
+  //       },
+  //       error: (err) => console.error(err),
+  //     });
+  //   }
+
   onSubmit() {
     if (this.createNewCompanyForm.invalid || this.passwordsDoNotMatch) {
       this.createNewCompanyForm.markAllAsTouched();
       this.confirmTouched = true;
       return;
     }
+
     const formData = new FormData();
-    const value = this.createNewCompanyForm.getRawValue();
-    const { files, confirmPassword, ...rest } = value;
+    const v = this.createNewCompanyForm.value; // <-- only enabled controls
 
-    // append scalar fields
-    Object.entries(rest).forEach(([k, v]) =>
-      formData.append(k, String(v ?? ""))
-    );
+    Object.entries(v).forEach(([key, val]) => {
+      if (key === "files" && Array.isArray(val)) {
+        // append each PDF
+        val.forEach((file: File) => formData.append("files", file, file.name));
+      } else {
+        // everything else must be stringifiable
+        formData.append(key, String(val));
+      }
+    });
 
-    // append files
-    files?.forEach((f: any, i: any) => formData.append("files", f, f.name));
-    debugger;
     this.backendService.addCompany(formData).subscribe({
-      next: (res) => {
-        console.log("Created!", res);
-        // reset or close modal/offcanvas here
+      next: () => {
+        // success — reset & close offcanvas...
       },
-      error: (err) => console.error(err),
+      error: console.error,
     });
   }
 
@@ -149,28 +184,67 @@ export class CompaniesComponent {
 
   // -------- Validators ----------
 
-  onFilesSelected(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    if (!input.files?.length) return;
-
-    const files = Array.from(input.files);
-    // (optional) validate file type/size here
-    this.createNewCompanyForm.patchValue({ files });
-    this.createNewCompanyForm.get("image")?.updateValueAndValidity();
-  }
-
   ngOnInit(): void {
+    this.createNewCompanyForm = this.fb.group({
+      files: [null, [Validators.required, this.pdfAndSizeValidator]],
+      country: ["", Validators.required],
+
+      // all other fields start disabled
+      name: [{ value: "", disabled: true }, Validators.required],
+      registrationNo: [{ value: "", disabled: true }, Validators.required],
+      vatNo: [{ value: "", disabled: true }, Validators.required],
+      peNo: [{ value: "", disabled: true }, Validators.required],
+      jobplusemployeryno: [{ value: "", disabled: true }, Validators.required],
+      currency: [{ value: "", disabled: true }, Validators.required],
+      phoneNO: [{ value: "", disabled: true }, Validators.required],
+      email: [{ value: "", disabled: true }],
+      address: [{ value: "", disabled: true }],
+      website: [
+        { value: "", disabled: true },
+        Validators.pattern(/^https?:\/\//),
+      ],
+      incorporatonDate: [{ value: "", disabled: true }, Validators.required],
+      password: [
+        { value: "", disabled: true },
+        [Validators.required, Validators.minLength(8)],
+      ],
+      status: [{ value: "active", disabled: true }, Validators.required],
+    });
+    const maltaFields = [
+      "name",
+      "registrationNo",
+      "vatNo",
+      "peNo",
+      "jobplusemployeryno",
+      "currency",
+      "phoneNO",
+      "email",
+      "address",
+      "website",
+      "incorporatonDate",
+      "password",
+      "status",
+    ];
+
+    // 3) When country changes, toggle those controls:
     this.createNewCompanyForm
-      .get("country")
-      ?.valueChanges.subscribe((country) => {
-        console.log("Country changed to:", country);
-        if (country === "malta") {
-          this.isMalta = true;
-          this.cdRef.detectChanges();
-        } else {
-          // hide/disable them
-          this.isMalta = false;
-        }
+      .get("country")!
+      .valueChanges.subscribe((country) => {
+        const isMalta = country === "malta";
+        this.isMalta = isMalta;
+
+        maltaFields.forEach((field) => {
+          const ctrl = this.createNewCompanyForm.get(field)!;
+          if (isMalta) {
+            ctrl.enable({ emitEvent: false });
+            ctrl.setValidators(Validators.required);
+          } else {
+            ctrl.disable({ emitEvent: false });
+            ctrl.clearValidators();
+            ctrl.setValue("");
+          }
+          ctrl.updateValueAndValidity({ emitEvent: false });
+        });
       });
     this.currencies = [
       { label: "EURO", value: "EURO" },
@@ -196,7 +270,6 @@ export class CompaniesComponent {
     this.password[i] = !this.password[i];
   }
 
-  // pagination variables
   public tableData: any[] = [];
   public pageSize = 10;
   public serialNumberArray: number[] = [];
@@ -206,7 +279,6 @@ export class CompaniesComponent {
   public searchDataValue = "";
   public tableDataCopy: any[] = [];
   public actualData: any[] = [];
-  //** pagination variables
 
   initChecked = false;
 
