@@ -28,6 +28,7 @@
         </button>
     </div>
 
+<<<<<<< HEAD
     <div class="sidebar-inner slimscroll">
         <ng-scrollbar>
             <div id="sidebar-menu" class="sidebar-menu">
@@ -57,6 +58,42 @@
                                                 <span class="menu-arrow"></span>
                                             </a>
                                             <ul [ngClass]=" menu.showSubRoute === true
+=======
+    <!-- Sidebar Menu Close -->
+    <button class="sidebar-close" (click)="closeSidebar()">
+      <i class="ti ti-x align-middle"></i>
+    </button>
+  </div>
+
+  <div class="sidebar-inner slimscroll">
+    <ng-scrollbar>
+      <div id="sidebar-menu" class="sidebar-menu">
+        <ul>
+          @for (mainTittle of side_bar_data; track mainTittle) {
+          <li class="menu-title">
+            <span>{{ mainTittle.tittle }}</span>
+          </li>
+          <li>
+            <ul>
+              @for (menu of mainTittle?.menu; track menu) {
+              @if (menu?.hasSubRoute === false) {
+              <li [class.active]="base === menu.base">
+                <a [routerLink]="menu?.route" (click)="expandSubMenus(menu)"><i class="ti"
+                    [class]="'ti-' + menu.icon"></i>
+                  <span>{{ menu?.menuValue }}</span>
+                </a>
+              </li>
+              }
+              @if (menu.hasSubRoute === true) {
+              <li class="submenu">
+                <a href="javascript:void(0)" (click)="expandSubMenus(menu)"
+                  [ngClass]=" menu.showSubRoute === true ?'subdrop':''" [class.active]="base === menu.base">
+                  <i class="ti" [class]="'ti-' + menu.icon"></i>
+                  <span>{{ menu.menuValue }}</span>
+                  <span class="menu-arrow"></span>
+                </a>
+                <ul [ngClass]=" menu.showSubRoute === true
+>>>>>>> c08b8baee4f2614c011c1aff8a5639f9e229c7d1
                                                 ? 'd-block'
                                                 : 'd-none'
                                             ">
