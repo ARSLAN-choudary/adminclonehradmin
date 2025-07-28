@@ -326,7 +326,7 @@
                         </div>
                     </div>
                     <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">
-                        <app-date-range-picker></app-date-range-picker>
+                        <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)"></app-date-range-picker>
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -454,7 +454,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of actualData;">
+                        <tr *ngFor="let data of tableData;">
                             <td>
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="d-flex flex-column fw-medium">
@@ -694,8 +694,8 @@
                                 <div class="d-inline-flex flex-column align-items-start">
                                     <label class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                                         <i class="ti ti-file-broken me-1"></i>Upload file
-                                        <input  #fileInput  type="file"  multiple  accept="application/pdf" 
-                                            (change)="onFilesSelected($event)"  hidden />
+                                        <input #fileInput type="file" multiple accept="application/pdf"
+                                            (change)="onFilesSelected($event)" hidden />
                                     </label>
                                     <span>PDF. Max size of 5MB</span>
                                     <ul *ngIf="createNewCompanyForm.value.files?.length">
