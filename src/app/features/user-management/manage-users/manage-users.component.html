@@ -48,8 +48,8 @@
                 <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
                     (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search">
             </div>
-            <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvas_add"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add User</a>
+            <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas" (click)="openAddUser()"><i
+                    class="ti ti-square-rounded-plus-filled me-1"></i>Add User</a>
         </div>
         <div class="card-body">
 
@@ -442,7 +442,7 @@
                                     <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
                                             href="javascript:void(0);" data-bs-toggle="offcanvas"
                                             data-bs-target="#offcanvas_edit" (click)="onEditUser(data)">
-                                            ><i class="ti ti-edit text-blue"></i>
+                                            <i class="ti ti-edit text-blue"></i>
                                             Edit</a><a (click)="deleteUser(data._id)" class="dropdown-item"
                                             href="javascript:void(0);" data-bs-toggle="modal"
                                             data-bs-target="#delete_contact"><i class="ti ti-trash"></i> Delete</a>
@@ -469,12 +469,12 @@
 </div>
 <!-- End Content -->
 <!-- Add User -->
-<div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
+<div #addUserCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Add New User</h5>
         <button type="button"
             class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-            data-bs-dismiss="offcanvas" aria-label="Close">
+            (click)="closeAddUser()" aria-label="Close">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -574,12 +574,12 @@
 <!-- /Add User -->
 
 <!-- Edit User -->
-<div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
+<div #editUserCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Edit User</h5>
         <button type="button"
             class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-            data-bs-dismiss="offcanvas" aria-label="Close">
+            (click)="closeEditUser()" aria-label="Close">
             <i class="ti ti-x"></i>
         </button>
     </div>

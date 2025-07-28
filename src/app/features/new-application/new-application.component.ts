@@ -1,5 +1,11 @@
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -78,7 +84,11 @@ interface PhoneInputValue {
   styleUrl: "./new-application.component.scss",
 })
 export class NewApplicationComponent implements OnInit {
-  @ViewChild("addCanvas") addCanvas!: ElementRef<HTMLElement>;
+  @ViewChild("addCanvas", { static: true })
+  addCanvas!: ElementRef<HTMLElement>;
+
+  private backdropEl?: HTMLElement;
+
   addNewApplicationForm!: FormGroup;
   public routes = routes;
   editUserData!: any;
@@ -176,7 +186,8 @@ export class NewApplicationComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private toastr: ToastrService,
     private backendService: BackendService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private renderer: Renderer2
   ) {
     this.data.getNewApplication().subscribe((apiRes: apiResultFormat) => {
       this.actualData = apiRes.data ?? [];
@@ -370,16 +381,41 @@ export class NewApplicationComponent implements OnInit {
     });
   }
 
+  openAddApplication() {
+    const el = this.addCanvas.nativeElement;
+
+    this.renderer.addClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "visible");
+    this.renderer.setAttribute(el, "aria-modal", "true");
+    this.renderer.removeAttribute(el, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.backdropEl = this.renderer.createElement("div");
+    this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
+    this.renderer.addClass(this.backdropEl, "fade");
+    this.renderer.addClass(this.backdropEl, "show");
+    if (this.backdropEl) {
+      this.backdropEl.addEventListener("click", () =>
+        this.closeAddApplication()
+      );
+      this.renderer.appendChild(document.body, this.backdropEl);
+    }
+  }
+
   closeAddApplication() {
     const el = this.addCanvas.nativeElement;
 
-    el.classList.remove("show");
-    el.style.visibility = "hidden";
-    el.removeAttribute("aria-modal");
-    el.setAttribute("aria-hidden", "true");
+    // 1) hide the panel
+    this.renderer.removeClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "hidden");
+    this.renderer.removeAttribute(el, "aria-modal");
+    this.renderer.setAttribute(el, "aria-hidden", "true");
 
-    document
-      .querySelectorAll(".offcanvas-backdrop")
-      .forEach((backdrop) => backdrop.parentNode?.removeChild(backdrop));
+    this.renderer.removeStyle(document.body, "overflow");
+
+    if (this.backdropEl) {
+      this.renderer.removeChild(document.body, this.backdropEl);
+      this.backdropEl = undefined;
+    }
   }
 }
