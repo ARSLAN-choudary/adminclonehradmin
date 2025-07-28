@@ -380,6 +380,11 @@ mat-select.space-select .mat-mdc-select-value {
   left: 150px;
 }
 
+::ng-deep .reportrange-picker .reportrange-picker-field {
+  width: 145px !important;
+}
+
+
 mat-select.space-select .mat-mdc-select-trigger {
   padding-left: 6px;
   border: 1px solid rgba(145, 158, 171, 0.32);

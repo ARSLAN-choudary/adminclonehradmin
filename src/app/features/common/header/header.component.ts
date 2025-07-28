@@ -23,7 +23,7 @@ export class HeaderComponent {
   public multilevel: boolean[] = [false, false, false];
   public submenus = false;
   public addClass = false;
-
+  role: string = "";
   openSubmenus() {
     this.submenus = !this.submenus;
   }
@@ -36,12 +36,13 @@ export class HeaderComponent {
   multiLevel3 = false;
 
   constructor(
-      private data: DataService,
-      private common: CommonService,
-      private sidebar: SidebarService,
-      public settings: SettingsService,
-      private sideBar: SidebarService
+    private data: DataService,
+    private common: CommonService,
+    private sidebar: SidebarService,
+    public settings: SettingsService,
+    private sideBar: SidebarService
   ) {
+    this.role = localStorage.getItem("role") || "";
     this.common.base.subscribe((base: string) => {
       this.base = base;
     });

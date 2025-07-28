@@ -18,7 +18,7 @@ export class AuthService {
       tap((response: any) => {
         // const token = response.data.accessToken;
         // localStorage.setItem("token", token);
-        // localStorage.setItem("role", response.data.userDetail.role);
+        localStorage.setItem("role", response.data.details.role);
         // localStorage.setItem("id", response.data.userDetail._id);
       })
     );
