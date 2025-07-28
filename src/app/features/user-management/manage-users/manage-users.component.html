@@ -430,8 +430,9 @@
 
                             <td>
                                 <span class="badge badge-pill badge-status"
-                                    [ngClass]="{ 'bg-success': data.status === 'Active',  'bg-danger': data.status === 'Inactive'}">{{
-                                    data.status }}</span>
+                                    [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">
+                                    {{ data.status }}
+                                </span>
 
                             </td>
                             <td>
