@@ -1,2 +1,11 @@
 <router-outlet></router-outlet>
 <title>{{ page | titlecase }} | CRMS - Advanced Bootstrap 5 Admin Template for Customer Management</title>
+
+<div *ngIf="isLoading" class="loader-overlay">
+    <div class="spinner-wrapper">
+        <button class="btn btn-light" type="button" disabled>
+            <span class="spinner-grow spinner-grow-sm align-middle" role="status" aria-hidden="true"></span>
+            Loading...
+        </button>
+    </div>
+</div>
