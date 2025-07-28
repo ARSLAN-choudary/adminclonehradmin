@@ -43,6 +43,8 @@ import { ToastrService } from "ngx-toastr";
 import { BackendService } from "../../Services/backend.service";
 import { DropdownModule } from "primeng/dropdown";
 import { SelectModule } from "primeng/select";
+import { Offcanvas } from "bootstrap";
+
 interface PhoneInputValue {
   number: string;
   nationalNumber: string;
@@ -245,7 +247,17 @@ export class NewApplicationComponent implements OnInit {
         .some((v) => v.includes(term));
     };
   }
+  closeCreateAppModal() {
+    const el = document.getElementById("offcanvas_add");
+    if (!el) return;
 
+    const offcanvas = Offcanvas.getInstance(el) ?? new Offcanvas(el);
+
+    offcanvas.hide();
+    document
+      .querySelectorAll(".offcanvas-backdrop")
+      .forEach((el) => el.remove());
+  }
   private getTableData(pageOption: pageSelection): void {
     this.tableData = [];
     this.tableDataCopy = [];
@@ -361,7 +373,8 @@ export class NewApplicationComponent implements OnInit {
     this.backendService.addApplication(payload).subscribe((res: any) => {
       if (res.status === "success") {
         this.toastr.success(res.message);
-      
+        this.closeCreateAppModal();
+
         this.addNewApplicationForm.reset();
       } else {
         this.toastr.error("User Not Created, Please Try Again Later");
