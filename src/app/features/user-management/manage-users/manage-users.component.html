@@ -8,6 +8,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="routes.index">Administrator</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Manage Users</li>
                 </ol>
             </nav>
@@ -15,7 +16,7 @@
         <div class="gap-2 d-flex align-items-center flex-wrap">
             <div class="dropdown">
                 <a href="javascript:void(0);" class="dropdown-toggle btn btn-outline-light px-2 shadow"
-                    data-bs-toggle="dropdown"><i class="ti ti-package-export me-2"></i>Export</a>
+                   data-bs-toggle="dropdown"><i class="ti ti-package-export me-2"></i>Export</a>
                 <div class="dropdown-menu  dropdown-menu-end">
                     <ul>
                         <li>
@@ -32,7 +33,7 @@
                 </div>
             </div>
             <a href="javascript:void(0);" class="btn btn-icon btn-outline-light shadow" data-bs-toggle="tooltip"
-                data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
+               data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
                     class="ti ti-refresh"></i></a>
             <app-collapse-header></app-collapse-header>
         </div>
@@ -45,10 +46,10 @@
             <div class="input-icon input-icon-start position-relative">
                 <span class="input-icon-addon text-dark"><i class="ti ti-search"></i></span>
                 <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
-                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search">
+                       (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search">
             </div>
             <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvas_add"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add User</a>
+               data-bs-target="#offcanvas_add"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add User</a>
         </div>
         <div class="card-body">
 
@@ -57,24 +58,24 @@
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <div class="dropdown">
                         <a href="javascript:void(0);" class="btn btn-outline-light shadow px-2"
-                            data-bs-toggle="dropdown" data-bs-auto-close="outside"><i
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"><i
                                 class="ti ti-filter me-2"></i>Filter<i class="ti ti-chevron-down ms-2"></i></a>
                         <div class="filter-dropdown-menu dropdown-menu dropdown-menu-lg p-0">
                             <div class="filter-header d-flex align-items-center justify-content-between border-bottom">
                                 <h6 class="mb-0"><i class="ti ti-filter me-1"></i>Filter</h6>
                                 <button type="button" class="btn-close close-filter-btn" data-bs-dismiss="dropdown-menu"
-                                    aria-label="Close"></button>
+                                        aria-label="Close"></button>
                             </div>
                             <div class="filter-set-view p-3">
                                 <div class="accordion" id="accordionExample">
                                     <div class="filter-set-content">
                                         <div class="filter-set-content-head">
                                             <a href="javascript:void(0);" data-bs-toggle="collapse"
-                                                data-bs-target="#collapseTwo" aria-expanded="true"
-                                                aria-controls="collapseTwo">Name</a>
+                                               data-bs-target="#collapseTwo" aria-expanded="true"
+                                               aria-controls="collapseTwo">Name</a>
                                         </div>
                                         <div class="filter-set-contents accordion-collapse collapse show"
-                                            id="collapseTwo" data-bs-parent="#accordionExample">
+                                             id="collapseTwo" data-bs-parent="#accordionExample">
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <div class="mb-2">
                                                     <div class="input-icon-start input-icon position-relative">
@@ -82,7 +83,7 @@
                                                             <i class="ti ti-search"></i>
                                                         </span>
                                                         <input type="text" class="form-control form-control-md"
-                                                            placeholder="Search">
+                                                               placeholder="Search">
                                                     </div>
                                                 </div>
                                                 <ul class="mb-0">
@@ -178,7 +179,7 @@
                                                     </li>
                                                     <li>
                                                         <a href="javascript:void(0);"
-                                                            class="link-primary text-decoration-underline p-2 d-flex">Load
+                                                           class="link-primary text-decoration-underline p-2 d-flex">Load
                                                             More</a>
                                                     </li>
                                                 </ul>
@@ -188,11 +189,11 @@
                                     <div class="filter-set-content">
                                         <div class="filter-set-content-head">
                                             <a href="javascript:void(0);" class="collapsed" data-bs-toggle="collapse"
-                                                data-bs-target="#collapseThree" aria-expanded="false"
-                                                aria-controls="collapseThree">Phone</a>
+                                               data-bs-target="#collapseThree" aria-expanded="false"
+                                               aria-controls="collapseThree">Phone</a>
                                         </div>
                                         <div class="filter-set-contents accordion-collapse collapse" id="collapseThree"
-                                            data-bs-parent="#accordionExample">
+                                             data-bs-parent="#accordionExample">
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <ul>
                                                     <li>
@@ -220,11 +221,11 @@
                                     <div class="filter-set-content">
                                         <div class="filter-set-content-head">
                                             <a href="javascript:void(0);" class="collapsed" data-bs-toggle="collapse"
-                                                data-bs-target="#owner" aria-expanded="false"
-                                                aria-controls="owner">Email</a>
+                                               data-bs-target="#owner" aria-expanded="false"
+                                               aria-controls="owner">Email</a>
                                         </div>
                                         <div class="filter-set-contents accordion-collapse collapse" id="owner"
-                                            data-bs-parent="#accordionExample">
+                                             data-bs-parent="#accordionExample">
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <ul class="mb-0">
                                                     <li class="mb-1">
@@ -247,7 +248,7 @@
                                                     </li>
                                                     <li>
                                                         <a href="javascript:void(0);"
-                                                            class="link-primary text-decoration-underline p-2 pt-0 d-flex">Load
+                                                           class="link-primary text-decoration-underline p-2 pt-0 d-flex">Load
                                                             More</a>
                                                     </li>
                                                 </ul>
@@ -257,11 +258,11 @@
                                     <div class="filter-set-content">
                                         <div class="filter-set-content-head">
                                             <a href="javascript:void(0);" class="collapsed" data-bs-toggle="collapse"
-                                                data-bs-target="#Status" aria-expanded="false"
-                                                aria-controls="Status">Status</a>
+                                               data-bs-target="#Status" aria-expanded="false"
+                                               aria-controls="Status">Status</a>
                                         </div>
                                         <div class="filter-set-contents accordion-collapse collapse" id="Status"
-                                            data-bs-parent="#accordionExample">
+                                             data-bs-parent="#accordionExample">
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <ul>
                                                     <li>
@@ -289,13 +290,13 @@
                         </div>
                     </div>
                     <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">
-                        <app-date-range-picker />
+                        <app-date-range-picker/>
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <div class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-outline-light px-2 shadow"
-                            data-bs-toggle="dropdown"><i class="ti ti-sort-ascending-2 me-2"></i>Sort By</a>
+                           data-bs-toggle="dropdown"><i class="ti ti-sort-ascending-2 me-2"></i>Sort By</a>
                         <div class="dropdown-menu">
                             <ul>
                                 <li>
@@ -309,7 +310,7 @@
                     </div>
                     <div class="dropdown">
                         <a href="javascript:void(0);" class="btn bg-soft-indigo px-2 border-0" data-bs-toggle="dropdown"
-                            data-bs-auto-close="outside"><i class="ti ti-columns-3 me-2"></i>Manage Columns</a>
+                           data-bs-auto-close="outside"><i class="ti ti-columns-3 me-2"></i>Manage Columns</a>
                         <div class="dropdown-menu dropdown-menu-md dropdown-md p-3">
                             <ul>
                                 <li class="gap-1 d-flex align-items-center mb-2">
@@ -319,7 +320,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Name</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                   role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -330,7 +331,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Phone</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                   role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -341,7 +342,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Email</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                   role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -352,7 +353,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Created </span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                   role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -363,7 +364,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Last Activity</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                   role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -374,7 +375,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Status</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                   role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -385,7 +386,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Action</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                   role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -399,57 +400,63 @@
             <!-- Contact List -->
             <div class="table-responsive custom-table">
                 <table class="table table-nowrap dataTable no-footer" id="categorieslist" matSort
-                    (matSortChange)="sortData($event)">
+                       (matSortChange)="sortData($event)">
                     <thead class="table-light">
-                        <tr>
+                    <tr>
 
-                            <th mat-sort-header="Name">Name</th>
-                            <th mat-sort-header="Phone">Phone</th>
-                            <th mat-sort-header="Email">Email</th>
-                            <th mat-sort-header="Created">Created</th>
-                            <th mat-sort-header="Activity">Last Activity</th>
-                            <th mat-sort-header="Status">Status</th>
-                            <th class="text-end no-sort">Action</th>
-                        </tr>
+                        <th mat-sort-header="Name">Name</th>
+                        <th mat-sort-header="Phone">Phone</th>
+                        <th mat-sort-header="Email">Email</th>
+                        <th mat-sort-header="Created">Created</th>
+                        <th mat-sort-header="Activity">Last Activity</th>
+                        <th mat-sort-header="Status">Status</th>
+                        <th class="text-end no-sort">Action</th>
+                    </tr>
                     </thead>
                     <tbody>
                         @for (data of tableData; track data) {
-                        <tr class="odd">
+                            <tr class="odd">
 
-                            <td>
-                                <h6 class="d-flex align-items-center fs-14 fw-medium mb-0"><a href="javascript:void(0);"
-                                        class="avatar avatar-rounded me-2"><img
-                                            src="assets/img/profiles/{{data.customer_image}}" alt="User Image"></a><a
-                                        href="javascript:void(0);" class="d-flex flex-column">{{data.customer_name}}
-                                        <span class="text-body fs-13 mt-1 d-inline-block fw-normal">{{data.customer_no}}
-                                        </span></a></h6>
-                            </td>
-                            <td>{{data.phone}}</td>
-                            <td>{{data.email}}</td>
-                            <td>{{data.created}}</td>
-                            <td>{{data.last_activity}}</td>
-                            <td><span class="badge badge-pill badge-status "
-                                    [ngClass]="{'bg-success':data.status === 'Active','bg-danger':data.status === 'Inactive'}">{{data.status}}</span>
-                            </td>
-                            <td>
-                                <div class="dropdown table-action"><a href="javascript:void(0);"
-                                        class="action-icon btn btn-xs shadow btn-icon btn-outline-light"
-                                        data-bs-toggle="dropdown" aria-expanded="false"><i
+                                <td>
+                                    <h6 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                                        <a href="javascript:void(0);"
+                                           class="d-flex flex-column">{{ data.userName }}
+                                        </a>
+                                    </h6>
+                                </td>
+                                <td>{{ data.phone }}</td>
+                                <td>{{ data.email }}</td>
+                                <td>{{ data.createdAt | date }}</td>
+                                <td>{{ data.role }}</td>
+
+                                <td>
+                                 <span class="badge badge-pill badge-status"
+                                       [ngClass]="{ 'bg-success': data.status === 'Active',  'bg-danger': data.status === 'Inactive'}">{{ data.status }}</span>
+
+                                </td>
+                                <td>
+                                    <div class="dropdown table-action"><a href="javascript:void(0);"
+                                                                          class="action-icon btn btn-xs shadow btn-icon btn-outline-light"
+                                                                          data-bs-toggle="dropdown"
+                                                                          aria-expanded="false"><i
                                             class="ti ti-dots-vertical"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
-                                            href="javascript:void(0);" data-bs-toggle="offcanvas"
-                                            data-bs-target="#offcanvas_edit"><i class="ti ti-edit text-blue"></i>
+                                        <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
+                                                                                          href="javascript:void(0);"
+                                                                                          data-bs-toggle="offcanvas"
+                                                                                          data-bs-target="#offcanvas_edit"><i
+                                                class="ti ti-edit text-blue"></i>
                                             Edit</a><a class="dropdown-item" href="javascript:void(0);"
-                                            data-bs-toggle="modal" data-bs-target="#delete_contact"><i
+                                                       data-bs-toggle="modal" data-bs-target="#delete_contact"><i
                                                 class="ti ti-trash"></i> Delete</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        }@if(tableData.length === 0){
-                        <tr>
-                            <td class="text-center" colspan="12">No Matching Data Found</td>
-                        </tr>
+                                </td>
+                            </tr>
+                        }
+                        @if (tableData.length === 0) {
+                            <tr>
+                                <td class="text-center" colspan="12">No Matching Data Found</td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -468,8 +475,8 @@
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Add New User</h5>
         <button type="button"
-            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-            data-bs-dismiss="offcanvas" aria-label="Close">
+                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                data-bs-dismiss="offcanvas" aria-label="Close">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -485,9 +492,9 @@
                             <div class="mb-3">
                                 <label class="form-label">User Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" formControlName="userName" id="userName"
-                                    [ngClass]="{'is-invalid': f['userName'].touched && f['userName'].invalid}">
+                                       [ngClass]="{'is-invalid': f['userName'].touched && f['userName'].invalid}">
                                 <div class="invalid-feedback"
-                                    *ngIf="f['userName'].touched && f['userName'].hasError('required')">
+                                     *ngIf="f['userName'].touched && f['userName'].hasError('required')">
                                     User Name is required.
                                 </div>
                             </div>
@@ -502,7 +509,7 @@
                                     </div> -->
                                 </div>
                                 <input type="text" class="form-control" formControlName="email" id="email"
-                                    [ngClass]="{'is-invalid': f['email'].touched && f['email'].invalid}">
+                                       [ngClass]="{'is-invalid': f['email'].touched && f['email'].invalid}">
                                 <div class="invalid-feedback" *ngIf="f['email'].touched">
                                     <div *ngIf="f['email'].hasError('required')">Email is required.</div>
                                     <div *ngIf="f['email'].hasError('email')">Enter a valid email.</div>
@@ -513,9 +520,9 @@
                             <div class="mb-3">
                                 <label class="form-label">Role <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" formControlName="role" id="role"
-                                    [ngClass]="{'is-invalid': f['role'].touched && f['role'].invalid}">
+                                       [ngClass]="{'is-invalid': f['role'].touched && f['role'].invalid}">
                                 <div class="invalid-feedback"
-                                    *ngIf="f['role'].touched && f['role'].hasError('required')">
+                                     *ngIf="f['role'].touched && f['role'].hasError('required')">
                                     Role is required.
                                 </div>
                             </div>
@@ -523,12 +530,20 @@
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Mobile No</label>
-                                <input type="text" class="form-control phone" name="phone" formControlName="mobileNo"
-                                    id="mobileNo"
-                                    [ngClass]="{'is-invalid': f['mobileNo'].touched && f['mobileNo'].invalid}">
+                                <label class="form-label">Mobile No <span class="text-danger">*</span></label>
+                                <ngx-intl-tel-input
+                                        [ngClass]="{'is-invalid': f['phone'].touched && f['phone'].invalid}"
+                                        [preferredCountries]="preferredCountries"
+                                        [onlyCountries]="onlyCountries" [enableAutoCountrySelect]="false"
+                                        [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true"
+                                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan"
+                                        [maxLength]="15"
+                                        [phoneValidation]="true" [separateDialCode]="true" formControlName="phone">
+                                </ngx-intl-tel-input>
                                 <div class="invalid-feedback"
-                                    *ngIf="f['mobileNo'].touched && f['mobileNo'].hasError('required')">
+                                     *ngIf="f['phone'].touched && f['phone'].hasError('required')">
                                     Mobile No is required.
                                 </div>
                             </div>
@@ -538,19 +553,18 @@
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">Location <span class="text-danger">*</span></label>
-                                <mat-select class="custom-mat-select select" formControlName="location"
-                                    (openedChange)="f['location'].markAsTouched()" placeholder="Select">
-                                    <mat-option>
-                                        <ngx-mat-select-search [formControl]="currentNationalityFilterCtrl"
-                                            placeholderLabel="Search country" noEntriesFoundLabel="No countries found">
-                                        </ngx-mat-select-search>
-                                    </mat-option>
-                                    <mat-option *ngFor="let c of filteredCurrentNationality | async" [value]="c.id">
-                                        {{ c.name }}
-                                    </mat-option>
-                                </mat-select>
+                                <p-select
+                                        [options]="countries"
+                                        optionLabel="label"
+                                        optionValue="value"
+                                        placeholder="Select"
+                                        [filter]="true"
+                                        class="form-control"
+                                        formControlName="location"
+                                ></p-select>
+
                                 <div class="text-danger fs-12 mt-1"
-                                    *ngIf="f['location'].touched && f['location'].invalid">
+                                     *ngIf="f['location'].touched && f['location'].invalid">
                                     Location is required.
                                 </div>
                             </div>
@@ -574,8 +588,8 @@
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Edit User</h5>
         <button type="button"
-            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-            data-bs-dismiss="offcanvas" aria-label="Close">
+                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                data-bs-dismiss="offcanvas" aria-label="Close">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -619,7 +633,7 @@
                                     <label class="form-label">Email <span class="text-danger">*</span></label>
                                     <div class="form-check form-switch form-check-reverse">
                                         <input class="form-check-input" type="checkbox" id="switchCheckReverse2"
-                                            checked>
+                                               checked>
                                         <label class="form-check-label" for="switchCheckReverse2">Email Opt Out</label>
                                     </div>
                                 </div>
@@ -649,9 +663,9 @@
                                 <label class="form-label">Password</label>
                                 <div class="input-group input-group-flat pass-group">
                                     <input type="password" class="form-control pass-input"
-                                        [type]="password[2] ? 'text' : 'password'">
+                                           [type]="password[2] ? 'text' : 'password'">
                                     <span class="input-group-text toggle-password " (click)="togglePassword(2)"
-                                        (keydown.enter)="togglePassword(2)" tabindex="0">
+                                          (keydown.enter)="togglePassword(2)" tabindex="0">
                                         <i class="ti " [ngClass]="password[2] ? 'ti-eye' : 'ti-eye-off'"></i>
                                     </span>
                                 </div>
@@ -662,9 +676,9 @@
                                 <label class="form-label">Repeat Password <span class="text-danger">*</span></label>
                                 <div class="input-group input-group-flat pass-group">
                                     <input type="password" class="form-control pass-input"
-                                        [type]="password[1] ? 'text' : 'password'">
+                                           [type]="password[1] ? 'text' : 'password'">
                                     <span class="input-group-text toggle-password " (click)="togglePassword(1)"
-                                        (keydown.enter)="togglePassword(1)" tabindex="0">
+                                          (keydown.enter)="togglePassword(1)" tabindex="0">
                                         <i class="ti " [ngClass]="password[1] ? 'ti-eye' : 'ti-eye-off'"></i>
                                     </span>
                                 </div>
@@ -710,9 +724,9 @@
                 <p class="mb-3">Are you sure you want to remove user you selected.</p>
                 <div class="d-flex justify-content-center">
                     <a href="javascript:void(0);" class="btn btn-light position-relative z-1 me-2 w-100"
-                        data-bs-dismiss="modal">Cancel</a>
+                       data-bs-dismiss="modal">Cancel</a>
                     <a href="javascript:void(0);" class="btn btn-primary position-relative z-1 w-100"
-                        data-bs-dismiss="modal">Yes, Delete</a>
+                       data-bs-dismiss="modal">Yes, Delete</a>
                 </div>
             </div>
         </div>

@@ -18,4 +18,12 @@ export class BackendService {
     getCompany(parms: any): Observable<any> {
         return this.http.post(CONFIG.getCompany, parms);
     }
+    getManageUsers(parms: any): Observable<any> {
+        return this.http.post(CONFIG.getManageUsers, parms);
+    }
+
+    addUser(parms: any): Observable<any> {
+        return this.http.post(CONFIG.addUser, parms);
+    }
+
 }
