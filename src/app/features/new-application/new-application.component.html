@@ -291,7 +291,7 @@
                         </div>
                     </div>
                     <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">
-                        <app-date-range-picker  />
+                        <app-date-range-picker />
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -420,13 +420,13 @@
                         <tr class="odd">
                             <td>{{ data.reference_no }}</td>
                             <td>{{ data.employer_name }}</td>
-                            <td>{{ data.job_title }}</td>
+                            <td class="job-tittle">{{ data.jobTitle }}</td>
                             <td>{{ data.mobile }}</td>
                             <td>{{ data.email }}</td>
-                            <td>{{ data.submission_date }}</td>
+                            <td>{{ data.createdAt | date }}</td>
                             <td>
                                 <span class="badge badge-pill badge-status"
-                                    [ngClass]="{'bg-success': data.status === 'Active', 'bg-danger': data.status === 'Inactive'}">
+                                    [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">
                                     {{ data.status }}
                                 </span>
                             </td>
