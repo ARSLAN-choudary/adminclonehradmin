@@ -203,7 +203,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       next: (res) => {
         this.toastr.success(res.message);
         this.userForm.reset();
-    
+        this.closeAddUser();
       },
       error: (err) => {
         this.toastr.success(err.message);
@@ -222,7 +222,19 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   //   outputStream.next(filtered);
   // }
 
- 
+  closeAddUser() {
+    const off = document.getElementById("offcanvas_add");
+    if (off) {
+      off.classList.remove("show");
+      off.style.visibility = "hidden";
+      off.removeAttribute("aria-modal");
+      off.setAttribute("aria-hidden", "true");
+    }
+
+    document
+      .querySelectorAll(".offcanvas-backdrop")
+      .forEach((el) => el.parentNode?.removeChild(el));
+  }
 
   private getTableData(pageOption: pageSelection): void {
     this.tableData = [];

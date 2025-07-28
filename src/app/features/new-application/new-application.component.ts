@@ -78,7 +78,7 @@ interface PhoneInputValue {
   styleUrl: "./new-application.component.scss",
 })
 export class NewApplicationComponent implements OnInit {
-  @ViewChild("addCanvas", { static: true }) addCanvas!: ElementRef<HTMLElement>;
+  @ViewChild("addCanvas") addCanvas!: ElementRef<HTMLElement>;
   addNewApplicationForm!: FormGroup;
   public routes = routes;
   editUserData!: any;
@@ -362,11 +362,24 @@ export class NewApplicationComponent implements OnInit {
     this.backendService.addApplication(payload).subscribe((res: any) => {
       if (res.status === "success") {
         this.toastr.success(res.message);
-
+        this.closeAddApplication();
         this.addNewApplicationForm.reset();
       } else {
         this.toastr.error("User Not Created, Please Try Again Later");
       }
     });
+  }
+
+  closeAddApplication() {
+    const el = this.addCanvas.nativeElement;
+
+    el.classList.remove("show");
+    el.style.visibility = "hidden";
+    el.removeAttribute("aria-modal");
+    el.setAttribute("aria-hidden", "true");
+
+    document
+      .querySelectorAll(".offcanvas-backdrop")
+      .forEach((backdrop) => backdrop.parentNode?.removeChild(backdrop));
   }
 }
