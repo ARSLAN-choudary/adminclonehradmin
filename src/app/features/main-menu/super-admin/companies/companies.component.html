@@ -697,10 +697,12 @@
                                         <input type="file" multiple accept="application/pdf"
                                             (change)="onFilesSelected($event)" hidden />
                                     </label>
-                                    <span>PDF. Max size of 50MB</span>
-                                    <div class="small text-muted" *ngIf="createNewCompanyForm.value.files?.length">
-                                        {{ createNewCompanyForm.value.files.length }} file(s) selected
-                                    </div>
+                                    <span>PDF. Max size of 5MB</span>
+                                    <ul *ngIf="createNewCompanyForm.value.files?.length">
+                                        <li *ngFor="let f of createNewCompanyForm.value.files">
+                                            {{ f.name }} ({{ (f.size/1024/1024) | number:'1.2-2' }} MB)
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
