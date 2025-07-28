@@ -47,7 +47,7 @@ import {
 } from "ngx-intl-tel-input";
 import { Select } from "primeng/select";
 import { ToastrService } from "ngx-toastr";
-import { Offcanvas } from "bootstrap";
+
 interface Country {
   id: number;
   name: string;
@@ -203,8 +203,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       next: (res) => {
         this.toastr.success(res.message);
         this.userForm.reset();
-        this.closeAddUser();
-      
+    
       },
       error: (err) => {
         this.toastr.success(err.message);
@@ -223,17 +222,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   //   outputStream.next(filtered);
   // }
 
-  closeAddUser() {
-    const el = document.getElementById("offcanvas_add");
-    if (!el) return;
-
-    const offcanvas = Offcanvas.getInstance(el) ?? new Offcanvas(el);
-
-    offcanvas.hide();
-    document
-    .querySelectorAll(".offcanvas-backdrop")
-    .forEach((el) => el.remove());
-  }
+ 
 
   private getTableData(pageOption: pageSelection): void {
     this.tableData = [];
