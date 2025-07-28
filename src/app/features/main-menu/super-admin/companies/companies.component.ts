@@ -113,11 +113,11 @@ export class CompaniesComponent {
   onFilesSelected(evt: Event) {
     const input = evt.target as HTMLInputElement;
     if (!input.files) return;
-    const files = Array.from(input.files);
-    this.control("files").setValue(files);
+    const arr = Array.from(input.files);
+    this.control("files").setValue(arr);
     this.control("files").markAsTouched();
+    input.value = "";
   }
-
   checkMatch(confirmValue: string) {
     const pw = this.control("password").value;
     this.passwordsDoNotMatch = pw !== confirmValue;
@@ -152,6 +152,7 @@ export class CompaniesComponent {
 
   onSubmit() {
     if (this.createNewCompanyForm.invalid || this.passwordsDoNotMatch) {
+      console.log(this.createNewCompanyForm.value);
       this.createNewCompanyForm.markAllAsTouched();
       this.confirmTouched = true;
       return;
@@ -197,12 +198,9 @@ export class CompaniesComponent {
       jobplusemployeryno: [{ value: "", disabled: true }, Validators.required],
       currency: [{ value: "", disabled: true }, Validators.required],
       phoneNO: [{ value: "", disabled: true }, Validators.required],
-      email: [{ value: "", disabled: true }],
-      address: [{ value: "", disabled: true }],
-      website: [
-        { value: "", disabled: true },
-        Validators.pattern(/^https?:\/\//),
-      ],
+      email: [""],
+      address: [""],
+      website: ["", Validators.pattern(/^https?:\/\//)],
       incorporatonDate: [{ value: "", disabled: true }, Validators.required],
       password: [
         { value: "", disabled: true },
@@ -218,9 +216,6 @@ export class CompaniesComponent {
       "jobplusemployeryno",
       "currency",
       "phoneNO",
-      "email",
-      "address",
-      "website",
       "incorporatonDate",
       "password",
       "status",
@@ -235,14 +230,13 @@ export class CompaniesComponent {
 
         maltaFields.forEach((field) => {
           const ctrl = this.createNewCompanyForm.get(field)!;
-          if (isMalta) {
+          if (country === "malta") {
             ctrl.enable({ emitEvent: false });
-            ctrl.setValidators(Validators.required);
           } else {
             ctrl.disable({ emitEvent: false });
-            ctrl.clearValidators();
-            ctrl.setValue("");
+            ctrl.reset("", { emitEvent: false });
           }
+          // leave the original validators in place
           ctrl.updateValueAndValidity({ emitEvent: false });
         });
       });

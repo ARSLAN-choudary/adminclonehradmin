@@ -694,13 +694,13 @@
                                 <div class="d-inline-flex flex-column align-items-start">
                                     <label class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                                         <i class="ti ti-file-broken me-1"></i>Upload file
-                                        <input type="file" multiple accept="application/pdf"
-                                            (change)="onFilesSelected($event)" hidden />
+                                        <input  #fileInput  type="file"  multiple  accept="application/pdf" 
+                                            (change)="onFilesSelected($event)"  hidden />
                                     </label>
                                     <span>PDF. Max size of 5MB</span>
                                     <ul *ngIf="createNewCompanyForm.value.files?.length">
                                         <li *ngFor="let f of createNewCompanyForm.value.files">
-                                            {{ f.name }} ({{ (f.size/1024/1024) | number:'1.2-2' }} MB)
+                                            {{ f.name }} ({{ f.size/1024/1024 | number:'1.2-2' }} MB)
                                         </li>
                                     </ul>
                                 </div>
@@ -769,7 +769,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">PE Number <span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" formControlName="peNo" id="phoneNo" />
+                                    <input type="text" class="form-control" formControlName="peNo" id="phoneNo1" />
                                     <div *ngIf="control('peNo').touched && control('peNo').invalid">
                                         <small class="text-danger" *ngIf="control('peNo').hasError('required')">
                                             PE Number is required
@@ -832,9 +832,9 @@
                                     <label class="form-label">Email Address</label>
                                     <input type="text" class="form-control" formControlName="email" id="email" />
                                     <div *ngIf="control('email').touched && control('email').invalid">
-                                        <small class="text-danger" *ngIf="control('email').hasError('required')">
+                                        <!-- <small class="text-danger" *ngIf="control('email').hasError('required')">
                                             Email is required
-                                        </small>
+                                        </small> -->
                                         <small class="text-danger" *ngIf="control('email').hasError('email')">
                                             Must be a valid email
                                         </small>
@@ -872,13 +872,14 @@
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="date" class="form-control pass-input"
                                             formControlName="incorporatonDate" id="incorporatonDate" />
-                                        <div
-                                            *ngIf="control('incorporatonDate').touched && control('incorporatonDate').invalid">
-                                            <small class="text-danger"
-                                                *ngIf="control('incorporatonDate').hasError('required')">
-                                                Incorporation Date is required
-                                            </small>
-                                        </div>
+
+                                    </div>
+                                    <div
+                                        *ngIf="control('incorporatonDate').touched && control('incorporatonDate').invalid">
+                                        <small class="text-danger"
+                                            *ngIf="control('incorporatonDate').hasError('required')">
+                                            Incorporation Date is required
+                                        </small>
                                     </div>
                                 </div>
                             </div>
@@ -905,9 +906,16 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3 ">
-                                    <label>Confirm Password</label>
-                                    <input #confirmInput type="password" class="form-control"
-                                        (input)="checkMatch(confirmInput.value)" (blur)="confirmTouched = true" />
+                                    <label class="form-label">Confirm Password</label>
+                                    <div class="input-group input-group-flat pass-group">
+                                        <input #confirmInput type="password" [type]="password[2]?'text':'password'"
+                                            class="form-control" id="confirmPassword"
+                                            (input)="checkMatch(confirmInput.value)" (blur)="confirmTouched = true" />
+                                        <span class="input-group-text toggle-password" (click)="togglePassword(2)">
+                                            <i class="ti " [ngClass]="password[2]?'ti-eye':'ti-eye-off'"></i>
+                                        </span>
+                                    </div>
+
                                     <div *ngIf="confirmTouched && passwordsDoNotMatch">
                                         <small class="text-danger">Passwords do not match</small>
                                     </div>
@@ -949,6 +957,7 @@
                             [disabled]="createNewCompanyForm.invalid || passwordsDoNotMatch">
                             Create New
                         </button>
+
                     </div>
                 </form>
             </div>
@@ -1023,7 +1032,7 @@
                                     <label class="form-label">Password <span class="text-danger"> *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[3]?'text':'password'"
-                                            formControlName="password" class="form-control pass-input">
+                                            class="form-control pass-input">
                                         <span class="input-group-text toggle-password" (click)="togglePassword(3)">
                                             <i class="ti " [ngClass]="password[3]?'ti-eye':'ti-eye-off'"></i>
                                         </span>
@@ -1036,8 +1045,7 @@
                                             *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[4]?'text':'password'"
-                                            formControlName="confirmPassword" id="confirmPassword"
-                                            class="form-control pass-input">
+                                            id="confirmPassword" class="form-control pass-input">
                                         <span class="input-group-text toggle-password" (click)="togglePassword(4)">
                                             <i class="ti " [ngClass]="password[4]?'ti-eye':'ti-eye-off'"></i>
                                         </span>
