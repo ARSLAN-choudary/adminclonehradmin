@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import {
-    FormBuilder,
+  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -43,7 +43,7 @@ import { ToastrService } from "ngx-toastr";
 import { BackendService } from "../../Services/backend.service";
 import { DropdownModule } from "primeng/dropdown";
 import { SelectModule } from "primeng/select";
-
+import * as bootstrap from "bootstrap";
 interface PhoneInputValue {
   number: string;
   nationalNumber: string;
@@ -78,7 +78,8 @@ interface PhoneInputValue {
   styleUrl: "./new-application.component.scss",
 })
 export class NewApplicationComponent implements OnInit {
-    addNewApplicationForm!: FormGroup;
+  @ViewChild("addCanvas", { static: true }) addCanvas!: ElementRef<HTMLElement>;
+  addNewApplicationForm!: FormGroup;
   public routes = routes;
   editUserData!: any;
   companies: { label: string; value: string }[] = [];
@@ -97,9 +98,9 @@ export class NewApplicationComponent implements OnInit {
   initChecked = false;
 
   applicationTypes = [
-    { label: "New",    value: "new" },
-    { label: "Renew",  value: "renew" },
-    { label: "Amend",  value: "amend" },
+    { label: "New", value: "new" },
+    { label: "Renew", value: "renew" },
+    { label: "Amend", value: "amend" },
   ];
 
   applicationContexts = [
@@ -108,21 +109,21 @@ export class NewApplicationComponent implements OnInit {
   ];
 
   sectorTypes = [
-    { label: "Private",   value: "private" },
-    { label: "Government",value: "government" },
-    { label: "Non‑Profit",value: "nonprofit" },
+    { label: "Private", value: "private" },
+    { label: "Government", value: "government" },
+    { label: "Non‑Profit", value: "nonprofit" },
   ];
 
   jobTitles = [
-    { label: "Manager",    value: "manager" },
-    { label: "Developer",  value: "developer" },
-    { label: "Analyst",    value: "analyst" },
+    { label: "Manager", value: "manager" },
+    { label: "Developer", value: "developer" },
+    { label: "Analyst", value: "analyst" },
   ];
 
   occupations = [
     { label: "Engineering", value: "engineering" },
-    { label: "Finance",     value: "finance" },
-    { label: "Marketing",   value: "marketing" },
+    { label: "Finance", value: "finance" },
+    { label: "Marketing", value: "marketing" },
   ];
 
   CountryISO = CountryISO;
@@ -174,7 +175,8 @@ export class NewApplicationComponent implements OnInit {
     private router: Router,
     private sanitizer: DomSanitizer,
     private toastr: ToastrService,
-    private backendService: BackendService,private fb: FormBuilder
+    private backendService: BackendService,
+    private fb: FormBuilder
   ) {
     this.data.getNewApplication().subscribe((apiRes: apiResultFormat) => {
       this.actualData = apiRes.data ?? [];
@@ -204,15 +206,15 @@ export class NewApplicationComponent implements OnInit {
 
   ngOnInit() {
     this.addNewApplicationForm = this.fb.group({
-        company:            [null, Validators.required],
-        applicationType:    [null, Validators.required],
-        applicationContext: [null, Validators.required],
-        sectorType:         [null, Validators.required],
-        jobTitle:           [null, Validators.required],
-        occupation:         [null, Validators.required],
-        email:              ["", [Validators.required, Validators.email]],
-        phone:              ["", Validators.required],
-      });
+      company: [null, Validators.required],
+      applicationType: [null, Validators.required],
+      applicationContext: [null, Validators.required],
+      sectorType: [null, Validators.required],
+      jobTitle: [null, Validators.required],
+      occupation: [null, Validators.required],
+      email: ["", [Validators.required, Validators.email]],
+      phone: ["", Validators.required],
+    });
     this.backendService.getCompany("").subscribe((res: any) => {
       console.log("companies payload:", res.data.data);
       this.companies = res.data.data.map((c: any) => ({
@@ -225,7 +227,6 @@ export class NewApplicationComponent implements OnInit {
   control(name: string) {
     return this.addNewApplicationForm.get(name)!;
   }
-
 
   private initDataSource(data: manageUsers[]): void {
     this.dataSource = new MatTableDataSource<manageUsers>(data);
@@ -345,7 +346,27 @@ export class NewApplicationComponent implements OnInit {
       this.addNewApplicationForm.markAllAsTouched();
       return;
     }
-    console.log("Form Value:", this.addNewApplicationForm.value);
-    // …call your API…
+
+    const raw = this.addNewApplicationForm.value;
+    const payload = {
+      company: raw.company,
+      applicationType: raw.applicationType,
+      applicationContext: raw.applicationContext,
+      employmentSectorType: raw.sectorType,
+      jobTitle: raw.jobTitle,
+      occupation: raw.occupation,
+      email: raw.email,
+      mobile: raw.phone.e164Number,
+    };
+
+    this.backendService.addApplication(payload).subscribe((res: any) => {
+      if (res.status === "success") {
+        this.toastr.success(res.message);
+      
+        this.addNewApplicationForm.reset();
+      } else {
+        this.toastr.error("User Not Created, Please Try Again Later");
+      }
+    });
   }
 }

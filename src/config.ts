@@ -9,4 +9,5 @@ export const CONFIG = {
   addUser: BASE_URL_API + "/api/users/adduser",
   updateUser: BASE_URL_API + "/api/users/updateuser",
   deleteUser: BASE_URL_API + "/api/users/Delete",
+  addApplication: BASE_URL_API + "/api/application/add"
 };

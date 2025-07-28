@@ -30,4 +30,7 @@ export class BackendService {
     const url = `${CONFIG.deleteUser}/${id}`;
     return this.http.delete(url);
   }
+  addApplication(payload:any): Observable<any>{
+     return this.http.post(CONFIG.addApplication,payload)
+  }
 }
