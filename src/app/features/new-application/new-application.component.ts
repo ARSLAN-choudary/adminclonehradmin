@@ -43,7 +43,6 @@ import { ToastrService } from "ngx-toastr";
 import { BackendService } from "../../Services/backend.service";
 import { DropdownModule } from "primeng/dropdown";
 import { SelectModule } from "primeng/select";
-import * as bootstrap from "bootstrap";
 interface PhoneInputValue {
   number: string;
   nationalNumber: string;
