@@ -18,11 +18,12 @@ import {
 import { MatButton } from "@angular/material/button";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { ReplaySubject, Subject, takeUntil } from "rxjs";
+import { ReplaySubject, Subject, switchMap, takeUntil, tap, throwError } from "rxjs";
 import { CommonModule } from "@angular/common";
 import { BackendService } from "../../Services/backend.service";
 import { ToastrService } from "ngx-toastr";
 import { ActivatedRoute } from "@angular/router";
+import { maxFileSizeValidator } from "../../Services/file-size.validator";
 
 interface Country {
   id: number;
@@ -120,11 +121,26 @@ export class LinkForComponent implements OnInit {
       }),
 
       // Document Uploads (optional fields for now)
-      passportScan: [null, Validators.required],
-      residenceIdCard: [null, Validators.required],
-      drivingLicense: [null, Validators.required],
-      curriculumVitae: [null, Validators.required],
-      additionalDocuments: [null, Validators.required],
+      passportScan: [
+        null,
+        [Validators.required, maxFileSizeValidator(2 * 1024 * 1024)],
+      ],
+      residenceIdCard: [
+        null,
+        [Validators.required, maxFileSizeValidator(2 * 1024 * 1024)],
+      ],
+      drivingLicense: [
+        null,
+        [Validators.required, maxFileSizeValidator(2 * 1024 * 1024)],
+      ],
+      curriculumVitae: [
+        null,
+        [Validators.required, maxFileSizeValidator(2 * 1024 * 1024)],
+      ],
+      additionalDocuments: [
+        null,
+        [Validators.required, maxFileSizeValidator(2 * 1024 * 1024)],
+      ],
     });
 
     this.filteredCurrentNationality.next(this.countries.slice());
@@ -181,27 +197,67 @@ export class LinkForComponent implements OnInit {
       this.employeeForm.markAllAsTouched();
       return;
     }
-    debugger;
-    console.log(this.employeeForm.value);
-    // if (this.employeeForm.invalid) {
-    //     this.employeeForm.markAllAsTouched();
-    //     return;
-    // }
-    console.log(this.employeeForm.value);
-    this.employeeForm.markAllAsTouched();
-
-    const payload = {
-      ...this.employeeForm.value,
-      id: this.userId,
+  
+    // 1) build FormData for upload
+    const filesForm = new FormData();
+    filesForm.append("applicationId", this.userId);
+  
+    const fileKeyMap: Record<string,string> = {
+      passportScan:       "passportScanned",
+      residenceIdCard:    "residenceIdCard",
+      drivingLicense:     "drivingLicense",
+      curriculumVitae:    "curriculumVitae",
+      additionalDocuments:"additionalDocuments",
     };
-    this.backend.addUserDetails(payload).subscribe({
-      next: (res: any) => {
-        this.toastr.success(res.message);
+  
+    for (const [ctrl, uploadKey] of Object.entries(fileKeyMap)) {
+      const files: File[] = this.employeeForm.get(ctrl)!.value || [];
+      files.forEach(f => filesForm.append(uploadKey, f, f.name));
+    }
+  
+    this.backend.uploadPdfFiles(filesForm).pipe(
+      tap(res => console.log("raw upload response:", res)),
+      switchMap((uploadRes: any) => {
+        const maybeArray =
+          Array.isArray(uploadRes)              ? uploadRes :
+          Array.isArray(uploadRes.data)         ? uploadRes.data :
+          Array.isArray(uploadRes.uploadedFiles)? uploadRes.uploadedFiles :
+          null;
+  
+        if (!maybeArray) {
+          return throwError(() => new Error(
+            "Unexpected upload response format, expected array of {type,fileUrl}"
+          ));
+        }
+  
+        const urls = (maybeArray as Array<{type:string, fileUrl:string}>)
+          .reduce((acc, { type, fileUrl }) => {
+            acc[type] = fileUrl;
+            return acc;
+          }, {} as Record<string,string>);
+  
+        const fv = this.employeeForm.value;
+        const payload = {
+          id: this.userId,
+          ...fv,
+          passportScanned:     urls["passportScanned"],
+          residenceIdCard:     urls["residenceIdCard"],
+          drivingLicense:      urls["drivingLicense"],
+          curriculumVitae:     urls["curriculumVitae"],
+          additionalDocuments: urls["additionalDocuments"],
+        };
+  
+        return this.backend.addUserDetails(payload);
+      })
+    ).subscribe({
+      next: () => {
+        this.toastr.success("Saved!");
         this.employeeForm.reset();
       },
-      error: (err) => {
-        this.toastr.success(err.message);
-      },
+      error: err => {
+        console.error("upload/save error:", err);
+        this.toastr.error(err.message || "Oops, failed");
+      }
     });
   }
 

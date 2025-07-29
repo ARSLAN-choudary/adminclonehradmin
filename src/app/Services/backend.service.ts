@@ -45,4 +45,7 @@ export class BackendService {
   addUserDetails(payload: any): Observable<any> {
     return this.http.put(CONFIG.addUserDetail, payload);
   }
+  uploadPdfFiles(payload: any): Observable<any> {
+    return this.http.post(CONFIG.uploadPdfFiles, payload);
+  }
 }
