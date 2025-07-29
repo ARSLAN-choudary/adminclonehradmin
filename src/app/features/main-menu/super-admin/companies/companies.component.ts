@@ -198,6 +198,10 @@ export class CompaniesComponent {
       length: limit,
       search: { value: this.searchDataValue },
     };
+    if (this.startDate && this.endDate) {
+      payload.startDate = this.startDate;
+      payload.endDate = this.endDate;
+    }
 
     this.backendService.getCompany(payload).subscribe((apiRes: any) => {
       this.tableData = apiRes.data.data;
@@ -290,13 +294,13 @@ export class CompaniesComponent {
   onDateRangeChange(event: { startDate: Date; endDate: Date }) {
     this.startDate = this.formatDate(event.startDate);
     this.endDate = this.formatDate(event.endDate);
-
-    this.searchData(this.searchDataValue || "");
+  
+    this.getTableData(this.skip, this.pageSize);
   }
 
   public searchData(value: string): void {
     this.searchDataValue = value.trim().toLowerCase();
-    this.skip = 0; // Reset to first page
+    this.skip = 0;
     this.getTableData(this.skip, this.pageSize);
   }
 

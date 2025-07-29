@@ -1175,7 +1175,7 @@ export const routes: Routes = [
         ],
     },
     {
-        path: 'goto',
+        path: 'userDetails',
         loadComponent: () =>
             import('./features/link-for/link-for.component').then((m) => m.LinkForComponent),
     },

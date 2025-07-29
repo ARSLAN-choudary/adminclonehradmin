@@ -87,7 +87,8 @@ interface PhoneInputValue {
 export class NewApplicationComponent implements OnInit {
   @ViewChild("addCanvas", { static: true })
   addCanvas!: ElementRef<HTMLElement>;
-
+  startDate: string = "";
+  endDate: string = "";
   public routes = routes;
   public pageSize = 10;
   public skip = 0;
@@ -232,6 +233,10 @@ export class NewApplicationComponent implements OnInit {
       length: limit,
       search: { value: this.searchDataValue },
     };
+    if (this.startDate && this.endDate) {
+      payload.startDate = this.startDate;
+      payload.endDate = this.endDate;
+    }
 
     this.backendService.getApplications(payload).subscribe((apiRes: any) => {
       this.actualData = apiRes.data.data ?? [];
@@ -285,7 +290,7 @@ export class NewApplicationComponent implements OnInit {
 
   gotoLink() {
     const baseUrl = window.location.origin;
-    window.open(`${baseUrl}/goto`, "_blank");
+    window.open(`${baseUrl}/userDetails`, "_blank");
   }
 
   passResendApplicationData(data: any) {
@@ -300,7 +305,17 @@ export class NewApplicationComponent implements OnInit {
 
     console.log("Saving changes for", updated);
   }
-
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+  onDateRangeChange(event: { startDate: Date; endDate: Date }) {
+    this.startDate = this.formatDate(event.startDate);
+    this.endDate = this.formatDate(event.endDate);
+    this.getTableData(this.skip, this.pageSize);
+  }
   createNewApplication() {
     if (this.addNewApplicationForm.invalid) {
       this.addNewApplicationForm.markAllAsTouched();
