@@ -15,20 +15,20 @@ export interface apiResultFormat {
 export interface contactList {
   isSelected: boolean;
   id: number;
-  Name: string,
-  Role:string;
-  Phone:string;
-  Tags:string;
-  Location:string;
-  Rating:string;
-  Image:string;
-  Flags:string;
-  Status:string;
+  Name: string;
+  Role: string;
+  Phone: string;
+  Tags: string;
+  Location: string;
+  Rating: string;
+  Image: string;
+  Flags: string;
+  Status: string;
   isStarActive: boolean;
 }
 export interface companiesList {
   isSelected: boolean;
-  id:number;
+  id: number;
   Image: string;
   Name: string;
   Email: string;
@@ -91,8 +91,8 @@ export interface fileShared {
 export interface leadsList {
   isSelected: boolean;
   isStarActive: boolean;
-  id:number;
-   LeadImage: string;
+  id: number;
+  LeadImage: string;
   LeadName: string;
   CompanyName: string;
   Location: string;
@@ -103,7 +103,7 @@ export interface leadsList {
   OwnerImage: string;
   CreatedDate: string;
 }
-export interface dealsList {  
+export interface dealsList {
   id: number;
   isSelected: boolean;
   isStarActive: boolean;
@@ -153,21 +153,21 @@ export interface contactMessage {
   Status: string;
 }
 export interface blogCategories {
-   isSelected: boolean;
+  isSelected: boolean;
   id: number;
   CategoryName: boolean;
   CreatedDate: string;
   Status: string;
 }
 export interface blogTags {
-   isSelected: boolean;
+  isSelected: boolean;
   id: number;
   TagName: boolean;
   CreatedDate: string;
   Status: string;
 }
 export interface blogComments {
-   isSelected: boolean;
+  isSelected: boolean;
   id: number;
   Name: boolean;
   Role: string;
@@ -179,7 +179,7 @@ export interface blogComments {
   isStarActive: boolean;
 }
 export interface faq {
-   isSelected: boolean;
+  isSelected: boolean;
   id: number;
   isStarActive: boolean;
   Questions: string;
@@ -189,7 +189,7 @@ export interface faq {
   Status: string;
 }
 export interface testimonials {
-   isSelected: boolean;
+  isSelected: boolean;
   id: number;
   isStarActive: boolean;
   EstimationBy: string;
@@ -210,7 +210,7 @@ export interface countries {
   CountryName: string;
 }
 export interface states {
-   isSelected: boolean;
+  isSelected: boolean;
   id: number;
   isStarActive: boolean;
   CountryCode: string;
@@ -229,9 +229,9 @@ export interface cities {
 }
 export interface source {
   id: number;
-  Title: string,
-  CreatedDate:string;
-  Status:string;
+  Title: string;
+  CreatedDate: string;
+  Status: string;
   isSelected: boolean;
 }
 export interface lostReason {
@@ -355,47 +355,45 @@ export interface dealReports {
   isStarActive: boolean;
 }
 export interface contactReports {
- isSelected: boolean;
- id: number;
- isStarActive: boolean;
- Name: string;
- Role: string;
- Image: string;
- Phone: string;
- Tags: string;
- FlagImage: string;
- Location: string;
- Rating: string;
- Status: string;
-
+  isSelected: boolean;
+  id: number;
+  isStarActive: boolean;
+  Name: string;
+  Role: string;
+  Image: string;
+  Phone: string;
+  Tags: string;
+  FlagImage: string;
+  Location: string;
+  Rating: string;
+  Status: string;
 }
 export interface companyReports {
- isSelected: boolean;
- id: number;
- isStarActive: boolean;
- Name: string;
- Email: string;
- Tags: string;
- Owner: string;
- OwnerImage: string;
- Image: string;
- Contact: string;
- Status: string;
-
+  isSelected: boolean;
+  id: number;
+  isStarActive: boolean;
+  Name: string;
+  Email: string;
+  Tags: string;
+  Owner: string;
+  OwnerImage: string;
+  Image: string;
+  Contact: string;
+  Status: string;
 }
 export interface projectReports {
   isSelected: boolean;
- id: number;
- isStarActive: boolean;
- Name: string;
- Image: string;
- Client: string;
- ClientImage: string;
- Priority: string;
- StartDate: string;
- EndDate: string;
- PipelineStage: string;
- Status: string;
+  id: number;
+  isStarActive: boolean;
+  Name: string;
+  Image: string;
+  Client: string;
+  ClientImage: string;
+  Priority: string;
+  StartDate: string;
+  EndDate: string;
+  PipelineStage: string;
+  Status: string;
 }
 export interface Star {
   show?: boolean;
@@ -414,6 +412,39 @@ export interface dataTables {
   id?: string;
 }
 
+export interface newApplicationDataTable {
+  isSelected: boolean;
+  _id: string;
+  firstName: string;
+  jobTitle: string;
+  mobile: string;
+  email: string;
+  createdAt: string;
+  status: string;
+}
+export interface companiesDataTable {
+  isSelected: boolean;
+  name: string;
+  _id: string;
+
+  registrationNo: string;
+  vatNo: string;
+  website: string;
+  incorporatonDate: string;
+  status: string;
+}
+
+export interface usersDataTable {
+  isSelected: boolean;
+  _id: string;
+
+  userName: string;
+  phone: string;
+  email: string;
+  createdAt: string;
+  role: string;
+  status: string;
+}
 export interface membershipTransactions {
   isSelected: boolean;
   id: number;
@@ -487,7 +518,7 @@ export interface projectLists {
   status: string;
   value: string;
   hrs: string;
-  send_img:string;
+  send_img: string;
   mem_image1: string;
   mem_image2: string;
   mem_image3: string;
@@ -511,11 +542,11 @@ export interface compaignList {
   isStarActive: boolean;
   Name: string;
   Type: string;
-  Opened: string;        
-  Closed: string;        
-  Unsubscribe: string;   
-  Delivered: string;     
-  Conversation: string;  
+  Opened: string;
+  Closed: string;
+  Unsubscribe: string;
+  Delivered: string;
+  Conversation: string;
   Status: string;
 }
 export interface pipeline {
@@ -532,7 +563,7 @@ export interface pipeline {
 export interface activityMail {
   isSelected: boolean;
   id: number;
-   Title: string;
+  Title: string;
   ActivityType: string;
   DueDate: string;
   Owner: string;
@@ -540,7 +571,6 @@ export interface activityMail {
   Image: string;
 }
 export interface proposalsList {
-  
   isSelected: boolean;
   id: number;
   proposalsID: string;
@@ -552,12 +582,10 @@ export interface proposalsList {
   Project: string;
   createdDate: string;
   status: string;
-  pro_img:string;
+  pro_img: string;
   client_img: string;
- 
 }
 export interface proposalView {
-  
   isSelected: boolean;
   id: number;
   title: string;
@@ -565,8 +593,6 @@ export interface proposalView {
   dueDate: string;
   owner: string;
   createdAt: string;
-  
- 
 }
 export interface contractList {
   isSelected: boolean;
@@ -602,14 +628,14 @@ export interface estimationList {
   action: string;
   client_img: string;
   status: string;
-  date:string;
-  img:string;
+  date: string;
+  img: string;
   img1: string;
-  img3:string;
-  project:string;
-  expiryDate:string;
-  estimationBy:string;
-  posting:string;
+  img3: string;
+  project: string;
+  expiryDate: string;
+  estimationBy: string;
+  posting: string;
   isStarActive: boolean;
 }
 export interface invoiceList {
@@ -624,9 +650,8 @@ export interface invoiceList {
   paidAmount: string;
   balanceAmount: string;
   status: string;
-  img:string;
+  img: string;
   img1: string;
- 
 }
 export interface PackageList {
   sNo?: number;
@@ -638,8 +663,6 @@ export interface PackageList {
   Created_Date: string; // Alternatively, use Date if you want to store it as a Date object
   Status: string;
 }
-
-
 
 export interface CompanyAccount {
   sNo?: number;
@@ -681,16 +704,16 @@ export interface CompanyInfo {
   isStarActive: boolean;
 }
 
-export interface superadmincompanies{
+export interface superadmincompanies {
   sNo?: number;
   isSelected: boolean;
-  id:number;
-  Image:string;
-  isStarActive:boolean;
+  id: number;
+  Image: string;
+  isStarActive: boolean;
   Name: string;
   Email: string;
   url: string;
   Plan: string;
-  Created_Date: string; 
+  Created_Date: string;
   Status: string;
 }

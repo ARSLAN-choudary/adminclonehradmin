@@ -441,12 +441,10 @@
                                         data-bs-toggle="dropdown" aria-expanded="false"><i
                                             class="ti ti-dots-vertical"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
-                                            href="javascript:void(0);" data-bs-toggle="offcanvas"
-                                            data-bs-target="#offcanvas_edit" (click)="onEditUser(data)">
+                                            href="javascript:void(0);" (click)="onEditUser(data)">
                                             <i class="ti ti-edit text-blue"></i>
                                             Edit</a><a (click)="deleteUser(data._id)" class="dropdown-item"
-                                            href="javascript:void(0);" data-bs-toggle="modal"
-                                            data-bs-target="#delete_contact"><i class="ti ti-trash"></i> Delete</a>
+                                            href="javascript:void(0);"><i class="ti ti-trash"></i> Delete</a>
                                     </div>
                                 </div>
                             </td>
@@ -627,24 +625,32 @@
 <!-- /Edit User -->
 
 <!-- delete modal -->
-<div class="modal " id="delete_contact">
-    <div class="modal-dialog modal-dialog-centered modal-sm rounded-0">
-        <div class="modal-content rounded-0">
-            <div class="modal-body p-4 text-center position-relative">
-                <div class="mb-3 position-relative z-1">
-                    <span class="avatar avatar-xl badge-soft-danger border-0 text-danger rounded-circle"><i
-                            class="ti ti-trash fs-24"></i></span>
-                </div>
-                <h5 class="mb-1">Delete Confirmation</h5>
-                <p class="mb-3">Are you sure you want to remove user you selected.</p>
-                <div class="d-flex justify-content-center">
-                    <a (click)="cancelDelete($event)" href="javascript:void(0);"
-                        class="btn btn-light position-relative z-1 me-2 w-100" data-bs-dismiss="modal">Cancel</a>
-                    <a (click)="confirmDelete($event)" href="javascript:void(0);"
-                        class="btn btn-primary position-relative z-1 w-100" data-bs-dismiss="modal">Yes, Delete</a>
-                </div>
-            </div>
+<!-- manage‑users.component.html -->
+<!-- … above your existing edit offcanvas … -->
+
+<!-- Delete offcanvas -->
+<div #deleteUserCanvas class="offcanvas offcanvas-end offcanvas-small" tabindex="-1" aria-hidden="true">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="fw-semibold">Delete Confirmation</h5>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 d-flex align-items-center justify-content-center rounded-circle"
+            aria-label="Close" (click)="closeDeleteModal()">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body text-center">
+        <div class="mb-3 position-relative z-1">
+            <span class="avatar avatar-xl badge-soft-danger border-0 text-danger rounded-circle">
+                <i class="ti ti-trash fs-24"></i>
+            </span>
+        </div>
+        <h5 class="mb-1">Are you sure?</h5>
+        <p class="mb-4">This action cannot be undone.</p>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-light me-2 w-100" (click)="closeDeleteModal()">Cancel</button>
+            <button class="btn btn-danger w-100" (click)="confirmDelete($event)">Yes, Delete</button>
         </div>
     </div>
 </div>
+
 <!-- delete modal -->
