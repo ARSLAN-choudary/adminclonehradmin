@@ -77,10 +77,26 @@ export class CompaniesComponent {
   check: boolean = false;
   selectedCountry: any = "Malta";
   createNewCompanyForm!: FormGroup;
-  currencies: any[] = [];
-  countries: any;
+  // currencies: any[] = [];
+  // countries: any;
   passwordsDoNotMatch = false;
   confirmTouched = false;
+  currencies = [
+    { label: "EURO", value: "EURO" },
+    { label: "AED", value: "AED" },
+    { label: "USD", value: "USD" },
+    { label: "POUND", value: "POUND" },
+  ];
+
+  countries = [
+    { label: "United Arab Emirates", value: "uae" },
+    { label: "Georgia", value: "georgia" },
+    { label: "Malta", value: "malta" },
+    { label: "United Kingdom", value: "uk" },
+    { label: "USA", value: "usa" },
+    { label: "Netherlands", value: "netherlands" },
+    { label: "Serbia", value: "serbia" },
+  ];
   constructor(
     private pagination: PaginationService,
     private router: Router,
@@ -88,13 +104,88 @@ export class CompaniesComponent {
     private backendService: BackendService,
     private cdRef: ChangeDetectorRef
   ) {
-    this.getCompanyList("");
+    let req: any = {
+      startDate: "",
+      endDate: "",
+      draw: 1,
+      start: 0,
+      length: 100,
+      columns: [],
+      order: [],
+      search: {
+        value: "",
+      },
+    };
+    this.getCompanyList(req);
+  }
+  ngOnInit(): void {
+    this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+      this.pageSize = res.pageSize;
+      this.getTableData({ skip: res.skip, limit: res.limit });
+    });
+
+    this.initCreateNewCompanyForm();
   }
 
+  initCreateNewCompanyForm() {
+    this.createNewCompanyForm = this.fb.group({
+      files: [null, [Validators.required, this.pdfAndSizeValidator]],
+      country: ["", Validators.required],
+
+      // all other fields start disabled
+      name: [{ value: "", disabled: true }, Validators.required],
+      registrationNo: [{ value: "", disabled: true }, Validators.required],
+      vatNo: [{ value: "", disabled: true }, Validators.required],
+      peNo: [{ value: "", disabled: true }, Validators.required],
+      jobplusemployeryno: [{ value: "", disabled: true }, Validators.required],
+      currency: [{ value: "", disabled: true }, Validators.required],
+      phoneNO: [{ value: "", disabled: true }, Validators.required],
+      email: [""],
+      address: [""],
+      website: ["", Validators.pattern(/^https?:\/\//)],
+      incorporatonDate: [{ value: "", disabled: true }, Validators.required],
+      password: [
+        { value: "", disabled: true },
+        [Validators.required, Validators.minLength(8)],
+      ],
+      status: [{ value: "active", disabled: true }, Validators.required],
+    });
+    const maltaFields = [
+      "name",
+      "registrationNo",
+      "vatNo",
+      "peNo",
+      "jobplusemployeryno",
+      "currency",
+      "phoneNO",
+      "incorporatonDate",
+      "password",
+      "status",
+    ];
+
+    this.createNewCompanyForm
+      .get("country")!
+      .valueChanges.subscribe((country) => {
+        const isMalta = country === "malta";
+        this.isMalta = isMalta;
+
+        maltaFields.forEach((field) => {
+          const ctrl = this.createNewCompanyForm.get(field)!;
+          if (country === "malta") {
+            ctrl.enable({ emitEvent: false });
+          } else {
+            ctrl.disable({ emitEvent: false });
+            ctrl.reset("", { emitEvent: false });
+          }
+          // leave the original validators in place
+          ctrl.updateValueAndValidity({ emitEvent: false });
+        });
+      });
+  }
   getCompanyList(data: any) {
     this.backendService.getCompany(data).subscribe((apiRes: any) => {
       this.actualData = apiRes.data.data;
-      this.totalData = apiRes.totalData;
+      this.totalData = apiRes.recordsTotal;
 
       this.pagination.tablePageSize.subscribe((res: any) => {
         if (this.router.url === this.routes.superAdminCompanies) {
@@ -133,33 +224,6 @@ export class CompaniesComponent {
     this.passwordsDoNotMatch = pw !== confirmValue;
   }
 
-  //   onSubmit() {
-  //     if (this.createNewCompanyForm.invalid || this.passwordsDoNotMatch) {
-  //       this.createNewCompanyForm.markAllAsTouched();
-  //       this.confirmTouched = true;
-  //       return;
-  //     }
-  //     const formData = new FormData();
-  //     const value = this.createNewCompanyForm.getRawValue();
-  //     const { files, confirmPassword, ...rest } = value;
-
-  //     // append scalar fields
-  //     Object.entries(rest).forEach(([k, v]) =>
-  //       formData.append(k, String(v ?? ""))
-  //     );
-
-  //     // append files
-  //     files?.forEach((f: any, i: any) => formData.append("files", f, f.name));
-  //     debugger;
-  //     this.backendService.addCompany(formData).subscribe({
-  //       next: (res) => {
-  //         console.log("Created!", res);
-  //         // reset or close modal/offcanvas here
-  //       },
-  //       error: (err) => console.error(err),
-  //     });
-  //   }
-
   onSubmit() {
     if (this.createNewCompanyForm.invalid || this.passwordsDoNotMatch) {
       console.log(this.createNewCompanyForm.value);
@@ -169,103 +233,24 @@ export class CompaniesComponent {
     }
 
     const formData = new FormData();
-    const v = this.createNewCompanyForm.value; // <-- only enabled controls
+    const v = this.createNewCompanyForm.value;
 
     Object.entries(v).forEach(([key, val]) => {
       if (key === "files" && Array.isArray(val)) {
-        // append each PDF
         val.forEach((file: File) => formData.append("files", file, file.name));
       } else {
-        // everything else must be stringifiable
         formData.append(key, String(val));
       }
     });
 
     this.backendService.addCompany(formData).subscribe({
-      next: () => {
-        // success — reset & close offcanvas...
-      },
+      next: () => {},
       error: console.error,
     });
   }
 
   control(name: string) {
     return this.createNewCompanyForm.get(name)!;
-  }
-
-  // -------- Validators ----------
-
-  ngOnInit(): void {
-    this.createNewCompanyForm = this.fb.group({
-      files: [null, [Validators.required, this.pdfAndSizeValidator]],
-      country: ["", Validators.required],
-
-      // all other fields start disabled
-      name: [{ value: "", disabled: true }, Validators.required],
-      registrationNo: [{ value: "", disabled: true }, Validators.required],
-      vatNo: [{ value: "", disabled: true }, Validators.required],
-      peNo: [{ value: "", disabled: true }, Validators.required],
-      jobplusemployeryno: [{ value: "", disabled: true }, Validators.required],
-      currency: [{ value: "", disabled: true }, Validators.required],
-      phoneNO: [{ value: "", disabled: true }, Validators.required],
-      email: [""],
-      address: [""],
-      website: ["", Validators.pattern(/^https?:\/\//)],
-      incorporatonDate: [{ value: "", disabled: true }, Validators.required],
-      password: [
-        { value: "", disabled: true },
-        [Validators.required, Validators.minLength(8)],
-      ],
-      status: [{ value: "active", disabled: true }, Validators.required],
-    });
-    const maltaFields = [
-      "name",
-      "registrationNo",
-      "vatNo",
-      "peNo",
-      "jobplusemployeryno",
-      "currency",
-      "phoneNO",
-      "incorporatonDate",
-      "password",
-      "status",
-    ];
-
-    // 3) When country changes, toggle those controls:
-    this.createNewCompanyForm
-      .get("country")!
-      .valueChanges.subscribe((country) => {
-        const isMalta = country === "malta";
-        this.isMalta = isMalta;
-
-        maltaFields.forEach((field) => {
-          const ctrl = this.createNewCompanyForm.get(field)!;
-          if (country === "malta") {
-            ctrl.enable({ emitEvent: false });
-          } else {
-            ctrl.disable({ emitEvent: false });
-            ctrl.reset("", { emitEvent: false });
-          }
-          // leave the original validators in place
-          ctrl.updateValueAndValidity({ emitEvent: false });
-        });
-      });
-    this.currencies = [
-      { label: "EURO", value: "EURO" },
-      { label: "AED", value: "AED" },
-      { label: "USD", value: "USD" },
-      { label: "POUND", value: "POUND" },
-    ];
-
-    this.countries = [
-      { label: "United Arab Emirates", value: "uae" },
-      { label: "Georgia", value: "georgia" },
-      { label: "Malta", value: "malta" },
-      { label: "United Kingdom", value: "uk" },
-      { label: "USA", value: "usa" },
-      { label: "Netherlands", value: "netherlands" },
-      { label: "Serbia", value: "serbia" },
-    ];
   }
 
   password: boolean[] = [false];
@@ -289,32 +274,6 @@ export class CompaniesComponent {
   onClickStar(item: superadmincompanies) {
     item.isStarActive = !item.isStarActive;
   }
-
-  // private getTableData(pageOption: pageSelection): void {
-  //   const { skip, limit } = pageOption;
-  //   this.tableData = [];
-  //   this.serialNumberArray = [];
-
-  //   const slicedData = this.actualData.slice(skip, skip + limit);
-
-  //   slicedData.forEach((res, index) => {
-  //     const serialNumber = skip + index + 1;
-  //     res.id = serialNumber;
-  //     this.tableData.push(res);
-  //     this.serialNumberArray.push(serialNumber);
-  //   });
-
-  //   this.tableDataCopy = [...this.tableData];
-  //   this.dataSource = new MatTableDataSource<any>(this.tableData);
-
-  //   this.pagination.calculatePageSize.next({
-  //     totalData: this.totalData,
-  //     pageSize: this.pageSize,
-  //     tableData: this.tableData,
-  //     tableDataCopy: this.tableDataCopy,
-  //     serialNumberArray: this.serialNumberArray,
-  //   });
-  // }
 
   private getTableData(pageOption: pageSelection): void {
     const { skip, limit } = pageOption;
