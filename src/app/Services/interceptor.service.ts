@@ -14,8 +14,9 @@ export const interceptorFn: HttpInterceptorFn = (req, next) => {
   // spinner.show();
 
   const isFormData = req.body instanceof FormData;
-
-  if (!req.url.includes("/login")) {
+  const isLoginCall = req.url.includes("/login");
+  const isUserDetailsCall = req.url.includes("/userDetails");
+  if (!isLoginCall && !isUserDetailsCall) {
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,

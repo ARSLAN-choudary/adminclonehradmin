@@ -290,7 +290,7 @@ export class NewApplicationComponent implements OnInit {
 
   gotoLink() {
     const baseUrl = window.location.origin;
-    window.open(`${baseUrl}/goto`, "_blank");
+    window.open(`${baseUrl}/userDetails`, "_blank");
   }
 
   passResendApplicationData(data: any) {
