@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   OnDestroy,
@@ -34,6 +35,7 @@ import {
   apiResultFormat,
   pageSelection,
   manageUsers,
+  usersDataTable,
 } from "../../../shared/model/pages.model";
 import {
   PaginationService,
@@ -87,6 +89,21 @@ interface Country {
   styleUrl: "./manage-users.component.scss",
 })
 export class ManageUsersComponent implements OnInit, OnDestroy {
+  @ViewChild("deleteContactModal", { static: true })
+  deleteContactModal!: ElementRef<HTMLElement>;
+
+  public pageSize = 10;
+  public skip = 0;
+  public currentPage = 1;
+  public totalData = 0;
+
+  public tableData: usersDataTable[] = [];
+  public serialNumberArray: number[] = [];
+
+  public dataSource!: MatTableDataSource<usersDataTable>;
+  public searchDataValue = "";
+  public row = true;
+
   deleteUserId!: any;
   @ViewChild("addUserCanvas", { static: true })
   addUserCanvas!: ElementRef<HTMLElement>;
@@ -95,6 +112,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
 
   private addBackdrop?: HTMLElement;
   private editBackdrop?: HTMLElement;
+  private deleteBackdrop?: HTMLElement;
   currentNationalityFilterCtrl = new FormControl<string>("");
   preferredCountries = [CountryISO.Pakistan, CountryISO.UnitedArabEmirates];
   onlyCountries = [
@@ -110,13 +128,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
 
   public routes = routes;
   // pagination variables
-  public tableData: any[] = [];
-  public pageSize = 10;
-  public serialNumberArray: number[] = [];
-  public totalData = 0;
   showFilter = false;
-  dataSource!: MatTableDataSource<manageUsers>;
-  public searchDataValue = "";
   public tableDataCopy: manageUsers[] = [];
   public actualData: manageUsers[] = [];
   //** pagination variables
@@ -148,7 +160,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     private toaster: ToastrService,
     private renderer: Renderer2
   ) {
-    this.getUserList();
     this.countries = [
       { label: "United Arab Emirates", value: "uae" },
       { label: "Georgia", value: "georgia" },
@@ -181,25 +192,22 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.currentNationalityFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe((search) => this._filterCountries(search));
+
+    this.getTableData(this.skip, this.pageSize);
+    //
+    // When pagination emits new page info
+    this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+      if (this.router.url === this.routes.dataTable) {
+        this.pageSize = res.pageSize;
+        this.skip = res.skip;
+        this.getTableData(res.skip, res.pageSize);
+      }
+    });
   }
 
   ngOnDestroy() {
     this._onDestroy.next();
     this._onDestroy.complete();
-  }
-
-  getUserList() {
-    this.backend.getManageUsers("").subscribe((apiRes: any) => {
-      this.actualData = apiRes.data.data;
-      this.totalData = apiRes.totalData;
-
-      this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-        if (this.router.url === this.routes.manageUsers) {
-          this.pageSize = res.pageSize;
-          this.getTableData({ skip: res.skip, limit: res.limit });
-        }
-      });
-    });
   }
 
   get f() {
@@ -224,101 +232,12 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         this.toastr.success(res.message);
         this.userForm.reset();
         this.closeAddUser();
-        this.getUserList();
+        this.getTableData(this.skip, this.pageSize);
       },
       error: (err) => {
         this.toastr.success(err.message);
       },
     });
-  }
-
-  // private _filterList(
-  //   search: string | null,
-  //   outputStream: ReplaySubject<Country[]>
-  // ) {
-  //   const term = (search || "").toLowerCase();
-  //   const filtered = this.countries.filter((c) =>
-  //     c.name.toLowerCase().includes(term)
-  //   );
-  //   outputStream.next(filtered);
-  // }
-
-  private getTableData(pageOption: pageSelection): void {
-    this.tableData = [];
-    this.tableDataCopy = [];
-    this.serialNumberArray = [];
-
-    this.actualData.map((res: any, index: number) => {
-      const serialNumber = index + 1;
-      if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-        res.id = serialNumber;
-        this.tableData.push(res);
-        this.serialNumberArray.push(serialNumber);
-        this.tableDataCopy.push(res);
-      }
-    });
-
-    this.dataSource = new MatTableDataSource<manageUsers>(this.actualData);
-
-    this.pagination.calculatePageSize.next({
-      totalData: this.totalData,
-      pageSize: this.pageSize,
-      tableData: this.tableData,
-      tableDataCopy: this.tableDataCopy,
-      serialNumberArray: this.serialNumberArray,
-    });
-  }
-
-  public sortData(sort: Sort) {
-    const data = this.tableData.slice();
-    if (!sort.active || sort.direction === "") {
-      this.tableData = data;
-    } else {
-      this.tableData = data.sort((a, b) => {
-        const aValue = (a as never)[sort.active];
-        const bValue = (b as never)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === "asc" ? 1 : -1);
-      });
-    }
-  }
-
-  public row = true;
-
-  public searchData(value: string): void {
-    this.searchDataValue = value.trim().toLowerCase();
-    this.dataSource.filter = this.searchDataValue;
-    this.tableData = this.dataSource.filteredData;
-    this.row = this.tableData.length > 0;
-
-    if (this.searchDataValue !== "") {
-      // Handle filtered data
-      this.pagination.calculatePageSize.next({
-        totalData: this.tableData.length,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        serialNumberArray: this.tableData.map((_, i) => i + 1),
-      });
-    } else {
-      // Handle reset to full data
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        serialNumberArray: this.serialNumberArray,
-      });
-    }
-  }
-
-  selectAll(initChecked: boolean) {
-    if (!initChecked) {
-      this.tableData.forEach((f) => {
-        f.isSelected = true;
-      });
-    } else {
-      this.tableData.forEach((f) => {
-        f.isSelected = false;
-      });
-    }
   }
 
   protected readonly CountryISO = CountryISO;
@@ -355,7 +274,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       },
       location: user.location,
     });
-    console.log(this.editUserForm.value);
   }
 
   onUpdateUser() {
@@ -374,8 +292,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         //     const instance = bootstrap.Offcanvas.getInstance(offcanvas);
         //     instance?.hide();
         // }
-        this.getUserList();
-        this.getTableData({ skip: 0, limit: this.pageSize });
+        this.getTableData(this.skip, this.pageSize);
       },
       error: (err: any) => {
         this.toastr.error(err.message);
@@ -402,12 +319,54 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   }
 
   deleteUser(id: any) {
+    const panel = this.deleteContactModal.nativeElement;
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+    this.editBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.editBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.editBackdrop, "fade");
+    this.renderer.addClass(this.editBackdrop, "show");
+    if (this.editBackdrop) {
+      this.editBackdrop.addEventListener("click", () =>
+        this.closeDeleteModal()
+      );
+    }
+    this.renderer.appendChild(document.body, this.editBackdrop);
+
     this.deleteUserId = id;
+  }
+
+  closeDeleteModal() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const panel = this.deleteContactModal.nativeElement;
+
+    this.renderer.removeClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "hidden");
+    this.renderer.removeAttribute(panel, "aria-modal");
+    this.renderer.setAttribute(panel, "aria-hidden", "true");
+    this.renderer.removeStyle(document.body, "overflow");
+    if (this.editBackdrop) {
+      this.renderer.removeChild(document.body, this.editBackdrop);
+      this.editBackdrop = undefined;
+    }
+
+    document
+      .querySelectorAll(".offcanvas-backdrop.fade.show")
+      .forEach((backdrop) =>
+        this.renderer.removeChild(document.body, backdrop)
+      );
+    this.renderer.removeStyle(panel, "transform");
   }
 
   cancelDelete(event: MouseEvent) {
     (event.target as HTMLElement).blur();
     this.deleteUserId = undefined;
+    this.closeDeleteModal();
   }
 
   confirmDelete(event: MouseEvent) {
@@ -416,7 +375,8 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       this.backend.deleteUser(this.deleteUserId).subscribe((res: any) => {
         if (res.status === "success") {
           this.toaster.success(res.message);
-          this.getUserList();
+          this.getTableData(this.skip, this.pageSize);
+          this.closeDeleteModal();
         } else {
           this.toaster.error("Please Try Again Later");
         }
@@ -443,6 +403,9 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   }
 
   closeAddUser() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     const panel = this.addUserCanvas.nativeElement;
     // hide
     this.renderer.removeClass(panel, "show");
@@ -457,6 +420,9 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   }
 
   closeEditUser() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     const panel = this.editUserCanvas.nativeElement;
 
     // … your existing hide logic …
@@ -476,5 +442,41 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         this.renderer.removeChild(document.body, backdrop)
       );
     this.renderer.removeStyle(panel, "transform");
+  }
+  private getTableData(skip: number, limit: number): void {
+    const payload: any = {
+      start: skip,
+      length: limit,
+      search: { value: this.searchDataValue },
+    };
+
+    this.backend.getManageUsers(payload).subscribe((apiRes: any) => {
+      // this.actualData = apiRes.data.data;
+      this.tableData = apiRes.data.data;
+      this.totalData = apiRes.totalData;
+      this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
+      this.dataSource = new MatTableDataSource<usersDataTable>(this.tableData);
+      this.row = this.tableData.length > 0;
+      this.pagination.calculatePageSize.next({
+        totalData: this.totalData,
+        pageSize: this.pageSize,
+        tableData: this.tableData,
+        serialNumberArray: this.serialNumberArray,
+      });
+    });
+  }
+
+  public searchData(value: string): void {
+    this.searchDataValue = value.trim().toLowerCase();
+    this.skip = 0; // Reset to first page
+    this.getTableData(this.skip, this.pageSize);
+  }
+
+  public sortData(sort: Sort): void {
+    this.getTableData(this.skip, this.pageSize);
+  }
+
+  public selectAll(initChecked: boolean): void {
+    this.tableData.forEach((f) => (f.isSelected = !initChecked));
   }
 }

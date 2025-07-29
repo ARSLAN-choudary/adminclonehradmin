@@ -22,6 +22,7 @@ import { routes } from "../../../../shared/routes/routes";
 import { Router, RouterLink } from "@angular/router";
 import {
   apiResultFormat,
+  companiesDataTable,
   superadmincompanies,
 } from "../../../../shared/model/pages.model";
 import { MatTableDataSource } from "@angular/material/table";
@@ -62,9 +63,20 @@ interface select {
   styleUrl: "./companies.component.scss",
 })
 export class CompaniesComponent {
+  public routes = routes;
+  public pageSize = 10;
+  public skip = 0;
+  public currentPage = 1;
+  public totalData = 0;
+
+  public tableData: companiesDataTable[] = [];
+  public serialNumberArray: number[] = [];
+
+  public dataSource!: MatTableDataSource<companiesDataTable>;
+  public searchDataValue = "";
+  public row = true;
   startDate: string = "";
   endDate: string = "";
-  routes = routes;
   select!: select[];
   select2!: select[];
   select3!: select[];
@@ -75,6 +87,12 @@ export class CompaniesComponent {
   selected3!: select[];
   selected4!: select[];
   check: boolean = false;
+  password: boolean[] = [false];
+  public tableDataCopy: any[] = [];
+  public actualData: any[] = [];
+  isMalta: any;
+
+  initChecked = false;
   selectedCountry: any = "Malta";
   createNewCompanyForm!: FormGroup;
   // currencies: any[] = [];
@@ -103,25 +121,17 @@ export class CompaniesComponent {
     private fb: FormBuilder,
     private backendService: BackendService,
     private cdRef: ChangeDetectorRef
-  ) {
-    let req: any = {
-      startDate: "",
-      endDate: "",
-      draw: 1,
-      start: 0,
-      length: 100,
-      columns: [],
-      order: [],
-      search: {
-        value: "",
-      },
-    };
-    this.getCompanyList(req);
-  }
+  ) {}
   ngOnInit(): void {
+    this.getTableData(this.skip, this.pageSize);
+    //
+    // When pagination emits new page info
     this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-      this.pageSize = res.pageSize;
-      this.getTableData({ skip: res.skip, limit: res.limit });
+      if (this.router.url === this.routes.dataTable) {
+        this.pageSize = res.pageSize;
+        this.skip = res.skip;
+        this.getTableData(res.skip, res.pageSize);
+      }
     });
 
     this.initCreateNewCompanyForm();
@@ -182,16 +192,26 @@ export class CompaniesComponent {
         });
       });
   }
-  getCompanyList(data: any) {
-    this.backendService.getCompany(data).subscribe((apiRes: any) => {
-      this.actualData = apiRes.data.data;
-      this.totalData = apiRes.recordsTotal;
+  private getTableData(skip: number, limit: number): void {
+    const payload: any = {
+      start: skip,
+      length: limit,
+      search: { value: this.searchDataValue },
+    };
 
-      this.pagination.tablePageSize.subscribe((res: any) => {
-        if (this.router.url === this.routes.superAdminCompanies) {
-          this.pageSize = res.pageSize;
-          this.getTableData({ skip: res.skip, limit: res.limit });
-        }
+    this.backendService.getCompany(payload).subscribe((apiRes: any) => {
+      this.tableData = apiRes.data.data;
+      this.totalData = apiRes.data.recordsTotal;
+      this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
+      this.dataSource = new MatTableDataSource<companiesDataTable>(
+        this.tableData
+      );
+      this.row = this.tableData.length > 0;
+      this.pagination.calculatePageSize.next({
+        totalData: this.totalData,
+        pageSize: this.pageSize,
+        tableData: this.tableData,
+        serialNumberArray: this.serialNumberArray,
       });
     });
   }
@@ -253,119 +273,13 @@ export class CompaniesComponent {
     return this.createNewCompanyForm.get(name)!;
   }
 
-  password: boolean[] = [false];
-
   togglePassword(i: number): void {
     this.password[i] = !this.password[i];
   }
 
-  public tableData: any[] = [];
-  public pageSize = 10;
-  public serialNumberArray: number[] = [];
-  public totalData = 0;
-  showFilter = false;
-  dataSource!: MatTableDataSource<superadmincompanies>;
-  public searchDataValue!: any;
-  public tableDataCopy: any[] = [];
-  public actualData: any[] = [];
-
-  initChecked = false;
-
   onClickStar(item: superadmincompanies) {
     item.isStarActive = !item.isStarActive;
   }
-
-  private getTableData(pageOption: pageSelection): void {
-    const { skip, limit } = pageOption;
-    this.tableData = [];
-    this.serialNumberArray = [];
-
-    const slicedData = this.actualData.slice(0, limit);
-
-    slicedData.forEach((res, index) => {
-      const serialNumber = skip + index + 1;
-      res.id = serialNumber;
-      this.tableData.push(res);
-      this.serialNumberArray.push(serialNumber);
-    });
-
-    this.tableDataCopy = [...this.tableData];
-    this.dataSource = new MatTableDataSource<any>(this.tableData);
-
-    this.pagination.calculatePageSize.next({
-      totalData: this.totalData,
-      pageSize: this.pageSize,
-      tableData: this.tableData,
-      tableDataCopy: this.tableDataCopy,
-      serialNumberArray: this.serialNumberArray,
-    });
-  }
-
-  public sortData(sort: Sort) {
-    const data = this.tableData.slice();
-    if (!sort.active || sort.direction === "") {
-      this.tableData = data;
-    } else {
-      this.tableData = data.sort((a, b) => {
-        const aValue = (a as never)[sort.active];
-        const bValue = (b as never)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === "asc" ? 1 : -1);
-      });
-    }
-  }
-
-  public row = true;
-  isMalta: any;
-
-  // public searchData(value: string): void {
-  //   this.searchDataValue = value.trim().toLowerCase();
-
-  //   let req = {
-  //     startDate: "2025-07-01",
-  //     endDate: "2025-07-27",
-  //     draw: 1,
-  //     start: 0,
-  //     length: 10,
-  //     columns: [],
-  //     order: [],
-  //     search: {
-  //       value: this.searchDataValue,
-  //     },
-  //   };
-  //   this.backendService.getCompany(req).subscribe((apiRes: any) => {
-  //     this.actualData = apiRes.data.data;
-  //     this.totalData = apiRes.totalData;
-
-  //     this.pagination.tablePageSize.subscribe((res: any) => {
-  //       if (this.router.url === this.routes.superAdminCompanies) {
-  //         this.pageSize = res.pageSize;
-  //         this.getTableData({ skip: res.skip, limit: res.limit });
-  //       }
-  //     });
-  //   });
-
-  //   this.dataSource.filter = this.searchDataValue;
-  //   this.tableData = this.dataSource.filteredData;
-  //   this.row = this.tableData.length > 0;
-
-  //   if (this.searchDataValue !== "") {
-  //     // Handle filtered data
-  //     this.pagination.calculatePageSize.next({
-  //       totalData: this.tableData.length,
-  //       pageSize: this.pageSize,
-  //       tableData: this.tableData,
-  //       serialNumberArray: this.tableData.map((_, i) => i + 1),
-  //     });
-  //   } else {
-  //     // Handle reset to full data
-  //     this.pagination.calculatePageSize.next({
-  //       totalData: this.totalData,
-  //       pageSize: this.pageSize,
-  //       tableData: this.tableData,
-  //       serialNumberArray: this.serialNumberArray,
-  //     });
-  //   }
-  // }
 
   private formatDate(date: Date): string {
     const year = date.getFullYear();
@@ -382,43 +296,15 @@ export class CompaniesComponent {
 
   public searchData(value: string): void {
     this.searchDataValue = value.trim().toLowerCase();
-
-    const paginationSettings = { skip: 0, limit: this.pageSize };
-
-    const req = {
-      startDate: this.startDate || "2025-07-01",
-      endDate: this.endDate || "2025-07-27",
-      draw: 1,
-      start: paginationSettings.skip,
-      length: paginationSettings.limit,
-      columns: [],
-      order: [],
-      search: { value: this.searchDataValue },
-    };
-
-    this.backendService.getCompany(req).subscribe((apiRes: any) => {
-      this.actualData = apiRes.data.data;
-      this.totalData = apiRes.totalData;
-      this.getTableData(paginationSettings);
-
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        serialNumberArray: this.serialNumberArray,
-      });
-    });
+    this.skip = 0; // Reset to first page
+    this.getTableData(this.skip, this.pageSize);
   }
 
-  selectAll(initChecked: boolean) {
-    if (!initChecked) {
-      this.tableData.forEach((f) => {
-        f.isSelected = true;
-      });
-    } else {
-      this.tableData.forEach((f) => {
-        f.isSelected = false;
-      });
-    }
+  public sortData(sort: Sort): void {
+    this.getTableData(this.skip, this.pageSize);
+  }
+
+  public selectAll(initChecked: boolean): void {
+    this.tableData.forEach((f) => (f.isSelected = !initChecked));
   }
 }
