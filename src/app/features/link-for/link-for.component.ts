@@ -20,6 +20,8 @@ import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {ReplaySubject, Subject, takeUntil} from "rxjs";
 import {CommonModule} from "@angular/common";
+import {BackendService} from "../../Services/backend.service";
+import {ToastrService} from "ngx-toastr";
 
 interface Country {
     id: number;
@@ -59,7 +61,9 @@ export class LinkForComponent implements OnInit {
     filteredBirthNationality = new ReplaySubject<Country[]>(1);
     filteredBirthCountry = new ReplaySubject<Country[]>(1);
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder,
+                private toastr: ToastrService,
+                private backend: BackendService) {
     }
 
     private _onDestroy = new Subject<void>();
@@ -95,8 +99,8 @@ export class LinkForComponent implements OnInit {
             addressInMalta: this.fb.group({
                 locality: ['', Validators.required],
                 street: ['', Validators.required],
-                propertyNumber: ['', Validators.required],
-                building: [''],
+                property: ['', Validators.required],
+                buildingInfo: [''],
                 postCode: ['', Validators.required],
             }),
 
@@ -141,11 +145,23 @@ export class LinkForComponent implements OnInit {
         //     this.employeeForm.markAllAsTouched();
         //     return;
         // }
-
         console.log(this.employeeForm.value);
-        // Submit logic here...
+        this.employeeForm.markAllAsTouched();
+        this.backend.addUserDetails(this.employeeForm.value).subscribe({
+            next: (res: any) => {
+                this.toastr.success(res.message);
+                this.employeeForm.reset();
+            },
+            error: (err) => {
+                this.toastr.success(err.message);
+            },
+        })
     }
 
-    onFileChange($event: Event, additionalDocs: string) {
+    onFileChange($event:
+                 Event, additionalDocs
+                 :
+                 string
+    ) {
     }
 }

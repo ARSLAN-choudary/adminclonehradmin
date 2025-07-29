@@ -42,4 +42,8 @@ export class BackendService {
     getApplications(payload: any): Observable<any> {
         return this.http.post(CONFIG.getApplications, payload)
     }
+
+    addUserDetails(payload: any): Observable<any> {
+        return this.http.post(CONFIG.addUserDetails, payload)
+    }
 }

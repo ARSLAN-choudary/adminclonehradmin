@@ -11,4 +11,5 @@ export const CONFIG = {
     deleteUser: BASE_URL_API + "/api/users/Delete",
     addApplication: BASE_URL_API + "/api/application/add",
     getApplications: BASE_URL_API + "/api/application/list",
+    addUserDetails: BASE_URL_API + "/api/application/userdetails",
 };
