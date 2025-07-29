@@ -9,160 +9,372 @@
         <h4 class="section-title">🧍 Personal Details</h4>
         <div class="row g-3">
             <div class="col-md-6">
-                <label class="form-label">Maltese Registration No <span class="text-danger">*</span></label>
-                <input type="text" formControlName="malteseRegistrationNo" class="form-control" required>
+                <label for="malteseRegistrationNo" class="form-label">Maltese Registration No <span
+                        class="text-danger">*</span></label>
+                <input [ngClass]="{
+                    'is-invalid':
+                      f['malteseRegistrationNo'].invalid &&
+                      f['malteseRegistrationNo'].touched
+                  }" type="text" formControlName="malteseRegistrationNo" id="malteseRegistrationNo"
+                    class="form-control" required>
+                <div *ngIf="
+                      f['malteseRegistrationNo'].invalid &&
+                      f['malteseRegistrationNo'].touched
+                    " class="text-danger small mt-1">
+                    This field is required.
+                </div>
+
             </div>
             <div class="col-md-6">
-                <label class="form-label">Last Name <span class="text-danger">*</span></label>
-                <input type="text" formControlName="lastName" class="form-control" required>
+                <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                <input [ngClass]="{
+                    'is-invalid': f['lastName'].invalid && f['lastName'].touched
+                  }" type="text" formControlName="lastName" id="lastName" class="form-control" required>
+                <div *ngIf="f['lastName'].invalid && f['lastName'].touched" class="text-danger small mt-1">
+                    Last name is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">First Name(s) <span class="text-danger">*</span></label>
-                <input type="text" formControlName="firstName" class="form-control" required>
+                <label for="firstName" class="form-label">First Name(s) <span class="text-danger">*</span></label>
+                <input [ngClass]="{
+                    'is-invalid': f['firstName'].invalid && f['firstName'].touched
+                  }" type="text" formControlName="firstName" id="firstName" class="form-control" required>
+                <div *ngIf="f['firstName'].invalid && f['firstName'].touched" class="text-danger small mt-1">
+                    First name is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Current Nationality <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="currentNationality">
+                <label for="currentNationality" class="form-label">Current Nationality <span
+                        class="text-danger">*</span></label>
+                <mat-select class="custom-mat-select select" id="currentNationality" placeholder="Select"
+                    formControlName="currentNationality" [ngClass]="{
+                        'is-invalid': f['currentNationality'].invalid && f['currentNationality'].touched
+                      }">
                     <mat-option>
-                        <ngx-mat-select-search [formControl]="currentNationalityFilterCtrl" placeholderLabel="Search country" noEntriesFoundLabel="No countries found"></ngx-mat-select-search>
+                        <ngx-mat-select-search [formControl]="currentNationalityFilterCtrl" id="search-country"
+                            placeholderLabel="Search country"
+                            noEntriesFoundLabel="No countries found"></ngx-mat-select-search>
                     </mat-option>
-                    <mat-option *ngFor="let c of filteredCurrentNationality | async" [value]="c.id">{{ c.name }}</mat-option>
+                    <mat-option *ngFor="let c of filteredCurrentNationality | async" [value]="c.id">{{
+                        c.name }}</mat-option>
+
                 </mat-select>
+                <div class="text-danger small"
+                    *ngIf="f['currentNationality'].invalid && f['currentNationality'].touched">
+                    Current nationality is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Birth Nationality <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="birthNationality">
+                <label for="birthNationality" class="form-label">Birth Nationality <span
+                        class="text-danger">*</span></label>
+                <mat-select class="custom-mat-select select" id="birthNationality" placeholder="Select"
+                    formControlName="birthNationality" [ngClass]="{
+                        'is-invalid': f['birthNationality'].invalid && f['birthNationality'].touched
+                      }">
                     <mat-option>
-                        <ngx-mat-select-search [formControl]="birthNationalityFilterCtrl" placeholderLabel="Search country" noEntriesFoundLabel="No countries found"></ngx-mat-select-search>
+                        <ngx-mat-select-search [formControl]="birthNationalityFilterCtrl" id="search_country"
+                            placeholderLabel="Search country"
+                            noEntriesFoundLabel="No countries found"></ngx-mat-select-search>
                     </mat-option>
-                    <mat-option *ngFor="let c of filteredBirthNationality | async" [value]="c.id">{{ c.name }}</mat-option>
+                    <mat-option *ngFor="let c of filteredBirthNationality | async" id="{{c.id}}" [value]="c.id">{{
+                        c.name }}</mat-option>
                 </mat-select>
+                <div class="text-danger small" *ngIf="f['birthNationality'].invalid && f['birthNationality'].touched">
+                    Birth Nationality is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Country of Birth <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="countryOfBirth">
+                <label for="countryOfBirth" class="form-label">Country of Birth <span
+                        class="text-danger">*</span></label>
+                <mat-select class="custom-mat-select select" placeholder="Select" id="countryOfBirth"
+                    formControlName="countryOfBirth" [ngClass]="{
+                        'is-invalid': f['countryOfBirth'].invalid && f['countryOfBirth'].touched
+                      }">
                     <mat-option>
-                        <ngx-mat-select-search [formControl]="birthCountryFilterCtrl" placeholderLabel="Search country" noEntriesFoundLabel="No countries found"></ngx-mat-select-search>
+                        <ngx-mat-select-search [formControl]="birthCountryFilterCtrl" id="search__country"
+                            placeholderLabel="Search country"
+                            noEntriesFoundLabel="No countries found"></ngx-mat-select-search>
                     </mat-option>
-                    <mat-option *ngFor="let c of filteredBirthCountry | async" [value]="c.id">{{ c.name }}</mat-option>
+                    <mat-option *ngFor="let c of filteredBirthCountry | async" id="{{c.id}}" [value]="c.id">{{ c.name
+                        }}</mat-option>
                 </mat-select>
+                <div class="text-danger small" *ngIf="f['countryOfBirth'].invalid && f['countryOfBirth'].touched">
+                    Country of Birth is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Place of Birth <span class="text-danger">*</span></label>
-                <input type="text" formControlName="placeOfBirth" class="form-control" required>
+                <label for="placeOfBirth" class="form-label">Place of Birth <span class="text-danger">*</span></label>
+                <input type="text" formControlName="placeOfBirth" id="placeOfBirth" class="form-control" [ngClass]="{
+                    'is-invalid':
+                      f['placeOfBirth'].invalid &&
+                      f['placeOfBirth'].touched
+                  }" required>
+                <div class="text-danger small" *ngIf="f['placeOfBirth'].invalid && f['placeOfBirth'].touched">
+                    Place of Birth is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Date of Birth <span class="text-danger">*</span></label>
-                <input type="date" formControlName="dateOfBirth" class="form-control" required>
+                <label for="dateOfBirth" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                <input type="date" formControlName="dateOfBirth" class="form-control" id="dateOfBirth" [ngClass]="{
+                    'is-invalid':
+                      f['dateOfBirth'].invalid &&
+                      f['dateOfBirth'].touched
+                  }" required>
+                <div class="text-danger small" *ngIf="f['dateOfBirth'].invalid && f['dateOfBirth'].touched">
+                    Date of Birth is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Gender <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="gender">
-                    <mat-option value="Male">Male</mat-option>
-                    <mat-option value="Female">Female</mat-option>
-                    <mat-option value="Other">Other</mat-option>
+                <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                <mat-select class="custom-mat-select select" placeholder="Select" id="gender" formControlName="gender"
+                    [ngClass]="{
+                    'is-invalid': f['gender'].invalid && f['gender'].touched
+                  }">
+                    <mat-option id="male" value="Male">Male</mat-option>
+                    <mat-option id="female" value="Female">Female</mat-option>
+                    <mat-option id="other" value="Other">Other</mat-option>
                 </mat-select>
+                <div class="text-danger small" *ngIf="f['gender'].invalid && f['gender'].touched">
+                    Gender is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Marital Status <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="maritalStatus">
-                    <mat-option value="Single">Single</mat-option>
-                    <mat-option value="Married">Married</mat-option>
+                <label for="maritalStatus" class="form-label">Marital Status <span class="text-danger">*</span></label>
+                <mat-select class="custom-mat-select select" placeholder="Select" id="maritalStatus"
+                    formControlName="maritalStatus" [ngClass]="{
+                        'is-invalid': f['maritalStatus'].invalid && f['maritalStatus'].touched
+                      }">
+                    <mat-option id="Single" value="Single">Single</mat-option>
+                    <mat-option id="Married" value="Married">Married</mat-option>
                 </mat-select>
+                <div class="text-danger small" *ngIf="f['maritalStatus'].invalid && f['maritalStatus'].touched">
+                    Marital Status is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Passport No <span class="text-danger">*</span></label>
-                <input type="text" formControlName="passportNo" class="form-control" required>
+                <label for="passportNo" class="form-label">Passport No <span class="text-danger">*</span></label>
+                <input type="text" formControlName="passportNo" id="passportNo" class="form-control" [ngClass]="{
+                    'is-invalid':
+                      f['passportNo'].invalid &&
+                      f['passportNo'].touched
+                  }" required>
+                <div class="text-danger small" *ngIf="f['passportNo'].invalid && f['passportNo'].touched">
+                    Passport No is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Country of Issue <span class="text-danger">*</span></label>
-                <input type="text" formControlName="countryOfIssue" class="form-control" required>
+                <label for="countryOfIssue" class="form-label">Country of Issue <span
+                        class="text-danger">*</span></label>
+                <input type="text" formControlName="countryOfIssue" id="countryOfIssue" class="form-control" [ngClass]="{
+                    'is-invalid':
+                      f['countryOfIssue'].invalid &&
+                      f['countryOfIssue'].touched
+                  }" required>
+                <div class="text-danger small" *ngIf="f['countryOfIssue'].invalid && f['countryOfIssue'].touched">
+                    Country of Issue is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Date of Issue <span class="text-danger">*</span></label>
-                <input type="date" formControlName="dateOfIssue" class="form-control" required>
+                <label for="dateOfIssue" class="form-label">Date of Issue <span class="text-danger">*</span></label>
+                <input type="date" formControlName="dateOfIssue" id="dateOfIssue" class="form-control" [ngClass]="{
+                    'is-invalid':
+                      f['dateOfIssue'].invalid &&
+                      f['dateOfIssue'].touched
+                  }" required>
+                <div class="text-danger small" *ngIf="f['dateOfIssue'].invalid && f['dateOfIssue'].touched">
+                    Date of Issue is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Valid Until <span class="text-danger">*</span></label>
-                <input type="date" formControlName="validUntil" class="form-control" required>
+                <label for="validUntil" class="form-label">Valid Until <span class="text-danger">*</span></label>
+                <input type="date" formControlName="validUntil" id="validUntil" class="form-control" [ngClass]="{
+                    'is-invalid':
+                      f['validUntil'].invalid &&
+                      f['validUntil'].touched
+                  }" required>
+                <div class="text-danger small" *ngIf="f['validUntil'].invalid && f['validUntil'].touched">
+                    Valid Until is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Currently Residing In <span class="text-danger">*</span></label>
-                <input type="text" formControlName="currentlyResidingIn" class="form-control" required>
+                <label for="currentlyResidingIn" class="form-label">Currently Residing In <span
+                        class="text-danger">*</span></label>
+                <input type="text" formControlName="currentlyResidingIn" id="currentlyResidingIn" class="form-control"
+                    [ngClass]="{
+                    'is-invalid':
+                      f['currentlyResidingIn'].invalid &&
+                      f['currentlyResidingIn'].touched
+                  }" required>
+                <div class="text-danger small"
+                    *ngIf="f['currentlyResidingIn'].invalid && f['currentlyResidingIn'].touched">
+                    Currently Residing In is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Since <span class="text-danger">*</span></label>
-                <input type="date" formControlName="residingSince" class="form-control" required>
+                <label for="residingSince" class="form-label">Since <span class="text-danger">*</span></label>
+                <input type="date" formControlName="residingSince" id="residingSince" class="form-control" [ngClass]="{
+                    'is-invalid':
+                      f['residingSince'].invalid &&
+                      f['residingSince'].touched
+                  }" required>
+                <div class="text-danger small" *ngIf="f['residingSince'].invalid && f['residingSince'].touched">
+                    Since is required.
+                </div>
             </div>
+
         </div>
         <!-- Address in Malta -->
         <!-- Address in Malta -->
         <h4 class="section-title">🏠 Address in Malta</h4>
         <div class="row g-3" formGroupName="addressInMalta">
             <div class="col-md-6">
-                <label class="form-label">Locality <span class="text-danger">*</span></label>
-                <input type="text" formControlName="locality" class="form-control" required>
+                <label for="locality" class="form-label">Locality <span class="text-danger">*</span></label>
+                <input type="text" formControlName="locality" id="locality3" class="form-control" [ngClass]="{
+                    'is-invalid': 
+                      addressInMalta.get('locality')!.invalid &&
+                      addressInMalta.get('locality')!.touched
+                  }" required>
+                <div class="text-danger small" *ngIf="
+                addressInMalta.get('locality')!.invalid &&
+                addressInMalta.get('locality')!.touched">
+                    Locality is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Street <span class="text-danger">*</span></label>
-                <input type="text" formControlName="street" class="form-control" required>
+                <label for="street" class="form-label">Street <span class="text-danger">*</span></label>
+                <input type="text" formControlName="street" id="street1" class="form-control" [ngClass]="{
+                    'is-invalid':
+                    addressInMalta.get('street')!.invalid &&
+                    addressInMalta.get('street')!.touched
+                  }" required>
+                <div class="text-danger small"
+                    *ngIf=" addressInMalta.get('street')!.invalid &&  addressInMalta.get!('street')!.touched">
+                    Street is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Property Number / Name <span class="text-danger">*</span></label>
-                <input type="text" formControlName="property" class="form-control" required>
+                <label for="property" class="form-label">Property Number / Name <span
+                        class="text-danger">*</span></label>
+                <input type="text" formControlName="property" id="property" class="form-control" [ngClass]="{
+                    'is-invalid':
+                    addressInMalta.get('property')!.invalid &&
+                    addressInMalta.get('property')!.touched
+                  }" required>
+                <div class="text-danger small"
+                    *ngIf=" addressInMalta.get('property')!.invalid &&  addressInMalta.get('property')!.touched">
+                    Property Number / Name is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Building / Entrance / Staircase / Floor <span class="text-danger">*</span></label>
-                <input type="text" formControlName="buildingInfo" class="form-control">
+                <label for="buildingInfo" class="form-label">Building / Entrance / Staircase / Floor <span
+                        class="text-danger">*</span></label>
+                <input type="text" formControlName="buildingInfo" id="buildingInfo" class="form-control" [ngClass]="{
+                    'is-invalid':
+                      addressInMalta.get('buildingInfo')!.invalid &&
+                      addressInMalta.get('buildingInfo')!.touched
+                  }" required>
+                <div class="text-danger small"
+                    *ngIf=" addressInMalta.get('buildingInfo')!.invalid && addressInMalta.get('buildingInfo')!.touched">
+                    Building / Entrance / Staircase / Floor is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Post Code <span class="text-danger">*</span></label>
-                <input type="text" formControlName="postCode" class="form-control" required>
+                <label for="postCode" class="form-label">Post Code <span class="text-danger">*</span></label>
+                <input type="text" formControlName="postCode" id="postCode" class="form-control" [ngClass]="{
+                    'is-invalid':
+                       addressInMalta.get('postCode')!.invalid &&
+                       addressInMalta.get('postCode')!.touched
+                  }" required>
+                <div class="text-danger small"
+                    *ngIf=" addressInMalta.get('postCode')!.invalid &&  addressInMalta.get('postCode')!.touched">
+                    Post Code is required.
+                </div>
             </div>
         </div>
 
 
-        <!-- Permanent Address Abroad -->
+
         <!-- Permanent Address Abroad -->
         <h4 class="section-title">🌍 Permanent Address Abroad</h4>
         <div class="row g-3" formGroupName="permanentAddressAbroad">
             <div class="col-md-6">
-                <label class="form-label">Door No <span class="text-danger">*</span></label>
-                <input type="text" formControlName="doorNo" class="form-control">
+                <label for="doorNo" class="form-label">Door No <span class="text-danger">*</span></label>
+                <input type="text" formControlName="doorNo" id="doorNo" class="form-control" [ngClass]="{
+                    'is-invalid':
+                       permanentAddressAbroad.get('doorNo')!.invalid &&
+                       permanentAddressAbroad.get('doorNo')!.touched
+                  }" required>
+                <div class="text-danger small"
+                    *ngIf="permanentAddressAbroad.get('doorNo')!.invalid &&  permanentAddressAbroad.get('doorNo')!.touched">
+                    Door No is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Street <span class="text-danger">*</span></label>
-                <input type="text" formControlName="street" class="form-control">
+                <label for="street" class="form-label">Street <span class="text-danger">*</span></label>
+                <input type="text" formControlName="street" id="street" class="form-control" [ngClass]="{
+                    'is-invalid':
+                       permanentAddressAbroad.get('street')!.invalid &&
+                       permanentAddressAbroad.get('street')!.touched
+                  }" required>
+                <div class="text-danger small"
+                    *ngIf="permanentAddressAbroad.get('street')!.invalid &&  permanentAddressAbroad.get('street')!.touched">
+                    Street is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Locality <span class="text-danger">*</span></label>
-                <input type="text" formControlName="locality" class="form-control">
+                <label for="locality" class="form-label">Locality <span class="text-danger">*</span></label>
+                <input type="text" formControlName="locality" id="locality1" class="form-control" [ngClass]="{
+                    'is-invalid':
+                       permanentAddressAbroad.get('locality')!.invalid &&
+                       permanentAddressAbroad.get('locality')!.touched
+                  }" required>
+                <div class="text-danger small"
+                    *ngIf="permanentAddressAbroad.get('locality')!.invalid &&  permanentAddressAbroad.get('locality')!.touched">
+                    Locality is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Post Code <span class="text-danger">*</span></label>
-                <input type="text" formControlName="postCode" class="form-control">
+                <label for="postCode" class="form-label">Post Code <span class="text-danger">*</span></label>
+                <input type="text" formControlName="postCode" id="postCode1" class="form-control" [ngClass]="{
+                    'is-invalid':
+                       permanentAddressAbroad.get('postCode')!.invalid &&
+                       permanentAddressAbroad.get('postCode')!.touched
+                  }" required>
+                <div class="text-danger small"
+                    *ngIf="permanentAddressAbroad.get('postCode')!.invalid &&  permanentAddressAbroad.get('postCode')!.touched">
+                    Post Code is required.
+                </div>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Country <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="country">
-                    <mat-option value="">Choose</mat-option>
-                    <mat-option value="Germany">Germany</mat-option>
-                    <mat-option value="USA">USA</mat-option>
-                    <mat-option value="Canada">Canada</mat-option>
-                    <mat-option value="India">India</mat-option>
-                    <mat-option value="China">China</mat-option>
+                <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
+                <mat-select id="country" class="custom-mat-select select" placeholder="Select" formControlName="country"
+                    [ngClass]="{
+                        'is-invalid':
+                           permanentAddressAbroad.get('country')!.invalid &&
+                           permanentAddressAbroad.get('country')!.touched
+                      }">
+                    <mat-option id="choose" value="">Choose</mat-option>
+                    <mat-option id="Germany" value="Germany">Germany</mat-option>
+                    <mat-option id="USA" value="USA">USA</mat-option>
+                    <mat-option id="Canada" value="Canada">Canada</mat-option>
+                    <mat-option id-="India" value="India">India</mat-option>
+                    <mat-option id="China" value="China">China</mat-option>
                 </mat-select>
+                <div class="text-danger small"
+                    *ngIf="permanentAddressAbroad.get('country')!.invalid &&  permanentAddressAbroad.get('country')!.touched">
+                    Country is required.
+                </div>
             </div>
         </div>
 
         <!-- Upload Documents -->
-        <label class="form-label">Additional Documents</label>
+        <label for="documents" class="form-label">Additional Documents</label>
         <h4 class="section-title">📎 Upload Documents <span class="text-danger">*</span></h4>
         <div class="row g-3">
 
 
             <div class="col-md-12">
-                <label class="form-label">Passport Scanned <span class="text-danger">*</span></label>
+                <label for="Passport" class="form-label">Passport Scanned <span class="text-danger">*</span></label>
                 <div class="d-flex align-items-center mb-3">
                     <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
                         <div class="position-relative d-flex align-items-center">
@@ -172,62 +384,27 @@
                     <div class="d-inline-flex flex-column align-items-start">
                         <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                             <i class="ti ti-file-broken me-1"></i>Upload file
-                            <input type="file" class="form-control image-sign" multiple="">
-                        </div>
-                        <span>PDF. Max size of 2Mb</span>                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <label class="form-label">Residence ID Card <span class="text-danger">*</span></label>
-                <div class="d-flex align-items-center mb-3">
-                    <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
-                        <div class="position-relative d-flex align-items-center">
-                            <i class="ti ti-photo text-dark fs-16"></i>
-                        </div>
-                    </div>
-                    <div class="d-inline-flex flex-column align-items-start">
-                        <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
-                            <i class="ti ti-file-broken me-1"></i>Upload file
-                            <input type="file" class="form-control image-sign" multiple="">
-                        </div>
-                        <span>PDF. Max size of 2Mb</span>                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <label class="form-label">Driving License <span class="text-danger">*</span></label>
-                <div class="d-flex align-items-center mb-3">
-                    <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
-                        <div class="position-relative d-flex align-items-center">
-                            <i class="ti ti-photo text-dark fs-16"></i>
-                        </div>
-                    </div>
-                    <div class="d-inline-flex flex-column align-items-start">
-                        <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
-                            <i class="ti ti-file-broken me-1"></i>Upload file
-                            <input type="file" class="form-control image-sign" multiple="">
-                        </div>
-                        <span>PDF. Max size of 2Mb</span>                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <label class="form-label">Curriculum Vitae (CV) <span class="text-danger">*</span></label>
-                <div class="d-flex align-items-center mb-3">
-                    <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
-                        <div class="position-relative d-flex align-items-center">
-                            <i class="ti ti-photo text-dark fs-16"></i>
-                        </div>
-                    </div>
-                    <div class="d-inline-flex flex-column align-items-start">
-                        <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
-                            <i class="ti ti-file-broken me-1"></i>Upload file
-                            <input type="file" class="form-control image-sign" multiple="">
+                            <input type="file" class="form-control image-sign" id="passportPdf" multiple
+                                (change)="onFileChange($event, 'passportScan')" [ngClass]="{
+                                    'is-invalid':
+                                       f['passportScan'].invalid &&
+                                       f['passportScan'].touched
+                                  }">
+
                         </div>
                         <span>PDF. Max size of 2Mb</span>
+                        <div class="text-danger small mt-1" *ngIf="
+                            f['passportScan'].invalid &&
+                            f['passportScan'].touched
+                        ">
+                            You must upload a passport scan.
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-12">
-                <label class="form-label">Additional Documents <span class="text-danger">*</span></label>
+                <label for="residenceIdCard" class="form-label">Residence ID Card <span
+                        class="text-danger">*</span></label>
                 <div class="d-flex align-items-center mb-3">
                     <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
                         <div class="position-relative d-flex align-items-center">
@@ -237,9 +414,103 @@
                     <div class="d-inline-flex flex-column align-items-start">
                         <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                             <i class="ti ti-file-broken me-1"></i>Upload file
-                            <input type="file" class="form-control image-sign" multiple="">
+                            <input type="file" class="form-control image-sign" id="residenceIdCard" [ngClass]="{
+                                'is-invalid':
+                                   f['residenceIdCard'].invalid &&
+                                   f['residenceIdCard'].touched
+                              }" multiple>
                         </div>
                         <span>PDF. Max size of 2Mb</span>
+                        <div class="text-danger small mt-1" *ngIf="
+                            f['residenceIdCard'].invalid &&
+                            f['residenceIdCard'].touched
+                        ">
+                            You must upload a Residence ID Card .
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="driving-license" class="form-label">Driving License <span
+                        class="text-danger">*</span></label>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
+                        <div class="position-relative d-flex align-items-center">
+                            <i class="ti ti-photo text-dark fs-16"></i>
+                        </div>
+                    </div>
+                    <div class="d-inline-flex flex-column align-items-start">
+                        <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
+                            <i class="ti ti-file-broken me-1"></i>Upload file
+                            <input type="file" class="form-control image-sign" id="driving-license" [ngClass]="{
+                                'is-invalid':
+                                   f['drivingLicense'].invalid &&
+                                   f['drivingLicense'].touched
+                              }" multiple="">
+                        </div>
+                        <span>PDF. Max size of 2Mb</span>
+                        <div class="text-danger small mt-1" *ngIf="
+                        f['drivingLicense'].invalid &&
+                        f['drivingLicense'].touched
+                    ">
+                            You must upload a Driving License .
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="curriculum-vitae" class="form-label">Curriculum Vitae (CV) <span
+                        class="text-danger">*</span></label>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
+                        <div class="position-relative d-flex align-items-center">
+                            <i class="ti ti-photo text-dark fs-16"></i>
+                        </div>
+                    </div>
+                    <div class="d-inline-flex flex-column align-items-start">
+                        <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
+                            <i class="ti ti-file-broken me-1"></i>Upload file
+                            <input type="file" class="form-control image-sign" id="curriculum-vitae" [ngClass]="{
+                                'is-invalid':
+                                   f['curriculumVitae'].invalid &&
+                                   f['curriculumVitae'].touched
+                              }" multiple="">
+                        </div>
+                        <span>PDF. Max size of 2Mb</span>
+                        <div class="text-danger small mt-1" *ngIf="
+                        f['curriculumVitae'].invalid &&
+                        f['curriculumVitae'].touched
+                    ">
+                            You must upload a Curriculum Vitae (CV) .
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="additional-documents" class="form-label">Additional Documents <span
+                        class="text-danger">*</span></label>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
+                        <div class="position-relative d-flex align-items-center">
+                            <i class="ti ti-photo text-dark fs-16"></i>
+                        </div>
+                    </div>
+                    <div class="d-inline-flex flex-column align-items-start">
+                        <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
+                            <i class="ti ti-file-broken me-1"></i>Upload file
+                            <input type="file" class="form-control image-sign" id="additional-documents" [ngClass]="{
+                                'is-invalid':
+                                   f['additionalDocuments'].invalid &&
+                                   f['additionalDocuments'].touched
+                              }" multiple="">
+                        </div>
+                        <span>PDF. Max size of 2Mb</span>
+                        <div class="text-danger small mt-1" *ngIf="
+                        f['additionalDocuments'].invalid &&
+                        f['additionalDocuments'].touched
+                    ">
+                            You must upload a Additional Documents.
+                        </div>
                     </div>
                 </div>
             </div>
