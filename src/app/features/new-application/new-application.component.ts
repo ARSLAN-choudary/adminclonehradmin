@@ -338,6 +338,10 @@ export class NewApplicationComponent implements OnInit {
       if (res.status === "success") {
         this.toastr.success(res.message);
         this.closeAddApplication();
+        if (res.data) {
+          const id = res.data._id;
+          this.router.navigate(["/userDetails", id]);
+        }
 
         this.getTableData(this.skip, this.pageSize);
 
