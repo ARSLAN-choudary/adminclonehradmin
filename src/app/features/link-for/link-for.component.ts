@@ -195,10 +195,43 @@ export class LinkForComponent implements OnInit {
     });
   }
 
-  onFileChange(evt: Event, controlName: string) {
-    const input = evt.target as HTMLInputElement;
-    const files = input.files && input.files.length ? input.files : null;
-    this.employeeForm.get(controlName)!.setValue(files);
-    this.employeeForm.get(controlName)!.markAsTouched();
+  onPassportScanChange(evt: Event) {
+    const files = (evt.target as HTMLInputElement).files;
+    this.employeeForm.patchValue({
+      passportScan: files ? Array.from(files) : null,
+    });
+    this.employeeForm.get('passportScan')!.markAsTouched();
+  }
+
+  onResidenceIdCardChange(evt: Event) {
+    const files = (evt.target as HTMLInputElement).files;
+    this.employeeForm.patchValue({
+      residenceIdCard: files ? Array.from(files) : null,
+    });
+    this.employeeForm.get('residenceIdCard')!.markAsTouched();
+  }
+
+  onDrivingLicenseChange(evt: Event) {
+    const files = (evt.target as HTMLInputElement).files;
+    this.employeeForm.patchValue({
+      drivingLicense: files ? Array.from(files) : null,
+    });
+    this.employeeForm.get('drivingLicense')!.markAsTouched();
+  }
+
+  onCurriculumVitaeChange(evt: Event) {
+    const files = (evt.target as HTMLInputElement).files;
+    this.employeeForm.patchValue({
+      curriculumVitae: files ? Array.from(files) : null,
+    });
+    this.employeeForm.get('curriculumVitae')!.markAsTouched();
+  }
+
+  onAdditionalDocumentsChange(evt: Event) {
+    const files = (evt.target as HTMLInputElement).files;
+    this.employeeForm.patchValue({
+      additionalDocuments: files ? Array.from(files) : null,
+    });
+    this.employeeForm.get('additionalDocuments')!.markAsTouched();
   }
 }

@@ -161,6 +161,11 @@
                 <div class="text-danger small" *ngIf="f['passportNo'].invalid && f['passportNo'].touched">
                     Passport No is required.
                 </div>
+                <ul *ngIf="f['passportScan'].value?.length" class="list-unstyled small">
+                    <li *ngFor="let file of f['passportScan'].value">
+                        <i class="ti ti-file-text me-1"></i>{{ file.name }}
+                    </li>
+                </ul>
             </div>
             <div class="col-md-6">
                 <label for="countryOfIssue" class="form-label">Country of Issue <span
@@ -173,6 +178,7 @@
                 <div class="text-danger small" *ngIf="f['countryOfIssue'].invalid && f['countryOfIssue'].touched">
                     Country of Issue is required.
                 </div>
+
             </div>
             <div class="col-md-6">
                 <label for="dateOfIssue" class="form-label">Date of Issue <span class="text-danger">*</span></label>
@@ -184,6 +190,7 @@
                 <div class="text-danger small" *ngIf="f['dateOfIssue'].invalid && f['dateOfIssue'].touched">
                     Date of Issue is required.
                 </div>
+
             </div>
             <div class="col-md-6">
                 <label for="validUntil" class="form-label">Valid Until <span class="text-danger">*</span></label>
@@ -195,6 +202,7 @@
                 <div class="text-danger small" *ngIf="f['validUntil'].invalid && f['validUntil'].touched">
                     Valid Until is required.
                 </div>
+
             </div>
             <div class="col-md-6">
                 <label for="currentlyResidingIn" class="form-label">Currently Residing In <span
@@ -209,6 +217,7 @@
                     *ngIf="f['currentlyResidingIn'].invalid && f['currentlyResidingIn'].touched">
                     Currently Residing In is required.
                 </div>
+
             </div>
             <div class="col-md-6">
                 <label for="residingSince" class="form-label">Since <span class="text-danger">*</span></label>
@@ -220,6 +229,7 @@
                 <div class="text-danger small" *ngIf="f['residingSince'].invalid && f['residingSince'].touched">
                     Since is required.
                 </div>
+
             </div>
 
         </div>
@@ -385,7 +395,7 @@
                         <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                             <i class="ti ti-file-broken me-1"></i>Upload file
                             <input type="file" class="form-control image-sign" id="passportPdf" multiple
-                                (change)="onFileChange($event, 'passportScan')" [ngClass]="{
+                                (change)="onPassportScanChange($event)" [ngClass]="{
                                     'is-invalid':
                                        f['passportScan'].invalid &&
                                        f['passportScan'].touched
@@ -399,7 +409,13 @@
                         ">
                             You must upload a passport scan.
                         </div>
+                        <ul *ngIf="f['passportScan'].value?.length" class="list-unstyled small">
+                            <li *ngFor="let file of f['passportScan'].value">
+                                <i class="ti ti-file-text me-1"></i>{{ file.name }}
+                            </li>
+                        </ul>
                     </div>
+
                 </div>
             </div>
             <div class="col-md-12">
@@ -418,7 +434,7 @@
                                 'is-invalid':
                                    f['residenceIdCard'].invalid &&
                                    f['residenceIdCard'].touched
-                              }" multiple>
+                              }" (change)="onResidenceIdCardChange($event)" multiple>
                         </div>
                         <span>PDF. Max size of 2Mb</span>
                         <div class="text-danger small mt-1" *ngIf="
@@ -427,6 +443,11 @@
                         ">
                             You must upload a Residence ID Card .
                         </div>
+                        <ul *ngIf="f['residenceIdCard'].value?.length" class="list-unstyled small">
+                            <li *ngFor="let file of f['residenceIdCard'].value">
+                                <i class="ti ti-file-text me-1"></i>{{ file.name }}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -442,7 +463,8 @@
                     <div class="d-inline-flex flex-column align-items-start">
                         <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                             <i class="ti ti-file-broken me-1"></i>Upload file
-                            <input type="file" class="form-control image-sign" id="driving-license" [ngClass]="{
+                            <input type="file" class="form-control image-sign" id="driving-license"
+                                (change)="onDrivingLicenseChange($event)" [ngClass]="{
                                 'is-invalid':
                                    f['drivingLicense'].invalid &&
                                    f['drivingLicense'].touched
@@ -455,6 +477,11 @@
                     ">
                             You must upload a Driving License .
                         </div>
+                        <ul *ngIf="f['drivingLicense'].value?.length" class="list-unstyled small">
+                            <li *ngFor="let file of f['drivingLicense'].value">
+                                <i class="ti ti-file-text me-1"></i>{{ file.name }}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -470,7 +497,8 @@
                     <div class="d-inline-flex flex-column align-items-start">
                         <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                             <i class="ti ti-file-broken me-1"></i>Upload file
-                            <input type="file" class="form-control image-sign" id="curriculum-vitae" [ngClass]="{
+                            <input type="file" class="form-control image-sign" id="curriculum-vitae"
+                                (change)="onCurriculumVitaeChange($event)" [ngClass]="{
                                 'is-invalid':
                                    f['curriculumVitae'].invalid &&
                                    f['curriculumVitae'].touched
@@ -483,6 +511,11 @@
                     ">
                             You must upload a Curriculum Vitae (CV) .
                         </div>
+                        <ul *ngIf="f['curriculumVitae'].value?.length" class="list-unstyled small">
+                            <li *ngFor="let file of f['curriculumVitae'].value">
+                                <i class="ti ti-file-text me-1"></i>{{ file.name }}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -498,7 +531,8 @@
                     <div class="d-inline-flex flex-column align-items-start">
                         <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                             <i class="ti ti-file-broken me-1"></i>Upload file
-                            <input type="file" class="form-control image-sign" id="additional-documents" [ngClass]="{
+                            <input type="file" class="form-control image-sign" id="additional-documents"
+                                (change)="onAdditionalDocumentsChange($event)" [ngClass]="{
                                 'is-invalid':
                                    f['additionalDocuments'].invalid &&
                                    f['additionalDocuments'].touched
@@ -511,6 +545,11 @@
                     ">
                             You must upload a Additional Documents.
                         </div>
+                        <ul *ngIf="f['additionalDocuments'].value?.length" class="list-unstyled small">
+                            <li *ngFor="let file of f['additionalDocuments'].value">
+                                <i class="ti ti-file-text me-1"></i>{{ file.name }}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
