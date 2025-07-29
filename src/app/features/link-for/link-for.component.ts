@@ -22,6 +22,7 @@ import { ReplaySubject, Subject, takeUntil } from "rxjs";
 import { CommonModule } from "@angular/common";
 import { BackendService } from "../../Services/backend.service";
 import { ToastrService } from "ngx-toastr";
+import { ActivatedRoute } from "@angular/router";
 
 interface Country {
   id: number;
@@ -46,6 +47,7 @@ interface Country {
   styleUrl: "./link-for.component.scss",
 })
 export class LinkForComponent implements OnInit {
+  private userId!: string;
   formGroup!: FormGroup;
   employeeForm!: FormGroup;
   countryCtrl = new FormControl();
@@ -64,7 +66,8 @@ export class LinkForComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private backend: BackendService
+    private backend: BackendService,
+    private route: ActivatedRoute
   ) {}
 
   private _onDestroy = new Subject<void>();
@@ -77,6 +80,8 @@ export class LinkForComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.userId = this.route.snapshot.paramMap.get("id")!;
+
     this.employeeForm = this.fb.group({
       // Personal Details
       malteseRegistrationNo: ["", Validators.required],
@@ -184,7 +189,12 @@ export class LinkForComponent implements OnInit {
     // }
     console.log(this.employeeForm.value);
     this.employeeForm.markAllAsTouched();
-    this.backend.addUserDetails(this.employeeForm.value).subscribe({
+
+    const payload = {
+      ...this.employeeForm.value,
+      id: this.userId,
+    };
+    this.backend.addUserDetails(payload).subscribe({
       next: (res: any) => {
         this.toastr.success(res.message);
         this.employeeForm.reset();
@@ -200,7 +210,7 @@ export class LinkForComponent implements OnInit {
     this.employeeForm.patchValue({
       passportScan: files ? Array.from(files) : null,
     });
-    this.employeeForm.get('passportScan')!.markAsTouched();
+    this.employeeForm.get("passportScan")!.markAsTouched();
   }
 
   onResidenceIdCardChange(evt: Event) {
@@ -208,7 +218,7 @@ export class LinkForComponent implements OnInit {
     this.employeeForm.patchValue({
       residenceIdCard: files ? Array.from(files) : null,
     });
-    this.employeeForm.get('residenceIdCard')!.markAsTouched();
+    this.employeeForm.get("residenceIdCard")!.markAsTouched();
   }
 
   onDrivingLicenseChange(evt: Event) {
@@ -216,7 +226,7 @@ export class LinkForComponent implements OnInit {
     this.employeeForm.patchValue({
       drivingLicense: files ? Array.from(files) : null,
     });
-    this.employeeForm.get('drivingLicense')!.markAsTouched();
+    this.employeeForm.get("drivingLicense")!.markAsTouched();
   }
 
   onCurriculumVitaeChange(evt: Event) {
@@ -224,7 +234,7 @@ export class LinkForComponent implements OnInit {
     this.employeeForm.patchValue({
       curriculumVitae: files ? Array.from(files) : null,
     });
-    this.employeeForm.get('curriculumVitae')!.markAsTouched();
+    this.employeeForm.get("curriculumVitae")!.markAsTouched();
   }
 
   onAdditionalDocumentsChange(evt: Event) {
@@ -232,6 +242,6 @@ export class LinkForComponent implements OnInit {
     this.employeeForm.patchValue({
       additionalDocuments: files ? Array.from(files) : null,
     });
-    this.employeeForm.get('additionalDocuments')!.markAsTouched();
+    this.employeeForm.get("additionalDocuments")!.markAsTouched();
   }
 }
