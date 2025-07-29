@@ -13,3 +13,12 @@
 // .job-tittle {
 //   letter-spacing: 0.005em;
 // }
+:host ::ng-deep .p-inputwrapper.p-select.p-inputwrapper-filled {
+  border: 2px solid #28a745 !important;
+  border-radius: 4px !important;
+}
+
+// :host ::ng-deep p-select.p-inputwrapper-filled .p-select-label {
+//   border: 2px solid #28a745 !important;
+//   border-radius: 4px !important;
+// }

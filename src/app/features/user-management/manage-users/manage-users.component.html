@@ -627,7 +627,7 @@
 <!-- /Edit User -->
 
 <!-- delete modal -->
-<div class="modal fade" id="delete_contact">
+<div class="modal " id="delete_contact">
     <div class="modal-dialog modal-dialog-centered modal-sm rounded-0">
         <div class="modal-content rounded-0">
             <div class="modal-body p-4 text-center position-relative">
@@ -638,10 +638,10 @@
                 <h5 class="mb-1">Delete Confirmation</h5>
                 <p class="mb-3">Are you sure you want to remove user you selected.</p>
                 <div class="d-flex justify-content-center">
-                    <a href="javascript:void(0);" class="btn btn-light position-relative z-1 me-2 w-100"
-                        data-bs-dismiss="modal">Cancel</a>
-                    <a href="javascript:void(0);" class="btn btn-primary position-relative z-1 w-100"
-                        data-bs-dismiss="modal">Yes, Delete</a>
+                    <a (click)="cancelDelete($event)" href="javascript:void(0);"
+                        class="btn btn-light position-relative z-1 me-2 w-100" data-bs-dismiss="modal">Cancel</a>
+                    <a (click)="confirmDelete($event)" href="javascript:void(0);"
+                        class="btn btn-primary position-relative z-1 w-100" data-bs-dismiss="modal">Yes, Delete</a>
                 </div>
             </div>
         </div>

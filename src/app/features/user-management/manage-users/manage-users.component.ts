@@ -87,6 +87,7 @@ interface Country {
   styleUrl: "./manage-users.component.scss",
 })
 export class ManageUsersComponent implements OnInit, OnDestroy {
+  deleteUserId!: any;
   @ViewChild("addUserCanvas", { static: true })
   addUserCanvas!: ElementRef<HTMLElement>;
   @ViewChild("editUserCanvas", { static: true })
@@ -147,17 +148,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     private toaster: ToastrService,
     private renderer: Renderer2
   ) {
-    this.backend.getManageUsers("").subscribe((apiRes: any) => {
-      this.actualData = apiRes.data.data;
-      this.totalData = apiRes.totalData;
-
-      this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-        if (this.router.url === this.routes.manageUsers) {
-          this.pageSize = res.pageSize;
-          this.getTableData({ skip: res.skip, limit: res.limit });
-        }
-      });
-    });
+    this.getUserList();
     this.countries = [
       { label: "United Arab Emirates", value: "uae" },
       { label: "Georgia", value: "georgia" },
@@ -197,6 +188,20 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this._onDestroy.complete();
   }
 
+  getUserList() {
+    this.backend.getManageUsers("").subscribe((apiRes: any) => {
+      this.actualData = apiRes.data.data;
+      this.totalData = apiRes.totalData;
+
+      this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+        if (this.router.url === this.routes.manageUsers) {
+          this.pageSize = res.pageSize;
+          this.getTableData({ skip: res.skip, limit: res.limit });
+        }
+      });
+    });
+  }
+
   get f() {
     return this.userForm.controls;
   }
@@ -219,6 +224,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         this.toastr.success(res.message);
         this.userForm.reset();
         this.closeAddUser();
+        this.getUserList();
       },
       error: (err) => {
         this.toastr.success(err.message);
@@ -368,6 +374,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         //     const instance = bootstrap.Offcanvas.getInstance(offcanvas);
         //     instance?.hide();
         // }
+        this.getUserList();
         this.getTableData({ skip: 0, limit: this.pageSize });
       },
       error: (err: any) => {
@@ -395,13 +402,26 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   }
 
   deleteUser(id: any) {
-    this.backend.deleteUser(id).subscribe((res: any) => {
-      if (res.status === "success") {
-        this.toaster.success(res.message);
-      } else {
-        this.toaster.error("Please Try Again Later");
-      }
-    });
+    this.deleteUserId = id;
+  }
+
+  cancelDelete(event: MouseEvent) {
+    (event.target as HTMLElement).blur();
+    this.deleteUserId = undefined;
+  }
+
+  confirmDelete(event: MouseEvent) {
+    (event.target as HTMLElement).blur();
+    if (this.deleteUserId) {
+      this.backend.deleteUser(this.deleteUserId).subscribe((res: any) => {
+        if (res.status === "success") {
+          this.toaster.success(res.message);
+          this.getUserList();
+        } else {
+          this.toaster.error("Please Try Again Later");
+        }
+      });
+    }
   }
 
   openAddUser() {
