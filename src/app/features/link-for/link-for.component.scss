@@ -3,7 +3,7 @@ body {
   color: #333;
 }
 header {
-  background-color: #E41F07;
+  background-color: #e41f07;
   color: #fff;
   padding: 40px 20px;
   text-align: center;
@@ -18,8 +18,8 @@ header p {
   color: #ffecec;
 }
 h4.section-title {
-  color: #E41F07;
-  border-bottom: 2px solid #E41F07;
+  color: #e41f07;
+  border-bottom: 2px solid #e41f07;
   padding-bottom: 6px;
   margin-top: 40px;
 }
@@ -27,7 +27,7 @@ h4.section-title {
   font-weight: 500;
 }
 .btn-custom {
-  background-color: #E41F07;
+  background-color: #e41f07;
   color: #fff;
 }
 .btn-custom:hover {
@@ -35,4 +35,12 @@ h4.section-title {
 }
 .message {
   display: none;
+}
+
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+:host ::ng-deep .mat-mdc-select.is-invalid .mat-mdc-select-trigger {
+  border: 1px solid #dc3545;
+  border-radius: 4px;
 }
