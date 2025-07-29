@@ -406,17 +406,21 @@
 
                         </div>
                         <span>PDF. Max size of 2Mb</span>
-                        <div class="text-danger small mt-1" *ngIf="
-                            f['passportScan'].invalid &&
-                            f['passportScan'].touched
-                        ">
-                            You must upload a passport scan.
-                        </div>
                         <ul *ngIf="f['passportScan'].value?.length" class="list-unstyled small">
                             <li *ngFor="let file of f['passportScan'].value">
                                 <i class="ti ti-file-text me-1"></i>{{ file.name }}
                             </li>
                         </ul>
+                        <div class="text-danger small mt-1" *ngIf="
+                          (  f['passportScan'].invalid &&
+                            f['passportScan'].touched) && !f['passportScan'].hasError('maxFileSize')
+                        ">
+                            You must upload a passport scan.
+                        </div>
+
+                        <div *ngIf="f['passportScan'].hasError('maxFileSize')" class="text-danger small">
+                            file must be less than 2 MB.
+                        </div>
                     </div>
 
                 </div>
@@ -440,17 +444,21 @@
                               }" (change)="onResidenceIdCardChange($event)" multiple>
                         </div>
                         <span>PDF. Max size of 2Mb</span>
-                        <div class="text-danger small mt-1" *ngIf="
-                            f['residenceIdCard'].invalid &&
-                            f['residenceIdCard'].touched
-                        ">
-                            You must upload a Residence ID Card .
-                        </div>
                         <ul *ngIf="f['residenceIdCard'].value?.length" class="list-unstyled small">
                             <li *ngFor="let file of f['residenceIdCard'].value">
                                 <i class="ti ti-file-text me-1"></i>{{ file.name }}
                             </li>
                         </ul>
+                        <div class="text-danger small mt-1" *ngIf="
+                           ( f['residenceIdCard'].invalid &&
+                            f['residenceIdCard'].touched) && !f['residenceIdCard'].hasError('maxFileSize')
+                        ">
+                            You must upload a Residence ID Card .
+                        </div>
+
+                        <div *ngIf="f['residenceIdCard'].hasError('maxFileSize')" class="text-danger small">
+                            file must be less than 2 MB.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -474,17 +482,21 @@
                               }" multiple="">
                         </div>
                         <span>PDF. Max size of 2Mb</span>
-                        <div class="text-danger small mt-1" *ngIf="
-                        f['drivingLicense'].invalid &&
-                        f['drivingLicense'].touched
-                    ">
-                            You must upload a Driving License .
-                        </div>
                         <ul *ngIf="f['drivingLicense'].value?.length" class="list-unstyled small">
                             <li *ngFor="let file of f['drivingLicense'].value">
                                 <i class="ti ti-file-text me-1"></i>{{ file.name }}
                             </li>
                         </ul>
+                        <div class="text-danger small mt-1" *ngIf="
+                       ( f['drivingLicense'].invalid &&
+                        f['drivingLicense'].touched) && !f['drivingLicense'].hasError('maxFileSize')
+                    ">
+                            You must upload a Driving License .
+                        </div>
+
+                        <div *ngIf="f['drivingLicense'].hasError('maxFileSize')" class="text-danger small">
+                            file must be less than 2 MB.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -508,17 +520,21 @@
                               }" multiple="">
                         </div>
                         <span>PDF. Max size of 2Mb</span>
-                        <div class="text-danger small mt-1" *ngIf="
-                        f['curriculumVitae'].invalid &&
-                        f['curriculumVitae'].touched
-                    ">
-                            You must upload a Curriculum Vitae (CV) .
-                        </div>
                         <ul *ngIf="f['curriculumVitae'].value?.length" class="list-unstyled small">
                             <li *ngFor="let file of f['curriculumVitae'].value">
                                 <i class="ti ti-file-text me-1"></i>{{ file.name }}
                             </li>
                         </ul>
+                        <div class="text-danger small mt-1" *ngIf="
+                       ( f['curriculumVitae'].invalid &&
+                        f['curriculumVitae'].touched)&& !f['curriculumVitae'].hasError('maxFileSize')
+                    ">
+                            You must upload a Curriculum Vitae (CV) .
+                        </div>
+
+                        <div *ngIf="f['curriculumVitae'].hasError('maxFileSize')" class="text-danger small">
+                            file must be less than 2 MB.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -541,18 +557,25 @@
                                    f['additionalDocuments'].touched
                               }" multiple="">
                         </div>
+
                         <span>PDF. Max size of 2Mb</span>
-                        <div class="text-danger small mt-1" *ngIf="
-                        f['additionalDocuments'].invalid &&
-                        f['additionalDocuments'].touched
-                    ">
-                            You must upload a Additional Documents.
-                        </div>
                         <ul *ngIf="f['additionalDocuments'].value?.length" class="list-unstyled small">
                             <li *ngFor="let file of f['additionalDocuments'].value">
                                 <i class="ti ti-file-text me-1"></i>{{ file.name }}
                             </li>
                         </ul>
+                        <div class="text-danger small mt-1" *ngIf="
+                       ( f['additionalDocuments'].invalid &&
+                        f['additionalDocuments'].touched )&&( !f['additionalDocuments'].hasError('maxFileSize'))
+                    ">
+                            You must upload a Additional Documents.
+                        </div>
+                        <div *ngIf="f['additionalDocuments'].touched &&
+       f['additionalDocuments'].hasError('maxFileSize')" class="text-danger small">
+                            file must be less than 2 MB.
+                        </div>
+
+
                     </div>
                 </div>
             </div>
