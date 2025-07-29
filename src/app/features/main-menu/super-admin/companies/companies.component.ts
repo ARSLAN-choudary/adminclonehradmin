@@ -294,7 +294,7 @@ export class CompaniesComponent {
   onDateRangeChange(event: { startDate: Date; endDate: Date }) {
     this.startDate = this.formatDate(event.startDate);
     this.endDate = this.formatDate(event.endDate);
-    console.log("filtering from", this.startDate, "to", this.endDate);
+  
     this.getTableData(this.skip, this.pageSize);
   }
 

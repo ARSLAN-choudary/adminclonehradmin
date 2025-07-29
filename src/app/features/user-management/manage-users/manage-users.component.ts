@@ -91,6 +91,8 @@ interface Country {
 export class ManageUsersComponent implements OnInit, OnDestroy {
   @ViewChild("deleteContactModal", { static: true })
   deleteContactModal!: ElementRef<HTMLElement>;
+  startDate: string = "";
+  endDate: string = "";
 
   public pageSize = 10;
   public skip = 0;
@@ -276,6 +278,18 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     });
   }
 
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+  onDateRangeChange(event: { startDate: Date; endDate: Date }) {
+    this.startDate = this.formatDate(event.startDate);
+    this.endDate = this.formatDate(event.endDate);
+    this.getTableData(this.skip, this.pageSize);
+  }
+
   onUpdateUser() {
     if (this.editUserForm.invalid) return;
 
@@ -450,6 +464,10 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       search: { value: this.searchDataValue },
     };
 
+    if (this.startDate && this.endDate) {
+      payload.startDate = this.startDate;
+      payload.endDate = this.endDate;
+    }
     this.backend.getManageUsers(payload).subscribe((apiRes: any) => {
       // this.actualData = apiRes.data.data;
       this.tableData = apiRes.data.data;
