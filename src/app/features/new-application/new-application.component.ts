@@ -262,7 +262,7 @@ export class NewApplicationComponent implements OnInit {
       startDate: "",
       endDate: "",
       draw: 1,
-      start: 1,
+      start: 0,
       length: 100,
       columns: [],
       order: [],
@@ -385,6 +385,9 @@ export class NewApplicationComponent implements OnInit {
       if (res.status === "success") {
         this.toastr.success(res.message);
         this.closeAddApplication();
+
+        this.getApplicationList();
+
         this.addNewApplicationForm.reset();
       } else {
         this.toastr.error("User Not Created, Please Try Again Later");
