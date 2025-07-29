@@ -4,168 +4,153 @@
 </header>
 
 <div class="container my-5">
-    <form id="employeeForm">
-
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" id="employeeForm">
         <!-- Personal Details -->
         <h4 class="section-title">🧍 Personal Details</h4>
         <div class="row g-3">
             <div class="col-md-6">
                 <label class="form-label">Maltese Registration No <span class="text-danger">*</span></label>
-
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="malteseRegistrationNo" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Last Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="lastName" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">First Name(s) <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="firstName" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Current Nationality <span class="text-danger">*</span></label>
-
-                <mat-select class="custom-mat-select select" placeholder="Select"
-                    [formControl]="currentNationalityCtrl">
+                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="currentNationality">
                     <mat-option>
-                        <ngx-mat-select-search [formControl]="currentNationalityCtrl" placeholderLabel="Search country"
-                            noEntriesFoundLabel="No countries found">
-                        </ngx-mat-select-search>
+                        <ngx-mat-select-search [formControl]="currentNationalityFilterCtrl" placeholderLabel="Search country" noEntriesFoundLabel="No countries found"></ngx-mat-select-search>
                     </mat-option>
-                    <mat-option *ngFor="let c of filteredCurrentNationality | async" [value]="c.id">
-                        {{ c.name }}
-                    </mat-option>
+                    <mat-option *ngFor="let c of filteredCurrentNationality | async" [value]="c.id">{{ c.name }}</mat-option>
                 </mat-select>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Birth Nationality <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select" [formControl]="birthNationalityCtrl">
+                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="birthNationality">
                     <mat-option>
-                        <ngx-mat-select-search [formControl]="birthNationalityFilterCtrl"
-                            placeholderLabel="Search country" noEntriesFoundLabel="No countries found">
-                        </ngx-mat-select-search>
+                        <ngx-mat-select-search [formControl]="birthNationalityFilterCtrl" placeholderLabel="Search country" noEntriesFoundLabel="No countries found"></ngx-mat-select-search>
                     </mat-option>
-                    <mat-option *ngFor="let c of filteredBirthNationality | async" [value]="c.id">
-                        {{ c.name }}
-                    </mat-option>
+                    <mat-option *ngFor="let c of filteredBirthNationality | async" [value]="c.id">{{ c.name }}</mat-option>
                 </mat-select>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Country of Birth <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select" [formControl]="birthCountryCtrl">
+                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="countryOfBirth">
                     <mat-option>
-                        <ngx-mat-select-search [formControl]="birthCountryFilterCtrl" placeholderLabel="Search country"
-                            noEntriesFoundLabel="No countries found">
-                        </ngx-mat-select-search> </mat-option>
-                    <mat-option *ngFor="let c of filteredBirthCountry | async" [value]="c.id">
-                        {{ c.name }}
+                        <ngx-mat-select-search [formControl]="birthCountryFilterCtrl" placeholderLabel="Search country" noEntriesFoundLabel="No countries found"></ngx-mat-select-search>
                     </mat-option>
+                    <mat-option *ngFor="let c of filteredBirthCountry | async" [value]="c.id">{{ c.name }}</mat-option>
                 </mat-select>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Place of Birth <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="placeOfBirth" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Date of Birth <span class="text-danger">*</span></label>
-                <input type="date" class="form-control" required>
+                <input type="date" formControlName="dateOfBirth" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Gender <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select">
-                    <mat-option value="1">Male</mat-option>
-                    <mat-option value="1">Female</mat-option>
-                    <mat-option value="1">Other</mat-option>
-
+                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="gender">
+                    <mat-option value="Male">Male</mat-option>
+                    <mat-option value="Female">Female</mat-option>
+                    <mat-option value="Other">Other</mat-option>
                 </mat-select>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Marital Status <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select">
-                    <mat-option value="1">Single</mat-option>
-                    <mat-option value="1">Married</mat-option>
+                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="maritalStatus">
+                    <mat-option value="Single">Single</mat-option>
+                    <mat-option value="Married">Married</mat-option>
                 </mat-select>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Passport No <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="passportNo" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Country of Issue <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="countryOfIssue" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Date of Issue <span class="text-danger">*</span></label>
-                <input type="date" class="form-control" required>
+                <input type="date" formControlName="dateOfIssue" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Valid Until <span class="text-danger">*</span></label>
-                <input type="date" class="form-control" required>
+                <input type="date" formControlName="validUntil" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Currently Residing In <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="currentlyResidingIn" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Since <span class="text-danger">*</span></label>
-                <input type="date" class="form-control" required>
+                <input type="date" formControlName="residingSince" class="form-control" required>
             </div>
         </div>
-
+        <!-- Address in Malta -->
         <!-- Address in Malta -->
         <h4 class="section-title">🏠 Address in Malta</h4>
-        <div class="row g-3">
+        <div class="row g-3" formGroupName="addressInMalta">
             <div class="col-md-6">
                 <label class="form-label">Locality <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="locality" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Street <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="street" class="form-control" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Property Number / Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="property" class="form-control" required>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Building / Entrance / Staircase / Floor <span
-                        class="text-danger">*</span></label>
-                <input type="text" class="form-control">
+                <label class="form-label">Building / Entrance / Staircase / Floor <span class="text-danger">*</span></label>
+                <input type="text" formControlName="buildingInfo" class="form-control">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Post Code <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required>
+                <input type="text" formControlName="postCode" class="form-control" required>
             </div>
         </div>
 
+
+        <!-- Permanent Address Abroad -->
         <!-- Permanent Address Abroad -->
         <h4 class="section-title">🌍 Permanent Address Abroad</h4>
-        <div class="row g-3">
+        <div class="row g-3" formGroupName="permanentAddressAbroad">
             <div class="col-md-6">
                 <label class="form-label">Door No <span class="text-danger">*</span></label>
-                <input type="text" class="form-control">
+                <input type="text" formControlName="doorNo" class="form-control">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Street <span class="text-danger">*</span></label>
-                <input type="text" class="form-control">
+                <input type="text" formControlName="street" class="form-control">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Locality <span class="text-danger">*</span></label>
-                <input type="text" class="form-control">
+                <input type="text" formControlName="locality" class="form-control">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Post Code <span class="text-danger">*</span></label>
-                <input type="text" class="form-control">
+                <input type="text" formControlName="postCode" class="form-control">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Country <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select">
-                    <mat-option value="1">Choose</mat-option>
-                    <mat-option value="1">Germany</mat-option>
-                    <mat-option value="1">USA</mat-option>
-                    <mat-option value="1">Canada</mat-option>
-                    <mat-option value="1">India</mat-option>
-                    <mat-option value="1">China</mat-option>
+                <mat-select class="custom-mat-select select" placeholder="Select" formControlName="country">
+                    <mat-option value="">Choose</mat-option>
+                    <mat-option value="Germany">Germany</mat-option>
+                    <mat-option value="USA">USA</mat-option>
+                    <mat-option value="Canada">Canada</mat-option>
+                    <mat-option value="India">India</mat-option>
+                    <mat-option value="China">China</mat-option>
                 </mat-select>
             </div>
         </div>

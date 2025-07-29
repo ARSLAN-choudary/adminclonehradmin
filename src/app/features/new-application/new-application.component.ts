@@ -173,30 +173,6 @@ export class NewApplicationComponent implements OnInit {
     companyForm = new FormGroup({
         company: new FormControl(null, Validators.required),
     });
-<<<<<<< HEAD
-=======
-  }
-  getApplicationList() {
-    let req: any = {
-      startDate: "",
-      endDate: "",
-      draw: 1,
-      start: 0,
-      length: 100,
-      columns: [],
-      order: [],
-      search: {
-        value: "",
-      },
-    };
-    this.backendService.getApplications(req).subscribe((apiRes: any) => {
-      this.actualData = apiRes.data.data ?? [];
-      this.totalData = apiRes.totalData ?? this.actualData.length;
-      this.initDataSource(this.actualData);
-      this.tableData = [...this.actualData];
-      this.serialNumberArray = this.tableData.map((_, i) => i + 1);
-      console.log(this.tableData);
->>>>>>> 75164df0c13c5b24c11243f7447d2a8b89f91337
 
     public sidebarPopup = false;
     public sidebarPopup2 = false;
@@ -336,7 +312,6 @@ export class NewApplicationComponent implements OnInit {
         this.searchDataValue = value.trim().toLowerCase();
         this.dataSource.filter = this.searchDataValue;
 
-<<<<<<< HEAD
         this.tableData = this.dataSource.filteredData;
         this.row = this.tableData.length > 0;
         if (this.searchDataValue !== "") {
@@ -349,40 +324,6 @@ export class NewApplicationComponent implements OnInit {
         } else {
             this.getTableData({skip: 0, limit: this.pageSize});
         }
-=======
-    this.backendService.addApplication(payload).subscribe((res: any) => {
-      if (res.status === "success") {
-        this.toastr.success(res.message);
-        this.closeAddApplication();
-
-        this.getApplicationList();
-
-        this.addNewApplicationForm.reset();
-      } else {
-        this.toastr.error("User Not Created, Please Try Again Later");
-      }
-    });
-  }
-
-  openAddApplication() {
-    const el = this.addCanvas.nativeElement;
-
-    this.renderer.addClass(el, "show");
-    this.renderer.setStyle(el, "visibility", "visible");
-    this.renderer.setAttribute(el, "aria-modal", "true");
-    this.renderer.removeAttribute(el, "aria-hidden");
-    this.renderer.setStyle(document.body, "overflow", "hidden");
-
-    this.backdropEl = this.renderer.createElement("div");
-    this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
-    this.renderer.addClass(this.backdropEl, "fade");
-    this.renderer.addClass(this.backdropEl, "show");
-    if (this.backdropEl) {
-      this.backdropEl.addEventListener("click", () =>
-        this.closeAddApplication()
-      );
-      this.renderer.appendChild(document.body, this.backdropEl);
->>>>>>> 75164df0c13c5b24c11243f7447d2a8b89f91337
     }
 
     public togglePassword(index: number) {
