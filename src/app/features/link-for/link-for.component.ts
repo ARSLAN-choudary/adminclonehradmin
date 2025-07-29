@@ -30,6 +30,7 @@ interface Country {
   name: string;
 }
 
+
 @Component({
   selector: "app-link-for",
   standalone: true,
