@@ -44,8 +44,9 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="currentNationality" class="form-label">Current Nationality <span
-                        class="text-danger">*</span></label>
+                <!-- <label for="currentNationality" class="form-label">Current Nationality <span
+                        class="text-danger">*</span></label> -->
+                <mat-label class="form-label">Current Nationality <span class="text-danger">*</span></mat-label>
                 <mat-select class="custom-mat-select select" id="currentNationality" placeholder="Select"
                     formControlName="currentNationality" [ngClass]="{
                         'is-invalid': f['currentNationality'].invalid && f['currentNationality'].touched
@@ -65,8 +66,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="birthNationality" class="form-label">Birth Nationality <span
-                        class="text-danger">*</span></label>
+                <mat-label class="form-label">Birth Nationality <span class="text-danger">*</span></mat-label>
                 <mat-select class="custom-mat-select select" id="birthNationality" placeholder="Select"
                     formControlName="birthNationality" [ngClass]="{
                         'is-invalid': f['birthNationality'].invalid && f['birthNationality'].touched
@@ -84,8 +84,9 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="countryOfBirth" class="form-label">Country of Birth <span
-                        class="text-danger">*</span></label>
+
+                <mat-label class="form-label">Country of Birth <span class="text-danger">*</span></mat-label>
+
                 <mat-select class="custom-mat-select select" placeholder="Select" id="countryOfBirth"
                     formControlName="countryOfBirth" [ngClass]="{
                         'is-invalid': f['countryOfBirth'].invalid && f['countryOfBirth'].touched
@@ -125,7 +126,8 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                <mat-label class="form-label">Gender<span class="text-danger">*</span></mat-label>
+
                 <mat-select class="custom-mat-select select" placeholder="Select" id="gender" formControlName="gender"
                     [ngClass]="{
                     'is-invalid': f['gender'].invalid && f['gender'].touched
@@ -139,7 +141,8 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="maritalStatus" class="form-label">Marital Status <span class="text-danger">*</span></label>
+                <mat-label class="form-label">Marital Status<span class="text-danger">*</span></mat-label>
+
                 <mat-select class="custom-mat-select select" placeholder="Select" id="maritalStatus"
                     formControlName="maritalStatus" [ngClass]="{
                         'is-invalid': f['maritalStatus'].invalid && f['maritalStatus'].touched
@@ -238,7 +241,7 @@
         <h4 class="section-title">🏠 Address in Malta</h4>
         <div class="row g-3" formGroupName="addressInMalta">
             <div class="col-md-6">
-                <label for="locality" class="form-label">Locality <span class="text-danger">*</span></label>
+                <label for="locality3" class="form-label">Locality <span class="text-danger">*</span></label>
                 <input type="text" formControlName="locality" id="locality3" class="form-control" [ngClass]="{
                     'is-invalid': 
                       addressInMalta.get('locality')!.invalid &&
@@ -332,7 +335,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="locality" class="form-label">Locality <span class="text-danger">*</span></label>
+                <label for="locality1" class="form-label">Locality <span class="text-danger">*</span></label>
                 <input type="text" formControlName="locality" id="locality1" class="form-control" [ngClass]="{
                     'is-invalid':
                        permanentAddressAbroad.get('locality')!.invalid &&
@@ -356,7 +359,8 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
+                <mat-label class="form-label">Country<span class="text-danger">*</span></mat-label>
+
                 <mat-select id="country" class="custom-mat-select select" placeholder="Select" formControlName="country"
                     [ngClass]="{
                         'is-invalid':
@@ -378,13 +382,12 @@
         </div>
 
         <!-- Upload Documents -->
-        <label for="documents" class="form-label">Additional Documents</label>
         <h4 class="section-title">📎 Upload Documents <span class="text-danger">*</span></h4>
         <div class="row g-3">
 
 
             <div class="col-md-12">
-                <label for="Passport" class="form-label">Passport Scanned <span class="text-danger">*</span></label>
+                <label for="passportPdf" class="form-label">Passport Scanned <span class="text-danger">*</span></label>
                 <div class="d-flex align-items-center mb-3">
                     <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
                         <div class="position-relative d-flex align-items-center">
