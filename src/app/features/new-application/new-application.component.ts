@@ -618,7 +618,6 @@ export class NewApplicationComponent implements OnInit {
       };
     }
 
-    // 4) Set column widths roughly to match PDF
     ws["!cols"] = [
       { wch: 12 }, // ReferenceNo
       { wch: 20 }, // EmployerName

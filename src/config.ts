@@ -3,6 +3,8 @@ const BASE_URL_API = "https://my-planent.onrender.com";
 
 export const CONFIG = {
   login: BASE_URL_API + "/api/auth/login",
+  forgetPassword: BASE_URL_API + "/api/auth/forgetpassword",
+  verifyOtp: BASE_URL_API + "/api/auth/verifyotp",
   addCompany: BASE_URL_API + "/api/company/addCompany",
   getCompany: BASE_URL_API + "/api/company/getlist",
   getManageUsers: BASE_URL_API + "/api/users/userslist",

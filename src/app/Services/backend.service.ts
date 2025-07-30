@@ -53,4 +53,10 @@ export class BackendService {
     const url = `${CONFIG.getApplicationDetails}/${id}`;
     return this.http.get(url);
   }
+  sentOtp(payload: any): Observable<any> {
+    return this.http.post(CONFIG.forgetPassword, payload);
+  }
+  verifyOtp(payload: any): Observable<any> {
+    return this.http.post(CONFIG.verifyOtp, payload);
+  }
 }
