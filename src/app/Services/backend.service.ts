@@ -48,4 +48,9 @@ export class BackendService {
   uploadPdfFiles(payload: any): Observable<any> {
     return this.http.post(CONFIG.uploadPdfFiles, payload);
   }
+
+  getApplicationDetails(id: any): Observable<any> {
+    const url = `${CONFIG.getApplicationDetails}/${id}`;
+    return this.http.get(url);
+  }
 }
