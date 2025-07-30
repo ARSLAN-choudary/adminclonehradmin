@@ -118,7 +118,7 @@ export class LinkForComponent implements OnInit {
         postCode: ["", Validators.required],
       }),
 
-      // Permanent Address Abroad
+      //  Address Abroad
       permanentAddressAbroad: this.fb.group({
         doorNo: [""],
         street: ["", Validators.required],
