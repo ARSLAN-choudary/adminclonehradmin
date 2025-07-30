@@ -40,6 +40,10 @@ import { CustomPaginationComponent } from "../../../../shared/custom-pagination/
 import { HttpClient } from "@angular/common/http";
 import { BackendService } from "../../../../Services/backend.service";
 import { tap } from "rxjs";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 BackendService;
 
@@ -330,5 +334,113 @@ export class CompaniesComponent {
 
   public selectAll(initChecked: boolean): void {
     this.tableData.forEach((f) => (f.isSelected = !initChecked));
+  }
+  exportAsPDF(): void {
+    if (!this.tableData?.length) return;
+    const doc = new jsPDF("p", "pt", "a4");
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = { left: 20, right: 20 };
+
+    doc.setFontSize(18);
+    doc.text("Companies List", pageWidth / 2, 40, { align: "center" });
+
+    const headers = [
+      ["Name", "Registration No", "VAT No", "Website", "Inc Date", "Status"],
+    ];
+    const body = this.tableData.map((d) => [
+      d.name,
+      d.registrationNo,
+      d.vatNo,
+      d.website,
+      new Date(d.incorporatonDate).toLocaleDateString(),
+      d.status,
+    ]);
+
+    autoTable(doc, {
+      head: headers,
+      body: body,
+      startY: 60,
+      margin,
+      tableWidth: pageWidth - margin.left - margin.right,
+      theme: "striped",
+      headStyles: {
+        fillColor: [41, 128, 185],
+        textColor: 255,
+        halign: "center",
+        valign: "middle",
+      },
+      bodyStyles: {
+        halign: "center",
+        valign: "middle",
+      },
+      styles: {
+        fontSize: 8,
+        cellPadding: 6,
+        overflow: "ellipsize",
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245],
+      },
+    });
+
+    doc.save("CompaniesList.pdf");
+  }
+
+  exportAsExcel(): void {
+    if (!this.tableData?.length) return;
+
+    const exportData = this.tableData.map((d) => ({
+      name: d.name,
+      registrationNo: d.registrationNo,
+      vatNo: d.vatNo,
+      website: d.website,
+      incorporatonDate: new Date(d.incorporatonDate).toLocaleDateString(), // or d.incorporatonDate
+      status: d.status,
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, {
+      header: [
+        "name",
+        "registrationNo",
+        "vatNo",
+        "website",
+        "incorporatonDate",
+        "status",
+      ],
+    });
+
+    const range = XLSX.utils.decode_range(ws["!ref"]!);
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cell = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (!ws[cell]) continue;
+      ws[cell].s = {
+        fill: { fgColor: { rgb: "297CB9" } },
+        font: { bold: true, color: { rgb: "FFFFFF" } },
+        alignment: { horizontal: "center" },
+      };
+    }
+
+    ws["!cols"] = [
+      { wch: 20 }, 
+      { wch: 15 }, 
+      { wch: 15 },
+      { wch: 25 }, 
+      { wch: 20 }, 
+      { wch: 10 },
+    ];
+
+    const wb: XLSX.WorkBook = {
+      Sheets: { CompaniesList: ws },
+      SheetNames: ["CompaniesList"],
+    };
+    const buf = XLSX.write(wb, {
+      bookType: "xlsx",
+      type: "array",
+      cellStyles: true,
+    });
+    const blob = new Blob([buf], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(blob, `CompaniesList_${Date.now()}.xlsx`);
   }
 }
