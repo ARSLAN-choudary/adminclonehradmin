@@ -6,7 +6,9 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  signal,
   ViewChild,
+  WritableSignal,
 } from "@angular/core";
 import {
   FormBuilder,
@@ -44,7 +46,7 @@ import {
 import { DataService } from "../../../shared/data/data.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { DateRangePickerComponent } from "../../common/date-range-picker/date-range-picker.component";
-import { ReplaySubject, Subject, takeUntil } from "rxjs";
+import { ReplaySubject, Subject, takeUntil, tap } from "rxjs";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -92,6 +94,8 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   @ViewChild("deleteUserCanvas", { static: false })
   deleteContactModal!: ElementRef<HTMLDivElement>;
 
+  inActiveUsers: WritableSignal<number> = signal(0);
+  activeUsers: WritableSignal<number> = signal(0);
   startDate: string = "";
   endDate: string = "";
 
@@ -458,6 +462,11 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       );
     this.renderer.removeStyle(panel, "transform");
   }
+  private updateCounts(data: any[] = []) {
+    const active = data.filter((c) => c.status === "active").length;
+    this.activeUsers.set(active);
+    this.inActiveUsers.set(data.length - active);
+  }
   private getTableData(skip: number, limit: number): void {
     const payload: any = {
       start: skip,
@@ -469,20 +478,31 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       payload.startDate = this.startDate;
       payload.endDate = this.endDate;
     }
-    this.backend.getManageUsers(payload).subscribe((apiRes: any) => {
-      // this.actualData = apiRes.data.data;
-      this.tableData = apiRes.data.data;
-      this.totalData = apiRes.data.recordsTotal;
-      this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
-      this.dataSource = new MatTableDataSource<usersDataTable>(this.tableData);
-      this.row = this.tableData.length > 0;
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        serialNumberArray: this.serialNumberArray,
+    this.backend
+      .getManageUsers(payload)
+      .pipe(
+        tap((apiRes: any) => {
+          const arr = Array.isArray(apiRes?.data?.data) ? apiRes.data.data : [];
+          this.updateCounts(arr);
+        })
+      )
+      .subscribe((apiRes: any) => {
+        // this.actualData = apiRes.data.data;
+        this.tableData = apiRes.data.data;
+        this.totalData = apiRes.data.recordsTotal;
+
+        this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
+        this.dataSource = new MatTableDataSource<usersDataTable>(
+          this.tableData
+        );
+        this.row = this.tableData.length > 0;
+        this.pagination.calculatePageSize.next({
+          totalData: this.totalData,
+          pageSize: this.pageSize,
+          tableData: this.tableData,
+          serialNumberArray: this.serialNumberArray,
+        });
       });
-    });
   }
 
   public searchData(value: string): void {
