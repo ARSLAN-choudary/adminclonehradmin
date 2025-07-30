@@ -4,7 +4,9 @@ import {
   ElementRef,
   OnInit,
   Renderer2,
+  signal,
   ViewChild,
+  WritableSignal,
 } from "@angular/core";
 import {
   FormBuilder,
@@ -87,6 +89,9 @@ interface PhoneInputValue {
 export class NewApplicationComponent implements OnInit {
   @ViewChild("addCanvas", { static: true })
   addCanvas!: ElementRef<HTMLElement>;
+
+  errorMsg: WritableSignal<string> = signal("");
+  successMsg: WritableSignal<string> = signal("");
   startDate: string = "";
   endDate: string = "";
   public routes = routes;
@@ -337,17 +342,22 @@ export class NewApplicationComponent implements OnInit {
     this.backendService.addApplication(payload).subscribe((res: any) => {
       if (res.status === "success") {
         this.toastr.success(res.message);
-        this.closeAddApplication();
-        if (res.data) {
-          const id = res.data._id;
-          this.router.navigate(["/userDetails", id]);
-        }
+        this.successMsg.set(
+          "Application submitted! Check your email to complete any additional details."
+        );
+
+        // if (res.data) {
+        //   const id = res.data._id;
+        //   this.router.navigate(["/userDetails", id]);
+        // }
 
         this.getTableData(this.skip, this.pageSize);
 
         this.addNewApplicationForm.reset();
       } else {
         this.toastr.error("User Not Created, Please Try Again Later");
+        this.errorMsg.set("User Not Created, Please Try Again Later");
+        setTimeout(() => {}, 7000);
       }
     });
   }

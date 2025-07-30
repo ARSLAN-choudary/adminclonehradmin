@@ -635,6 +635,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="flex-grow-1">
+                    <div class="text-danger" *ngIf="errorMsg()">
+                        {{ errorMsg() }}
+                    </div>
+                    <div class="text-success" *ngIf="successMsg()">
+                        {{ successMsg() }}
+                    </div>
+                </div>
                 <!-- /Basic Info -->
             </div>
             <div class="d-flex align-items-center justify-content-end">
