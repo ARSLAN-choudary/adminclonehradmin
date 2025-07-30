@@ -16,7 +16,9 @@ export const interceptorFn: HttpInterceptorFn = (req, next) => {
   const isFormData = req.body instanceof FormData;
   const isLoginCall = req.url.includes("/login");
   const isUserDetailsCall = req.url.includes("/userDetails");
-  if (!isLoginCall && !isUserDetailsCall) {
+  const isForgetPasswordCall = req.url.includes("/forgot-password");
+
+  if (!isLoginCall && !isUserDetailsCall && !isForgetPasswordCall) {
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
