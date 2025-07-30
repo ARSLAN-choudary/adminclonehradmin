@@ -13,5 +13,4 @@ export const CONFIG = {
   getApplications: BASE_URL_API + "/api/application/list",
   addUserDetail: BASE_URL_API + "/api/application/userdetail",
   uploadPdfFiles: BASE_URL_API + "/api/application/upload",
-  getApplicationDetails: BASE_URL_API + "/api/application/get",
 };
