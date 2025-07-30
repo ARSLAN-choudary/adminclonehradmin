@@ -107,8 +107,6 @@ export class NewApplicationComponent implements OnInit {
   appSubmittedCanvas!: ElementRef<HTMLElement>;
   applicationDetails!: any;
 
-  errorMsg: WritableSignal<string> = signal("");
-  successMsg: WritableSignal<string> = signal("");
   startDate: string = "";
   endDate: string = "";
   public routes = routes;
@@ -377,9 +375,8 @@ export class NewApplicationComponent implements OnInit {
     this.backendService.addApplication(payload).subscribe((res: any) => {
       if (res.status === "success") {
         this.toastr.success(res.message);
-        this.successMsg.set(
-          "Application submitted! Check your email to complete any additional details."
-        );
+        this.closeAddApplication();
+        this.openThankYouModal();
 
         // if (res.data) {
         //   const id = res.data._id;
@@ -391,7 +388,6 @@ export class NewApplicationComponent implements OnInit {
         this.addNewApplicationForm.reset();
       } else {
         this.toastr.error("User Not Created, Please Try Again Later");
-        this.errorMsg.set("User Not Created, Please Try Again Later");
         setTimeout(() => {}, 7000);
       }
     });
@@ -529,11 +525,9 @@ export class NewApplicationComponent implements OnInit {
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = { left: 20, right: 20 };
 
-    // Title
     doc.setFontSize(18);
     doc.text("Application List Detail", pageWidth / 2, 40, { align: "center" });
 
-    // Build header (drop “Action”)
     const headers = [
       [
         "Reference no",
@@ -546,14 +540,13 @@ export class NewApplicationComponent implements OnInit {
       ],
     ];
 
-    // Build body rows (same order, no “action”)
     const body = this.tableData.map((d) => [
       `R${d._id.slice(-3).toUpperCase()}`,
       d.firstName,
       d.jobTitle,
       d.mobile,
       d.email,
-      // format date however you like
+
       new Date(d.createdAt).toLocaleDateString(),
       d.status,
     ]);
@@ -578,8 +571,8 @@ export class NewApplicationComponent implements OnInit {
       },
       styles: {
         fontSize: 8,
-        cellPadding: 6, // uniform row height
-        overflow: "ellipsize", // truncate long text
+        cellPadding: 6,
+        overflow: "ellipsize",
       },
       alternateRowStyles: {
         fillColor: [245, 245, 245],
@@ -592,7 +585,6 @@ export class NewApplicationComponent implements OnInit {
   exportAsExcel(): void {
     if (!this.tableData?.length) return;
 
-    // 1) Transform your data
     const exportData = this.tableData.map((d) => ({
       ReferenceNo: `R${d._id.slice(-3).toUpperCase()}`,
       EmployerName: d.firstName,
@@ -603,7 +595,6 @@ export class NewApplicationComponent implements OnInit {
       Status: d.status,
     }));
 
-    // 2) Create sheet, explicitly list headers (no Action)
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, {
       header: [
         "ReferenceNo",
@@ -616,7 +607,6 @@ export class NewApplicationComponent implements OnInit {
       ],
     });
 
-    // 3) Style header row
     const range = XLSX.utils.decode_range(ws["!ref"]!);
     for (let C = range.s.c; C <= range.e.c; ++C) {
       const cell = XLSX.utils.encode_cell({ r: 0, c: C });
@@ -639,7 +629,6 @@ export class NewApplicationComponent implements OnInit {
       { wch: 10 }, // Status
     ];
 
-    // 5) Build workbook and download
     const wb: XLSX.WorkBook = {
       Sheets: { ApplicationListDetail: ws },
       SheetNames: ["ApplicationListDetail"],

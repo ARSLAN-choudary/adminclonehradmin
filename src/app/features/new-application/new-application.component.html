@@ -639,14 +639,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex-grow-1">
-                    <div class="text-danger" *ngIf="errorMsg()">
-                        {{ errorMsg() }}
-                    </div>
-                    <div class="text-success" *ngIf="successMsg()">
-                        {{ successMsg() }}
-                    </div>
-                </div>
+
                 <!-- /Basic Info -->
             </div>
             <div class="d-flex align-items-center justify-content-end">
@@ -995,8 +988,8 @@
                 <i class="ti ti-check fs-24"></i>
             </span>
         </div>
-        <h5 class="mb-1">Application Submitted</h5>
-        <p class="mb-4">Your application has been submitted successfully.</p>
+        <h5 class="mb-1">Application Created</h5>
+        <p class="mb-4">Your application has been Created successfully.</p>
         <div class="d-flex justify-content-center">
             <button class="btn btn-success w-100" (click)="closeThankYouModal()">
                 Close
