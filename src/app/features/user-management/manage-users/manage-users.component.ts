@@ -92,8 +92,8 @@ interface Country {
   styleUrl: "./manage-users.component.scss",
 })
 export class ManageUsersComponent implements OnInit, OnDestroy {
-  @ViewChild("deleteContactModal", { static: true })
-  deleteContactModal!: ElementRef<HTMLElement>;
+  @ViewChild("deleteUserCanvas ", { static: true })
+  deleteUserCanvas!: ElementRef<HTMLElement>;
   startDate: string = "";
   endDate: string = "";
 
@@ -316,7 +316,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   }
 
   deleteUser(id: any) {
-    const panel = this.deleteContactModal.nativeElement;
+    const panel = this.deleteUserCanvas.nativeElement;
     this.renderer.addClass(panel, "show");
     this.renderer.setStyle(panel, "visibility", "visible");
     this.renderer.setAttribute(panel, "aria-modal", "true");
@@ -340,7 +340,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
-    const panel = this.deleteContactModal.nativeElement;
+    const panel = this.deleteUserCanvas.nativeElement;
 
     this.renderer.removeClass(panel, "show");
     this.renderer.setStyle(panel, "visibility", "hidden");

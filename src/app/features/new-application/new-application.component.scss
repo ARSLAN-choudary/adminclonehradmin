@@ -22,10 +22,9 @@
 //   border: 2px solid #28a745 !important;
 //   border-radius: 4px !important;
 // }
-.offcanvas-small {
+#appSubmittedCanvas.offcanvas-small {
   right: auto !important;
   bottom: auto !important;
-
   position: fixed;
   top: 50% !important;
   left: 50% !important;
@@ -39,9 +38,10 @@
   overflow-y: auto;
 }
 
-.offcanvas-backdrop {
+#appSubmittedCanvas.show ~ .offcanvas-backdrop {
   position: fixed;
 }
+
 .off-canvas-custom {
   border: 0px solid transparent;
   border-radius: 10px;
