@@ -440,6 +440,10 @@
                                             class="ti ti-dots-vertical"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="javascript:void(0);"
+                                            (click)="openViewApplicationModal(data._id)"><i
+                                                class="ti ti-edit text-blue"></i>
+                                            View Details</a>
                                         <a (click)="editApplication(data)" class="dropdown-item"
                                             href="javascript:void(0);" data-bs-toggle="offcanvas"
                                             data-bs-target="#offcanvas_edit"><i class="ti ti-edit text-blue"></i>
@@ -646,7 +650,7 @@
                 <!-- /Basic Info -->
             </div>
             <div class="d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="offcanvas">Cancel</a>
+                <a href="javascript:void(0);" class="btn btn-light me-2" (click)="closeAddApplication()">Cancel</a>
                 <button type="submit" class="btn btn-primary" [disabled]="addNewApplicationForm.invalid">Create</button>
             </div>
         </form>
@@ -789,3 +793,187 @@
 </div>
 
 <!-- /Resend Application Ends here -->
+
+
+<!-- View Details Modal -->
+<div #offcanvas_view class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_view">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="fw-semibold">Application Details</h5>
+        <button type="button" class="btn-close" (click)="closeViewApplicationModal()" aria-label="Close">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+
+    <div class="offcanvas-body">
+        <ng-container *ngIf="applicationDetails">
+
+            <!-- Basic Information -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <strong>Basic Information</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Company</label>
+                            <input type="text" class="form-control" [value]="applicationDetails.company" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Application Type</label>
+                            <input type="text" class="form-control" [value]="applicationDetails.applicationType"
+                                readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Context</label>
+                            <input type="text" class="form-control" [value]="applicationDetails.applicationContext"
+                                readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Sector</label>
+                            <input type="text" class="form-control" [value]="applicationDetails.employmentSectorType"
+                                readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Job Title</label>
+                            <input type="text" class="form-control" [value]="applicationDetails.jobTitle" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Occupation</label>
+                            <input type="text" class="form-control" [value]="applicationDetails.occupation" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" [value]="applicationDetails.email" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Mobile</label>
+                            <input type="text" class="form-control" [value]="applicationDetails.mobile" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address in Malta -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <strong>🏠 Address in Malta</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Locality</label>
+                            <input type="text" class="form-control" [value]="applicationDetails.addressInMalta.locality"
+                                readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Street</label>
+                            <input type="text" class="form-control" [value]="applicationDetails.addressInMalta.street"
+                                readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Post Code</label>
+                            <input type="text" class="form-control" [value]="applicationDetails.addressInMalta.postCode"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Permanent Address Abroad -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <strong>🌍 Permanent Address Abroad</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Door No</label>
+                            <input type="text" class="form-control"
+                                [value]="applicationDetails.permanentAddressAbroad.doorNo" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Street</label>
+                            <input type="text" class="form-control"
+                                [value]="applicationDetails.permanentAddressAbroad.street" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Locality</label>
+                            <input type="text" class="form-control"
+                                [value]="applicationDetails.permanentAddressAbroad.locality" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Post Code</label>
+                            <input type="text" class="form-control"
+                                [value]="applicationDetails.permanentAddressAbroad.postCode" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Country</label>
+                            <input type="text" class="form-control"
+                                [value]="applicationDetails.permanentAddressAbroad.country" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Uploaded Documents -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <strong>📎 Uploaded Documents</strong>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Driving License
+                        <a [href]="applicationDetails.uploadDocuments.drivingLicense" target="_blank"
+                            class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Passport Scan
+                        <a [href]="applicationDetails.uploadDocuments.passportScanned" target="_blank"
+                            class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Residence ID Card
+                        <a [href]="applicationDetails.uploadDocuments.residenceIdCard" target="_blank"
+                            class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Curriculum Vitae
+                        <a [href]="applicationDetails.uploadDocuments.curriculumVitae" target="_blank"
+                            class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Additional Documents:</strong>
+                        <div class="mt-2">
+                            <ng-container *ngFor="let url of applicationDetails.uploadDocuments.additionalDocuments">
+                                <a [href]="url" target="_blank" class="btn btn-sm btn-outline-secondary me-2 mb-2">
+                                    View
+                                </a>
+                            </ng-container>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Close Button -->
+            <div class="text-end">
+                <button type="button" class="btn btn-secondary" (click)="closeViewApplicationModal()">
+                    Close
+                </button>
+            </div>
+
+        </ng-container>
+    </div>
+</div>
+
+
+
+
+<!-- View Details Modal -->

@@ -14,3 +14,27 @@
   border: 2px solid #28a745 !important;
   border-radius: 4px !important;
 }
+.offcanvas-small {
+  right: auto !important;
+  bottom: auto !important;
+
+  position: fixed;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+
+  --bs-offcanvas-width: 320px;
+  width: var(--bs-offcanvas-width);
+  max-width: 90%;
+  height: auto;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.offcanvas-backdrop {
+  position: fixed;
+}
+.off-canvas-custom {
+  border: 0px solid transparent;
+  border-radius: 10px;
+}

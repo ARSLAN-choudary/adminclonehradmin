@@ -46,7 +46,8 @@
             <div class="input-icon input-icon-start position-relative">
                 <span class="input-icon-addon text-dark"><i class="ti ti-search"></i></span>
                 <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
-                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search">
+                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search"
+                    id="search-data">
             </div>
             <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas" (click)="openAddUser()"><i
                     class="ti ti-square-rounded-plus-filled me-1"></i>Add User</a>
@@ -83,13 +84,15 @@
                                                             <i class="ti ti-search"></i>
                                                         </span>
                                                         <input type="text" class="form-control form-control-md"
-                                                            placeholder="Search">
+                                                            placeholder="Search" id="filter name">
                                                     </div>
                                                 </div>
                                                 <ul class="mb-0">
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="Elizabeth Morgan"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="Elizabeth Morgan">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-06.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -97,8 +100,10 @@
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="Katherine Brooks"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="Katherine Brooks">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-40.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -106,8 +111,10 @@
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="Sophia Lopez"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="Sophia Lopez">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-05.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -115,8 +122,10 @@
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="John Michael"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="John Michael">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-10.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -124,8 +133,10 @@
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="Natalie Brooks"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="Natalie Brooks">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-15.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -133,8 +144,10 @@
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="William Turner"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="William Turner">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-01.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -142,8 +155,10 @@
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="Ava Martinez"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="Ava Martinez">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-13.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -151,8 +166,10 @@
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="Nathan Reed"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="Nathan Reed">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-12.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -160,8 +177,10 @@
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="Lily Anderson"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="Lily Anderson">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-03.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -169,8 +188,10 @@
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="Ryan Coleman"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="Ryan Coleman">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-18.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -197,20 +218,26 @@
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <ul>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label id="phone1"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="phone1">
                                                             +1 87545 54503
                                                         </label>
                                                     </li>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="iphone2"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="phone2">
                                                             +1 98975 17485
                                                         </label>
                                                     </li>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="iphone3"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="phone3">
                                                             +1 54655 25455
                                                         </label>
                                                     </li>
@@ -230,19 +257,22 @@
                                                 <ul class="mb-0">
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="email1">
                                                             elizabeth&#64;example.com
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="email2">
                                                             katherine&#64;example.com
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="email3">
                                                             samantha&#64;example.com
                                                         </label>
                                                     </li>
@@ -267,13 +297,15 @@
                                                 <ul>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="status1">
                                                             Active
                                                         </label>
                                                     </li>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="status2">
                                                             Inactive
                                                         </label>
                                                     </li>
@@ -321,7 +353,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Name</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="manage-coloumns1" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -332,7 +364,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Phone</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="manage-coloumns2" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -343,7 +375,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Email</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="manage-coloumns3" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -354,7 +386,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Created </span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="manage-coloumns4" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -365,7 +397,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Last Activity</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="manage-coloumns5" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -375,8 +407,8 @@
 
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Status</span>
-                                            <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                            <input class="form-check-input switchCheckDefault ms-auto" id="status3"
+                                                type="checkbox" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -386,8 +418,8 @@
 
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Action</span>
-                                            <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                            <input class="form-check-input switchCheckDefault ms-auto" id="action1"
+                                                type="checkbox" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -630,7 +662,7 @@
 <!-- … above your existing edit offcanvas … -->
 
 <!-- Delete offcanvas -->
-<div #deleteUserCanvas class="offcanvas offcanvas-end offcanvas-small" tabindex="-1" aria-hidden="true">
+<div #deleteUserCanvas class="offcanvas off-canvas-custom  offcanvas-small" tabindex="-1" aria-hidden="true">
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Delete Confirmation</h5>
         <button type="button"

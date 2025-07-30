@@ -89,8 +89,9 @@ interface Country {
   styleUrl: "./manage-users.component.scss",
 })
 export class ManageUsersComponent implements OnInit, OnDestroy {
-  @ViewChild("deleteContactModal", { static: true })
-  deleteContactModal!: ElementRef<HTMLElement>;
+  @ViewChild("deleteUserCanvas", { static: false })
+  deleteContactModal!: ElementRef<HTMLDivElement>;
+
   startDate: string = "";
   endDate: string = "";
 
@@ -471,7 +472,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.backend.getManageUsers(payload).subscribe((apiRes: any) => {
       // this.actualData = apiRes.data.data;
       this.tableData = apiRes.data.data;
-      this.totalData = apiRes.totalData;
+      this.totalData = apiRes.data.recordsTotal;
       this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
       this.dataSource = new MatTableDataSource<usersDataTable>(this.tableData);
       this.row = this.tableData.length > 0;
