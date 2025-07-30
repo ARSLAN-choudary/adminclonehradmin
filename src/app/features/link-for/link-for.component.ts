@@ -1,4 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -37,7 +43,6 @@ interface Country {
   name: string;
 }
 
-
 @Component({
   selector: "app-link-for",
   standalone: true,
@@ -56,6 +61,9 @@ interface Country {
   styleUrl: "./link-for.component.scss",
 })
 export class LinkForComponent implements OnInit {
+  @ViewChild("appSubmittedCanvas", { static: true })
+  appSubmittedCanvas!: ElementRef<HTMLElement>;
+  private backdropEl?: HTMLElement;
   private userId!: string;
   formGroup!: FormGroup;
   employeeForm!: FormGroup;
@@ -76,7 +84,8 @@ export class LinkForComponent implements OnInit {
     private fb: FormBuilder,
     private toastr: ToastrService,
     private backend: BackendService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private renderer: Renderer2
   ) {}
 
   private _onDestroy = new Subject<void>();
@@ -269,6 +278,7 @@ export class LinkForComponent implements OnInit {
       .subscribe({
         next: () => {
           this.toastr.success("Saved!");
+          this.openThankYouModal();
           this.employeeForm.reset();
         },
         error: (err) => {
@@ -316,5 +326,46 @@ export class LinkForComponent implements OnInit {
       additionalDocuments: files ? Array.from(files) : null,
     });
     this.employeeForm.get("additionalDocuments")!.markAsTouched();
+  }
+
+  openThankYouModal() {
+    const el = this.appSubmittedCanvas.nativeElement;
+
+    this.renderer.addClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "visible");
+    this.renderer.setAttribute(el, "aria-modal", "true");
+    this.renderer.removeAttribute(el, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.backdropEl = this.renderer.createElement("div");
+    this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
+    this.renderer.addClass(this.backdropEl, "fade");
+    this.renderer.addClass(this.backdropEl, "show");
+    if (this.backdropEl) {
+      this.backdropEl.addEventListener("click", () =>
+        this.closeThankYouModal()
+      );
+      this.renderer.appendChild(document.body, this.backdropEl);
+    }
+  }
+
+  closeThankYouModal() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const el = this.appSubmittedCanvas.nativeElement;
+
+    this.renderer.removeClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "hidden");
+    this.renderer.removeAttribute(el, "aria-modal");
+    this.renderer.setAttribute(el, "aria-hidden", "true");
+
+    this.renderer.removeStyle(document.body, "overflow");
+
+    if (this.backdropEl) {
+      this.renderer.removeChild(document.body, this.backdropEl);
+      this.backdropEl = undefined;
+    }
+    this.employeeForm.reset();
   }
 }

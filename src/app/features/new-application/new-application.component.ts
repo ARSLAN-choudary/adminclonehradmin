@@ -90,6 +90,11 @@ export class NewApplicationComponent implements OnInit {
   @ViewChild("addCanvas", { static: true })
   addCanvas!: ElementRef<HTMLElement>;
 
+  @ViewChild("offcanvas_view", { static: true })
+  offcanvas_view!: ElementRef<HTMLElement>;
+
+  applicationDetails!: any;
+
   errorMsg: WritableSignal<string> = signal("");
   successMsg: WritableSignal<string> = signal("");
   startDate: string = "";
@@ -384,9 +389,57 @@ export class NewApplicationComponent implements OnInit {
   }
 
   closeAddApplication() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     const el = this.addCanvas.nativeElement;
 
     // 1) hide the panel
+    this.renderer.removeClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "hidden");
+    this.renderer.removeAttribute(el, "aria-modal");
+    this.renderer.setAttribute(el, "aria-hidden", "true");
+
+    this.renderer.removeStyle(document.body, "overflow");
+
+    if (this.backdropEl) {
+      this.renderer.removeChild(document.body, this.backdropEl);
+      this.backdropEl = undefined;
+    }
+    this.addNewApplicationForm.reset();
+  }
+
+  openViewApplicationModal(id: any) {
+    const el = this.offcanvas_view.nativeElement;
+
+    this.renderer.addClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "visible");
+    this.renderer.setAttribute(el, "aria-modal", "true");
+    this.renderer.removeAttribute(el, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.backdropEl = this.renderer.createElement("div");
+    this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
+    this.renderer.addClass(this.backdropEl, "fade");
+    this.renderer.addClass(this.backdropEl, "show");
+    if (this.backdropEl) {
+      this.backdropEl.addEventListener("click", () =>
+        this.closeAddApplication()
+      );
+      this.renderer.appendChild(document.body, this.backdropEl);
+    }
+
+    this.backendService.getApplicationDetails(id).subscribe((res: any) => {
+      this.applicationDetails = res.data;
+    });
+  }
+
+  closeViewApplicationModal() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const el = this.offcanvas_view.nativeElement;
+
     this.renderer.removeClass(el, "show");
     this.renderer.setStyle(el, "visibility", "hidden");
     this.renderer.removeAttribute(el, "aria-modal");
