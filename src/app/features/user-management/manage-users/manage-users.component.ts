@@ -89,8 +89,9 @@ interface Country {
   styleUrl: "./manage-users.component.scss",
 })
 export class ManageUsersComponent implements OnInit, OnDestroy {
-  @ViewChild("deleteContactModal", { static: true })
-  deleteContactModal!: ElementRef<HTMLElement>;
+  @ViewChild("deleteUserCanvas", { static: false })
+  deleteContactModal!: ElementRef<HTMLDivElement>;
+
   startDate: string = "";
   endDate: string = "";
 
