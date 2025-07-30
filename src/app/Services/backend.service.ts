@@ -25,8 +25,8 @@ export class BackendService {
     return this.http.post(CONFIG.addUser, parms);
   }
 
-  updateUser(parms: any): Observable<any> {
-    return this.http.post(CONFIG.updateUser, parms);
+  updateUser(payload: any): Observable<any> {
+    return this.http.put(CONFIG.updateUser, payload);
   }
 
   deleteUser(id: any): Observable<any> {

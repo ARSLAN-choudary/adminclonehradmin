@@ -52,6 +52,14 @@ import { ToastrService } from "ngx-toastr";
 import { BackendService } from "../../Services/backend.service";
 import { DropdownModule } from "primeng/dropdown";
 import { SelectModule } from "primeng/select";
+import { tap } from "rxjs";
+
+import "jspdf-autotable";
+
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
 
 interface PhoneInputValue {
   number: string;
@@ -89,6 +97,15 @@ interface PhoneInputValue {
 export class NewApplicationComponent implements OnInit {
   @ViewChild("addCanvas", { static: true })
   addCanvas!: ElementRef<HTMLElement>;
+  inActiveApplications: WritableSignal<number> = signal(0);
+  activeApplications: WritableSignal<number> = signal(0);
+
+  @ViewChild("offcanvas_view", { static: true })
+  offcanvas_view!: ElementRef<HTMLElement>;
+
+  @ViewChild("appSubmittedCanvas", { static: true })
+  appSubmittedCanvas!: ElementRef<HTMLElement>;
+  applicationDetails!: any;
 
   errorMsg: WritableSignal<string> = signal("");
   successMsg: WritableSignal<string> = signal("");
@@ -117,6 +134,10 @@ export class NewApplicationComponent implements OnInit {
   public actualData: any[] = [];
 
   initChecked = false;
+
+  private EXCEL_TYPE =
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+  private EXCEL_EXTENSION = ".xlsx";
 
   applicationTypes = [
     { label: "New", value: "new" },
@@ -232,6 +253,12 @@ export class NewApplicationComponent implements OnInit {
     });
   }
 
+  private updateCounts(data: any[] = []) {
+    const active = data.filter((c) => c.status === "active").length;
+    this.activeApplications.set(active);
+    this.inActiveApplications.set(data.length - active);
+  }
+
   private getTableData(skip: number, limit: number): void {
     const payload: any = {
       start: skip,
@@ -243,24 +270,32 @@ export class NewApplicationComponent implements OnInit {
       payload.endDate = this.endDate;
     }
 
-    this.backendService.getApplications(payload).subscribe((apiRes: any) => {
-      this.actualData = apiRes.data.data ?? [];
-      this.totalData = apiRes.totalData ?? this.actualData.length;
-      this.tableData = [...this.actualData];
-      console.log(this.tableData);
+    this.backendService
+      .getApplications(payload)
+      .pipe(
+        tap((apiRes: any) => {
+          const arr = Array.isArray(apiRes?.data?.data) ? apiRes.data.data : [];
+          this.updateCounts(arr);
+        })
+      )
+      .subscribe((apiRes: any) => {
+        this.actualData = apiRes.data.data ?? [];
+        this.totalData = apiRes.totalData ?? this.actualData.length;
+        this.tableData = [...this.actualData];
+        console.log(this.tableData);
 
-      this.serialNumberArray = this.tableData.map((_, i) => i + 1);
-      this.dataSource = new MatTableDataSource<newApplicationDataTable>(
-        this.tableData
-      );
-      this.row = this.tableData.length > 0;
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        serialNumberArray: this.serialNumberArray,
+        this.serialNumberArray = this.tableData.map((_, i) => i + 1);
+        this.dataSource = new MatTableDataSource<newApplicationDataTable>(
+          this.tableData
+        );
+        this.row = this.tableData.length > 0;
+        this.pagination.calculatePageSize.next({
+          totalData: this.totalData,
+          pageSize: this.pageSize,
+          tableData: this.tableData,
+          serialNumberArray: this.serialNumberArray,
+        });
       });
-    });
   }
 
   public searchData(value: string): void {
@@ -384,6 +419,9 @@ export class NewApplicationComponent implements OnInit {
   }
 
   closeAddApplication() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     const el = this.addCanvas.nativeElement;
 
     // 1) hide the panel
@@ -398,5 +436,222 @@ export class NewApplicationComponent implements OnInit {
       this.renderer.removeChild(document.body, this.backdropEl);
       this.backdropEl = undefined;
     }
+    this.addNewApplicationForm.reset();
+  }
+
+  openViewApplicationModal(id: any) {
+    const el = this.offcanvas_view.nativeElement;
+
+    this.renderer.addClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "visible");
+    this.renderer.setAttribute(el, "aria-modal", "true");
+    this.renderer.removeAttribute(el, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.backdropEl = this.renderer.createElement("div");
+    this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
+    this.renderer.addClass(this.backdropEl, "fade");
+    this.renderer.addClass(this.backdropEl, "show");
+    if (this.backdropEl) {
+      this.backdropEl.addEventListener("click", () =>
+        this.closeAddApplication()
+      );
+      this.renderer.appendChild(document.body, this.backdropEl);
+    }
+
+    this.backendService.getApplicationDetails(id).subscribe((res: any) => {
+      this.applicationDetails = res.data;
+    });
+  }
+
+  closeViewApplicationModal() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const el = this.offcanvas_view.nativeElement;
+
+    this.renderer.removeClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "hidden");
+    this.renderer.removeAttribute(el, "aria-modal");
+    this.renderer.setAttribute(el, "aria-hidden", "true");
+
+    this.renderer.removeStyle(document.body, "overflow");
+
+    if (this.backdropEl) {
+      this.renderer.removeChild(document.body, this.backdropEl);
+      this.backdropEl = undefined;
+    }
+  }
+
+  openThankYouModal() {
+    const el = this.appSubmittedCanvas.nativeElement;
+
+    this.renderer.addClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "visible");
+    this.renderer.setAttribute(el, "aria-modal", "true");
+    this.renderer.removeAttribute(el, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.backdropEl = this.renderer.createElement("div");
+    this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
+    this.renderer.addClass(this.backdropEl, "fade");
+    this.renderer.addClass(this.backdropEl, "show");
+    if (this.backdropEl) {
+      this.backdropEl.addEventListener("click", () =>
+        this.closeThankYouModal()
+      );
+      this.renderer.appendChild(document.body, this.backdropEl);
+    }
+  }
+
+  closeThankYouModal() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const el = this.appSubmittedCanvas.nativeElement;
+
+    this.renderer.removeClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "hidden");
+    this.renderer.removeAttribute(el, "aria-modal");
+    this.renderer.setAttribute(el, "aria-hidden", "true");
+
+    this.renderer.removeStyle(document.body, "overflow");
+
+    if (this.backdropEl) {
+      this.renderer.removeChild(document.body, this.backdropEl);
+      this.backdropEl = undefined;
+    }
+  }
+  exportAsPDF(): void {
+    if (!this.tableData?.length) return;
+
+    const doc = new jsPDF("p", "pt", "a4");
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = { left: 20, right: 20 };
+
+    // Title
+    doc.setFontSize(18);
+    doc.text("Application List Detail", pageWidth / 2, 40, { align: "center" });
+
+    // Build header (drop “Action”)
+    const headers = [
+      [
+        "Reference no",
+        "Employer Name",
+        "Job Title",
+        "Mobile",
+        "Email",
+        "Submission Date",
+        "Status",
+      ],
+    ];
+
+    // Build body rows (same order, no “action”)
+    const body = this.tableData.map((d) => [
+      `R${d._id.slice(-3).toUpperCase()}`,
+      d.firstName,
+      d.jobTitle,
+      d.mobile,
+      d.email,
+      // format date however you like
+      new Date(d.createdAt).toLocaleDateString(),
+      d.status,
+    ]);
+
+    autoTable(doc, {
+      head: headers,
+      body: body,
+      startY: 60,
+      margin,
+      tableWidth: pageWidth - margin.left - margin.right,
+      theme: "striped",
+
+      headStyles: {
+        fillColor: [41, 128, 185],
+        textColor: 255,
+        halign: "center",
+        valign: "middle",
+      },
+      bodyStyles: {
+        halign: "center",
+        valign: "middle",
+      },
+      styles: {
+        fontSize: 8,
+        cellPadding: 6, // uniform row height
+        overflow: "ellipsize", // truncate long text
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245],
+      },
+    });
+
+    doc.save("ApplicationListDetail.pdf");
+  }
+
+  exportAsExcel(): void {
+    if (!this.tableData?.length) return;
+
+    // 1) Transform your data
+    const exportData = this.tableData.map((d) => ({
+      ReferenceNo: `R${d._id.slice(-3).toUpperCase()}`,
+      EmployerName: d.firstName,
+      JobTitle: d.jobTitle,
+      Mobile: d.mobile,
+      Email: d.email,
+      SubmissionDate: new Date(d.createdAt).toLocaleDateString(),
+      Status: d.status,
+    }));
+
+    // 2) Create sheet, explicitly list headers (no Action)
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, {
+      header: [
+        "ReferenceNo",
+        "EmployerName",
+        "JobTitle",
+        "Mobile",
+        "Email",
+        "SubmissionDate",
+        "Status",
+      ],
+    });
+
+    // 3) Style header row
+    const range = XLSX.utils.decode_range(ws["!ref"]!);
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cell = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (!ws[cell]) continue;
+      ws[cell].s = {
+        fill: { fgColor: { rgb: "297CB9" } },
+        font: { bold: true, color: { rgb: "FFFFFF" } },
+        alignment: { horizontal: "center" },
+      };
+    }
+
+    // 4) Set column widths roughly to match PDF
+    ws["!cols"] = [
+      { wch: 12 }, // ReferenceNo
+      { wch: 20 }, // EmployerName
+      { wch: 25 }, // JobTitle
+      { wch: 15 }, // Mobile
+      { wch: 25 }, // Email
+      { wch: 18 }, // SubmissionDate
+      { wch: 10 }, // Status
+    ];
+
+    // 5) Build workbook and download
+    const wb: XLSX.WorkBook = {
+      Sheets: { ApplicationListDetail: ws },
+      SheetNames: ["ApplicationListDetail"],
+    };
+    const buf = XLSX.write(wb, {
+      bookType: "xlsx",
+      type: "array",
+      cellStyles: true,
+    });
+    saveAs(
+      new Blob([buf], { type: this.EXCEL_TYPE }),
+      `ApplicationListDetail_${Date.now()}.xlsx`
+    );
   }
 }

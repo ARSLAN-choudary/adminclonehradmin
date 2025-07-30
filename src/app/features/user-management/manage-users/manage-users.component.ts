@@ -56,7 +56,10 @@ import {
 } from "ngx-intl-tel-input";
 import { Select } from "primeng/select";
 import { ToastrService } from "ngx-toastr";
-
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 interface Country {
   id: number;
   name: string;
@@ -290,41 +293,21 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.getTableData(this.skip, this.pageSize);
   }
 
-  onUpdateUser() {
-    if (this.editUserForm.invalid) return;
-
-    this.editUserForm
-      .get("phone")
-      ?.setValue(this.editUserForm.get("phone")?.value?.e164Number);
-
-    this.backend.updateUser(this.editUserForm.value).subscribe({
-      next: (res: any) => {
-        this.toastr.success(res.message);
-        // Close offcanvas
-        const offcanvas = document.getElementById("offcanvas_edit");
-        // if (offcanvas) {
-        //     const instance = bootstrap.Offcanvas.getInstance(offcanvas);
-        //     instance?.hide();
-        // }
-        this.getTableData(this.skip, this.pageSize);
-      },
-      error: (err: any) => {
-        this.toastr.error(err.message);
-      },
-    });
-  }
-
   onEditSubmit() {
-    if (this.editUserForm.invalid) return;
+    // debugger;
+    // if (this.editUserForm.invalid) return;
 
+    debugger;
     const payload = {
       ...this.editUserForm.value,
       phone: this.editUserForm.get("phone")?.value?.e164Number,
+      id: this.selectedUser._id,
     };
-
-    this.backend.updateUser("").subscribe({
+    debugger;
+    this.backend.updateUser(payload).subscribe({
       next: (res) => {
         this.toastr.success("User updated");
+        this.closeEditUser();
       },
       error: (err) => {
         this.toastr.error("Update failed");
@@ -496,5 +479,97 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
 
   public selectAll(initChecked: boolean): void {
     this.tableData.forEach((f) => (f.isSelected = !initChecked));
+  }
+
+  exportAsPDF(): void {
+    if (!this.tableData?.length) return;
+
+    const doc = new jsPDF("p", "pt", "a4");
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(16);
+    doc.text("Manage Users", pageWidth / 2, 40, { align: "center" });
+
+    autoTable(doc, {
+      startY: 60,
+      head: [["Name", "Phone", "Email", "Created", "Role", "Status"]],
+      body: this.tableData.map((u) => [
+        u.userName,
+        u.phone,
+        u.email,
+        new Date(u.createdAt).toLocaleDateString(),
+        u.role,
+        u.status,
+      ]),
+      styles: {
+        fontSize: 9,
+        cellPadding: 4,
+        valign: "middle",
+        halign: "center",
+      },
+      headStyles: {
+        fillColor: [41, 128, 185],
+        textColor: 255,
+      },
+      alternateRowStyles: { fillColor: [245, 245, 245] },
+      margin: { left: 20, right: 20 },
+      theme: "striped",
+    });
+
+    doc.save(`UserList_${Date.now()}.pdf`);
+  }
+
+  exportAsExcel(): void {
+    if (!this.tableData?.length) return;
+
+    const exportData = this.tableData.map((u) => ({
+      Name: u.userName,
+      Phone: u.phone,
+      Email: u.email,
+      Created: new Date(u.createdAt).toLocaleDateString(),
+      Role: u.role,
+      Status: u.status,
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, {
+      header: ["Name", "Phone", "Email", "Created", "Role", "Status"],
+    });
+
+    // style header
+    const range = XLSX.utils.decode_range(ws["!ref"]!);
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cell = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (!ws[cell]) continue;
+      ws[cell].s = {
+        fill: { fgColor: { rgb: "297CB9" } },
+        font: { bold: true, color: { rgb: "FFFFFF" } },
+        alignment: { horizontal: "center" },
+      };
+    }
+
+    ws["!cols"] = [
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 25 },
+      { wch: 20 },
+      { wch: 15 },
+      { wch: 10 },
+    ];
+
+    const wb: XLSX.WorkBook = {
+      Sheets: { Users: ws },
+      SheetNames: ["Users"],
+    };
+    const buf = XLSX.write(wb, {
+      bookType: "xlsx",
+      type: "array",
+      cellStyles: true,
+    });
+    saveAs(
+      new Blob([buf], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      }),
+      `UserList_${Date.now()}.xlsx`
+    );
   }
 }

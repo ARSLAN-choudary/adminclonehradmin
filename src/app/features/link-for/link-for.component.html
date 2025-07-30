@@ -582,8 +582,38 @@
         </div>
 
         <div class="mt-4 text-end">
-            <button type="submit" class="btn btn-custom px-4">Submit</button>
+            <!-- <button type="submit" class="btn btn-custom px-4">Submit</button> -->
+            <button type="button" class="btn btn-custom px-4" (click)="openThankYouModal()">Submit</button>
             <div id="formMessage" class="alert mt-3 message" role="alert"></div>
+
         </div>
     </form>
+</div>
+
+
+<!-- Application Submitted Offcanvas -->
+<div #appSubmittedCanvas id="appSubmittedCanvas" class="offcanvas offcanvas-custom  offcanvas-small" tabindex="-1"
+    aria-labelledby="appSubmittedLabel" aria-hidden="true">
+    <div class="offcanvas-header border-bottom">
+        <h5 id="appSubmittedLabel" class="fw-semibold">Thank You!</h5>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 d-flex align-items-center justify-content-center rounded-circle"
+            aria-label="Close" (click)="closeThankYouModal()">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body text-center">
+        <div class="mb-3 position-relative z-1">
+            <span class="avatar avatar-xl badge-soft-success border-0 text-success rounded-circle">
+                <i class="ti ti-check fs-24"></i>
+            </span>
+        </div>
+        <h5 class="mb-1">Application Submitted</h5>
+        <p class="mb-4">Your application has been submitted successfully.</p>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-success w-100" (click)="closeThankYouModal()">
+                Close
+            </button>
+        </div>
+    </div>
 </div>
