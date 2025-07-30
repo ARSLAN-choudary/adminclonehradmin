@@ -497,6 +497,17 @@ export class DataService {
               showSubRoute: false,
               customSubmenuTwo: false,
             },
+
+            {
+              menuValue: "Manage Users",
+              // icon: "users",
+              route: routes.manageUsers,
+              hasSubRoute: false,
+              showSubRoute: false,
+              base: "manage-users",
+              customSubmenuTwo: false,
+              subRoutes: [],
+            },
             {
               menuValue: "Subscription",
               hasSubRoute: false,
@@ -546,14 +557,6 @@ export class DataService {
               menuValue: "New Application",
               base: "administratorApplication",
               route: routes.administratorApplication,
-            },
-            {
-              menuValue: "Manage Users",
-              // icon: "users",
-              route: routes.manageUsers,
-              // hasSubRoute: false,
-              // showSubRoute: false,
-              base: "manage-users",
             },
           ],
         },

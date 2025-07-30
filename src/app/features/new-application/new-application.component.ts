@@ -52,6 +52,7 @@ import { ToastrService } from "ngx-toastr";
 import { BackendService } from "../../Services/backend.service";
 import { DropdownModule } from "primeng/dropdown";
 import { SelectModule } from "primeng/select";
+import { tap } from "rxjs";
 
 interface PhoneInputValue {
   number: string;
@@ -89,6 +90,8 @@ interface PhoneInputValue {
 export class NewApplicationComponent implements OnInit {
   @ViewChild("addCanvas", { static: true })
   addCanvas!: ElementRef<HTMLElement>;
+  inActiveApplications: WritableSignal<number> = signal(0);
+  activeApplications: WritableSignal<number> = signal(0);
 
   @ViewChild("offcanvas_view", { static: true })
   offcanvas_view!: ElementRef<HTMLElement>;
@@ -237,6 +240,12 @@ export class NewApplicationComponent implements OnInit {
     });
   }
 
+  private updateCounts(data: any[] = []) {
+    const active = data.filter((c) => c.status === "active").length;
+    this.activeApplications.set(active);
+    this.inActiveApplications.set(data.length - active);
+  }
+
   private getTableData(skip: number, limit: number): void {
     const payload: any = {
       start: skip,
@@ -248,24 +257,32 @@ export class NewApplicationComponent implements OnInit {
       payload.endDate = this.endDate;
     }
 
-    this.backendService.getApplications(payload).subscribe((apiRes: any) => {
-      this.actualData = apiRes.data.data ?? [];
-      this.totalData = apiRes.totalData ?? this.actualData.length;
-      this.tableData = [...this.actualData];
-      console.log(this.tableData);
+    this.backendService
+      .getApplications(payload)
+      .pipe(
+        tap((apiRes: any) => {
+          const arr = Array.isArray(apiRes?.data?.data) ? apiRes.data.data : [];
+          this.updateCounts(arr);
+        })
+      )
+      .subscribe((apiRes: any) => {
+        this.actualData = apiRes.data.data ?? [];
+        this.totalData = apiRes.totalData ?? this.actualData.length;
+        this.tableData = [...this.actualData];
+        console.log(this.tableData);
 
-      this.serialNumberArray = this.tableData.map((_, i) => i + 1);
-      this.dataSource = new MatTableDataSource<newApplicationDataTable>(
-        this.tableData
-      );
-      this.row = this.tableData.length > 0;
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        serialNumberArray: this.serialNumberArray,
+        this.serialNumberArray = this.tableData.map((_, i) => i + 1);
+        this.dataSource = new MatTableDataSource<newApplicationDataTable>(
+          this.tableData
+        );
+        this.row = this.tableData.length > 0;
+        this.pagination.calculatePageSize.next({
+          totalData: this.totalData,
+          pageSize: this.pageSize,
+          tableData: this.tableData,
+          serialNumberArray: this.serialNumberArray,
+        });
       });
-    });
   }
 
   public searchData(value: string): void {

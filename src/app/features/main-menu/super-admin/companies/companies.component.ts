@@ -3,6 +3,8 @@ import {
   Component,
   EventEmitter,
   Output,
+  signal,
+  WritableSignal,
 } from "@angular/core";
 import { CollapseHeaderComponent } from "../../../common/collapse-header/collapse-header.component";
 import { DateRangePickerComponent } from "../../../common/date-range-picker/date-range-picker.component";
@@ -37,6 +39,7 @@ import { MatSortModule, Sort } from "@angular/material/sort";
 import { CustomPaginationComponent } from "../../../../shared/custom-pagination/custom-pagination.component";
 import { HttpClient } from "@angular/common/http";
 import { BackendService } from "../../../../Services/backend.service";
+import { tap } from "rxjs";
 
 BackendService;
 
@@ -63,6 +66,8 @@ interface select {
   styleUrl: "./companies.component.scss",
 })
 export class CompaniesComponent {
+  inActiveCompanies: WritableSignal<number> = signal(0);
+  activeCompanies: WritableSignal<number> = signal(0);
   public routes = routes;
   public pageSize = 10;
   public skip = 0;
@@ -192,6 +197,12 @@ export class CompaniesComponent {
         });
       });
   }
+
+  private updateCounts(data: any[] = []) {
+    const active = data.filter((c) => c.status === "active").length;
+    this.activeCompanies.set(active);
+    this.inActiveCompanies.set(data.length - active);
+  }
   private getTableData(skip: number, limit: number): void {
     const payload: any = {
       start: skip,
@@ -203,21 +214,30 @@ export class CompaniesComponent {
       payload.endDate = this.endDate;
     }
 
-    this.backendService.getCompany(payload).subscribe((apiRes: any) => {
-      this.tableData = apiRes.data.data;
-      this.totalData = apiRes.data.recordsTotal;
-      this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
-      this.dataSource = new MatTableDataSource<companiesDataTable>(
-        this.tableData
-      );
-      this.row = this.tableData.length > 0;
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        serialNumberArray: this.serialNumberArray,
+    this.backendService
+      .getCompany(payload)
+      .pipe(
+        tap((apiRes: any) => {
+          const arr = Array.isArray(apiRes?.data?.data) ? apiRes.data.data : [];
+          this.updateCounts(arr);
+        })
+      )
+      .subscribe((apiRes: any) => {
+        this.tableData = apiRes.data.data;
+        this.totalData = apiRes.data.recordsTotal;
+
+        this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
+        this.dataSource = new MatTableDataSource<companiesDataTable>(
+          this.tableData
+        );
+        this.row = this.tableData.length > 0;
+        this.pagination.calculatePageSize.next({
+          totalData: this.totalData,
+          pageSize: this.pageSize,
+          tableData: this.tableData,
+          serialNumberArray: this.serialNumberArray,
+        });
       });
-    });
   }
   pdfAndSizeValidator(control: AbstractControl): ValidationErrors | null {
     const files: File[] = control.value as File[];
@@ -294,7 +314,7 @@ export class CompaniesComponent {
   onDateRangeChange(event: { startDate: Date; endDate: Date }) {
     this.startDate = this.formatDate(event.startDate);
     this.endDate = this.formatDate(event.endDate);
-  
+
     this.getTableData(this.skip, this.pageSize);
   }
 
