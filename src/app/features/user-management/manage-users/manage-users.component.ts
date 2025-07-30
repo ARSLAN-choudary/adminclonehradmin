@@ -295,41 +295,21 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.getTableData(this.skip, this.pageSize);
   }
 
-  onUpdateUser() {
-    if (this.editUserForm.invalid) return;
-
-    this.editUserForm
-      .get("phone")
-      ?.setValue(this.editUserForm.get("phone")?.value?.e164Number);
-
-    this.backend.updateUser(this.editUserForm.value).subscribe({
-      next: (res: any) => {
-        this.toastr.success(res.message);
-        // Close offcanvas
-        const offcanvas = document.getElementById("offcanvas_edit");
-        // if (offcanvas) {
-        //     const instance = bootstrap.Offcanvas.getInstance(offcanvas);
-        //     instance?.hide();
-        // }
-        this.getTableData(this.skip, this.pageSize);
-      },
-      error: (err: any) => {
-        this.toastr.error(err.message);
-      },
-    });
-  }
-
   onEditSubmit() {
-    if (this.editUserForm.invalid) return;
+    // debugger;
+    // if (this.editUserForm.invalid) return;
 
+    debugger;
     const payload = {
       ...this.editUserForm.value,
       phone: this.editUserForm.get("phone")?.value?.e164Number,
+      id: this.selectedUser._id,
     };
-
-    this.backend.updateUser("").subscribe({
+    debugger;
+    this.backend.updateUser(payload).subscribe({
       next: (res) => {
         this.toastr.success("User updated");
+        this.closeEditUser();
       },
       error: (err) => {
         this.toastr.error("Update failed");

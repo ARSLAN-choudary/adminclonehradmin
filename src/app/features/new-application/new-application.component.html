@@ -420,7 +420,7 @@
                     <tbody>
                         @for (data of tableData; track data) {
                         <tr class="odd">
-                            <td>{{ data._id }}</td>
+                            <td>R{{data._id | slice:-3 | uppercase}}</td>
                             <td>{{ data.firstName }}</td>
                             <td class="job-tittle">{{ data.jobTitle }}</td>
                             <td>{{ data.mobile }}</td>
@@ -442,8 +442,7 @@
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item" href="javascript:void(0);"
-                                            (click)="openViewApplicationModal(data._id)"><i
-                                                class="ti ti-edit text-blue"></i>
+                                            (click)="openViewApplicationModal(data._id)"><i class="fa fa-eye"></i>
                                             View Details</a>
                                         <a (click)="editApplication(data)" class="dropdown-item"
                                             href="javascript:void(0);" data-bs-toggle="offcanvas"
