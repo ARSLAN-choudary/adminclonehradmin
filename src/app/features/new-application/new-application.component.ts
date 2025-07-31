@@ -95,7 +95,7 @@ interface PhoneInputValue {
   styleUrl: "./new-application.component.scss",
 })
 export class NewApplicationComponent implements OnInit {
-  @ViewChild("deleteUserCanvas ", { static: true })
+  @ViewChild("deleteUserCanvas", { static: true })
   deleteUserCanvas!: ElementRef<HTMLElement>;
   @ViewChild("addCanvas", { static: true })
   addCanvas!: ElementRef<HTMLElement>;
@@ -105,6 +105,7 @@ export class NewApplicationComponent implements OnInit {
   @ViewChild("offcanvas_view", { static: true })
   offcanvas_view!: ElementRef<HTMLElement>;
 
+  deleteApplicationId!: any;
   @ViewChild("appSubmittedCanvas", { static: true })
   appSubmittedCanvas!: ElementRef<HTMLElement>;
   applicationDetails!: any;
@@ -219,7 +220,8 @@ export class NewApplicationComponent implements OnInit {
     private toastr: ToastrService,
     private backendService: BackendService,
     private fb: FormBuilder,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private backend: BackendService
   ) {}
 
   ngOnInit() {
@@ -590,6 +592,7 @@ export class NewApplicationComponent implements OnInit {
   }
 
   deleteUser(id: any) {
+    this.deleteApplicationId = id;
     const panel = this.deleteUserCanvas.nativeElement;
     this.renderer.addClass(panel, "show");
     this.renderer.setStyle(panel, "visibility", "visible");
@@ -630,6 +633,7 @@ export class NewApplicationComponent implements OnInit {
         this.renderer.removeChild(document.body, backdrop)
       );
     this.renderer.removeStyle(panel, "transform");
+    this.deleteApplicationId = undefined;
   }
 
   exportAsExcel(): void {
@@ -691,5 +695,22 @@ export class NewApplicationComponent implements OnInit {
       new Blob([buf], { type: this.EXCEL_TYPE }),
       `ApplicationListDetail_${Date.now()}.xlsx`
     );
+  }
+
+  confirmDelete(event: MouseEvent) {
+    (event.target as HTMLElement).blur();
+    if (this.deleteApplicationId) {
+      this.backend
+        .deleteApplication(this.deleteApplicationId)
+        .subscribe((res: any) => {
+          if (res.status === "success") {
+            this.toastr.success(res.message);
+            this.getTableData(this.skip, this.pageSize);
+            this.closeDeleteModal();
+          } else {
+            this.toastr.error("Please Try Again Later");
+          }
+        });
+    }
   }
 }

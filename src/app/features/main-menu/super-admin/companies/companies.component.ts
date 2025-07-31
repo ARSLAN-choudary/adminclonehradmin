@@ -47,6 +47,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { ToastrService } from "ngx-toastr";
 
 BackendService;
 
@@ -75,8 +76,11 @@ interface select {
 export class CompaniesComponent {
   @ViewChild("editUserCanvas", { static: true })
   editUserCanvas!: ElementRef<HTMLElement>;
+  @ViewChild("deleteUserCanvas", { static: true })
+  deleteUserCanvas!: ElementRef<HTMLElement>;
   editUserForm!: FormGroup;
 
+  deleteCompanyId!: any;
   private editBackdrop?: HTMLElement;
 
   inActiveCompanies: WritableSignal<number> = signal(0);
@@ -139,7 +143,8 @@ export class CompaniesComponent {
     private fb: FormBuilder,
     private backendService: BackendService,
     private cdRef: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private toastr: ToastrService
   ) {}
   ngOnInit(): void {
     this.getTableData(this.skip, this.pageSize);
@@ -344,6 +349,51 @@ export class CompaniesComponent {
     this.getTableData(this.skip, this.pageSize);
   }
 
+  deleteUser(id: any) {
+    this.deleteCompanyId = id;
+    const panel = this.deleteUserCanvas.nativeElement;
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+    this.editBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.editBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.editBackdrop, "fade");
+    this.renderer.addClass(this.editBackdrop, "show");
+    if (this.editBackdrop) {
+      this.editBackdrop.addEventListener("click", () =>
+        this.closeDeleteModal()
+      );
+    }
+    this.renderer.appendChild(document.body, this.editBackdrop);
+  }
+
+  closeDeleteModal() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const panel = this.deleteUserCanvas.nativeElement;
+
+    this.renderer.removeClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "hidden");
+    this.renderer.removeAttribute(panel, "aria-modal");
+    this.renderer.setAttribute(panel, "aria-hidden", "true");
+    this.renderer.removeStyle(document.body, "overflow");
+    if (this.editBackdrop) {
+      this.renderer.removeChild(document.body, this.editBackdrop);
+      this.editBackdrop = undefined;
+    }
+
+    document
+      .querySelectorAll(".offcanvas-backdrop.fade.show")
+      .forEach((backdrop) =>
+        this.renderer.removeChild(document.body, backdrop)
+      );
+    this.renderer.removeStyle(panel, "transform");
+    this.deleteCompanyId = undefined;
+  }
+
   public searchData(value: string): void {
     this.searchDataValue = value.trim().toLowerCase();
     this.skip = 0;
@@ -538,5 +588,22 @@ export class CompaniesComponent {
     //     this.toastr.error("Update failed");
     //   },
     // });
+  }
+
+  confirmDelete(event: MouseEvent) {
+    (event.target as HTMLElement).blur();
+    if (this.deleteCompanyId) {
+      this.backendService
+        .deleteCompany(this.deleteCompanyId)
+        .subscribe((res: any) => {
+          if (res.status === "success") {
+            this.toastr.success(res.message);
+            this.getTableData(this.skip, this.pageSize);
+            this.closeDeleteModal();
+          } else {
+            this.toastr.error("Please Try Again Later");
+          }
+        });
+    }
   }
 }
