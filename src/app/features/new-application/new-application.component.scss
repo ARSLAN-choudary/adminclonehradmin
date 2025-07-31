@@ -22,7 +22,8 @@
 //   border: 2px solid #28a745 !important;
 //   border-radius: 4px !important;
 // }
-#appSubmittedCanvas.offcanvas-small {
+#appSubmittedCanvas.offcanvas-small,
+#deleteUserCanvas.offcanvas-small {
   right: auto !important;
   bottom: auto !important;
   position: fixed;
@@ -38,7 +39,8 @@
   overflow-y: auto;
 }
 
-#appSubmittedCanvas.show ~ .offcanvas-backdrop {
+#appSubmittedCanvas.show ~ .offcanvas-backdrop,
+#deleteUserCanvas.show ~ .offcanvas-backdrop {
   position: fixed;
 }
 
