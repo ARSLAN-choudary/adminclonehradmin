@@ -855,11 +855,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Website</label>
                                     <input type="text" class="form-control" formControlName="website" id="website" />
-                                    <div *ngIf="control('website').touched && control('website').invalid">
-                                        <small class="text-danger" *ngIf="control('website').hasError('pattern')">
-                                            Must be a valid URL (http:// or https://)
-                                        </small>
-                                    </div>
+
                                 </div>
                             </div>
 
@@ -1343,7 +1339,7 @@
                 <i class="ti ti-trash fs-24"></i>
             </span>
         </div>
-        <h5 class="mb-1">Are you sure you want to remove user you selected.</h5>
+        <h5 class="mb-3">Are you sure you want to remove Company you selected.</h5>
         <!-- <p class="mb-4"></p> -->
         <div class="d-flex justify-content-center">
             <button class="btn btn-light me-2 w-100" (click)="closeDeleteModal()">Cancel</button>

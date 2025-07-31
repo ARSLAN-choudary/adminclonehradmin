@@ -188,7 +188,7 @@ export class CompaniesComponent {
       phoneNO: [{ value: "", disabled: true }, Validators.required],
       email: [""],
       address: [""],
-      website: ["", Validators.pattern(/^https?:\/\//)],
+      website: [""],
       incorporatonDate: [{ value: "", disabled: true }, Validators.required],
       password: [
         { value: "", disabled: true },
