@@ -95,11 +95,13 @@ interface PhoneInputValue {
   styleUrl: "./new-application.component.scss",
 })
 export class NewApplicationComponent implements OnInit {
+  @ViewChild("deleteUserCanvas ", { static: true })
+  deleteUserCanvas!: ElementRef<HTMLElement>;
   @ViewChild("addCanvas", { static: true })
   addCanvas!: ElementRef<HTMLElement>;
   inActiveApplications: WritableSignal<number> = signal(0);
   activeApplications: WritableSignal<number> = signal(0);
-
+  private editBackdrop?: HTMLElement;
   @ViewChild("offcanvas_view", { static: true })
   offcanvas_view!: ElementRef<HTMLElement>;
 
@@ -477,6 +479,7 @@ export class NewApplicationComponent implements OnInit {
       this.renderer.removeChild(document.body, this.backdropEl);
       this.backdropEl = undefined;
     }
+    this.applicationDetails = null;
   }
 
   openThankYouModal() {
@@ -517,6 +520,10 @@ export class NewApplicationComponent implements OnInit {
       this.renderer.removeChild(document.body, this.backdropEl);
       this.backdropEl = undefined;
     }
+  }
+
+  trackByIndex(index: number, item: any): number {
+    return index;
   }
   exportAsPDF(): void {
     if (!this.tableData?.length) return;
@@ -580,6 +587,49 @@ export class NewApplicationComponent implements OnInit {
     });
 
     doc.save("ApplicationListDetail.pdf");
+  }
+
+  deleteUser(id: any) {
+    const panel = this.deleteUserCanvas.nativeElement;
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+    this.editBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.editBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.editBackdrop, "fade");
+    this.renderer.addClass(this.editBackdrop, "show");
+    if (this.editBackdrop) {
+      this.editBackdrop.addEventListener("click", () =>
+        this.closeDeleteModal()
+      );
+    }
+    this.renderer.appendChild(document.body, this.editBackdrop);
+  }
+
+  closeDeleteModal() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const panel = this.deleteUserCanvas.nativeElement;
+
+    this.renderer.removeClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "hidden");
+    this.renderer.removeAttribute(panel, "aria-modal");
+    this.renderer.setAttribute(panel, "aria-hidden", "true");
+    this.renderer.removeStyle(document.body, "overflow");
+    if (this.editBackdrop) {
+      this.renderer.removeChild(document.body, this.editBackdrop);
+      this.editBackdrop = undefined;
+    }
+
+    document
+      .querySelectorAll(".offcanvas-backdrop.fade.show")
+      .forEach((backdrop) =>
+        this.renderer.removeChild(document.body, backdrop)
+      );
+    this.renderer.removeStyle(panel, "transform");
   }
 
   exportAsExcel(): void {
