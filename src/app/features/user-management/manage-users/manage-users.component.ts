@@ -67,6 +67,14 @@ interface Country {
   name: string;
 }
 
+interface PhoneInputValue {
+  number: string;
+  nationalNumber: string;
+  internationalNumber: string;
+  e164Number: string;
+  countryCode: string;
+  dialCode: string;
+}
 @Component({
   selector: "app-manage-users",
   imports: [
@@ -270,18 +278,27 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.renderer.appendChild(document.body, this.editBackdrop);
 
     this.selectedUser = user;
+    const raw = user.phone || "";
+
+    let national = raw;
+    if (national.startsWith("+92")) {
+      national = national.slice(3);
+    } else if (national.startsWith("0")) {
+      national = national.slice(1);
+    }
+    const phoneObj: PhoneInputValue = {
+      number: national,
+      nationalNumber: national,
+      internationalNumber: `+92 ${national}`,
+      e164Number: `+92${national}`,
+      countryCode: "pk",
+      dialCode: "92",
+    };
     this.editUserForm.patchValue({
       userName: user.userName,
       email: user.email,
       role: user.role,
-      phone: {
-        number: user.phone,
-        internationalNumber: user.phone,
-        nationalNumber: user.phone,
-        e164Number: user.phone,
-        countryCode: "PK",
-        dialCode: "+92",
-      },
+      phone: phoneObj,
       location: user.location,
     });
   }

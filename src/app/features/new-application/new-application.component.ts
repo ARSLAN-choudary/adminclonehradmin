@@ -185,35 +185,6 @@ export class NewApplicationComponent implements OnInit {
     CountryISO.SaudiArabia,
   ];
 
-  editApplication(data: any) {
-    const raw = data.mobile || "";
-
-    let national = raw;
-    if (national.startsWith("+92")) {
-      national = national.slice(3);
-    } else if (national.startsWith("0")) {
-      national = national.slice(1);
-    }
-
-    const phoneObj: PhoneInputValue = {
-      number: national,
-      nationalNumber: national,
-      internationalNumber: `+92 ${national}`,
-      e164Number: `+92${national}`,
-      countryCode: "pk",
-      dialCode: "92",
-    };
-
-    this.editForm.patchValue({
-      _id: data._id,
-      firstName: data.firstName || "",
-      email: data.email || "",
-      mobile: phoneObj,
-      jobTitle: data.jobTitle || "",
-      status: data.status || "active",
-    });
-  }
-
   form: FormGroup = new FormGroup({
     phone: new FormControl(undefined, Validators.required),
   });
@@ -337,7 +308,34 @@ export class NewApplicationComponent implements OnInit {
   // public selectAll(initChecked: boolean): void {
   //   this.tableData.forEach((f) => (f.isSelected = !initChecked));
   // }
+  editApplication(data: any) {
+    const raw = data.mobile || "";
 
+    let national = raw;
+    if (national.startsWith("+92")) {
+      national = national.slice(3);
+    } else if (national.startsWith("0")) {
+      national = national.slice(1);
+    }
+
+    const phoneObj: PhoneInputValue = {
+      number: national,
+      nationalNumber: national,
+      internationalNumber: `+92 ${national}`,
+      e164Number: `+92${national}`,
+      countryCode: "pk",
+      dialCode: "92",
+    };
+
+    this.editForm.patchValue({
+      _id: data._id,
+      firstName: data.firstName || "",
+      email: data.email || "",
+      mobile: phoneObj,
+      jobTitle: data.jobTitle || "",
+      status: data.status || "active",
+    });
+  }
   control(name: string) {
     return this.addNewApplicationForm.get(name)!;
   }
@@ -864,19 +862,20 @@ export class NewApplicationComponent implements OnInit {
 
   confirmResend(event: MouseEvent) {
     (event.target as HTMLElement).blur();
-    // if (this.resendApplicationData) {
-    //   this.backend
-    //     .deleteApplication(this.deleteApplicationId)
-    //     .subscribe((res: any) => {
-    //       if (res.status === "success") {
-    //         this.toastr.success(res.message);
-    //         this.getTableData(this.skip, this.pageSize);
-    //         this.closeDeleteModal();
-    //       } else {
-    //         this.toastr.error("Please Try Again Later");
-    //       }
-    //     });
-    // }
+    if (this.resendApplicationData) {
+      debugger;
+      this.backend
+        .addApplication(this.resendApplicationData)
+        .subscribe((res: any) => {
+          if (res.status === "success") {
+            this.toastr.success(res.message);
+            this.getTableData(this.skip, this.pageSize);
+            this.closeResendModal();
+          } else {
+            this.toastr.error("Please Try Again Later");
+          }
+        });
+    }
   }
   onUpdateApplication() {
     if (this.editForm.invalid) return;
