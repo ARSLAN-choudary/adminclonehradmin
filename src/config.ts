@@ -10,6 +10,8 @@ export const CONFIG = {
   getManageUsers: BASE_URL_API + "/api/users/userslist",
   addUser: BASE_URL_API + "/api/users/adduser",
   updateUser: BASE_URL_API + "/api/users/updateuser",
+  updateApplication: BASE_URL_API + "/api/application/update",
+  updateCompany: BASE_URL_API + "/api/company/update",
   deleteUser: BASE_URL_API + "/api/users/Delete",
   deleteCompany: BASE_URL_API + "/api/company/delete",
   deleteApplication: BASE_URL_API + "/api/application/delete",

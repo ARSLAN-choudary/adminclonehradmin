@@ -7,9 +7,15 @@
 }
 
 ::ng-deep .reportrange-picker .reportrange-picker-field {
-  width: 145px !important;
+  width: 150px !important;
+}
+.table-headers {
 }
 
+:host ::ng-deep .mat-sort-header-container {
+  justify-content: center !important;
+  gap: 17px !important;
+}
 // .job-tittle {
 //   letter-spacing: 0.005em;
 // }

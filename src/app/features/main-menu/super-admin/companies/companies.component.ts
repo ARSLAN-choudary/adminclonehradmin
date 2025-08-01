@@ -74,11 +74,13 @@ interface select {
   styleUrl: "./companies.component.scss",
 })
 export class CompaniesComponent {
+  @ViewChild("addCompany", { static: true })
+  addCompany!: ElementRef<HTMLElement>;
   @ViewChild("editUserCanvas", { static: true })
   editUserCanvas!: ElementRef<HTMLElement>;
   @ViewChild("deleteUserCanvas", { static: true })
   deleteUserCanvas!: ElementRef<HTMLElement>;
-  editUserForm!: FormGroup;
+  editForm!: FormGroup;
 
   deleteCompanyId!: any;
   private editBackdrop?: HTMLElement;
@@ -163,13 +165,14 @@ export class CompaniesComponent {
   }
 
   initEditForm() {
-    this.editUserForm = this.fb.group({
+    this.editForm = this.fb.group({
+      id: [""],
       name: ["", Validators.required],
       registrationNo: ["", Validators.required],
-      vatNo: ["", [Validators.required, Validators.email]],
-      website: ["", Validators.required],
+      vatNo: ["", Validators.required],
+      website: [""],
       incorporatonDate: ["", Validators.required],
-      status: [null, Validators.required],
+      status: ["active", Validators.required],
     });
   }
 
@@ -319,7 +322,9 @@ export class CompaniesComponent {
     });
 
     this.backendService.addCompany(formData).subscribe({
-      next: () => {},
+      next: () => {
+        this.closeAddCompany();
+      },
       error: console.error,
     });
   }
@@ -516,29 +521,92 @@ export class CompaniesComponent {
     saveAs(blob, `CompaniesList_${Date.now()}.xlsx`);
   }
 
-  closeEditUser() {
+  closeAddCompany() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const panel = this.addCompany.nativeElement;
+
+    this.renderer.removeClass(panel, "show");
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+        this.renderer.removeStyle(document.body, "overflow");
+
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+        this.renderer.removeStyle(panel, "transform");
+        this.createNewCompanyForm.reset();
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
+
+    if (this.editBackdrop) {
+      this.renderer.removeChild(document.body, this.editBackdrop);
+      this.editBackdrop = undefined;
+    }
+    this.renderer.removeStyle(document.body, "overflow");
+
+    this.createNewCompanyForm.reset();
+  }
+
+  openAddCompany(): void {
+    const panel = this.addCompany.nativeElement;
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+    this.editBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.editBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.editBackdrop, "fade");
+    this.renderer.addClass(this.editBackdrop, "show");
+    if (this.editBackdrop) {
+      this.editBackdrop.addEventListener("click", () =>
+        this.closeEditCompany()
+      );
+    }
+    this.renderer.appendChild(document.body, this.editBackdrop);
+  }
+
+  closeEditCompany() {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
     const panel = this.editUserCanvas.nativeElement;
 
-    // … your existing hide logic …
     this.renderer.removeClass(panel, "show");
-    this.renderer.setStyle(panel, "visibility", "hidden");
-    this.renderer.removeAttribute(panel, "aria-modal");
-    this.renderer.setAttribute(panel, "aria-hidden", "true");
-    this.renderer.removeStyle(document.body, "overflow");
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+        this.renderer.removeStyle(document.body, "overflow");
+
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+        this.renderer.removeStyle(panel, "transform");
+        this.createNewCompanyForm.reset();
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
+
     if (this.editBackdrop) {
       this.renderer.removeChild(document.body, this.editBackdrop);
       this.editBackdrop = undefined;
     }
-
-    document
-      .querySelectorAll(".offcanvas-backdrop.fade.show")
-      .forEach((backdrop) =>
-        this.renderer.removeChild(document.body, backdrop)
-      );
-    this.renderer.removeStyle(panel, "transform");
+    this.renderer.removeStyle(document.body, "overflow");
+    this.editForm.reset();
   }
 
   onEditCompany(user: any): void {
@@ -553,43 +621,46 @@ export class CompaniesComponent {
     this.renderer.addClass(this.editBackdrop, "fade");
     this.renderer.addClass(this.editBackdrop, "show");
     if (this.editBackdrop) {
-      this.editBackdrop.addEventListener("click", () => this.closeEditUser());
+      this.editBackdrop.addEventListener("click", () =>
+        this.closeEditCompany()
+      );
     }
     this.renderer.appendChild(document.body, this.editBackdrop);
 
-    // this.selectedUser = user;
-    this.editUserForm.patchValue({
+    this.editForm.patchValue({
+      id: user._id ?? user.id,
       name: user.name,
       registrationNo: user.registrationNo,
       vatNo: user.vatNo,
       website: user.website,
-      incorporatonDate: user.incorporatonDate,
+      incorporatonDate: this.toDateInputString(user.incorporatonDate),
       status: user.status,
     });
   }
 
-  onEditSubmit() {
-    // debugger;
-    // if (this.editUserForm.invalid) return;
+  onUpdateCompany() {
+    if (this.editForm.invalid) {
+      this.editForm.markAllAsTouched();
+      return;
+    }
 
-    debugger;
     const payload = {
-      ...this.editUserForm.value,
-      phone: this.editUserForm.get("phone")?.value?.e164Number,
-      // id: this.selectedUser._id,
+      ...this.editForm.value,
     };
-    debugger;
-    // this.backend.updateUser(payload).subscribe({
-    //   next: (res) => {
-    //     this.toastr.success("User updated");
-    //     this.closeEditUser();
-    //   },
-    //   error: (err) => {
-    //     this.toastr.error("Update failed");
-    //   },
-    // });
-  }
+    console.log(payload);
 
+    this.backendService.updateCompany(payload).subscribe({
+      next: (res) => {
+        this.toastr.success(res.message);
+        this.closeEditCompany();
+        this.getTableData(this.skip, this.pageSize);
+        this.editForm.reset();
+      },
+      error: (err) => {
+        this.toastr.error(err.message);
+      },
+    });
+  }
   confirmDelete(event: MouseEvent) {
     (event.target as HTMLElement).blur();
     if (this.deleteCompanyId) {
@@ -605,5 +676,12 @@ export class CompaniesComponent {
           }
         });
     }
+  }
+
+  private toDateInputString(raw: any): string {
+    if (!raw) return "";
+    const d = new Date(raw);
+    const tzOffset = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - tzOffset).toISOString().slice(0, 10);
   }
 }

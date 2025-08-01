@@ -6,7 +6,9 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  signal,
   ViewChild,
+  WritableSignal,
 } from "@angular/core";
 import {
   FormBuilder,
@@ -44,7 +46,7 @@ import {
 import { DataService } from "../../../shared/data/data.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { DateRangePickerComponent } from "../../common/date-range-picker/date-range-picker.component";
-import { ReplaySubject, Subject, takeUntil } from "rxjs";
+import { ReplaySubject, Subject, takeUntil, tap } from "rxjs";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -96,6 +98,9 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   deleteUserCanvas!: ElementRef<HTMLElement>;
   startDate: string = "";
   endDate: string = "";
+
+  inActiveUsers: WritableSignal<number> = signal(0);
+  activeUsers: WritableSignal<number> = signal(0);
 
   public pageSize = 10;
   public skip = 0;
@@ -240,7 +245,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         this.getTableData(this.skip, this.pageSize);
       },
       error: (err) => {
-        this.toastr.success(err.message);
+        this.toastr.error(err.error.message);
       },
     });
   }
@@ -297,13 +302,11 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     // debugger;
     // if (this.editUserForm.invalid) return;
 
-    debugger;
     const payload = {
       ...this.editUserForm.value,
       phone: this.editUserForm.get("phone")?.value?.e164Number,
       id: this.selectedUser._id,
     };
-    debugger;
     this.backend.updateUser(payload).subscribe({
       next: (res) => {
         this.toastr.success("User updated");
@@ -404,16 +407,36 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       document.activeElement.blur();
     }
     const panel = this.addUserCanvas.nativeElement;
-    // hide
+
     this.renderer.removeClass(panel, "show");
-    this.renderer.setStyle(panel, "visibility", "hidden");
-    this.renderer.removeAttribute(panel, "aria-modal");
-    this.renderer.setAttribute(panel, "aria-hidden", "true");
-    this.renderer.removeStyle(document.body, "overflow");
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+        this.renderer.removeStyle(document.body, "overflow");
+
+        if (this.addBackdrop) {
+          this.renderer.removeChild(document.body, this.addBackdrop);
+          this.addBackdrop = undefined;
+        }
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+        this.renderer.removeStyle(panel, "transform");
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
     if (this.addBackdrop) {
       this.renderer.removeChild(document.body, this.addBackdrop);
       this.addBackdrop = undefined;
     }
+    this.renderer.removeStyle(document.body, "overflow");
+
+    this.userForm.reset();
   }
 
   closeEditUser() {
@@ -422,23 +445,41 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     }
     const panel = this.editUserCanvas.nativeElement;
 
-    // … your existing hide logic …
     this.renderer.removeClass(panel, "show");
-    this.renderer.setStyle(panel, "visibility", "hidden");
-    this.renderer.removeAttribute(panel, "aria-modal");
-    this.renderer.setAttribute(panel, "aria-hidden", "true");
-    this.renderer.removeStyle(document.body, "overflow");
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+        this.renderer.removeStyle(document.body, "overflow");
+
+        if (this.editBackdrop) {
+          this.renderer.removeChild(document.body, this.editBackdrop);
+          this.editBackdrop = undefined;
+        }
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+        this.renderer.removeStyle(panel, "transform");
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
     if (this.editBackdrop) {
       this.renderer.removeChild(document.body, this.editBackdrop);
       this.editBackdrop = undefined;
     }
+    this.renderer.removeStyle(document.body, "overflow");
 
-    document
-      .querySelectorAll(".offcanvas-backdrop.fade.show")
-      .forEach((backdrop) =>
-        this.renderer.removeChild(document.body, backdrop)
-      );
-    this.renderer.removeStyle(panel, "transform");
+    this.editUserForm.reset();
+  }
+
+  private updateCounts(data: any[] = []) {
+    const active = data.filter((c) => c.status === "active").length;
+    this.activeUsers.set(active);
+    this.inActiveUsers.set(data.length - active);
   }
   private getTableData(skip: number, limit: number): void {
     const payload: any = {
@@ -451,20 +492,30 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       payload.startDate = this.startDate;
       payload.endDate = this.endDate;
     }
-    this.backend.getManageUsers(payload).subscribe((apiRes: any) => {
-      // this.actualData = apiRes.data.data;
-      this.tableData = apiRes.data.data;
-      this.totalData = apiRes.totalData;
-      this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
-      this.dataSource = new MatTableDataSource<usersDataTable>(this.tableData);
-      this.row = this.tableData.length > 0;
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        serialNumberArray: this.serialNumberArray,
+    this.backend
+      .getManageUsers(payload)
+      .pipe(
+        tap((apiRes: any) => {
+          const arr = Array.isArray(apiRes?.data?.data) ? apiRes.data.data : [];
+          this.updateCounts(arr);
+        })
+      )
+      .subscribe((apiRes: any) => {
+        // this.actualData = apiRes.data.data;
+        this.tableData = apiRes.data.data;
+        this.totalData = apiRes.totalData;
+        this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
+        this.dataSource = new MatTableDataSource<usersDataTable>(
+          this.tableData
+        );
+        this.row = this.tableData.length > 0;
+        this.pagination.calculatePageSize.next({
+          totalData: this.totalData,
+          pageSize: this.pageSize,
+          tableData: this.tableData,
+          serialNumberArray: this.serialNumberArray,
+        });
       });
-    });
   }
 
   public searchData(value: string): void {

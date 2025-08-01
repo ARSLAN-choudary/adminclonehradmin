@@ -97,8 +97,14 @@ interface PhoneInputValue {
 export class NewApplicationComponent implements OnInit {
   @ViewChild("deleteUserCanvas", { static: true })
   deleteUserCanvas!: ElementRef<HTMLElement>;
+  @ViewChild("editCanvas", { static: true })
+  editCanvas!: ElementRef<HTMLElement>;
   @ViewChild("addCanvas", { static: true })
   addCanvas!: ElementRef<HTMLElement>;
+
+  @ViewChild("resendCanvas", { static: true })
+  resendCanvas!: ElementRef<HTMLElement>;
+  editForm: FormGroup;
   inActiveApplications: WritableSignal<number> = signal(0);
   activeApplications: WritableSignal<number> = signal(0);
   private editBackdrop?: HTMLElement;
@@ -179,24 +185,32 @@ export class NewApplicationComponent implements OnInit {
     CountryISO.SaudiArabia,
   ];
 
-  editForm = new FormGroup({
-    mobile: new FormControl<PhoneInputValue | null>(null, Validators.required),
-    email: new FormControl("", [Validators.required, Validators.email]),
-  });
-
   editApplication(data: any) {
+    const raw = data.mobile || "";
+
+    let national = raw;
+    if (national.startsWith("+92")) {
+      national = national.slice(3);
+    } else if (national.startsWith("0")) {
+      national = national.slice(1);
+    }
+
     const phoneObj: PhoneInputValue = {
-      number: data.mobile,
-      nationalNumber: data.mobile,
-      internationalNumber: `+92 ${data.mobile}`,
-      e164Number: `+92${data.mobile}`,
+      number: national,
+      nationalNumber: national,
+      internationalNumber: `+92 ${national}`,
+      e164Number: `+92${national}`,
       countryCode: "pk",
       dialCode: "92",
     };
 
     this.editForm.patchValue({
+      _id: data._id,
+      firstName: data.firstName || "",
+      email: data.email || "",
       mobile: phoneObj,
-      email: data.email,
+      jobTitle: data.jobTitle || "",
+      status: data.status || "active",
     });
   }
 
@@ -222,7 +236,19 @@ export class NewApplicationComponent implements OnInit {
     private fb: FormBuilder,
     private renderer: Renderer2,
     private backend: BackendService
-  ) {}
+  ) {
+    this.editForm = this.fb.group({
+      _id: [""],
+      firstName: ["", Validators.required],
+      mobile: new FormControl<PhoneInputValue | null>(
+        null,
+        Validators.required
+      ),
+      email: new FormControl("", [Validators.required, Validators.email]),
+      jobTitle: ["", Validators.required],
+      status: ["active", Validators.required],
+    });
+  }
 
   ngOnInit() {
     this.addNewApplicationForm = this.fb.group({
@@ -244,8 +270,7 @@ export class NewApplicationComponent implements OnInit {
     });
 
     this.getTableData(this.skip, this.pageSize);
-    //
-    // When pagination emits new page info
+
     this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
       if (this.router.url === this.routes.dataTable) {
         this.pageSize = res.pageSize;
@@ -284,7 +309,6 @@ export class NewApplicationComponent implements OnInit {
         this.actualData = apiRes.data.data ?? [];
         this.totalData = apiRes.totalData ?? this.actualData.length;
         this.tableData = [...this.actualData];
-        console.log(this.tableData);
 
         this.serialNumberArray = this.tableData.map((_, i) => i + 1);
         this.dataSource = new MatTableDataSource<newApplicationDataTable>(
@@ -326,8 +350,8 @@ export class NewApplicationComponent implements OnInit {
     item.isStarActive = !item.isStarActive;
   }
 
-  trackById(_: number, item: manageUsers) {
-    return (item as any).id ?? item.customer_no ?? item.email;
+  trackById(index: number, item: any): any {
+    return item._id ?? item.id ?? index;
   }
 
   gotoLink() {
@@ -335,18 +359,6 @@ export class NewApplicationComponent implements OnInit {
     window.open(`${baseUrl}/userDetails`, "_blank");
   }
 
-  passResendApplicationData(data: any) {
-    this.resendApplicationData = data;
-  }
-
-  onResendConfirm() {}
-
-  onSaveChanges() {
-    if (this.editForm.invalid) return;
-    const updated = this.editForm.value;
-
-    console.log("Saving changes for", updated);
-  }
   private formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -422,21 +434,97 @@ export class NewApplicationComponent implements OnInit {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
-    const el = this.addCanvas.nativeElement;
+    const panel = this.addCanvas.nativeElement;
 
-    // 1) hide the panel
-    this.renderer.removeClass(el, "show");
-    this.renderer.setStyle(el, "visibility", "hidden");
-    this.renderer.removeAttribute(el, "aria-modal");
-    this.renderer.setAttribute(el, "aria-hidden", "true");
+    this.renderer.removeClass(panel, "show");
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+        this.renderer.removeStyle(document.body, "overflow");
 
-    this.renderer.removeStyle(document.body, "overflow");
+        if (this.backdropEl) {
+          this.renderer.removeChild(document.body, this.backdropEl);
+          this.backdropEl = undefined;
+        }
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+        this.renderer.removeStyle(panel, "transform");
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
 
     if (this.backdropEl) {
       this.renderer.removeChild(document.body, this.backdropEl);
       this.backdropEl = undefined;
     }
+    this.renderer.removeStyle(document.body, "overflow");
+
     this.addNewApplicationForm.reset();
+  }
+
+  openEditApplication() {
+    const el = this.editCanvas.nativeElement;
+
+    this.renderer.addClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "visible");
+    this.renderer.setAttribute(el, "aria-modal", "true");
+    this.renderer.removeAttribute(el, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.backdropEl = this.renderer.createElement("div");
+    this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
+    this.renderer.addClass(this.backdropEl, "fade");
+    this.renderer.addClass(this.backdropEl, "show");
+    if (this.backdropEl) {
+      this.backdropEl.addEventListener("click", () =>
+        this.closeAddApplication()
+      );
+      this.renderer.appendChild(document.body, this.backdropEl);
+    }
+  }
+
+  closeEditApplication() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const panel = this.editCanvas.nativeElement;
+
+    this.renderer.removeClass(panel, "show");
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+        this.renderer.removeStyle(document.body, "overflow");
+
+        if (this.backdropEl) {
+          this.renderer.removeChild(document.body, this.backdropEl);
+          this.backdropEl = undefined;
+        }
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+        this.renderer.removeStyle(panel, "transform");
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
+
+    if (this.backdropEl) {
+      this.renderer.removeChild(document.body, this.backdropEl);
+      this.backdropEl = undefined;
+    }
+    this.renderer.removeStyle(document.body, "overflow");
+
+    this.editForm.reset();
   }
 
   openViewApplicationModal(id: any) {
@@ -468,19 +556,37 @@ export class NewApplicationComponent implements OnInit {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
-    const el = this.offcanvas_view.nativeElement;
+    const panel = this.offcanvas_view.nativeElement;
 
-    this.renderer.removeClass(el, "show");
-    this.renderer.setStyle(el, "visibility", "hidden");
-    this.renderer.removeAttribute(el, "aria-modal");
-    this.renderer.setAttribute(el, "aria-hidden", "true");
+    this.renderer.removeClass(panel, "show");
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+        this.renderer.removeStyle(document.body, "overflow");
 
-    this.renderer.removeStyle(document.body, "overflow");
+        if (this.backdropEl) {
+          this.renderer.removeChild(document.body, this.backdropEl);
+          this.backdropEl = undefined;
+        }
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+        this.renderer.removeStyle(panel, "transform");
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
 
     if (this.backdropEl) {
       this.renderer.removeChild(document.body, this.backdropEl);
       this.backdropEl = undefined;
     }
+    this.renderer.removeStyle(document.body, "overflow");
+
     this.applicationDetails = null;
   }
 
@@ -522,6 +628,48 @@ export class NewApplicationComponent implements OnInit {
       this.renderer.removeChild(document.body, this.backdropEl);
       this.backdropEl = undefined;
     }
+  }
+
+  openResendModal(data: any) {
+    this.resendApplicationData = data;
+    const el = this.resendCanvas.nativeElement;
+
+    this.renderer.addClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "visible");
+    this.renderer.setAttribute(el, "aria-modal", "true");
+    this.renderer.removeAttribute(el, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.backdropEl = this.renderer.createElement("div");
+    this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
+    this.renderer.addClass(this.backdropEl, "fade");
+    this.renderer.addClass(this.backdropEl, "show");
+    if (this.backdropEl) {
+      this.backdropEl.addEventListener("click", () =>
+        this.closeThankYouModal()
+      );
+      this.renderer.appendChild(document.body, this.backdropEl);
+    }
+  }
+
+  closeResendModal() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const el = this.resendCanvas.nativeElement;
+
+    this.renderer.removeClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "hidden");
+    this.renderer.removeAttribute(el, "aria-modal");
+    this.renderer.setAttribute(el, "aria-hidden", "true");
+
+    this.renderer.removeStyle(document.body, "overflow");
+
+    if (this.backdropEl) {
+      this.renderer.removeChild(document.body, this.backdropEl);
+      this.backdropEl = undefined;
+    }
+    this.resendApplicationData = undefined;
   }
 
   trackByIndex(index: number, item: any): number {
@@ -712,5 +860,46 @@ export class NewApplicationComponent implements OnInit {
           }
         });
     }
+  }
+
+  confirmResend(event: MouseEvent) {
+    (event.target as HTMLElement).blur();
+    // if (this.resendApplicationData) {
+    //   this.backend
+    //     .deleteApplication(this.deleteApplicationId)
+    //     .subscribe((res: any) => {
+    //       if (res.status === "success") {
+    //         this.toastr.success(res.message);
+    //         this.getTableData(this.skip, this.pageSize);
+    //         this.closeDeleteModal();
+    //       } else {
+    //         this.toastr.error("Please Try Again Later");
+    //       }
+    //     });
+    // }
+  }
+  onUpdateApplication() {
+    if (this.editForm.invalid) return;
+    const data = this.editForm.value;
+    let payload = {
+      _id: data._id,
+      mobile: data.mobile.e164Number,
+      status: data.status,
+      jobTitle: data.jobTitle,
+      email: data.email,
+      firstName: data.firstName,
+    };
+
+    this.backend.updateApplication(payload).subscribe({
+      next: (res) => {
+        this.toastr.success(res.message);
+        this.closeEditApplication();
+        this.getTableData(this.skip, this.pageSize);
+        this.editForm.reset();
+      },
+      error: (err) => {
+        this.toastr.error(err.message);
+      },
+    });
   }
 }
