@@ -7,15 +7,24 @@
 }
 
 ::ng-deep .reportrange-picker .reportrange-picker-field {
-  width: 145px !important;
+  width: 150px !important;
+}
+.table-headers {
 }
 
+:host ::ng-deep .mat-sort-header-container {
+  justify-content: center !important;
+  gap: 17px !important;
+}
 // .job-tittle {
 //   letter-spacing: 0.005em;
 // }
 :host ::ng-deep .p-inputwrapper.p-select.p-inputwrapper-filled {
   border: 2px solid #28a745 !important;
   border-radius: 4px !important;
+}
+:host ::ng-deep table.table.dataTable > thead > tr th {
+  padding-right: 24px !important;
 }
 
 // :host ::ng-deep p-select.p-inputwrapper-filled .p-select-label {
@@ -47,4 +56,7 @@
 .off-canvas-custom {
   border: 0px solid transparent;
   border-radius: 10px;
+}
+.cursor-pointer {
+  cursor: pointer !important;
 }

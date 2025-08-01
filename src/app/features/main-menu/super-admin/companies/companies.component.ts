@@ -74,11 +74,13 @@ interface select {
   styleUrl: "./companies.component.scss",
 })
 export class CompaniesComponent {
+  @ViewChild("addCompany", { static: true })
+  addCompany!: ElementRef<HTMLElement>;
   @ViewChild("editUserCanvas", { static: true })
   editUserCanvas!: ElementRef<HTMLElement>;
   @ViewChild("deleteUserCanvas", { static: true })
   deleteUserCanvas!: ElementRef<HTMLElement>;
-  editUserForm!: FormGroup;
+  editForm!: FormGroup;
 
   deleteCompanyId!: any;
   private editBackdrop?: HTMLElement;
@@ -163,39 +165,53 @@ export class CompaniesComponent {
   }
 
   initEditForm() {
-    this.editUserForm = this.fb.group({
+    this.editForm = this.fb.group({
+      id: [""],
       name: ["", Validators.required],
       registrationNo: ["", Validators.required],
-      vatNo: ["", [Validators.required, Validators.email]],
-      website: ["", Validators.required],
+      vatNo: ["", Validators.required],
+      website: [""],
       incorporatonDate: ["", Validators.required],
-      status: [null, Validators.required],
+      status: ["active", Validators.required],
     });
   }
 
   initCreateNewCompanyForm() {
-    this.createNewCompanyForm = this.fb.group({
-      files: [null, [Validators.required, this.pdfAndSizeValidator]],
-      country: ["", Validators.required],
+    this.createNewCompanyForm = this.fb.group(
+      {
+        files: [
+          null,
+          [Validators.required, this.fileTypeAndSizeValidator.bind(this)],
+        ],
 
-      // all other fields start disabled
-      name: [{ value: "", disabled: true }, Validators.required],
-      registrationNo: [{ value: "", disabled: true }, Validators.required],
-      vatNo: [{ value: "", disabled: true }, Validators.required],
-      peNo: [{ value: "", disabled: true }, Validators.required],
-      jobplusemployeryno: [{ value: "", disabled: true }, Validators.required],
-      currency: [{ value: "", disabled: true }, Validators.required],
-      phoneNO: [{ value: "", disabled: true }, Validators.required],
-      email: [""],
-      address: [""],
-      website: ["", Validators.pattern(/^https?:\/\//)],
-      incorporatonDate: [{ value: "", disabled: true }, Validators.required],
-      password: [
-        { value: "", disabled: true },
-        [Validators.required, Validators.minLength(8)],
-      ],
-      status: [{ value: "active", disabled: true }, Validators.required],
-    });
+        country: ["", Validators.required],
+
+        // all other fields start disabled
+        name: [{ value: "", disabled: true }, Validators.required],
+        registrationNo: [{ value: "", disabled: true }, Validators.required],
+        vatNo: [{ value: "", disabled: true }, Validators.required],
+        peNo: [{ value: "", disabled: true }, Validators.required],
+        jobplusemployeryno: [
+          { value: "", disabled: true },
+          Validators.required,
+        ],
+        currency: [{ value: "", disabled: true }, Validators.required],
+        phoneNO: [{ value: "", disabled: true }, Validators.required],
+        email: [""],
+        address: [""],
+        website: [""],
+        incorporatonDate: [{ value: "", disabled: true }, Validators.required],
+        password: [
+          { value: "", disabled: true },
+          [Validators.required, Validators.minLength(8)],
+        ],
+        confirmPassword: [{ value: "", disabled: true }, Validators.required],
+        status: [{ value: "active", disabled: true }, Validators.required],
+      },
+      {
+        validators: this.passwordsMatchValidator,
+      }
+    );
     const maltaFields = [
       "name",
       "registrationNo",
@@ -206,6 +222,7 @@ export class CompaniesComponent {
       "phoneNO",
       "incorporatonDate",
       "password",
+      "confirmPassword",
       "status",
     ];
 
@@ -229,6 +246,12 @@ export class CompaniesComponent {
       });
   }
 
+  passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const pw = group.get("password")?.value;
+    const cp = group.get("confirmPassword")?.value;
+    if (!pw || !cp) return { mismatch: true };
+    return pw === cp ? null : { mismatch: true };
+  }
   private updateCounts(data: any[] = []) {
     const active = data.filter((c) => c.status === "active").length;
     this.activeCompanies.set(active);
@@ -254,7 +277,21 @@ export class CompaniesComponent {
         })
       )
       .subscribe((apiRes: any) => {
-        this.tableData = apiRes.data.data;
+        let arr: any[] = Array.isArray(apiRes?.data?.data)
+          ? apiRes.data.data
+          : [];
+
+        // sort so deleted companies are at the bottom
+        arr.sort((a, b) => {
+          if (a.isDeleted === b.isDeleted) return 0;
+          return a.isDeleted ? 1 : -1; // deleted => after non-deleted
+        });
+
+        // update counts ignoring deleted if you don't want them affecting active/inactive
+        const countsSource = arr.filter((c) => !c.isDeleted);
+        this.updateCounts(countsSource);
+
+        this.tableData = arr;
         this.totalData = apiRes.data.recordsTotal;
 
         this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
@@ -286,6 +323,29 @@ export class CompaniesComponent {
     return null;
   }
 
+  fileTypeAndSizeValidator(control: AbstractControl): ValidationErrors | null {
+    const files: File[] = control.value as File[];
+    if (!files || files.length === 0) {
+      return { required: true };
+    }
+    const allowedTypes = [
+      "application/pdf",
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+      "image/webp",
+    ];
+    for (let f of files) {
+      if (!allowedTypes.includes(f.type)) {
+        return { invalidType: true };
+      }
+      if (f.size > 5 * 1024 * 1024) {
+        return { fileTooLarge: true };
+      }
+    }
+    return null;
+  }
+
   onFilesSelected(evt: Event) {
     const input = evt.target as HTMLInputElement;
     if (!input.files) return;
@@ -294,14 +354,14 @@ export class CompaniesComponent {
     this.control("files").markAsTouched();
     input.value = "";
   }
+
   checkMatch(confirmValue: string) {
     const pw = this.control("password").value;
-    this.passwordsDoNotMatch = pw !== confirmValue;
+    this.passwordsDoNotMatch = !confirmValue || pw !== confirmValue;
   }
 
   onSubmit() {
     if (this.createNewCompanyForm.invalid || this.passwordsDoNotMatch) {
-      console.log(this.createNewCompanyForm.value);
       this.createNewCompanyForm.markAllAsTouched();
       this.confirmTouched = true;
       return;
@@ -311,16 +371,47 @@ export class CompaniesComponent {
     const v = this.createNewCompanyForm.value;
 
     Object.entries(v).forEach(([key, val]) => {
+      if (key === "confirmPassword") return;
       if (key === "files" && Array.isArray(val)) {
-        val.forEach((file: File) => formData.append("files", file, file.name));
+        val.forEach((file: File) => {
+          formData.append("image", file, file.name);
+        });
       } else {
         formData.append(key, String(val));
       }
     });
 
     this.backendService.addCompany(formData).subscribe({
-      next: () => {},
-      error: console.error,
+      next: () => {
+        this.closeAddCompany();
+      },
+      error: (err) => {
+        console.error("upload error", err);
+        this.toastr.error("Upload failed");
+      },
+    });
+  }
+
+  toggleStatus(data: any) {
+    const newStatus = data.status === "active" ? "inactive" : "active";
+    const payload = {
+      id: data._id ?? data.id,
+      status: newStatus,
+    };
+
+    this.backendService.updateCompany(payload).subscribe({
+      next: (res: any) => {
+        if (res?.status === "success" || res?.success === true) {
+          data.status = newStatus;
+          this.toastr.success(res.message || "Status updated");
+          this.getTableData(this.skip, this.pageSize);
+        } else {
+          this.toastr.error(res?.message || "Failed to toggle status");
+        }
+      },
+      error: (err: any) => {
+        this.toastr.error("Failed to toggle status");
+      },
     });
   }
 
@@ -516,29 +607,92 @@ export class CompaniesComponent {
     saveAs(blob, `CompaniesList_${Date.now()}.xlsx`);
   }
 
-  closeEditUser() {
+  closeAddCompany() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const panel = this.addCompany.nativeElement;
+
+    this.renderer.removeClass(panel, "show");
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+        this.renderer.removeStyle(document.body, "overflow");
+
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+        this.renderer.removeStyle(panel, "transform");
+        this.createNewCompanyForm.reset();
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
+
+    if (this.editBackdrop) {
+      this.renderer.removeChild(document.body, this.editBackdrop);
+      this.editBackdrop = undefined;
+    }
+    this.renderer.removeStyle(document.body, "overflow");
+
+    this.createNewCompanyForm.reset();
+  }
+
+  openAddCompany(): void {
+    const panel = this.addCompany.nativeElement;
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+    this.editBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.editBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.editBackdrop, "fade");
+    this.renderer.addClass(this.editBackdrop, "show");
+    if (this.editBackdrop) {
+      this.editBackdrop.addEventListener("click", () =>
+        this.closeEditCompany()
+      );
+    }
+    this.renderer.appendChild(document.body, this.editBackdrop);
+  }
+
+  closeEditCompany() {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
     const panel = this.editUserCanvas.nativeElement;
 
-    // … your existing hide logic …
     this.renderer.removeClass(panel, "show");
-    this.renderer.setStyle(panel, "visibility", "hidden");
-    this.renderer.removeAttribute(panel, "aria-modal");
-    this.renderer.setAttribute(panel, "aria-hidden", "true");
-    this.renderer.removeStyle(document.body, "overflow");
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+        this.renderer.removeStyle(document.body, "overflow");
+
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+        this.renderer.removeStyle(panel, "transform");
+        this.createNewCompanyForm.reset();
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
+
     if (this.editBackdrop) {
       this.renderer.removeChild(document.body, this.editBackdrop);
       this.editBackdrop = undefined;
     }
-
-    document
-      .querySelectorAll(".offcanvas-backdrop.fade.show")
-      .forEach((backdrop) =>
-        this.renderer.removeChild(document.body, backdrop)
-      );
-    this.renderer.removeStyle(panel, "transform");
+    this.renderer.removeStyle(document.body, "overflow");
+    this.editForm.reset();
   }
 
   onEditCompany(user: any): void {
@@ -553,43 +707,46 @@ export class CompaniesComponent {
     this.renderer.addClass(this.editBackdrop, "fade");
     this.renderer.addClass(this.editBackdrop, "show");
     if (this.editBackdrop) {
-      this.editBackdrop.addEventListener("click", () => this.closeEditUser());
+      this.editBackdrop.addEventListener("click", () =>
+        this.closeEditCompany()
+      );
     }
     this.renderer.appendChild(document.body, this.editBackdrop);
 
-    // this.selectedUser = user;
-    this.editUserForm.patchValue({
+    this.editForm.patchValue({
+      id: user._id ?? user.id,
       name: user.name,
       registrationNo: user.registrationNo,
       vatNo: user.vatNo,
       website: user.website,
-      incorporatonDate: user.incorporatonDate,
+      incorporatonDate: this.toDateInputString(user.incorporatonDate),
       status: user.status,
     });
   }
 
-  onEditSubmit() {
-    // debugger;
-    // if (this.editUserForm.invalid) return;
+  onUpdateCompany() {
+    if (this.editForm.invalid) {
+      this.editForm.markAllAsTouched();
+      return;
+    }
 
-    debugger;
     const payload = {
-      ...this.editUserForm.value,
-      phone: this.editUserForm.get("phone")?.value?.e164Number,
-      // id: this.selectedUser._id,
+      ...this.editForm.value,
     };
-    debugger;
-    // this.backend.updateUser(payload).subscribe({
-    //   next: (res) => {
-    //     this.toastr.success("User updated");
-    //     this.closeEditUser();
-    //   },
-    //   error: (err) => {
-    //     this.toastr.error("Update failed");
-    //   },
-    // });
-  }
+    console.log(payload);
 
+    this.backendService.updateCompany(payload).subscribe({
+      next: (res) => {
+        this.toastr.success(res.message);
+        this.closeEditCompany();
+        this.getTableData(this.skip, this.pageSize);
+        this.editForm.reset();
+      },
+      error: (err) => {
+        this.toastr.error(err.message);
+      },
+    });
+  }
   confirmDelete(event: MouseEvent) {
     (event.target as HTMLElement).blur();
     if (this.deleteCompanyId) {
@@ -605,5 +762,12 @@ export class CompaniesComponent {
           }
         });
     }
+  }
+
+  private toDateInputString(raw: any): string {
+    if (!raw) return "";
+    const d = new Date(raw);
+    const tzOffset = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - tzOffset).toISOString().slice(0, 10);
   }
 }

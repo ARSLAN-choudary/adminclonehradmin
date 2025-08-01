@@ -25,3 +25,18 @@
 a {
   cursor: pointer !important;
 }
+
+::ng-deep .reportrange-picker .reportrange-picker-field {
+  width: 150px !important;
+}
+
+table.dataTable tbody tr.isDeleted td {
+  background-color: rgb(243, 191, 191) !important;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+:host ::ng-deep table.table.dataTable > thead > tr th {
+  padding-right: 24px !important;
+}

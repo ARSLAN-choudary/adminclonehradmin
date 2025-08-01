@@ -50,8 +50,8 @@
                 <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
                     (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search">
             </div>
-            <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvas_add"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add New Company</a>
+            <a href="javascript:void(0);" class="btn btn-primary" (click)="openAddCompany()"><i
+                    class="ti ti-square-rounded-plus-filled me-1"></i>Add New Company</a>
         </div>
         <div class="card-body">
 
@@ -455,7 +455,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of tableData;">
+                        @for (data of tableData; track $index) {
+                        <tr [ngClass]="{ 'isDeleted': data.isDeleted}">
                             <td>
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="d-flex flex-column fw-medium">
@@ -468,10 +469,13 @@
                             <td>{{ data.website }}</td>
                             <td>{{ data.incorporatonDate |date}}</td>
                             <td>
-                                <span class="badge bg-success">{{ data.status }}</span>
+                                <span class="badge badge-pill badge-status cursor-pointer" (click)="toggleStatus(data)"
+                                    [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">{{
+                                    data.status }}</span>
                             </td>
-                            <td>
-                                <div class="dropdown table-action">
+
+                            <td class="text-center">
+                                <div class="dropdown table-action text-center ">
                                     <a href="#" class="action-icon btn btn-xs shadow btn-icon btn-outline-light"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ti ti-dots-vertical"></i>
@@ -487,6 +491,8 @@
                                 </div>
                             </td>
                         </tr>
+                        }
+
 
                         <!-- Empty state -->
                         <tr *ngIf="tableData.length === 0">
@@ -668,12 +674,12 @@
 <!-- End Upgrade Plane -->
 
 <!-- Start Add Company -->
-<div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
+<div #addCompany class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Add New Company</h5>
         <button type="button"
             class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-            data-bs-dismiss="offcanvas" aria-label="Close">
+            aria-label="Close" (click)="closeAddCompany()">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -693,7 +699,7 @@
                                 <div class="d-inline-flex flex-column align-items-start">
                                     <label class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                                         <i class="ti ti-file-broken me-1"></i>Upload file
-                                        <input #fileInput type="file" multiple accept="application/pdf"
+                                        <input #fileInput type="file" multiple accept="image/*,application/pdf"
                                             (change)="onFilesSelected($event)" hidden />
                                     </label>
                                     <span>PDF. Max size of 5MB</span>
@@ -855,11 +861,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Website</label>
                                     <input type="text" class="form-control" formControlName="website" id="website" />
-                                    <div *ngIf="control('website').touched && control('website').invalid">
-                                        <small class="text-danger" *ngIf="control('website').hasError('pattern')">
-                                            Must be a valid URL (http:// or https://)
-                                        </small>
-                                    </div>
+
                                 </div>
                             </div>
 
@@ -907,16 +909,17 @@
                                 <div class="mb-3 ">
                                     <label class="form-label">Confirm Password</label>
                                     <div class="input-group input-group-flat pass-group">
-                                        <input #confirmInput type="password" [type]="password[2]?'text':'password'"
-                                            class="form-control" id="confirmPassword"
-                                            (input)="checkMatch(confirmInput.value)" (blur)="confirmTouched = true" />
+                                        <input type="password" [type]="password[2]?'text':'password'"
+                                            class="form-control" id="confirmPassword" formControlName="confirmPassword"
+                                            id="confirmPassword" />
                                         <span class="input-group-text toggle-password" (click)="togglePassword(2)">
                                             <i class="ti " [ngClass]="password[2]?'ti-eye':'ti-eye-off'"></i>
                                         </span>
                                     </div>
 
-                                    <div *ngIf="confirmTouched && passwordsDoNotMatch">
-                                        <small class="text-danger">Passwords do not match</small>
+                                    <div
+                                        *ngIf="createNewCompanyForm.hasError('mismatch') && (createNewCompanyForm.get('password')?.touched || createNewCompanyForm.get('confirmPassword')?.touched)">
+                                        <small class="text-danger">Passwords do not match.</small>
                                     </div>
                                 </div>
                             </div>
@@ -950,10 +953,9 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-end mt-3">
-                        <button type="button" data-bs-dismiss="offcanvas" class="btn btn-sm btn-light me-2">Cancel
+                        <button type="button" (click)="closeAddCompany()" class="btn btn-sm btn-light me-2">Cancel
                         </button>
-                        <button type="submit" class="btn btn-sm btn-primary"
-                            [disabled]="createNewCompanyForm.invalid || passwordsDoNotMatch">
+                        <button type="submit" class="btn btn-sm btn-primary" [disabled]="createNewCompanyForm.invalid ">
                             Create New
                         </button>
 
@@ -965,163 +967,7 @@
 
     <!-- End Add Company -->
 
-    <!-- Start Edit Company -->
-    <div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
-        <div class="offcanvas-header border-bottom">
-            <h5 class="fw-semibold">Edit Company</h5>
-            <button type="button"
-                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                data-bs-dismiss="offcanvas" aria-label="Close">
-                <i class="ti ti-x"></i>
-            </button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="card">
-                <div class="card-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
-                                        <div class="position-relative d-flex align-items-center">
-                                            <i class="ti ti-photo text-dark fs-16"></i>
-                                        </div>
-                                    </div>
-                                    <div class="d-inline-flex flex-column align-items-start">
-                                        <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
-                                            <i class="ti ti-file-broken me-1"></i>Upload file
-                                            <input type="file" class="form-control image-sign" multiple="">
-                                        </div>
-                                        <span>JPG, GIF or PNG. Max size of 800K</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Company Name <span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" value="NovaWave LLC">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" value="nova@llc.com">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Account URL</label>
-                                    <input type="text" class="form-control" value="nw.nova.com">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Phone Number <span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" value="+1 85785 98751">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Website</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3 ">
-                                    <label class="form-label">Password <span class="text-danger"> *</span></label>
-                                    <div class="input-group input-group-flat pass-group">
-                                        <input type="password" [type]="password[3]?'text':'password'"
-                                            class="form-control pass-input">
-                                        <span class="input-group-text toggle-password" (click)="togglePassword(3)">
-                                            <i class="ti " [ngClass]="password[3]?'ti-eye':'ti-eye-off'"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3 ">
-                                    <label class="form-label">Confirm Password <span class="text-danger">
-                                            *</span></label>
-                                    <div class="input-group input-group-flat pass-group">
-                                        <input type="password" [type]="password[4]?'text':'password'"
-                                            id="confirmPassword" class="form-control pass-input">
-                                        <span class="input-group-text toggle-password" (click)="togglePassword(4)">
-                                            <i class="ti " [ngClass]="password[4]?'ti-eye':'ti-eye-off'"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Address</label>
-                                    <input type="text" class="form-control"
-                                        value="146 Settlers Lane New York, NY 10013">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3 ">
-                                    <label class="form-label">Plan Name <span class="text-danger"> *</span></label>
-                                    <p-select [options]="select" [(ngModel)]="selected"
-                                        [ngModelOptions]="{standalone: true}" optionLabel="data" placeholder="Advanced"
-                                        [filter]="true" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3 ">
-                                    <label class="form-label">Plan Type <span class="text-danger"> *</span></label>
-                                    <p-select [options]="select2" [(ngModel)]="selected2"
-                                        [ngModelOptions]="{standalone: true}" optionLabel="data" placeholder="Monthly"
-                                        [filter]="true" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3 ">
-                                    <label class="form-label">Currency <span class="text-danger"> *</span></label>
 
-                                    <p-select [options]="select3" [(ngModel)]="selected3"
-                                        [ngModelOptions]="{standalone: true}" optionLabel="data" placeholder="Dollar"
-                                        [filter]="true" class="form-control" />
-
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3 ">
-                                    <label class="form-label">Language <span class="text-danger"> *</span></label>
-                                    <p-select [options]="select4" [(ngModel)]="selected4"
-                                        [ngModelOptions]="{standalone: true}" optionLabel="data" placeholder="English"
-                                        [filter]="true" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-0">
-                                    <div class="radio-wrap">
-                                        <label class="form-label">Status</label>
-                                        <div class="d-flex flex-wrap">
-                                            <div class="me-2">
-                                                <input type="radio" class="status-radio" id="person1" name="leave"
-                                                    checked="">
-                                                <label for="person1">Active</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" class="status-radio" id="Organization1"
-                                                    name="leave">
-                                                <label for="Organization1">Inactive</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="d-flex align-items-center justify-content-end">
-                <button type="button" data-bs-dismiss="offcanvas" class="btn btn-sm btn-light me-2">Cancel</button>
-                <button type="submit" class="btn btn-sm btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-    <!-- End Edit Company -->
 
     <!-- Start Company Detail -->
     <div class="modal fade custom-modal" id="company_detail">
@@ -1262,70 +1108,6 @@
 </div>
 
 
-<div #editUserCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
-    <div class="offcanvas-header border-bottom">
-        <h5 class="fw-semibold">Edit User</h5>
-        <button type="button"
-            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-            (click)="closeEditUser()" aria-label="Close">
-            <i class="ti ti-x"></i>
-        </button>
-    </div>
-    <div class="offcanvas-body">
-        <form [formGroup]="editUserForm" (ngSubmit)="onEditSubmit()">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label>Name</label>
-                    <input class="form-control" formControlName="name" id="name_1">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Registration No</label>
-                    <input class="form-control" formControlName="registrationNo" id="registrationNo_1">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>VAT No</label>
-                    <input class="form-control" formControlName="vatNo" id="vatNo_1">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Website</label>
-                    <input class="form-control" formControlName="website" id="website_1">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Inc Date</label>
-                    <input class="form-control" formControlName="incorporatonDate" id="incorporatonDate_1">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Status</label>
-                    <div class="d-flex gap-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" id="statusActive" formControlName="status"
-                                value="active" />
-                            <label class="form-check-label" for="statusActive">
-                                Active
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" id="statusInactive" formControlName="status"
-                                value="inactive" />
-                            <label class="form-check-label" for="statusInactive">
-                                Inactive
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-light me-2" data-bs-dismiss="offcanvas">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-            </div>
-        </form>
-
-    </div>
-
-</div>
 
 <div #deleteUserCanvas class="offcanvas off-canvas-custom offcanvas-small" tabindex="-1" aria-hidden="true"
     id="deleteUserCanvas">
@@ -1343,7 +1125,7 @@
                 <i class="ti ti-trash fs-24"></i>
             </span>
         </div>
-        <h5 class="mb-1">Are you sure you want to remove user you selected.</h5>
+        <h5 class="mb-3">Are you sure you want to remove Company you selected.</h5>
         <!-- <p class="mb-4"></p> -->
         <div class="d-flex justify-content-center">
             <button class="btn btn-light me-2 w-100" (click)="closeDeleteModal()">Cancel</button>
@@ -1351,3 +1133,96 @@
         </div>
     </div>
 </div>
+
+
+<!-- Start Edit Company -->
+<div #editUserCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="fw-semibold">Edit Company</h5>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            (click)="closeEditCompany()" aria-label="Close">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <form [formGroup]="editForm" (ngSubmit)="onUpdateCompany()">
+            <div class="row">
+                <!-- Name -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Company Name</label>
+                    <input class="form-control" formControlName="name" id="name_1" />
+                    <div *ngIf="editForm.get('name')?.touched && editForm.get('name')?.invalid">
+                        <small class="text-danger">Name is required</small>
+                    </div>
+                </div>
+
+                <!-- Registration No -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Registration No</label>
+                    <input class="form-control" formControlName="registrationNo" id="registrationNo_1" />
+                    <div *ngIf="editForm.get('registrationNo')?.touched && editForm.get('registrationNo')?.invalid">
+                        <small class="text-danger">Registration Number is required</small>
+                    </div>
+                </div>
+
+                <!-- VAT No -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">VAT No</label>
+                    <input class="form-control" formControlName="vatNo" id="vatNo_1" />
+                    <div *ngIf="editForm.get('vatNo')?.touched && editForm.get('vatNo')?.invalid">
+                        <small class="text-danger">VAT Number is required</small>
+                    </div>
+                </div>
+
+                <!-- Website -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Website</label>
+                    <input class="form-control" formControlName="website" id="website_1" />
+                    <div *ngIf="editForm.get('website')?.touched && editForm.get('website')?.invalid">
+                        <small class="text-danger">Website is required</small>
+                    </div>
+                </div>
+
+                <!-- Incorporation Date -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Incorporation Date</label>
+                    <input type="date" class="form-control" formControlName="incorporatonDate"
+                        id="incorporatonDate_1" />
+
+                    <div *ngIf="editForm.get('incorporatonDate')?.touched && editForm.get('incorporatonDate')?.invalid">
+                        <small class="text-danger">Incorporation Date is required</small>
+                    </div>
+                </div>
+
+                <!-- Status radios -->
+                <div class="col-md-6 ">
+                    <label class="form-label d-block mb-3">Status</label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="statusActive" formControlName="status"
+                                value="active" />
+                            <label class="form-check-label" for="statusActive">Active</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="statusInactive" formControlName="status"
+                                value="inactive" />
+                            <label class="form-check-label" for="statusInactive">Inactive</label>
+                        </div>
+                    </div>
+                    <div *ngIf="editForm.get('status')?.touched && editForm.get('status')?.invalid">
+                        <small class="text-danger">Status is required</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-2">
+                <button type="button" class="btn btn-light me-2" (click)="closeEditCompany()">Cancel</button>
+                <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Save
+                    Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- End Edit Company -->

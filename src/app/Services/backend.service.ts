@@ -28,6 +28,12 @@ export class BackendService {
   updateUser(payload: any): Observable<any> {
     return this.http.put(CONFIG.updateUser, payload);
   }
+  updateApplication(payload: any): Observable<any> {
+    return this.http.put(CONFIG.updateApplication, payload);
+  }
+  updateCompany(payload: any): Observable<any> {
+    return this.http.put(CONFIG.updateCompany, payload);
+  }
 
   deleteUser(id: any): Observable<any> {
     const url = `${CONFIG.deleteUser}/${id}`;
