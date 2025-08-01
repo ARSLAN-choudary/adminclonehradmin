@@ -37,3 +37,6 @@ table.dataTable tbody tr.isDeleted td {
 .cursor-pointer {
   cursor: pointer !important;
 }
+:host ::ng-deep table.table.dataTable > thead > tr th {
+  padding-right: 24px !important;
+}
