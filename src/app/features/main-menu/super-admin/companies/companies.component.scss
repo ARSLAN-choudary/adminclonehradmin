@@ -30,7 +30,10 @@ a {
   width: 150px !important;
 }
 
-table.dataTable tbody tr.isDeleted td {
+:host ::ng-deep table.dataTable tbody tr.isDeleted td {
+  background-color: rgb(243, 191, 191) !important;
+}
+:host ::ng-deep table tr.isDeleted {
   background-color: rgb(243, 191, 191) !important;
 }
 

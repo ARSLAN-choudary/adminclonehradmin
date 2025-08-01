@@ -456,7 +456,7 @@
                     </thead>
                     <tbody>
                         @for (data of tableData; track $index) {
-                        <tr [ngClass]="{ 'isDeleted': data.isDeleted}">
+                        <tr [class.isDeleted]="data.isDeleted">
                             <td>
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="d-flex flex-column fw-medium">

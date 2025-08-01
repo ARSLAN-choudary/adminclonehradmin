@@ -153,11 +153,11 @@ export class CompaniesComponent {
     //
     // When pagination emits new page info
     this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-      if (this.router.url === this.routes.dataTable) {
-        this.pageSize = res.pageSize;
-        this.skip = res.skip;
-        this.getTableData(res.skip, res.pageSize);
-      }
+      // if (this.router.url === this.routes.dataTable) {
+      this.pageSize = res.pageSize;
+      this.skip = res.skip;
+      this.getTableData(res.skip, res.pageSize);
+      // }
     });
 
     this.initCreateNewCompanyForm();
@@ -281,18 +281,22 @@ export class CompaniesComponent {
           ? apiRes.data.data
           : [];
 
-        // sort so deleted companies are at the bottom
+        arr = arr.map((d) => ({ ...d, isDeleted: !!d.isDeleted }));
         arr.sort((a, b) => {
-          if (a.isDeleted === b.isDeleted) return 0;
-          return a.isDeleted ? 1 : -1; // deleted => after non-deleted
+          if (a.isDeleted === b.isDeleted) {
+            return (
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+          }
+          return a.isDeleted ? 1 : -1;
         });
 
-        // update counts ignoring deleted if you don't want them affecting active/inactive
         const countsSource = arr.filter((c) => !c.isDeleted);
         this.updateCounts(countsSource);
 
         this.tableData = arr;
         this.totalData = apiRes.data.recordsTotal;
+        this.cdRef.markForCheck();
 
         this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
         this.dataSource = new MatTableDataSource<companiesDataTable>(
@@ -383,6 +387,8 @@ export class CompaniesComponent {
 
     this.backendService.addCompany(formData).subscribe({
       next: () => {
+        this.getTableData(this.skip, this.pageSize);
+
         this.closeAddCompany();
       },
       error: (err) => {

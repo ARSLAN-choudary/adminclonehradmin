@@ -51,6 +51,10 @@ export class BackendService {
   addApplication(payload: any): Observable<any> {
     return this.http.post(CONFIG.addApplication, payload);
   }
+  applicationResend(payload: any): Observable<any> {
+    return this.http.post(CONFIG.applicationResend, payload);
+  }
+
 
   getApplications(payload: any): Observable<any> {
     return this.http.post(CONFIG.getApplications, payload);

@@ -863,18 +863,20 @@ export class NewApplicationComponent implements OnInit {
   confirmResend(event: MouseEvent) {
     (event.target as HTMLElement).blur();
     if (this.resendApplicationData) {
-      debugger;
-      this.backend
-        .addApplication(this.resendApplicationData)
-        .subscribe((res: any) => {
-          if (res.status === "success") {
-            this.toastr.success(res.message);
-            this.getTableData(this.skip, this.pageSize);
-            this.closeResendModal();
-          } else {
-            this.toastr.error("Please Try Again Later");
-          }
-        });
+      let payload = {
+        email: this.resendApplicationData.email,
+        applicationId: this.resendApplicationData._id,
+      };
+
+      this.backend.applicationResend(payload).subscribe((res: any) => {
+        if (res.status === "success") {
+          this.toastr.success(res.message);
+          this.getTableData(this.skip, this.pageSize);
+          this.closeResendModal();
+        } else {
+          this.toastr.error("Please Try Again Later");
+        }
+      });
     }
   }
   onUpdateApplication() {
