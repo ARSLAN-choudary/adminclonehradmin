@@ -16,6 +16,7 @@ export const CONFIG = {
   deleteCompany: BASE_URL_API + "/api/company/delete",
   deleteApplication: BASE_URL_API + "/api/application/delete",
   addApplication: BASE_URL_API + "/api/application/add",
+  applicationResend: BASE_URL_API + "/api/application/resend",
   getApplications: BASE_URL_API + "/api/application/list",
   addUserDetail: BASE_URL_API + "/api/application/userdetail",
   uploadPdfFiles: BASE_URL_API + "/api/application/upload",
