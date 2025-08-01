@@ -56,6 +56,7 @@ export class BackendService {
     return this.http.post(CONFIG.getApplications, payload);
   }
 
+
   addUserDetails(payload: any): Observable<any> {
     return this.http.put(CONFIG.addUserDetail, payload);
   }
