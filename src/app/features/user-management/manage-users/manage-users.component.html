@@ -433,7 +433,7 @@
                             <td>{{ data.role }}</td>
 
                             <td>
-                                <span class="badge badge-pill badge-status"
+                                <span class="badge badge-pill badge-status cursor-pointer" (click)="toggleStatus(data)"
                                     [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">
                                     {{ data.status }}
                                 </span>

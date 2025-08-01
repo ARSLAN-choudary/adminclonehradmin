@@ -902,4 +902,26 @@ export class NewApplicationComponent implements OnInit {
       },
     });
   }
+  toggleStatus(data: any) {
+    const newStatus = data.status === "active" ? "inactive" : "active";
+    const payload = {
+      _id: data._id ?? data.id,
+      status: newStatus,
+    };
+
+    this.backend.updateApplication(payload).subscribe({
+      next: (res: any) => {
+        if (res?.status === "success" || res?.success === true) {
+          data.status = newStatus;
+          this.toastr.success(res.message || "Status updated");
+          this.getTableData(this.skip, this.pageSize);
+        } else {
+          this.toastr.error(res?.message || "Failed to toggle status");
+        }
+      },
+      error: (err: any) => {
+        this.toastr.error("Failed to toggle status");
+      },
+    });
+  }
 }

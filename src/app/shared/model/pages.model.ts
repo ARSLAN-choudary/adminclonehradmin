@@ -423,6 +423,7 @@ export interface newApplicationDataTable {
   status: string;
 }
 export interface companiesDataTable {
+  isDeleted:boolean,
   isSelected: boolean;
   name: string;
   _id: string;

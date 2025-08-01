@@ -177,28 +177,41 @@ export class CompaniesComponent {
   }
 
   initCreateNewCompanyForm() {
-    this.createNewCompanyForm = this.fb.group({
-      files: [null, [Validators.required, this.pdfAndSizeValidator]],
-      country: ["", Validators.required],
+    this.createNewCompanyForm = this.fb.group(
+      {
+        files: [
+          null,
+          [Validators.required, this.fileTypeAndSizeValidator.bind(this)],
+        ],
 
-      // all other fields start disabled
-      name: [{ value: "", disabled: true }, Validators.required],
-      registrationNo: [{ value: "", disabled: true }, Validators.required],
-      vatNo: [{ value: "", disabled: true }, Validators.required],
-      peNo: [{ value: "", disabled: true }, Validators.required],
-      jobplusemployeryno: [{ value: "", disabled: true }, Validators.required],
-      currency: [{ value: "", disabled: true }, Validators.required],
-      phoneNO: [{ value: "", disabled: true }, Validators.required],
-      email: [""],
-      address: [""],
-      website: [""],
-      incorporatonDate: [{ value: "", disabled: true }, Validators.required],
-      password: [
-        { value: "", disabled: true },
-        [Validators.required, Validators.minLength(8)],
-      ],
-      status: [{ value: "active", disabled: true }, Validators.required],
-    });
+        country: ["", Validators.required],
+
+        // all other fields start disabled
+        name: [{ value: "", disabled: true }, Validators.required],
+        registrationNo: [{ value: "", disabled: true }, Validators.required],
+        vatNo: [{ value: "", disabled: true }, Validators.required],
+        peNo: [{ value: "", disabled: true }, Validators.required],
+        jobplusemployeryno: [
+          { value: "", disabled: true },
+          Validators.required,
+        ],
+        currency: [{ value: "", disabled: true }, Validators.required],
+        phoneNO: [{ value: "", disabled: true }, Validators.required],
+        email: [""],
+        address: [""],
+        website: [""],
+        incorporatonDate: [{ value: "", disabled: true }, Validators.required],
+        password: [
+          { value: "", disabled: true },
+          [Validators.required, Validators.minLength(8)],
+        ],
+        confirmPassword: [{ value: "", disabled: true }, Validators.required],
+        status: [{ value: "active", disabled: true }, Validators.required],
+      },
+      {
+        validators: this.passwordsMatchValidator,
+      }
+    );
     const maltaFields = [
       "name",
       "registrationNo",
@@ -209,6 +222,7 @@ export class CompaniesComponent {
       "phoneNO",
       "incorporatonDate",
       "password",
+      "confirmPassword",
       "status",
     ];
 
@@ -232,6 +246,12 @@ export class CompaniesComponent {
       });
   }
 
+  passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const pw = group.get("password")?.value;
+    const cp = group.get("confirmPassword")?.value;
+    if (!pw || !cp) return { mismatch: true };
+    return pw === cp ? null : { mismatch: true };
+  }
   private updateCounts(data: any[] = []) {
     const active = data.filter((c) => c.status === "active").length;
     this.activeCompanies.set(active);
@@ -257,7 +277,21 @@ export class CompaniesComponent {
         })
       )
       .subscribe((apiRes: any) => {
-        this.tableData = apiRes.data.data;
+        let arr: any[] = Array.isArray(apiRes?.data?.data)
+          ? apiRes.data.data
+          : [];
+
+        // sort so deleted companies are at the bottom
+        arr.sort((a, b) => {
+          if (a.isDeleted === b.isDeleted) return 0;
+          return a.isDeleted ? 1 : -1; // deleted => after non-deleted
+        });
+
+        // update counts ignoring deleted if you don't want them affecting active/inactive
+        const countsSource = arr.filter((c) => !c.isDeleted);
+        this.updateCounts(countsSource);
+
+        this.tableData = arr;
         this.totalData = apiRes.data.recordsTotal;
 
         this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
@@ -289,6 +323,29 @@ export class CompaniesComponent {
     return null;
   }
 
+  fileTypeAndSizeValidator(control: AbstractControl): ValidationErrors | null {
+    const files: File[] = control.value as File[];
+    if (!files || files.length === 0) {
+      return { required: true };
+    }
+    const allowedTypes = [
+      "application/pdf",
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+      "image/webp",
+    ];
+    for (let f of files) {
+      if (!allowedTypes.includes(f.type)) {
+        return { invalidType: true };
+      }
+      if (f.size > 5 * 1024 * 1024) {
+        return { fileTooLarge: true };
+      }
+    }
+    return null;
+  }
+
   onFilesSelected(evt: Event) {
     const input = evt.target as HTMLInputElement;
     if (!input.files) return;
@@ -297,14 +354,14 @@ export class CompaniesComponent {
     this.control("files").markAsTouched();
     input.value = "";
   }
+
   checkMatch(confirmValue: string) {
     const pw = this.control("password").value;
-    this.passwordsDoNotMatch = pw !== confirmValue;
+    this.passwordsDoNotMatch = !confirmValue || pw !== confirmValue;
   }
 
   onSubmit() {
     if (this.createNewCompanyForm.invalid || this.passwordsDoNotMatch) {
-      console.log(this.createNewCompanyForm.value);
       this.createNewCompanyForm.markAllAsTouched();
       this.confirmTouched = true;
       return;
@@ -314,8 +371,11 @@ export class CompaniesComponent {
     const v = this.createNewCompanyForm.value;
 
     Object.entries(v).forEach(([key, val]) => {
+      if (key === "confirmPassword") return;
       if (key === "files" && Array.isArray(val)) {
-        val.forEach((file: File) => formData.append("files", file, file.name));
+        val.forEach((file: File) => {
+          formData.append("image", file, file.name);
+        });
       } else {
         formData.append(key, String(val));
       }
@@ -325,7 +385,33 @@ export class CompaniesComponent {
       next: () => {
         this.closeAddCompany();
       },
-      error: console.error,
+      error: (err) => {
+        console.error("upload error", err);
+        this.toastr.error("Upload failed");
+      },
+    });
+  }
+
+  toggleStatus(data: any) {
+    const newStatus = data.status === "active" ? "inactive" : "active";
+    const payload = {
+      id: data._id ?? data.id,
+      status: newStatus,
+    };
+
+    this.backendService.updateCompany(payload).subscribe({
+      next: (res: any) => {
+        if (res?.status === "success" || res?.success === true) {
+          data.status = newStatus;
+          this.toastr.success(res.message || "Status updated");
+          this.getTableData(this.skip, this.pageSize);
+        } else {
+          this.toastr.error(res?.message || "Failed to toggle status");
+        }
+      },
+      error: (err: any) => {
+        this.toastr.error("Failed to toggle status");
+      },
     });
   }
 

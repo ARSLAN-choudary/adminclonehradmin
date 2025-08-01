@@ -27,5 +27,13 @@ a {
 }
 
 ::ng-deep .reportrange-picker .reportrange-picker-field {
-    width: 150px !important;
-  }
+  width: 150px !important;
+}
+
+table.dataTable tbody tr.isDeleted td {
+  background-color: rgb(243, 191, 191) !important;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}

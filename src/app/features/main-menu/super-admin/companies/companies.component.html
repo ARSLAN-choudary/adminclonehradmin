@@ -455,7 +455,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of tableData;">
+                        @for (data of tableData; track $index) {
+                        <tr [ngClass]="{ 'isDeleted': data.isDeleted}">
                             <td>
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="d-flex flex-column fw-medium">
@@ -468,10 +469,11 @@
                             <td>{{ data.website }}</td>
                             <td>{{ data.incorporatonDate |date}}</td>
                             <td>
-                                <span class="badge badge-pill badge-status"
+                                <span class="badge badge-pill badge-status cursor-pointer" (click)="toggleStatus(data)"
                                     [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">{{
                                     data.status }}</span>
                             </td>
+
                             <td class="text-center">
                                 <div class="dropdown table-action text-center ">
                                     <a href="#" class="action-icon btn btn-xs shadow btn-icon btn-outline-light"
@@ -489,6 +491,8 @@
                                 </div>
                             </td>
                         </tr>
+                        }
+
 
                         <!-- Empty state -->
                         <tr *ngIf="tableData.length === 0">
@@ -695,7 +699,7 @@
                                 <div class="d-inline-flex flex-column align-items-start">
                                     <label class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                                         <i class="ti ti-file-broken me-1"></i>Upload file
-                                        <input #fileInput type="file" multiple accept="application/pdf"
+                                        <input #fileInput type="file" multiple accept="image/*,application/pdf"
                                             (change)="onFilesSelected($event)" hidden />
                                     </label>
                                     <span>PDF. Max size of 5MB</span>
@@ -905,16 +909,17 @@
                                 <div class="mb-3 ">
                                     <label class="form-label">Confirm Password</label>
                                     <div class="input-group input-group-flat pass-group">
-                                        <input #confirmInput type="password" [type]="password[2]?'text':'password'"
-                                            class="form-control" id="confirmPassword"
-                                            (input)="checkMatch(confirmInput.value)" (blur)="confirmTouched = true" />
+                                        <input type="password" [type]="password[2]?'text':'password'"
+                                            class="form-control" id="confirmPassword" formControlName="confirmPassword"
+                                            id="confirmPassword" />
                                         <span class="input-group-text toggle-password" (click)="togglePassword(2)">
                                             <i class="ti " [ngClass]="password[2]?'ti-eye':'ti-eye-off'"></i>
                                         </span>
                                     </div>
 
-                                    <div *ngIf="confirmTouched && passwordsDoNotMatch">
-                                        <small class="text-danger">Passwords do not match</small>
+                                    <div
+                                        *ngIf="createNewCompanyForm.hasError('mismatch') && (createNewCompanyForm.get('password')?.touched || createNewCompanyForm.get('confirmPassword')?.touched)">
+                                        <small class="text-danger">Passwords do not match.</small>
                                     </div>
                                 </div>
                             </div>
@@ -950,8 +955,7 @@
                     <div class="d-flex align-items-center justify-content-end mt-3">
                         <button type="button" (click)="closeAddCompany()" class="btn btn-sm btn-light me-2">Cancel
                         </button>
-                        <button type="submit" class="btn btn-sm btn-primary"
-                            [disabled]="createNewCompanyForm.invalid || passwordsDoNotMatch">
+                        <button type="submit" class="btn btn-sm btn-primary" [disabled]="createNewCompanyForm.invalid ">
                             Create New
                         </button>
 
