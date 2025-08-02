@@ -48,7 +48,8 @@
             <div class="input-icon input-icon-start position-relative">
                 <span class="input-icon-addon text-dark"><i class="ti ti-search"></i></span>
                 <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
-                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search">
+                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search"
+                    id="search_data">
             </div>
             <a href="javascript:void(0);" class="btn btn-primary" (click)="openAddCompany()"><i
                     class="ti ti-square-rounded-plus-filled me-1"></i>Add New Company</a>
@@ -85,31 +86,35 @@
                                                             <i class="ti ti-search"></i>
                                                         </span>
                                                         <input type="text" class="form-control form-control-md"
-                                                            placeholder="Search">
+                                                            placeholder="Search" id="search__data">
                                                     </div>
                                                 </div>
                                                 <ul class="mb-0">
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="1">
                                                             USA
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="2">
                                                             France
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="3">
                                                             Italy
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="4">
                                                             Germany
                                                         </label>
                                                     </li>
@@ -136,38 +141,43 @@
                                                         <span class="input-icon-addon fs-12">
                                                             <i class="ti ti-search"></i>
                                                         </span>
-                                                        <input type="text" class="form-control form-control-md"
+                                                        <input type="text" class="form-control form-control-md" id="5"
                                                             placeholder="Search">
                                                     </div>
                                                 </div>
                                                 <ul class="mb-0">
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="6">
                                                             Hendry Milner
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="7">
                                                             Guilory Berggren
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="8">
                                                             Jami Carlile
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="9">
                                                             Theresa Nelson
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="10">
                                                             Smith Cooper
                                                         </label>
                                                     </li>
@@ -192,19 +202,22 @@
                                                 <ul>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="11">
                                                             Collab
                                                         </label>
                                                     </li>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="12">
                                                             Promotion
                                                         </label>
                                                     </li>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="13">
                                                             VIP
                                                         </label>
                                                     </li>
@@ -224,7 +237,8 @@
                                                 <ul>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="14">
                                                             <span class="rating">
                                                                 <i class="ti ti-star-filled text-warning"></i>
                                                                 <i class="ti ti-star-filled text-warning"></i>
@@ -237,7 +251,8 @@
                                                     </li>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="15">
                                                             <span class="rating">
                                                                 <i class="ti ti-star-filled text-warning"></i>
                                                                 <i class="ti ti-star-filled text-warning"></i>
@@ -250,7 +265,8 @@
                                                     </li>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="16">
                                                             <span class="rating">
                                                                 <i class="ti ti-star-filled text-warning"></i>
                                                                 <i class="ti ti-star-filled text-warning"></i>
@@ -263,7 +279,8 @@
                                                     </li>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="17">
                                                             <span class="rating">
                                                                 <i class="ti ti-star-filled text-warning"></i>
                                                                 <i class="ti ti-star-filled text-warning"></i>
@@ -276,7 +293,8 @@
                                                     </li>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="18">
                                                             <span class="rating">
                                                                 <i class="ti ti-star-filled text-warning"></i>
                                                                 <i class="ti ti-star-filled"></i>
@@ -303,13 +321,15 @@
                                                 <ul>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="19">
                                                             Active
                                                         </label>
                                                     </li>
                                                     <li>
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="20">
                                                             Inactive
                                                         </label>
                                                     </li>
@@ -363,7 +383,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Name</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="21" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -374,7 +394,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Email</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                id="22" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -385,7 +405,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Account URL</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                id="23" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -396,7 +416,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Plan</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                id="24" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -407,7 +427,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Created Dated</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                id="25" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -418,7 +438,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Status</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                id="26" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -429,7 +449,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Action</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                id="27" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -597,34 +617,43 @@
                             <div class="row row-gap-3">
                                 <div class="col-md-6">
                                     <div>
-                                        <label class="form-label">Plan Name <span class="text-danger">*</span></label>
+                                        <span id="planName_label" class="form-label">
+                                            Plan Name <span class="text-danger">*</span>
+                                        </span>
+
                                         <p-select [options]="selected" [(ngModel)]="selected"
                                             [ngModelOptions]="{standalone: true}" optionLabel="data"
-                                            placeholder="Select" [filter]="true" class="form-control" />
+                                            inputId="planNameMain" aria-labelledby="planNameMain" placeholder="Select"
+                                            [filter]="true" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div>
-                                        <label class="form-label">Plan Type <span class="text-danger">*</span></label>
+
+                                        <span class="form-label">
+                                            Plan Type<span class="text-danger">*</span>
+                                        </span>
+
                                         <p-select [options]="selected2" [(ngModel)]="selected2"
-                                            [ngModelOptions]="{standalone: true}" optionLabel="data"
+                                            [ngModelOptions]="{standalone: true}" optionLabel="data" id="planType"
                                             placeholder="Select" [filter]="true" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div>
-                                        <label class="form-label">Amount<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" value="Data Analytics">
+                                        <label for="amount_1" class="form-label">Amount<span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" value="Data Analytics" id="amount_1">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div>
-                                        <label class="form-label">Payment Date <span
+                                        <label for="payment_date" class="form-label">Payment Date <span
                                                 class="text-danger">*</span></label>
                                         <div class="input-icon-end position-relative ngxdate">
                                             <input type="text" class="form-control" bsDatepicker
                                                 [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate"
-                                                placeholder="dd/mm/yyyy">
+                                                placeholder="dd/mm/yyyy" id="payment_date">
                                             <span class="input-icon-addon">
                                                 <i class="ti ti-calendar text-dark"></i>
                                             </span>
@@ -633,12 +662,12 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div>
-                                        <label class="form-label">Next Payment Date <span
+                                        <label for="next_payment_date" class="form-label">Next Payment Date <span
                                                 class="text-danger">*</span></label>
                                         <div class="input-icon-end position-relative ngxdate2">
                                             <input type="text" class="form-control" bsDatepicker
                                                 [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate2"
-                                                placeholder="dd/mm/yyyy">
+                                                placeholder="dd/mm/yyyy" id="next_payment_date">
                                             <span class="input-icon-addon">
                                                 <i class="ti ti-calendar text-dark"></i>
                                             </span>
@@ -647,11 +676,12 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div>
-                                        <label class="form-label">Expiring On <span class="text-danger">*</span></label>
+                                        <label for="expiring_on" class="form-label">Expiring On <span
+                                                class="text-danger">*</span></label>
                                         <div class="input-icon-end position-relative ngxdate3">
                                             <input type="text" class="form-control" bsDatepicker
                                                 [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate3"
-                                                placeholder="dd/mm/yyyy">
+                                                placeholder="dd/mm/yyyy" id="expiring_on">
                                             <span class="input-icon-addon">
                                                 <i class="ti ti-calendar text-dark"></i>
                                             </span>
@@ -697,12 +727,13 @@
                                     </div>
                                 </div>
                                 <div class="d-inline-flex flex-column align-items-start">
-                                    <label class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
+                                    <label for="upload_file"
+                                        class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                                         <i class="ti ti-file-broken me-1"></i>Upload file
                                         <input #fileInput type="file" multiple accept="image/*,application/pdf"
-                                            (change)="onFilesSelected($event)" hidden />
+                                            id="upload_file" (change)="onFilesSelected($event)" hidden />
                                     </label>
-                                    <span>PDF. Max size of 5MB</span>
+                                    <span>PDF. Max size of 2MB</span>
                                     <ul *ngIf="createNewCompanyForm.value.files?.length">
                                         <li *ngFor="let f of createNewCompanyForm.value.files">
                                             {{ f.name }} ({{ f.size/1024/1024 | number:'1.2-2' }} MB)
@@ -715,7 +746,9 @@
                         <!-- Country -->
                         <div class="col-md-6 align-items-end">
                             <div class="mb-3">
-                                <label class="form-label">Country <span class="text-danger"> *</span></label>
+                                <span class="form-label">
+                                    Country <span class="text-danger">*</span>
+                                </span>
                                 <p-select [options]="countries" optionLabel="label" optionValue="value"
                                     placeholder="Select" [filter]="true" class="form-control" formControlName="country"
                                     id="country"></p-select>
@@ -731,8 +764,9 @@
                             <!-- Company Name -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Company Name <span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" formControlName="name" id="name" />
+                                    <label for="company_name" class="form-label">Company Name <span class="text-danger">
+                                            *</span></label>
+                                    <input type="text" class="form-control" formControlName="name" id="company_name" />
                                 </div>
                                 <div *ngIf="control('name').touched && control('name').invalid">
                                     <small class="text-danger" *ngIf="control('name').hasError('required')">
@@ -744,10 +778,11 @@
                             <!-- Registration Number -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Registration Number <span class="text-danger">
+                                    <label for="resgistration_number" class="form-label">Registration Number <span
+                                            class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" formControlName="registrationNo"
-                                        id="registrationNo" />
+                                        id="resgistration_number" />
                                     <div *ngIf="control('registrationNo').touched && control('registrationNo').invalid">
                                         <small class="text-danger"
                                             *ngIf="control('registrationNo').hasError('required')">
@@ -760,8 +795,9 @@
                             <!-- VAT Number -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">VAT Number <span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" formControlName="vatNo" id="vatNo" />
+                                    <label for="vat_number" class="form-label">VAT Number <span class="text-danger">
+                                            *</span></label>
+                                    <input type="text" class="form-control" formControlName="vatNo" id="vat_number" />
                                     <div *ngIf="control('vatNo').touched && control('vatNo').invalid">
                                         <small class="text-danger" *ngIf="control('vatNo').hasError('required')">
                                             VAT Number is required
@@ -773,8 +809,9 @@
                             <!-- PE Number -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">PE Number <span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" formControlName="peNo" id="phoneNo1" />
+                                    <label for="pe_number" class="form-label">PE Number <span class="text-danger">
+                                            *</span></label>
+                                    <input type="text" class="form-control" formControlName="peNo" id="pe_number" />
                                     <div *ngIf="control('peNo').touched && control('peNo').invalid">
                                         <small class="text-danger" *ngIf="control('peNo').hasError('required')">
                                             PE Number is required
@@ -786,9 +823,10 @@
                             <!-- JobsPlus Employer Number -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">JobsPlus Employer Number <span class="text-danger">
+                                    <label for="jobsPlusEmp" class="form-label">JobsPlus Employer Number <span
+                                            class="text-danger">
                                             *</span></label>
-                                    <input type="text" class="form-control" id="jobplusemployeryno"
+                                    <input type="text" class="form-control" id="jobsPlusEmp"
                                         formControlName="jobplusemployeryno" />
                                     <div
                                         *ngIf="control('jobplusemployeryno').touched && control('jobplusemployeryno').invalid">
@@ -803,7 +841,9 @@
                             <!-- Currency -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Currency <span class="text-danger"> *</span></label>
+                                    <span class="form-label">
+                                        Currency<span class="text-danger">*</span>
+                                    </span>
                                     <p-select [options]="currencies" optionLabel="label" optionValue="value"
                                         id="currency" placeholder="Select" [filter]="true" class="form-control"
                                         formControlName="currency"></p-select>
@@ -818,8 +858,10 @@
                             <!-- Phone -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Phone Number <span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" formControlName="phoneNO" id="phoneNo" />
+                                    <label for="phone_Number" class="form-label">Phone Number <span class="text-danger">
+                                            *</span></label>
+                                    <input type="text" class="form-control" formControlName="phoneNO"
+                                        id="phone_Number" />
                                     <div *ngIf="control('phoneNO').touched && control('phoneNO').invalid">
                                         <small class="text-danger" *ngIf="control('phoneNO').hasError('required')">
                                             Phone Number is required
@@ -834,8 +876,8 @@
                             <!-- Email -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Email Address</label>
-                                    <input type="text" class="form-control" formControlName="email" id="email" />
+                                    <label for="email_adress" class="form-label">Email Address</label>
+                                    <input type="text" class="form-control" formControlName="email" id="email_adress" />
                                     <div *ngIf="control('email').touched && control('email').invalid">
                                         <!-- <small class="text-danger" *ngIf="control('email').hasError('required')">
                                             Email is required
@@ -850,8 +892,9 @@
                             <!-- Address -->
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Company Address</label>
-                                    <input type="text" class="form-control" formControlName="address" />
+                                    <label for="company_address" class="form-label">Company Address</label>
+                                    <input type="text" class="form-control" formControlName="address"
+                                        id="company_address" />
 
                                 </div>
                             </div>
@@ -859,8 +902,9 @@
                             <!-- Website -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Website</label>
-                                    <input type="text" class="form-control" formControlName="website" id="website" />
+                                    <label for="website_address" class="form-label">Website</label>
+                                    <input type="text" class="form-control" formControlName="website"
+                                        id="website_address" />
 
                                 </div>
                             </div>
@@ -868,7 +912,8 @@
                             <!-- Incorporation Date -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Incorporation Date <span class="text-danger">
+                                    <label for="incorporatonDate" class="form-label">Incorporation Date <span
+                                            class="text-danger">
                                             *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="date" class="form-control pass-input"
@@ -887,10 +932,11 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3 ">
-                                    <label class="form-label">Password <span class="text-danger"> *</span></label>
+                                    <label for="password_1" class="form-label">Password <span class="text-danger">
+                                            *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[1]?'text':'password'"
-                                            formControlName="password" id="password" class="form-control pass-input">
+                                            formControlName="password" id="password_1" class="form-control pass-input">
                                         <span class="input-group-text toggle-password" (click)="togglePassword(1)">
                                             <i class="ti " [ngClass]="password[1]?'ti-eye':'ti-eye-off'"></i>
                                         </span>
@@ -907,10 +953,10 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3 ">
-                                    <label class="form-label">Confirm Password</label>
+                                    <label for="confirm_password" class="form-label">Confirm Password</label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[2]?'text':'password'"
-                                            class="form-control" id="confirmPassword" formControlName="confirmPassword"
+                                            class="form-control" id="confirm_password" formControlName="confirmPassword"
                                             id="confirmPassword" />
                                         <span class="input-group-text toggle-password" (click)="togglePassword(2)">
                                             <i class="ti " [ngClass]="password[2]?'ti-eye':'ti-eye-off'"></i>
@@ -929,17 +975,19 @@
                             <div class="col-md-12">
                                 <div class="mb-0">
                                     <div class="radio-wrap">
-                                        <label class="form-label">Status</label>
+                                        <span class="form-label">
+                                            Status <span class="text-danger">*</span>
+                                        </span>
                                         <div class="d-flex flex-wrap">
                                             <div class="me-2">
-                                                <input type="radio" class="status-radio" id="active" value="active"
+                                                <input type="radio" class="status-radio" id="active_1" value="active"
                                                     formControlName="status" />
-                                                <label for="active">Active</label>
+                                                <label for="active_1">Active</label>
                                             </div>
                                             <div>
-                                                <input type="radio" class="status-radio" id="inactive" value="inactive"
-                                                    formControlName="status" />
-                                                <label for="inactive">Inactive</label>
+                                                <input type="radio" class="status-radio" id="inactive_1"
+                                                    value="inactive" formControlName="status" />
+                                                <label for="inactive_1">Inactive</label>
                                             </div>
                                             <div
                                                 *ngIf="control('status').touched && control('status').hasError('required')">
@@ -1150,8 +1198,8 @@
             <div class="row">
                 <!-- Name -->
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Company Name</label>
-                    <input class="form-control" formControlName="name" id="name_1" />
+                    <label for="company_name_1" class="form-label">Company Name</label>
+                    <input class="form-control" formControlName="name" id="company_name_1" />
                     <div *ngIf="editForm.get('name')?.touched && editForm.get('name')?.invalid">
                         <small class="text-danger">Name is required</small>
                     </div>
@@ -1159,8 +1207,8 @@
 
                 <!-- Registration No -->
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Registration No</label>
-                    <input class="form-control" formControlName="registrationNo" id="registrationNo_1" />
+                    <label for="resgistration_number_1" class="form-label">Registration No</label>
+                    <input class="form-control" formControlName="registrationNo" id="resgistration_number_1" />
                     <div *ngIf="editForm.get('registrationNo')?.touched && editForm.get('registrationNo')?.invalid">
                         <small class="text-danger">Registration Number is required</small>
                     </div>
@@ -1168,8 +1216,8 @@
 
                 <!-- VAT No -->
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">VAT No</label>
-                    <input class="form-control" formControlName="vatNo" id="vatNo_1" />
+                    <label for="vat_number_01" class="form-label">VAT No</label>
+                    <input class="form-control" formControlName="vatNo" id="vat_number_01" />
                     <div *ngIf="editForm.get('vatNo')?.touched && editForm.get('vatNo')?.invalid">
                         <small class="text-danger">VAT Number is required</small>
                     </div>
@@ -1177,8 +1225,8 @@
 
                 <!-- Website -->
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Website</label>
-                    <input class="form-control" formControlName="website" id="website_1" />
+                    <label for="website_01" class="form-label">Website</label>
+                    <input class="form-control" formControlName="website" id="website_01" />
                     <div *ngIf="editForm.get('website')?.touched && editForm.get('website')?.invalid">
                         <small class="text-danger">Website is required</small>
                     </div>
@@ -1186,9 +1234,9 @@
 
                 <!-- Incorporation Date -->
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Incorporation Date</label>
+                    <label for="incorporatonDate_01" class="form-label">Incorporation Date</label>
                     <input type="date" class="form-control" formControlName="incorporatonDate"
-                        id="incorporatonDate_1" />
+                        id="incorporatonDate_01" />
 
                     <div *ngIf="editForm.get('incorporatonDate')?.touched && editForm.get('incorporatonDate')?.invalid">
                         <small class="text-danger">Incorporation Date is required</small>
@@ -1197,12 +1245,15 @@
 
                 <!-- Status radios -->
                 <div class="col-md-6 ">
-                    <label class="form-label d-block mb-3">Status</label>
+                    <span class="form-label">
+                        Status <span class="text-danger">*</span>
+                    </span>
+
                     <div class="d-flex gap-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" id="statusActive" formControlName="status"
+                            <input class="form-check-input" type="radio" id="active_01" formControlName="status"
                                 value="active" />
-                            <label class="form-check-label" for="statusActive">Active</label>
+                            <label for="active_01" class="form-check-label">Active</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" id="statusInactive" formControlName="status"
