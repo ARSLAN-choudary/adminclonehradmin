@@ -47,7 +47,8 @@
             <div class="input-icon input-icon-start position-relative">
                 <span class="input-icon-addon text-dark"><i class="ti ti-search"></i></span>
                 <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
-                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search">
+                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search"
+                    id="search__data">
             </div>
             <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas" (click)="openAddUser()"><i
                     class="ti ti-square-rounded-plus-filled me-1"></i>Add User</a>
@@ -84,13 +85,14 @@
                                                             <i class="ti ti-search"></i>
                                                         </span>
                                                         <input type="text" class="form-control form-control-md"
-                                                            placeholder="Search">
+                                                            placeholder="Search" id="01">
                                                     </div>
                                                 </div>
                                                 <ul class="mb-0">
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="02">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-06.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -99,7 +101,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="03">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-40.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -108,7 +111,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="04">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-05.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -117,7 +121,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="05">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-10.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -126,7 +131,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="06">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-15.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -135,7 +141,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="07">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-01.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -144,7 +151,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="08">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-13.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -153,7 +161,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="09">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-12.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -162,7 +171,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="10">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-03.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -171,7 +181,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="11">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-18.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -198,20 +209,26 @@
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <ul>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="13"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="13">
                                                             +1 87545 54503
                                                         </label>
                                                     </li>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="14"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="14">
                                                             +1 98975 17485
                                                         </label>
                                                     </li>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="15"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="15">
                                                             +1 54655 25455
                                                         </label>
                                                     </li>
@@ -230,20 +247,26 @@
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <ul class="mb-0">
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="31"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="31">
                                                             elizabeth&#64;example.com
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="32"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="32">
                                                             katherine&#64;example.com
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="33"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="33">
                                                             samantha&#64;example.com
                                                         </label>
                                                     </li>
@@ -267,14 +290,18 @@
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <ul>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="active"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="active">
                                                             Active
                                                         </label>
                                                     </li>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="inActive"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="inActive">
                                                             Inactive
                                                         </label>
                                                     </li>
@@ -319,10 +346,10 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="21" class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Name</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" checked id="21">
                                         </label>
                                     </div>
                                 </li>
@@ -330,10 +357,10 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="22" class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Phone</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                id="22" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -341,10 +368,10 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="23" class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Email</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="23" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -352,10 +379,10 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="24" class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Created </span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="24" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -363,10 +390,10 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="25" class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Last Activity</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="25" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -374,10 +401,11 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="status"
+                                            class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Status</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="status" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -385,10 +413,11 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="action"
+                                            class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Action</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                id="action" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -491,9 +520,11 @@
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">User Name <span class="text-danger">*</span></label>
+                                <label for="userName_1" class="form-label">User Name <span
+                                        class="text-danger">*</span></label>
                                 <input type="text" class="form-control" formControlName="userName" id="userName"
-                                    [ngClass]="{'is-invalid': f['userName'].touched && f['userName'].invalid}">
+                                    [ngClass]="{'is-invalid': f['userName'].touched && f['userName'].invalid}"
+                                    id="userName_1">
                                 <div class="invalid-feedback"
                                     *ngIf="f['userName'].touched && f['userName'].hasError('required')">
                                     User Name is required.
@@ -503,13 +534,11 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <label class="form-label">Email <span class="text-danger">*</span></label>
-                                    <!-- <div class="form-check form-switch form-check-reverse">
-                                        <input class="form-check-input" type="checkbox" id="switchCheckReverse">
-                                        <label class="form-check-label" for="switchCheckReverse">Email Opt Out</label>
-                                    </div> -->
+                                    <label for="email_01" class="form-label">Email <span
+                                            class="text-danger">*</span></label>
+
                                 </div>
-                                <input type="text" class="form-control" formControlName="email" id="email"
+                                <input type="text" class="form-control" formControlName="email" id="email_01"
                                     [ngClass]="{'is-invalid': f['email'].touched && f['email'].invalid}">
                                 <div class="invalid-feedback" *ngIf="f['email'].touched">
                                     <div *ngIf="f['email'].hasError('required')">Email is required.</div>
@@ -519,8 +548,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Role <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="role" id="role"
+                                <label for="role_01" class="form-label">Role <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="role" id="role_01"
                                     [ngClass]="{'is-invalid': f['role'].touched && f['role'].invalid}">
                                 <div class="invalid-feedback"
                                     *ngIf="f['role'].touched && f['role'].hasError('required')">
@@ -531,7 +560,9 @@
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Mobile No <span class="text-danger">*</span></label>
+                                <span class="form-label">
+                                    Mobile No <span class="text-danger">*</span>
+                                </span>
                                 <ngx-intl-tel-input [ngClass]="{'is-invalid': f['phone'].touched && f['phone'].invalid}"
                                     [preferredCountries]="preferredCountries" [onlyCountries]="onlyCountries"
                                     [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
@@ -539,7 +570,7 @@
                                     [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
                                     [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan"
                                     [maxLength]="15" [phoneValidation]="true" [separateDialCode]="true"
-                                    formControlName="phone">
+                                    formControlName="phone" id="mobile_no">
                                 </ngx-intl-tel-input>
                                 <div class="invalid-feedback"
                                     *ngIf="f['phone'].touched && f['phone'].hasError('required')">
@@ -551,9 +582,11 @@
 
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="form-label">Location <span class="text-danger">*</span></label>
+                                <span id="planName_label" class="form-label">
+                                    Location <span class="text-danger">*</span>
+                                </span>
                                 <p-select [options]="countries" optionLabel="label" optionValue="value"
-                                    placeholder="Select" [filter]="true" class="form-control"
+                                    placeholder="Select" [filter]="true" class="form-control" inputId="location"
                                     formControlName="location"></p-select>
 
                                 <div class="text-danger fs-12 mt-1"
@@ -590,29 +623,33 @@
         <form [formGroup]="editUserForm" (ngSubmit)="onEditSubmit()">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label>User Name</label>
-                    <input class="form-control" formControlName="userName">
+                    <label for="userName__1">User Name</label>
+                    <input class="form-control" formControlName="userName" id="userName__1">
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label>Email</label>
-                    <input class="form-control" formControlName="email">
+                    <label for="email__1">Email</label>
+                    <input class="form-control" formControlName="email" id="email__1">
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label>Role</label>
-                    <input class="form-control" formControlName="role">
+                    <label for="role__1">Role</label>
+                    <input class="form-control" formControlName="role" id="role__1">
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label>Phone</label>
+                    <span class="form-label">
+                        Phone <span class="text-danger">*</span>
+                    </span>
                     <ngx-intl-tel-input [preferredCountries]="preferredCountries" [onlyCountries]="onlyCountries"
                         [searchCountryFlag]="true" [selectFirstCountry]="false"
                         [selectedCountryISO]="CountryISO.Pakistan" [separateDialCode]="true" [enablePlaceholder]="true"
-                        formControlName="phone">
+                        formControlName="phone" id="phone__1">
                     </ngx-intl-tel-input>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label>Location</label>
+                    <span class="form-label">
+                        Location< <span class="text-danger">*</span>
+                    </span>
                     <p-select [options]="countries" optionLabel="label" optionValue="value" formControlName="location"
-                        placeholder="Select" class="form-control">
+                        placeholder="Select" class="form-control" id="location__1">
                     </p-select>
                 </div>
             </div>
