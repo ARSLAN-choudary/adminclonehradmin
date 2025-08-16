@@ -1,8 +1,10 @@
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
+  OnInit,
   Output,
   Renderer2,
   signal,
@@ -48,6 +50,7 @@ import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { ToastrService } from "ngx-toastr";
+import { SelectFilterIdDirective } from "../../../../shared/common/directives/select-filter-id.directive";
 
 BackendService;
 
@@ -68,20 +71,23 @@ interface select {
     CustomPaginationComponent,
     MatSortModule,
     ReactiveFormsModule,
+    SelectFilterIdDirective,
   ],
 
   templateUrl: "./companies.component.html",
   styleUrl: "./companies.component.scss",
 })
-export class CompaniesComponent {
+export class CompaniesComponent implements OnInit, AfterViewInit {
   @ViewChild("addCompany", { static: true })
   addCompany!: ElementRef<HTMLElement>;
   @ViewChild("editUserCanvas", { static: true })
   editUserCanvas!: ElementRef<HTMLElement>;
   @ViewChild("deleteUserCanvas", { static: true })
   deleteUserCanvas!: ElementRef<HTMLElement>;
+  @ViewChild("countrySelect", { read: ElementRef })
+  countrySelectEl!: ElementRef;
   editForm!: FormGroup;
-
+  private _filterIdCounter = 0;
   deleteCompanyId!: any;
   private editBackdrop?: HTMLElement;
 
@@ -163,6 +169,7 @@ export class CompaniesComponent {
     this.initCreateNewCompanyForm();
     this.initEditForm();
   }
+  ngAfterViewInit() {}
 
   initEditForm() {
     this.editForm = this.fb.group({
@@ -775,5 +782,29 @@ export class CompaniesComponent {
     const d = new Date(raw);
     const tzOffset = d.getTimezoneOffset() * 60000;
     return new Date(d.getTime() - tzOffset).toISOString().slice(0, 10);
+  }
+  labelFilterInput(prefix = "pfilter"): void {
+    this.setFilterId(prefix);
+  }
+
+  private setFilterId(prefix: string): void {
+    const apply = () => {
+      // Grab ALL filter inputs currently in DOM (covers overlay appended to body)
+      const filters = Array.from(
+        document.querySelectorAll<HTMLInputElement>("input.p-select-filter")
+      ).filter((el) => !el.id); // only those missing id
+
+      if (!filters.length) return false;
+
+      for (const input of filters) {
+        input.id = `${prefix}-${++this._filterIdCounter}`; // ✅ real unique id
+      }
+      return true;
+    };
+
+    // try now, then retry to cover animation/async mount
+    if (!apply()) setTimeout(apply, 0);
+    setTimeout(apply, 40);
+    setTimeout(apply, 120);
   }
 }

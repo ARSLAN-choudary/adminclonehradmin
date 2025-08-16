@@ -621,10 +621,11 @@
                                             Plan Name <span class="text-danger">*</span>
                                         </span>
 
-                                        <p-select [options]="selected" [(ngModel)]="selected"
+                                        <p-select appSelectFilterId [options]="selected" [(ngModel)]="selected"
                                             [ngModelOptions]="{standalone: true}" optionLabel="data"
                                             inputId="planNameMain" aria-labelledby="planNameMain" placeholder="Select"
-                                            [filter]="true" class="form-control" />
+                                            [filter]="true" class="form-control"
+                                            (onShow)="labelFilterInput('plan-filter')" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -634,9 +635,10 @@
                                             Plan Type<span class="text-danger">*</span>
                                         </span>
 
-                                        <p-select [options]="selected2" [(ngModel)]="selected2"
+                                        <p-select appSelectFilterId [options]="selected2" [(ngModel)]="selected2"
                                             [ngModelOptions]="{standalone: true}" optionLabel="data" id="planType"
-                                            placeholder="Select" [filter]="true" class="form-control" />
+                                            placeholder="Select" [filter]="true" class="form-control"
+                                            (onShow)="labelFilterInput('planType-filter')" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -749,9 +751,10 @@
                                 <span class="form-label">
                                     Country <span class="text-danger">*</span>
                                 </span>
-                                <p-select [options]="countries" optionLabel="label" optionValue="value"
-                                    placeholder="Select" [filter]="true" class="form-control" formControlName="country"
-                                    id="country"></p-select>
+                                <p-select appSelectFilterId [options]="countries" optionLabel="label"
+                                    optionValue="value" placeholder="Select" [filter]="true" class="form-control"
+                                    formControlName="country" id="country"
+                                    (onShow)="labelFilterInput('country-filter')"></p-select>
                                 <div *ngIf="control('country').touched && control('country').invalid">
                                     <small class="text-danger" *ngIf="control('country').hasError('required')">
                                         Country is required
@@ -844,9 +847,10 @@
                                     <span class="form-label">
                                         Currency<span class="text-danger">*</span>
                                     </span>
-                                    <p-select [options]="currencies" optionLabel="label" optionValue="value"
-                                        id="currency" placeholder="Select" [filter]="true" class="form-control"
-                                        formControlName="currency"></p-select>
+                                    <p-select appSelectFilterId [options]="currencies" optionLabel="label"
+                                        optionValue="value" id="currency" placeholder="Select" [filter]="true"
+                                        class="form-control" formControlName="currency"
+                                        (onShow)="labelFilterInput('currency-filter')"></p-select>
                                     <div *ngIf="control('currency').touched && control('currency').invalid">
                                         <small class="text-danger" *ngIf="control('currency').hasError('required')">
                                             Currency is required
@@ -956,8 +960,8 @@
                                     <label for="confirm_password" class="form-label">Confirm Password</label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[2]?'text':'password'"
-                                            class="form-control" id="confirm_password" formControlName="confirmPassword"
-                                            id="confirmPassword" />
+                                            class="form-control" id="confirm_password"
+                                            formControlName="confirmPassword" />
                                         <span class="input-group-text toggle-password" (click)="togglePassword(2)">
                                             <i class="ti " [ngClass]="password[2]?'ti-eye':'ti-eye-off'"></i>
                                         </span>
