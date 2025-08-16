@@ -102,7 +102,7 @@ interface PhoneInputValue {
   styleUrl: "./manage-users.component.scss",
 })
 export class ManageUsersComponent implements OnInit, OnDestroy {
-  @ViewChild("deleteUserCanvas ", { static: true })
+  @ViewChild("deleteUserCanvas", { static: true })
   deleteUserCanvas!: ElementRef<HTMLElement>;
   startDate: string = "";
   endDate: string = "";

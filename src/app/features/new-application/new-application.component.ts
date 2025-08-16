@@ -60,6 +60,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
+import { SelectFilterIdDirective } from "../../shared/common/directives/select-filter-id.directive";
 
 interface PhoneInputValue {
   number: string;
@@ -90,6 +91,8 @@ interface PhoneInputValue {
     NgxIntlTelInputModule,
     DropdownModule,
     SelectModule,
+    SelectFilterIdDirective,
+
   ],
   templateUrl: "./new-application.component.html",
   styleUrl: "./new-application.component.scss",
@@ -101,7 +104,7 @@ export class NewApplicationComponent implements OnInit {
   editCanvas!: ElementRef<HTMLElement>;
   @ViewChild("addCanvas", { static: true })
   addCanvas!: ElementRef<HTMLElement>;
-
+  private _filterIdCounter = 0;
   @ViewChild("resendCanvas", { static: true })
   resendCanvas!: ElementRef<HTMLElement>;
   editForm: FormGroup;
@@ -924,5 +927,30 @@ export class NewApplicationComponent implements OnInit {
         this.toastr.error("Failed to toggle status");
       },
     });
+  }
+
+  labelFilterInput(prefix = "pfilter"): void {
+    this.setFilterId(prefix);
+  }
+
+  private setFilterId(prefix: string): void {
+    const apply = () => {
+      // Grab ALL filter inputs currently in DOM (covers overlay appended to body)
+      const filters = Array.from(
+        document.querySelectorAll<HTMLInputElement>("input.p-select-filter")
+      ).filter((el) => !el.id); // only those missing id
+
+      if (!filters.length) return false;
+
+      for (const input of filters) {
+        input.id = `${prefix}-${++this._filterIdCounter}`; // ✅ real unique id
+      }
+      return true;
+    };
+
+    // try now, then retry to cover animation/async mount
+    if (!apply()) setTimeout(apply, 0);
+    setTimeout(apply, 40);
+    setTimeout(apply, 120);
   }
 }
