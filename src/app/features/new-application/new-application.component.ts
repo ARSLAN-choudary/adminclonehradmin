@@ -236,7 +236,6 @@ export class NewApplicationComponent implements OnInit {
       phone: ["", Validators.required],
     });
     this.backendService.getCompany("").subscribe((res: any) => {
-      // console.log("companies payload:", res.data.data);
       this.companies = res.data.data.map((c: any) => ({
         label: c.name,
         value: c._id,
