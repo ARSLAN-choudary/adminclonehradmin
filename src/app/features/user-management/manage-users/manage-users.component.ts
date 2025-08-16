@@ -62,6 +62,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { SelectFilterIdDirective } from "../../../shared/common/directives/select-filter-id.directive";
 interface Country {
   id: number;
   name: string;
@@ -97,6 +98,7 @@ interface PhoneInputValue {
     MatInputModule,
     NgxIntlTelInputModule,
     Select,
+    SelectFilterIdDirective,
   ],
   templateUrl: "./manage-users.component.html",
   styleUrl: "./manage-users.component.scss",
@@ -114,7 +116,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   public skip = 0;
   public currentPage = 1;
   public totalData = 0;
-
+  private _filterIdCounter = 0;
   public tableData: usersDataTable[] = [];
   public serialNumberArray: number[] = [];
 
@@ -662,5 +664,29 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         this.toastr.error("Failed to toggle status");
       },
     });
+  }
+  labelFilterInput(prefix = "pfilter"): void {
+    this.setFilterId(prefix);
+  }
+
+  private setFilterId(prefix: string): void {
+    const apply = () => {
+      // Grab ALL filter inputs currently in DOM (covers overlay appended to body)
+      const filters = Array.from(
+        document.querySelectorAll<HTMLInputElement>("input.p-select-filter")
+      ).filter((el) => !el.id); // only those missing id
+
+      if (!filters.length) return false;
+
+      for (const input of filters) {
+        input.id = `${prefix}-${++this._filterIdCounter}`; // ✅ real unique id
+      }
+      return true;
+    };
+
+    // try now, then retry to cover animation/async mount
+    if (!apply()) setTimeout(apply, 0);
+    setTimeout(apply, 40);
+    setTimeout(apply, 120);
   }
 }

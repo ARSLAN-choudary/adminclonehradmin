@@ -585,9 +585,10 @@
                                 <span id="planName_label" class="form-label">
                                     Location <span class="text-danger">*</span>
                                 </span>
-                                <p-select [options]="countries" optionLabel="label" optionValue="value"
-                                    placeholder="Select" [filter]="true" class="form-control" inputId="location"
-                                    formControlName="location"></p-select>
+                                <p-select appSelectFilterId [options]="countries" optionLabel="label"
+                                    optionValue="value" placeholder="Select" [filter]="true" class="form-control"
+                                    inputId="location" formControlName="location"
+                                    (onShow)="labelFilterInput('location-filter')"></p-select>
 
                                 <div class="text-danger fs-12 mt-1"
                                     *ngIf="f['location'].touched && f['location'].invalid">
@@ -648,8 +649,9 @@
                     <span class="form-label">
                         Location< <span class="text-danger">*</span>
                     </span>
-                    <p-select [options]="countries" optionLabel="label" optionValue="value" formControlName="location"
-                        placeholder="Select" class="form-control" id="location__1">
+                    <p-select appSelectFilterId [options]="countries" optionLabel="label" optionValue="value"
+                        formControlName="location" placeholder="Select" class="form-control" id="location__1"
+                        (onShow)="labelFilterInput('companyEdit-filter')">
                     </p-select>
                 </div>
             </div>
