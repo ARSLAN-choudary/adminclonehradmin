@@ -328,6 +328,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       next: (res) => {
         this.toastr.success("User updated");
         this.closeEditUser();
+        this.getTableData(this.skip, this.pageSize);
       },
       error: (err) => {
         this.toastr.error("Update failed");

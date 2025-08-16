@@ -175,7 +175,6 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
     this.editForm = this.fb.group({
       id: [""],
       name: ["", Validators.required],
-      registrationNo: ["", Validators.required],
       vatNo: ["", Validators.required],
       website: [""],
       incorporatonDate: ["", Validators.required],
@@ -729,7 +728,6 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
     this.editForm.patchValue({
       id: user._id ?? user.id,
       name: user.name,
-      registrationNo: user.registrationNo,
       vatNo: user.vatNo,
       website: user.website,
       incorporatonDate: this.toDateInputString(user.incorporatonDate),
@@ -746,7 +744,6 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
     const payload = {
       ...this.editForm.value,
     };
-    console.log(payload);
 
     this.backendService.updateCompany(payload).subscribe({
       next: (res) => {
