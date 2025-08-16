@@ -540,9 +540,10 @@
                                 <span class="form-label">
                                     Company <span class="text-danger">*</span>
                                 </span>
-                                <p-select [options]="companies" optionLabel="label" optionValue="value"
-                                    placeholder="Select" [filter]="true" class="form-control" formControlName="company"
-                                    id="company"></p-select>
+                                <p-select appSelectFilterId [options]="companies" optionLabel="label"
+                                    optionValue="value" placeholder="Select" [filter]="true" class="form-control"
+                                    formControlName="company" id="company"
+                                    (onShow)="labelFilterInput('company-filter')"></p-select>
                                 <small class="text-danger"
                                     *ngIf="control('company').touched && control('company').hasError('required')">
                                     Company is required
@@ -558,9 +559,10 @@
                             <span class="form-label">
                                 Application Type <span class="text-danger">*</span>
                             </span>
-                            <p-select formControlName="applicationType" [options]="applicationTypes" optionLabel="label"
-                                optionValue="value" placeholder="Select type" [filter]="true" id="applicationType"
-                                class="form-control"></p-select>
+                            <p-select appSelectFilterId formControlName="applicationType" [options]="applicationTypes"
+                                optionLabel="label" optionValue="value" placeholder="Select type" [filter]="true"
+                                id="applicationType" class="form-control"
+                                (onShow)="labelFilterInput('application-filter')"></p-select>
                             <small class="text-danger"
                                 *ngIf="control('applicationType').touched && control('applicationType').hasError('required')">
                                 Type is required
@@ -575,9 +577,10 @@
                             <span class="form-label">
                                 Application Context <span class="text-danger">*</span>
                             </span>
-                            <p-select formControlName="applicationContext" [options]="applicationContexts"
-                                optionLabel="label" optionValue="value" placeholder="Select context" [filter]="true"
-                                id="applicationContext" class="form-control"></p-select>
+                            <p-select appSelectFilterId formControlName="applicationContext"
+                                [options]="applicationContexts" optionLabel="label" optionValue="value"
+                                placeholder="Select context" [filter]="true" id="applicationContext"
+                                class="form-control" (onShow)="labelFilterInput('context-filter')"></p-select>
                             <small class="text-danger"
                                 *ngIf="control('applicationContext').touched && control('applicationContext').hasError('required')">
                                 Context is required
@@ -593,9 +596,10 @@
                             <span class="form-label">
                                 Employment Sector Type <span class="text-danger">*</span>
                             </span>
-                            <p-select formControlName="sectorType" [options]="sectorTypes" optionLabel="label"
-                                id="sectorType" optionValue="value" placeholder="Select sector" [filter]="true"
-                                class="form-control"></p-select>
+                            <p-select appSelectFilterId formControlName="sectorType" [options]="sectorTypes"
+                                optionLabel="label" id="sectorType" optionValue="value" placeholder="Select sector"
+                                [filter]="true" class="form-control"
+                                (onShow)="labelFilterInput('emp-filter')"></p-select>
                             <small class="text-danger"
                                 *ngIf="control('sectorType').touched && control('sectorType').hasError('required')">
                                 Sector is required
@@ -609,9 +613,9 @@
                             <span class="form-label">
                                 Job Title <span class="text-danger">*</span>
                             </span>
-                            <p-select formControlName="jobTitle" [options]="jobTitles" optionLabel="label"
-                                optionValue="value" placeholder="Select title" [filter]="true" id="jobTitle"
-                                class="form-control"></p-select>
+                            <p-select appSelectFilterId formControlName="jobTitle" [options]="jobTitles"
+                                optionLabel="label" optionValue="value" placeholder="Select title" [filter]="true"
+                                id="jobTitle" class="form-control" (onShow)="labelFilterInput('job-filter')"></p-select>
                             <small class="text-danger"
                                 *ngIf="control('jobTitle').touched && control('jobTitle').hasError('required')">
                                 Job title is required
@@ -625,9 +629,10 @@
                             <span class="form-label">
                                 Occupation <span class="text-danger">*</span>
                             </span>
-                            <p-select formControlName="occupation" [options]="occupations" optionLabel="label"
-                                optionValue="value" placeholder="Select occupation" [filter]="true" id="occupation"
-                                class="form-control"></p-select>
+                            <p-select appSelectFilterId formControlName="occupation" [options]="occupations"
+                                optionLabel="label" optionValue="value" placeholder="Select occupation" [filter]="true"
+                                id="occupation" class="form-control"
+                                (onShow)="labelFilterInput('occupation-filter')"></p-select>
                             <small class="text-danger"
                                 *ngIf="control('occupation').touched && control('occupation').hasError('required')">
                                 Occupation is required

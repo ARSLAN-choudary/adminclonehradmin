@@ -908,7 +908,7 @@
                                 <div class="mb-3">
                                     <label for="website_address" class="form-label">Website</label>
                                     <input type="text" class="form-control" formControlName="website"
-                                        id="website_address" />
+                                        id="website_address" autocomplete="website" />
 
                                 </div>
                             </div>
@@ -940,7 +940,8 @@
                                             *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[1]?'text':'password'"
-                                            formControlName="password" id="password_1" class="form-control pass-input">
+                                            formControlName="password" id="password_1" class="form-control pass-input"
+                                            autocomplete="new-password">
                                         <span class="input-group-text toggle-password" (click)="togglePassword(1)">
                                             <i class="ti " [ngClass]="password[1]?'ti-eye':'ti-eye-off'"></i>
                                         </span>

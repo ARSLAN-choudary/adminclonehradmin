@@ -19,6 +19,17 @@
 // .job-tittle {
 //   letter-spacing: 0.005em;
 // }
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  margin: -1px;
+}
 :host ::ng-deep .p-inputwrapper.p-select.p-inputwrapper-filled {
   border: 2px solid #28a745 !important;
   border-radius: 4px !important;
