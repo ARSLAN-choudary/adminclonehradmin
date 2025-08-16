@@ -23,18 +23,21 @@
                                             access the MY PLANET system.</p>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Email Address</label>
+                                        <label for="email" class="form-label">Email Address</label>
                                         <div class="input-group input-group-flat">
-                                            <input type="email" class="form-control" formControlName="email" id="email">
+                                            <input type="email" class="form-control" formControlName="email"
+                                                   autocomplete="email"
+                                                   name="email" id="email">
                                             <span class="input-group-text">
                                                 <i class="ti ti-mail"></i>
                                             </span>
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Password</label>
+                                        <label for="password" class="form-label">Password</label>
                                         <div class="input-group input-group-flat pass-group">
-                                            <input [type]="!hidePassword ? 'text' : 'password' " id="password"
+                                            <input [type]="!hidePassword ? 'text' : 'password' " name="password"
+                                                   id="password"
                                                    formControlName="password" class="pass-input form-control">
                                             <span class="input-group-text toggle-password" (click)="togglePassword()"
                                                   tabindex="0"><i class="ti"
@@ -73,7 +76,6 @@
                                 </div>
                             </form>
                         </div> <!-- end col -->
-
                     </div>
                     <!-- end row -->
 
