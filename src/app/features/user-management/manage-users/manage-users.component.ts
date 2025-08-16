@@ -521,8 +521,14 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((apiRes: any) => {
-        // this.actualData = apiRes.data.data;
-        this.tableData = apiRes.data.data;
+        let arr: usersDataTable[] = apiRes.data.data || [];
+
+        arr = arr.sort((a, b) => {
+          if (a.status === b.status) return 0;
+          return a.status === "inactive" ? 1 : -1;
+        });
+
+        this.tableData = arr;
         this.totalData = apiRes.totalData;
         this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
         this.dataSource = new MatTableDataSource<usersDataTable>(
