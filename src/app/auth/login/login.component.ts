@@ -70,7 +70,6 @@ export class LoginComponent implements OnInit {
 
     this.auth.login(email, password).subscribe(
       (data) => {
-        console.log(data);
         if (data.data.token) {
           localStorage.setItem("token", data.data.token);
           debugger;

@@ -106,6 +106,10 @@ interface PhoneInputValue {
 export class ManageUsersComponent implements OnInit, OnDestroy {
   @ViewChild("deleteUserCanvas", { static: true })
   deleteUserCanvas!: ElementRef<HTMLElement>;
+  private collator = new Intl.Collator(undefined, {
+    numeric: true,
+    sensitivity: "base",
+  });
   startDate: string = "";
   endDate: string = "";
 
@@ -521,8 +525,14 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((apiRes: any) => {
-        // this.actualData = apiRes.data.data;
-        this.tableData = apiRes.data.data;
+        let arr: usersDataTable[] = apiRes.data.data || [];
+
+        arr = arr.sort((a, b) => {
+          if (a.status === b.status) return 0;
+          return a.status === "inactive" ? 1 : -1;
+        });
+
+        this.tableData = arr;
         this.totalData = apiRes.totalData;
         this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
         this.dataSource = new MatTableDataSource<usersDataTable>(
@@ -541,10 +551,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   public searchData(value: string): void {
     this.searchDataValue = value.trim().toLowerCase();
     this.skip = 0; // Reset to first page
-    this.getTableData(this.skip, this.pageSize);
-  }
-
-  public sortData(sort: Sort): void {
     this.getTableData(this.skip, this.pageSize);
   }
 
@@ -671,22 +677,66 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
 
   private setFilterId(prefix: string): void {
     const apply = () => {
-      // Grab ALL filter inputs currently in DOM (covers overlay appended to body)
       const filters = Array.from(
         document.querySelectorAll<HTMLInputElement>("input.p-select-filter")
-      ).filter((el) => !el.id); // only those missing id
+      ).filter((el) => !el.id);
 
       if (!filters.length) return false;
 
       for (const input of filters) {
-        input.id = `${prefix}-${++this._filterIdCounter}`; // ✅ real unique id
+        input.id = `${prefix}-${++this._filterIdCounter}`;
       }
       return true;
     };
 
-    // try now, then retry to cover animation/async mount
     if (!apply()) setTimeout(apply, 0);
     setTimeout(apply, 40);
     setTimeout(apply, 120);
+  }
+  private statusWeight(row: any): number {
+    return (row.status ?? "").toLowerCase() === "inactive" ? 1 : 0;
+  }
+
+  private valueOf(row: any, key: string): any {
+    switch (key) {
+      case "createdAt":
+        return new Date(row.createdAt).getTime() || 0;
+      default:
+        return (row[key] ?? "").toString();
+    }
+  }
+
+  public sortData(sort: Sort): void {
+    const data = [...this.tableData];
+
+    if (!sort.active || sort.direction === "") {
+      this.tableData = data.sort(
+        (a, b) => this.statusWeight(a) - this.statusWeight(b)
+      );
+      this.dataSource.data = this.tableData;
+      return;
+    }
+
+    const isAsc = sort.direction === "asc";
+
+    data.sort((a, b) => {
+      if (sort.active !== "status") {
+        const sw = this.statusWeight(a) - this.statusWeight(b);
+        if (sw !== 0) return sw;
+      }
+
+      const va = this.valueOf(a, sort.active);
+      const vb = this.valueOf(b, sort.active);
+
+      if (typeof va === "number" && typeof vb === "number") {
+        return isAsc ? va - vb : vb - va;
+      }
+      return isAsc
+        ? this.collator.compare(va, vb)
+        : this.collator.compare(vb, va);
+    });
+
+    this.tableData = data;
+    this.dataSource.data = this.tableData;
   }
 }
