@@ -440,17 +440,17 @@
             <!-- Contact List -->
             <div class="table-responsive custom-table">
                 <table class="table table-nowrap dataTable no-footer" id="categorieslist" matSort
-                    (matSortChange)="sortData($event)">
+                    (matSortChange)="sortData($event)" [matSortDisableClear]="true">
                     <thead class="table-light">
 
                         <tr>
-                            <th mat-sort-header="Name"> Reference no</th>
-                            <th mat-sort-header="Phone"> Employer Name</th>
-                            <th mat-sort-header="Email">Job Title</th>
-                            <th mat-sort-header="Created">mobile</th>
-                            <th mat-sort-header="Activity">email</th>
-                            <th mat-sort-header="Date">Submission Date</th>
-                            <th mat-sort-header="Status">Status</th>
+                            <th mat-sort-header="_id"> Reference no</th>
+                            <th mat-sort-header="firstName"> Employer Name</th>
+                            <th mat-sort-header="jobTitle">Job Title</th>
+                            <th mat-sort-header="mobile">mobile</th>
+                            <th mat-sort-header="email">email</th>
+                            <th mat-sort-header="createdAt">Submission Date</th>
+                            <th mat-sort-header="status">Status</th>
                             <th class="text-end no-sort">Action</th>
                         </tr>
                     </thead>

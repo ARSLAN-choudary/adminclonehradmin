@@ -462,7 +462,8 @@
 
             <!-- Report List -->
             <div class="table-responsive custom-table">
-                <table matSort (matSortChange)="sortData($event)" class="table table-nowrap dataTable">
+                <table matSort (matSortChange)="sortData($event)" [matSortDisableClear]="true"
+                    class="table table-nowrap dataTable">
                     <thead class="table-light">
                         <tr>
                             <th mat-sort-header="name">Name</th>
