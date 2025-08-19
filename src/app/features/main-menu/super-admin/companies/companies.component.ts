@@ -12,7 +12,6 @@ import {
   WritableSignal,
 } from "@angular/core";
 import { CollapseHeaderComponent } from "../../../common/collapse-header/collapse-header.component";
-import { DateRangePickerComponent } from "../../../common/date-range-picker/date-range-picker.component";
 import { SelectModule } from "primeng/select";
 import {
   AbstractControl,
@@ -29,21 +28,16 @@ import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { routes } from "../../../../shared/routes/routes";
 import { Router, RouterLink } from "@angular/router";
 import {
-  apiResultFormat,
   companiesDataTable,
   superadmincompanies,
 } from "../../../../shared/model/pages.model";
 import { MatTableDataSource } from "@angular/material/table";
-import { DataService } from "../../../../shared/data/data.service";
 import {
-  pageSelection,
   PaginationService,
   tablePageSize,
 } from "../../../../shared/custom-pagination/pagination.service";
-import { DomSanitizer } from "@angular/platform-browser";
 import { MatSortModule, Sort } from "@angular/material/sort";
 import { CustomPaginationComponent } from "../../../../shared/custom-pagination/custom-pagination.component";
-import { HttpClient } from "@angular/common/http";
 import { BackendService } from "../../../../Services/backend.service";
 import { tap } from "rxjs";
 import jsPDF from "jspdf";
@@ -69,7 +63,6 @@ interface select {
   selector: "app-companies",
   imports: [
     CollapseHeaderComponent,
-    DateRangePickerComponent,
     SelectModule,
     FormsModule,
     CommonModule,

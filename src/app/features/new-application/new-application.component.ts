@@ -302,8 +302,10 @@ export class NewApplicationComponent implements OnInit {
 
   public searchData(value: string): void {
     this.searchDataValue = value.trim().toLowerCase();
-    this.skip = 0; // Reset to first page
-    this.getTableData(this.skip, this.pageSize);
+    this.skip = 0;
+    if (this.searchDataValue.length >= 3) {
+      this.getTableData(this.skip, this.pageSize);
+    }
   }
 
   editApplication(data: any) {
