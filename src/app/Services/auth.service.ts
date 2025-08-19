@@ -36,4 +36,7 @@ export class AuthService {
     const token = this.getToken();
     return !this.jwtHelper.isTokenExpired(token);
   }
+  clearToken() {
+    localStorage.removeItem("token");
+  }
 }
