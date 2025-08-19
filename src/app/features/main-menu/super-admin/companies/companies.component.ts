@@ -21,6 +21,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
   ValidationErrors,
+  ValidatorFn,
   Validators,
 } from "@angular/forms";
 import { CommonModule } from "@angular/common";
@@ -51,6 +52,12 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { ToastrService } from "ngx-toastr";
 import { SelectFilterIdDirective } from "../../../../shared/common/directives/select-filter-id.directive";
+import {
+  CountryISO,
+  NgxIntlTelInputModule,
+  SearchCountryField,
+  PhoneNumberFormat,
+} from "ngx-intl-tel-input";
 
 BackendService;
 
@@ -72,6 +79,7 @@ interface select {
     MatSortModule,
     ReactiveFormsModule,
     SelectFilterIdDirective,
+    NgxIntlTelInputModule,
   ],
 
   templateUrl: "./companies.component.html",
@@ -94,7 +102,15 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
   private _filterIdCounter = 0;
   deleteCompanyId!: any;
   private editBackdrop?: HTMLElement;
-
+  CountryISO = CountryISO;
+  SearchCountryField = SearchCountryField;
+  PhoneNumberFormat = PhoneNumberFormat;
+  preferredCountries = [CountryISO.Pakistan, CountryISO.UnitedArabEmirates];
+  onlyCountries = [
+    CountryISO.Pakistan,
+    CountryISO.UnitedArabEmirates,
+    CountryISO.SaudiArabia,
+  ];
   inActiveCompanies: WritableSignal<number> = signal(0);
   activeCompanies: WritableSignal<number> = signal(0);
   public routes = routes;
@@ -179,9 +195,17 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
     this.editForm = this.fb.group({
       id: [""],
       name: ["", Validators.required],
-      vatNo: ["", Validators.required],
-      website: [""],
-      incorporatonDate: ["", Validators.required],
+      phoneNO: ["", Validators.required],
+      website: [
+        "",
+        [
+          this.websiteUrlValidator({
+            requireProtocol: false,
+            requireTld: true,
+          }),
+        ],
+      ],
+      email: ["", Validators.required, Validators.email],
       status: ["active", Validators.required],
     });
   }
@@ -208,8 +232,17 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
         currency: [{ value: "", disabled: true }, Validators.required],
         phoneNO: [{ value: "", disabled: true }, Validators.required],
         email: [""],
-        address: [""],
-        website: [""],
+        address: [{ value: "", disabled: true }, Validators.required],
+        website: [
+          { value: "", disabled: true },
+          [
+            Validators.required,
+            this.websiteUrlValidator({
+              requireProtocol: false,
+              requireTld: true,
+            }),
+          ],
+        ],
         incorporatonDate: [{ value: "", disabled: true }, Validators.required],
         password: [
           { value: "", disabled: true },
@@ -234,6 +267,9 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
       "password",
       "confirmPassword",
       "status",
+      "address",
+      "email",
+      "website",
     ];
 
     this.createNewCompanyForm
@@ -254,6 +290,49 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
           ctrl.updateValueAndValidity({ emitEvent: false });
         });
       });
+  }
+
+  websiteUrlValidator(opts?: {
+    requireProtocol?: boolean;
+    allowedProtocols?: string[];
+    requireTld?: boolean;
+  }): ValidatorFn {
+    const requireProtocol = opts?.requireProtocol ?? false;
+    const allowedProtocols = opts?.allowedProtocols ?? ["http:", "https:"];
+    const requireTld = opts?.requireTld ?? true;
+
+    return (control: AbstractControl): ValidationErrors | null => {
+      const raw = (control.value ?? "").toString().trim();
+      if (!raw) return null;
+
+      const hasScheme = /^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(raw);
+      if (!hasScheme && requireProtocol) {
+        return { url: { reason: "missingProtocol" } };
+      }
+
+      const test = hasScheme ? raw : `https://${raw}`;
+
+      try {
+        const u = new URL(test);
+
+        if (!allowedProtocols.includes(u.protocol)) {
+          return { url: { reason: "protocol" } };
+        }
+
+        const host = u.hostname;
+        if (!host || host.startsWith(".") || host.endsWith(".")) {
+          return { url: { reason: "invalidHostname" } };
+        }
+
+        if (requireTld && !host.includes(".")) {
+          return { url: { reason: "tld" } };
+        }
+
+        return null;
+      } catch {
+        return { url: { reason: "syntax" } };
+      }
+    };
   }
 
   passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
@@ -338,35 +417,37 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
   }
 
   fileTypeAndSizeValidator(control: AbstractControl): ValidationErrors | null {
-    const files: File[] = control.value as File[];
+    const files = control.value as File[] | null;
+
     if (!files || files.length === 0) {
       return { required: true };
     }
-    const allowedTypes = [
-      "application/pdf",
-      "image/png",
-      "image/jpeg",
-      "image/jpg",
-      "image/webp",
-    ];
-    for (let f of files) {
-      if (!allowedTypes.includes(f.type)) {
-        return { invalidType: true };
-      }
-      if (f.size > 5 * 1024 * 1024) {
-        return { fileTooLarge: true };
-      }
+    if (files.length !== 1) {
+      return { tooMany: true };
     }
+
+    const f = files[0]!;
+    if (f.type !== "image/png") return { invalidType: true };
+    if (f.size > 5 * 1024 * 1024) return { fileTooLarge: true };
     return null;
   }
 
   onFilesSelected(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    if (!input.files) return;
-    const arr = Array.from(input.files);
-    this.control("files").setValue(arr);
-    this.control("files").markAsTouched();
-    input.value = "";
+    const input = evt.target as HTMLInputElement | null;
+    if (!input) return;
+
+    const filesList = input.files;
+    const file = filesList && filesList.length ? filesList.item(0)! : null;
+
+    const filesCtrl = this.createNewCompanyForm.get(
+      "files"
+    ) as import("@angular/forms").FormControl<File[] | null>;
+
+    filesCtrl.setValue(file ? [file] : null);
+    filesCtrl.markAsTouched();
+    filesCtrl.updateValueAndValidity();
+
+    if (input) input.value = "";
   }
 
   checkMatch(confirmValue: string) {
@@ -728,9 +809,9 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
     this.editForm.patchValue({
       id: user._id ?? user.id,
       name: user.name,
-      vatNo: user.vatNo,
+      phoneNO: user.phoneNO,
       website: user.website,
-      incorporatonDate: this.toDateInputString(user.incorporatonDate),
+      email: user.email,
       status: user.status,
     });
   }
