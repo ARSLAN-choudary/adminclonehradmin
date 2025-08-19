@@ -867,7 +867,6 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
       status: user.status,
       image: null,
     });
-    console.log(user.phoneNO, this.toE164(user.phoneNO));
   }
 
   onUpdateCompany() {
