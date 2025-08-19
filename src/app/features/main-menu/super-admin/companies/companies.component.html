@@ -732,16 +732,28 @@
                                 <div class="d-inline-flex flex-column align-items-start">
                                     <label for="upload_file"
                                         class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
-                                        <i class="ti ti-file-broken me-1"></i>Upload file
-                                        <input #fileInput type="file" multiple accept="image/*,application/pdf"
-                                            id="upload_file" (change)="onFilesSelected($event)" hidden />
+                                        <i class="ti ti-file-broken me-1"></i>Upload Image
+                                        <input #fileInput type="file" accept="image/png" id="upload_file"
+                                            (change)="onFilesSelected($event)" hidden />
                                     </label>
-                                    <span>PDF. Max size of 2MB</span>
-                                    <ul *ngIf="createNewCompanyForm.value.files?.length">
-                                        <li *ngFor="let f of createNewCompanyForm.value.files">
-                                            {{ f.name }} ({{ f.size/1024/1024 | number:'1.2-2' }} MB)
-                                        </li>
-                                    </ul>
+                                    <span>Only .png images <span class="text-danger">*</span></span>
+                                    <ng-container *ngIf="control('files').value as files">
+                                        <ul *ngIf="files?.length">
+                                            <li *ngFor="let f of files">
+                                                {{ f.name }} ({{ f.size/1024/1024 | number:'1.2-2' }} MB)
+                                            </li>
+                                        </ul>
+                                    </ng-container>
+                                    <div class="mt-1"
+                                        *ngIf="control('files').touched && control('files').errors as errs">
+                                        <small class="text-danger" *ngIf="errs['required']">Image is required.</small>
+                                        <small class="text-danger" *ngIf="errs['invalidType']">Only .png images are
+                                            allowed.</small>
+                                        <small class="text-danger" *ngIf="errs['fileTooLarge']">Max size is 5
+                                            MB.</small>
+                                        <small class="text-danger" *ngIf="errs['tooMany']">Upload exactly 1
+                                            image.</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -881,12 +893,14 @@
                             <!-- Email -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="email_adress" class="form-label">Email Address</label>
+                                    <label for="email_adress" class="form-label">Email Address <span
+                                            class="text-danger">
+                                            *</span></label>
                                     <input type="text" class="form-control" formControlName="email" id="email_adress" />
                                     <div *ngIf="control('email').touched && control('email').invalid">
-                                        <!-- <small class="text-danger" *ngIf="control('email').hasError('required')">
+                                        <small class="text-danger" *ngIf="control('email').hasError('required')">
                                             Email is required
-                                        </small> -->
+                                        </small>
                                         <small class="text-danger" *ngIf="control('email').hasError('email')">
                                             Must be a valid email
                                         </small>
@@ -897,9 +911,17 @@
                             <!-- Address -->
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="company_address" class="form-label">Company Address</label>
+                                    <label for="company_address" class="form-label">Company Address <span
+                                            class="text-danger">
+                                            *</span></label>
                                     <input type="text" class="form-control" formControlName="address"
                                         id="company_address" />
+                                    <div *ngIf="control('address').touched && control('address').invalid">
+                                        <small class="text-danger" *ngIf="control('address').hasError('required')">
+                                            Comapny Address is required
+                                        </small>
+
+                                    </div>
 
                                 </div>
                             </div>
@@ -907,10 +929,25 @@
                             <!-- Website -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="website_address" class="form-label">Website</label>
+                                    <label for="website_address" class="form-label">Website <span class="text-danger">
+                                            *</span></label>
                                     <input type="text" class="form-control" formControlName="website"
                                         id="website_address" autocomplete="website" />
+                                    <div *ngIf="control('website').touched && control('website').errors as e">
+                                        <small class="text-danger" *ngIf="e['required']">
+                                            Website is required.
+                                        </small>
 
+                                        <small class="text-danger" *ngIf="e['url']">
+                                            <ng-container [ngSwitch]="e['url'].reason">
+                                                <span *ngSwitchCase="'missingProtocol'">Add http:// or https://</span>
+                                                <span *ngSwitchCase="'protocol'">Only http(s) is allowed</span>
+                                                <span *ngSwitchCase="'invalidHostname'">Invalid hostname</span>
+                                                <span *ngSwitchCase="'tld'">Must include a TLD (e.g. .com)</span>
+                                                <span *ngSwitchDefault>Must be a valid website URL</span>
+                                            </ng-container>
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1222,10 +1259,10 @@
 
                 <!-- VAT No -->
                 <div class="col-md-6 mb-3">
-                    <label for="vat_number_01" class="form-label">VAT No</label>
-                    <input class="form-control" formControlName="vatNo" id="vat_number_01" />
-                    <div *ngIf="editForm.get('vatNo')?.touched && editForm.get('vatNo')?.invalid">
-                        <small class="text-danger">VAT Number is required</small>
+                    <label for="vat_number_01" class="form-label">Email</label>
+                    <input class="form-control" formControlName="email" id="vat_number_01" />
+                    <div *ngIf="editForm.get('email')?.touched && editForm.get('email')?.invalid">
+                        <small class="text-danger">Email is required</small>
                     </div>
                 </div>
 
@@ -1233,21 +1270,46 @@
                 <div class="col-md-6 mb-3">
                     <label for="website_01" class="form-label">Website</label>
                     <input class="form-control" formControlName="website" id="website_01" />
-                    <div *ngIf="editForm.get('website')?.touched && editForm.get('website')?.invalid">
-                        <small class="text-danger">Website is required</small>
-                    </div>
-                </div>
+                    <div *ngIf="editForm.get('website')?.touched && editForm.get('website')?.errors as e">
+                        <small class="text-danger" *ngIf="e['required']">
+                            Website is required.
+                        </small>
 
-                <!-- Incorporation Date -->
+                        <small class="text-danger" *ngIf="e['url']">
+                            <ng-container [ngSwitch]="e['url'].reason">
+                                <span *ngSwitchCase="'missingProtocol'">Add http:// or https://</span>
+                                <span *ngSwitchCase="'protocol'">Only http(s) is allowed</span>
+                                <span *ngSwitchCase="'invalidHostname'">Invalid hostname</span>
+                                <span *ngSwitchCase="'tld'">Must include a TLD (e.g. .com)</span>
+                                <span *ngSwitchDefault>Must be a valid website URL</span>
+                            </ng-container>
+                        </small>
+                    </div>
+
+                </div>
                 <div class="col-md-6 mb-3">
-                    <label for="incorporatonDate_01" class="form-label">Incorporation Date</label>
-                    <input type="date" class="form-control" formControlName="incorporatonDate"
-                        id="incorporatonDate_01" />
+                    <span class="form-label">
+                        Mobile Number <span class="text-danger">*</span>
+                    </span>
+                    <ngx-intl-tel-input [cssClass]="'form-control'" [preferredCountries]="preferredCountries"
+                        [onlyCountries]="onlyCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                        [searchCountryFlag]="true"
+                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan" [maxLength]="15"
+                        [phoneValidation]="true" [separateDialCode]="true" formControlName="phoneNO" is="phone"
+                        id="phone">
+                    </ngx-intl-tel-input>
 
-                    <div *ngIf="editForm.get('incorporatonDate')?.touched && editForm.get('incorporatonDate')?.invalid">
-                        <small class="text-danger">Incorporation Date is required</small>
-                    </div>
+
+
+                    <!--                                    <div class="text-danger mt-1" *ngIf="phone.invalid && (phone.dirty || phone.touched)">-->
+                    <!--                                        Invalid phone number-->
+                    <!--                                    </div>-->
+
+                    <!--                                    <button class="btn btn-primary mt-3" [disabled]="form.invalid">Save</button>-->
                 </div>
+
+
 
                 <!-- Status radios -->
                 <div class="col-md-6 ">
