@@ -211,7 +211,7 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
           }),
         ],
       ],
-      email: ["", Validators.required, Validators.email],
+      email: ["", [Validators.required, Validators.email]],
       status: ["active", Validators.required],
       image: [null, [this.optionalPngValidator.bind(this)]],
     });
@@ -868,12 +868,13 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
     this.editForm.patchValue({
       id: user._id,
       name: user.name,
-      phoneNO: user.phoneNO,
+      phoneNO: this.toE164(user.phoneNO),
       website: user.website,
       email: user.email,
       status: user.status,
       image: null,
     });
+    console.log(user.phoneNO, this.toE164(user.phoneNO));
   }
 
   onUpdateCompany() {
@@ -887,7 +888,7 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
     const fd = new FormData();
     fd.append("id", v.id);
     fd.append("name", v.name);
-    fd.append("phoneNO", v.phoneNO);
+    fd.append("phoneNO", this.toE164(this.editForm.get("phoneNO")?.value));
     fd.append("website", v.website);
     fd.append("email", v.email);
     fd.append("status", v.status);
@@ -1014,5 +1015,18 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
 
     this.tableData = data;
     this.dataSource.data = this.tableData;
+  }
+  private toE164(val: any): string {
+    if (!val) return "";
+    if (typeof val === "string") return val.trim();
+    return (
+      val.e164Number ??
+      val.internationalNumber ??
+      val.number ??
+      val.nationalNumber ??
+      ""
+    )
+      .toString()
+      .replace(/\s+/g, "");
   }
 }
