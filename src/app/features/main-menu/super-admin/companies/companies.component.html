@@ -345,10 +345,10 @@
                             </div>
                         </div>
                     </div>
-<!--                    <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">-->
-<!--                        <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)">-->
-<!--                        </app-date-range-picker>-->
-<!--                    </div>-->
+                    <!--                    <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">-->
+                    <!--                        <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)">-->
+                    <!--                        </app-date-range-picker>-->
+                    <!--                    </div>-->
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <div class="dropdown">
@@ -507,7 +507,7 @@
                                         <a class="dropdown-item" (click)="onEditCompany(data)">
                                             <i class="ti ti-edit text-blue me-1"></i>Edit
                                         </a>
-                                        <a class="dropdown-item" (click)="deleteUser(data._id)">
+                                        <a class="dropdown-item" (click)="deleteUser(data)">
                                             <i class="ti ti-trash text-blue me-1"></i>Delete
                                         </a>
                                     </div>
@@ -1218,7 +1218,7 @@
                 <i class="ti ti-trash fs-24"></i>
             </span>
         </div>
-        <h5 class="mb-3">Are you sure you want to remove Company you selected.</h5>
+        <h5 class="mb-3">Are you sure you want to Remove {{deleteCompanyName()}}.</h5>
         <!-- <p class="mb-4"></p> -->
         <div class="d-flex justify-content-center">
             <button class="btn btn-light me-2 w-100" (click)="closeDeleteModal()">Cancel</button>
@@ -1241,6 +1241,49 @@
     <div class="offcanvas-body">
         <form [formGroup]="editForm" (ngSubmit)="onUpdateCompany()">
             <div class="row">
+                <!-- Image (Edit) -->
+                <div class="col-md-6">
+                    <div class="d-flex mb-3">
+                        <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
+                            <img *ngIf="editPreviewUrl || currentEditingImageUrl"
+                                [src]="editPreviewUrl || currentEditingImageUrl" class="img-fluid rounded"
+                                alt="Company image" style="max-width: 100%; max-height: 120px;" />
+                            <div *ngIf="!editPreviewUrl && !currentEditingImageUrl"
+                                class="position-relative d-flex align-items-center">
+                                <i class="ti ti-photo text-dark fs-16"></i>
+                            </div>
+                        </div>
+
+                        <div class="d-inline-flex flex-column align-items-start">
+                            <label for="edit_upload_file"
+                                class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
+                                <i class="ti ti-file-broken me-1"></i>Edit Image
+                                <input type="file" id="edit_upload_file" accept="image/png"
+                                    (change)="onEditFilesSelected($event)" hidden />
+                            </label>
+
+                            <span>Only .png images <span class="text-danger">*</span></span>
+
+                            <ng-container *ngIf="editForm.get('image')?.value as files">
+                                <ul *ngIf="files?.length">
+                                    <li *ngFor="let f of files">
+                                        {{ f.name }} ({{ f.size/1024/1024 | number:'1.2-2' }} MB)
+                                    </li>
+                                </ul>
+                            </ng-container>
+
+                            <div class="mt-1"
+                                *ngIf="editForm.get('image')?.touched && editForm.get('image')?.errors as errs">
+                                <small class="text-danger" *ngIf="errs['invalidType']">Only .png images are
+                                    allowed.</small>
+                                <small class="text-danger" *ngIf="errs['fileTooLarge']">Max size is 5 MB.</small>
+                                <small class="text-danger" *ngIf="errs['tooMany']">Upload exactly 1 image.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <!-- Name -->
                 <div class="col-md-6 mb-3">
                     <label for="company_name_1" class="form-label">Company Name</label>
@@ -1250,16 +1293,9 @@
                     </div>
                 </div>
 
-                <!-- Registration No -->
-                <!-- <div class="col-md-6 mb-3">
-                    <label for="resgistration_number_1" class="form-label">Registration No</label>
-                    <input class="form-control" formControlName="registrationNo" id="resgistration_number_1" />
-                    <div *ngIf="editForm.get('registrationNo')?.touched && editForm.get('registrationNo')?.invalid">
-                        <small class="text-danger">Registration Number is required</small>
-                    </div>
-                </div> -->
 
-                <!-- VAT No -->
+
+
                 <div class="col-md-6 mb-3">
                     <label for="vat_number_01" class="form-label">Email</label>
                     <input class="form-control" formControlName="email" id="vat_number_01" />
