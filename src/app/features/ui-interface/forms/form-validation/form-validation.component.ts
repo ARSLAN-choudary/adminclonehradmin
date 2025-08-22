@@ -41,14 +41,16 @@ export class FormValidationComponent {
 
   onSubmit(): void {
     if (this.myForm.valid) {
+      console.log('Form Submitted!', this.myForm.value);
     } else {
-      this.myForm.markAllAsTouched();
+      this.myForm.markAllAsTouched(); // Trigger validation messages
     }
   }
   onSubmit1(): void {
     if (this.myForm1.valid) {
+      console.log('Form Submitted!', this.myForm1.value);
     } else {
-      this.myForm1.markAllAsTouched(); 
+      this.myForm1.markAllAsTouched(); // Trigger validation messages
     }
   }
  

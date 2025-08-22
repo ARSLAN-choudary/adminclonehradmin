@@ -1,10 +1,12 @@
-import { Component } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: "app-companies",
+  selector: 'app-companies',
   imports: [RouterModule],
-  templateUrl: "./companies.component.html",
-  styleUrl: "./companies.component.scss",
+  templateUrl: './companies.component.html',
+  styleUrl: './companies.component.scss'
 })
-export class CompaniesComponent {}
+export class CompaniesComponent {
+
+}

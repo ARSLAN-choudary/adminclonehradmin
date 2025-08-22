@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { LayoutComponent } from './common/layout/layout.component';
 import { SidebarComponent } from './common/sidebar/sidebar.component';
 import { HeaderComponent } from './common/header/header.component';
+import { MenuItem } from 'primeng/api';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { filter } from 'rxjs';
 export interface RouterObject {
