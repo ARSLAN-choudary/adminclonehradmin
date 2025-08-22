@@ -501,6 +501,7 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
       return;
     }
 
+
     const formData = new FormData();
     const v = this.createNewCompanyForm.value;
 
