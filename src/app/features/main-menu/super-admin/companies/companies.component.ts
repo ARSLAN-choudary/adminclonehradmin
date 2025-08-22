@@ -528,6 +528,7 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
     });
   }
 
+
   toggleStatus(data: any) {
     const newStatus = data.status === "active" ? "inactive" : "active";
     const payload = {
