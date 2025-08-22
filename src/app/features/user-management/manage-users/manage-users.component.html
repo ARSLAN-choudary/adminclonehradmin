@@ -4,10 +4,12 @@
     <!-- Page Header -->
     <div class="d-flex align-items-center justify-content-between gap-2 mb-4 flex-wrap">
         <div>
-            <h4 class="mb-1">Manage Users<span class="badge badge-soft-primary ms-2">152</span></h4>
+            <h4 class="mb-1">Manage Users<span class="badge badge-soft-success ms-2">{{activeUsers()}}</span><span
+                    class="badge badge-soft-primary ms-2">{{inActiveUsers()}}</span></h4>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="routes.index">Administrator</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Manage Users</li>
                 </ol>
             </nav>
@@ -19,12 +21,12 @@
                 <div class="dropdown-menu  dropdown-menu-end">
                     <ul>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item"><i
+                            <a href="javascript:void(0);" class="dropdown-item" (click)="exportAsPDF()"><i
                                     class="ti ti-file-type-pdf me-1"></i>Export as
                                 PDF</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item"><i
+                            <a href="javascript:void(0);" class="dropdown-item" (click)="exportAsExcel()"><i
                                     class="ti ti-file-type-xls me-1"></i>Export as
                                 Excel </a>
                         </li>
@@ -45,10 +47,11 @@
             <div class="input-icon input-icon-start position-relative">
                 <span class="input-icon-addon text-dark"><i class="ti ti-search"></i></span>
                 <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
-                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search">
+                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search"
+                    id="search__data">
             </div>
-            <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvas_add"><i class="ti ti-square-rounded-plus-filled me-1"></i>Add User</a>
+            <a href="javascript:void(0);" class="btn btn-primary" (click)="openAddUser()"><i
+                    class="ti ti-square-rounded-plus-filled me-1"></i>Add User</a>
         </div>
         <div class="card-body">
 
@@ -69,8 +72,9 @@
                                 <div class="accordion" id="accordionExample">
                                     <div class="filter-set-content">
                                         <div class="filter-set-content-head">
-                                            <a href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                                aria-expanded="true" aria-controls="collapseTwo">Name</a>
+                                            <a href="javascript:void(0);" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseTwo" aria-expanded="true"
+                                                aria-controls="collapseTwo">Name</a>
                                         </div>
                                         <div class="filter-set-contents accordion-collapse collapse show"
                                             id="collapseTwo" data-bs-parent="#accordionExample">
@@ -81,13 +85,14 @@
                                                             <i class="ti ti-search"></i>
                                                         </span>
                                                         <input type="text" class="form-control form-control-md"
-                                                            placeholder="Search">
+                                                            placeholder="Search" id="01">
                                                     </div>
                                                 </div>
                                                 <ul class="mb-0">
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="02">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-06.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -96,7 +101,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="03">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-40.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -105,7 +111,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="04">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-05.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -114,7 +121,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="05">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-10.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -123,7 +131,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="06">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-15.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -132,7 +141,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="07">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-01.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -141,7 +151,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="08">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-13.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -150,7 +161,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="09">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-12.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -159,7 +171,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="10">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-03.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -168,7 +181,8 @@
                                                     </li>
                                                     <li class="mb-1">
                                                         <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="11">
                                                             <span class="avatar avatar-xs rounded-circle me-2"><img
                                                                     src="assets/img/users/user-18.jpg"
                                                                     class="flex-shrink-0 rounded-circle"
@@ -195,20 +209,26 @@
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <ul>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="13"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="13">
                                                             +1 87545 54503
                                                         </label>
                                                     </li>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="14"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="14">
                                                             +1 98975 17485
                                                         </label>
                                                     </li>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="15"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="15">
                                                             +1 54655 25455
                                                         </label>
                                                     </li>
@@ -227,20 +247,26 @@
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <ul class="mb-0">
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="31"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="31">
                                                             elizabeth&#64;example.com
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="32"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="32">
                                                             katherine&#64;example.com
                                                         </label>
                                                     </li>
                                                     <li class="mb-1">
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="33"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="33">
                                                             samantha&#64;example.com
                                                         </label>
                                                     </li>
@@ -264,14 +290,18 @@
                                             <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
                                                 <ul>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="active"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="active">
                                                             Active
                                                         </label>
                                                     </li>
                                                     <li>
-                                                        <label class="dropdown-item px-2 d-flex align-items-center">
-                                                            <input class="form-check-input m-0 me-1" type="checkbox">
+                                                        <label for="inActive"
+                                                            class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="inActive">
                                                             Inactive
                                                         </label>
                                                     </li>
@@ -287,9 +317,10 @@
                             </div>
                         </div>
                     </div>
-                    <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">
-                        <app-date-range-picker />
-                    </div>
+                    <!-- <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">
+                        <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)">
+                        </app-date-range-picker>
+                    </div> -->
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <div class="dropdown">
@@ -315,10 +346,10 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="21" class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Name</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" checked id="21">
                                         </label>
                                     </div>
                                 </li>
@@ -326,10 +357,10 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="22" class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Phone</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                id="22" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -337,10 +368,10 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="23" class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Email</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="23" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -348,10 +379,10 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="24" class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Created </span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="24" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -359,10 +390,10 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="25" class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Last Activity</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="25" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -370,10 +401,11 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="status"
+                                            class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Status</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                role="switch" id="status" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -381,10 +413,11 @@
                                     <i class="ti ti-columns me-1"></i>
                                     <div class="form-check form-switch w-100 ps-0">
 
-                                        <label class="form-check-label d-flex align-items-center gap-2 w-100">
+                                        <label for="action"
+                                            class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Action</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                role="switch" checked>
+                                                id="action" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -398,76 +431,63 @@
             <!-- Contact List -->
             <div class="table-responsive custom-table">
                 <table class="table table-nowrap dataTable no-footer" id="categorieslist" matSort
-                    (matSortChange)="sortData($event)">
+                    (matSortChange)="sortData($event)" [matSortDisableClear]="true">
                     <thead class="table-light">
                         <tr>
-                            <th class="no-sort">
-                                <div class="checkboxs" class="form-check form-check-md" (click)="selectAll(initChecked)"
-                                    (keydown.enter)="selectAll(initChecked)" tabindex="0">
-                                    <input class="form-check-input" type="checkbox" [(ngModel)]="initChecked" /><span
-                                        class="checkmarks"></span>
-                                </div>
+
+                            <th mat-sort-header="userName">Name</th>
+                            <th mat-sort-header="phone">Phone</th>
+                            <th mat-sort-header="email">
+                                Email
                             </th>
-                            <th class="no-sort"></th>
-                            <th mat-sort-header="Name">Name</th>
-                            <th mat-sort-header="Phone">Phone</th>
-                            <th mat-sort-header="Email">Email</th>
-                            <th mat-sort-header="Created">Created</th>
-                            <th mat-sort-header="Activity">Last Activity</th>
-                            <th mat-sort-header="Status">Status</th>
+                            <th mat-sort-header="createdAt">Created</th>
+                            <th mat-sort-header="role">Role</th>
+                            <th mat-sort-header="status">Status</th>
                             <th class="text-end no-sort">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for (data of tableData; track data) {
                         <tr class="odd">
-                            <td class="sorting_1">
-                                <div class="form-check form-check-md">
-                                    <input type="checkbox" class="form-check-input"
-                                        [(ngModel)]="data.isSelected" />
-                                        <span class="checkmarks"></span>
-                                    </div>
-                            </td>
+
                             <td>
-                                <div class="set-star rating-select" tabindex="0" (keydown.enter)="onClickStar(data)"
-                                        (click)="onClickStar(data)" [class.filled]="data.isStarActive">
-                                        <i class="ti ti-star-filled fs-16"></i>
-                                    </div>
+                                <h6 class="d-flex align-items-center fs-14 fw-medium mb-0">
+                                    <a href="javascript:void(0);" class="d-flex flex-column">{{ data.userName }}
+                                    </a>
+                                </h6>
                             </td>
+                            <td>{{ data.phone }}</td>
+                            <td>{{ data.email }}</td>
+                            <td>{{ data.createdAt | date }}</td>
+                            <td>{{ data.role }}</td>
+
                             <td>
-                                <h6 class="d-flex align-items-center fs-14 fw-medium mb-0"><a href="javascript:void(0);"
-                                        class="avatar avatar-rounded me-2"><img src="assets/img/profiles/{{data.customer_image}}"
-                                            alt="User Image"></a><a href="javascript:void(0);"
-                                        class="d-flex flex-column">{{data.customer_name}} <span
-                                            class="text-body fs-13 mt-1 d-inline-block fw-normal">{{data.customer_no}}
-                                        </span></a></h6>
+                                <span class="badge badge-pill badge-status cursor-pointer" (click)="toggleStatus(data)"
+                                    [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">
+                                    {{ data.status }}
+                                </span>
+
                             </td>
-                            <td>{{data.phone}}</td>
-                            <td>{{data.email}}</td>
-                            <td>{{data.created}}</td>
-                            <td>{{data.last_activity}}</td>
-                            <td><span class="badge badge-pill badge-status "
-                                    [ngClass]="{'bg-success':data.status === 'Active','bg-danger':data.status === 'Inactive'}">{{data.status}}</span>
-                            </td>
-                            <td>
-                                <div class="dropdown table-action"><a href="javascript:void(0);"
+                            <td class="text-end">
+                                <div class="dropdown table-action text-center"><a href="javascript:void(0);"
                                         class="action-icon btn btn-xs shadow btn-icon btn-outline-light"
                                         data-bs-toggle="dropdown" aria-expanded="false"><i
                                             class="ti ti-dots-vertical"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
-                                            href="javascript:void(0);" data-bs-toggle="offcanvas"
-                                            data-bs-target="#offcanvas_edit"><i class="ti ti-edit text-blue"></i>
-                                            Edit</a><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
-                                            data-bs-target="#delete_contact"><i class="ti ti-trash"></i> Delete</a>
+                                            href="javascript:void(0);" (click)="onEditUser(data)">
+                                            <i class="ti ti-edit text-blue"></i>
+                                            Edit</a><a (click)="deleteUser(data._id)" class="dropdown-item"
+                                            href="javascript:void(0);"><i class="ti ti-trash"></i> Delete</a>
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                         }@if(tableData.length === 0){
-                                <tr>
-                                    <td class="text-center" colspan="12">No Matching Data Found</td>
-                                </tr>
-                            }
+                        }
+                        @if (tableData.length === 0) {
+                        <tr>
+                            <td class="text-center" colspan="12">No Matching Data Found</td>
+                        </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -480,268 +500,200 @@
 
 </div>
 <!-- End Content -->
-  <!-- Add User -->
-    <div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
-        <div class="offcanvas-header border-bottom">
-            <h5 class="fw-semibold">Add New User</h5>
-            <button type="button"
-                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                data-bs-dismiss="offcanvas" aria-label="Close">
-                <i class="ti ti-x"></i>
-            </button>
-        </div>
-        <div class="offcanvas-body">
-            <form>
+<!-- Add User -->
+<div #addUserCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="fw-semibold">Add New User</h5>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            (click)="closeAddUser()" aria-label="Close">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+            <div>
+                <!-- Basic Info -->
                 <div>
-                    <!-- Basic Info -->
-                    <div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
-                                        <div class="position-relative d-flex align-items-center">
-                                            <i class="ti ti-photo text-dark fs-16"></i>
-                                        </div>
-                                    </div>
-                                    <div class="d-inline-flex flex-column align-items-start">
-                                        <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
-                                            <i class="ti ti-file-broken me-1"></i>Upload file
-                                            <input type="file" class="form-control image-sign" multiple="">
-                                        </div>
-                                        <span>JPG, GIF or PNG. Max size of 800K</span>
-                                    </div>
+                    <div class="row">
+
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="userName_1" class="form-label">User Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="userName" id="userName"
+                                    [ngClass]="{'is-invalid': f['userName'].touched && f['userName'].invalid}"
+                                    id="userName_1">
+                                <div class="invalid-feedback"
+                                    *ngIf="f['userName'].touched && f['userName'].hasError('required')">
+                                    User Name is required.
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">First Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label for="email_01" class="form-label">Email <span
+                                            class="text-danger">*</span></label>
+
+                                </div>
+                                <input type="text" class="form-control" formControlName="email" id="email_01"
+                                    [ngClass]="{'is-invalid': f['email'].touched && f['email'].invalid}">
+                                <div class="invalid-feedback" *ngIf="f['email'].touched">
+                                    <div *ngIf="f['email'].hasError('required')">Email is required.</div>
+                                    <div *ngIf="f['email'].hasError('email')">Enter a valid email.</div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">User Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="role_01" class="form-label">Role <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="role" id="role_01"
+                                    [ngClass]="{'is-invalid': f['role'].touched && f['role'].invalid}">
+                                <div class="invalid-feedback"
+                                    *ngIf="f['role'].touched && f['role'].hasError('required')">
+                                    Role is required.
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <label class="form-label">Email <span class="text-danger">*</span></label>
-                                        <div class="form-check form-switch form-check-reverse">
-                                            <input class="form-check-input" type="checkbox" id="switchCheckReverse">
-                                            <label class="form-check-label" for="switchCheckReverse">Email Opt Out</label>
-                                        </div>
-                                    </div>
-                                    <input type="text" class="form-control">
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <span class="form-label">
+                                    Mobile No <span class="text-danger">*</span>
+                                </span>
+                                <ngx-intl-tel-input [ngClass]="{'is-invalid': f['phone'].touched && f['phone'].invalid}"
+                                    [preferredCountries]="preferredCountries" [onlyCountries]="onlyCountries"
+                                    [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                                    [searchCountryFlag]="true"
+                                    [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                    [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan"
+                                    [maxLength]="15" [phoneValidation]="true" [separateDialCode]="true"
+                                    formControlName="phone" id="mobile_no">
+                                </ngx-intl-tel-input>
+                                <div class="invalid-feedback"
+                                    *ngIf="f['phone'].touched && f['phone'].hasError('required')">
+                                    Mobile No is required.
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Role <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Phone 1 <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control phone" name="phone">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Phone 2</label>
-                                    <input type="text" class="form-control phone" name="phone">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <div class="input-group input-group-flat pass-group">
-                                        <input type="password" class="form-control pass-input" [type]="password[2] ? 'text' : 'password'">
-                                        <span class="input-group-text toggle-password " (click)="togglePassword(2)" (keydown.enter)="togglePassword(2)"  tabindex="0">
-                                            <i class="ti " [ngClass]="password[2] ? 'ti-eye' : 'ti-eye-off'" ></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Repeat Password <span class="text-danger">*</span></label>
-                                    <div class="input-group input-group-flat pass-group">
-                                        <input type="password" class="form-control pass-input" [type]="password[1] ? 'text' : 'password'">
-                                        <span class="input-group-text toggle-password " (click)="togglePassword(1)" (keydown.enter)="togglePassword(1)"  tabindex="0">
-                                            <i class="ti " [ngClass]="password[1] ? 'ti-eye' : 'ti-eye-off'" ></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Location <span class="text-danger">*</span></label>
-                                    <mat-select class="custom-mat-select select" placeholder="Select">
-                                        <mat-option value="1">Choose</mat-option>
-                                        <mat-option value="1">Germany</mat-option>
-                                        <mat-option value="1">USA</mat-option>
-                                        <mat-option value="1">Canada</mat-option>
-                                        <mat-option value="1">India</mat-option>
-                                        <mat-option value="1">China</mat-option>
-                                    </mat-select>
+                        </div>
+
+
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <span id="planName_label" class="form-label">
+                                    Location <span class="text-danger">*</span>
+                                </span>
+                                <p-select appSelectFilterId [options]="countries" optionLabel="label"
+                                    optionValue="value" placeholder="Select" [filter]="true" class="form-control"
+                                    inputId="location" formControlName="location"
+                                    (onShow)="labelFilterInput('location-filter')"></p-select>
+
+                                <div class="text-danger fs-12 mt-1"
+                                    *ngIf="f['location'].touched && f['location'].invalid">
+                                    Location is required.
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- /Basic Info -->
                 </div>
-                <div class="d-flex align-items-center justify-content-end">
-                    <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="offcanvas">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Create</button>
-                </div>
-            </form>
-        </div>
-
+                <!-- /Basic Info -->
+            </div>
+            <div class="d-flex align-items-center justify-content-end">
+                <a href="javascript:void(0);" class="btn btn-light me-2" (click)="closeAddUser()">Cancel</a>
+                <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Create</button>
+            </div>
+        </form>
     </div>
-    <!-- /Add User -->
 
-    <!-- Edit User -->
-    <div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
-        <div class="offcanvas-header border-bottom">
-            <h5 class="fw-semibold">Edit User</h5>
-            <button type="button"
-                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                data-bs-dismiss="offcanvas" aria-label="Close">
-                <i class="ti ti-x"></i>
-            </button>
-        </div>
-        <div class="offcanvas-body">
-            <form>
-                <div>
-                    <!-- Basic Info -->
-                    <div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
-                                        <div class="position-relative d-flex align-items-center">
-                                            <i class="ti ti-photo text-dark fs-16"></i>
-                                        </div>
-                                    </div>
-                                    <div class="d-inline-flex flex-column align-items-start">
-                                        <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
-                                            <i class="ti ti-file-broken me-1"></i>Upload file
-                                            <input type="file" class="form-control image-sign" multiple="">
-                                        </div>
-                                        <span>JPG, GIF or PNG. Max size of 800K</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">First Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="Elizabeth Morgan">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">User Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="Elizabeth@12">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <label class="form-label">Email <span class="text-danger">*</span></label>
-                                        <div class="form-check form-switch form-check-reverse">
-                                            <input class="form-check-input" type="checkbox" id="switchCheckReverse2" checked>
-                                            <label class="form-check-label" for="switchCheckReverse2">Email Opt Out</label>
-                                        </div>
-                                    </div>
-                                    <input type="text" class="form-control" value="elizabeth@gmail.com">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Role <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="Software">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Phone 1 <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control phone" name="phone">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Phone 2</label>
-                                    <input type="text" class="form-control phone" name="phone">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <div class="input-group input-group-flat pass-group">
-                                        <input type="password" class="form-control pass-input" [type]="password[2] ? 'text' : 'password'">
-                                        <span class="input-group-text toggle-password " (click)="togglePassword(2)" (keydown.enter)="togglePassword(2)"  tabindex="0">
-                                            <i class="ti " [ngClass]="password[2] ? 'ti-eye' : 'ti-eye-off'" ></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Repeat Password <span class="text-danger">*</span></label>
-                                    <div class="input-group input-group-flat pass-group">
-                                        <input type="password" class="form-control pass-input" [type]="password[1] ? 'text' : 'password'">
-                                        <span class="input-group-text toggle-password " (click)="togglePassword(1)" (keydown.enter)="togglePassword(1)"  tabindex="0">
-                                            <i class="ti " [ngClass]="password[1] ? 'ti-eye' : 'ti-eye-off'" ></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Location <span class="text-danger">*</span></label>
-                                    <mat-select class="custom-mat-select select" placeholder="Select">
-                                        <mat-option value="1">Choose</mat-option>
-                                        <mat-option value="1">Germany</mat-option>
-                                        <mat-option value="1" selected>USA</mat-option>
-                                        <mat-option value="1">Canada</mat-option>
-                                        <mat-option value="1">India</mat-option>
-                                        <mat-option value="1">China</mat-option>
-                                    </mat-select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /Basic Info -->
-                </div>
-                <div class="d-flex align-items-center justify-content-end">
-                    <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="offcanvas">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-        </div>
+</div>
+<!-- /Add User -->
 
+<!-- Edit User -->
+<div #editUserCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="fw-semibold">Edit User</h5>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            (click)="closeEditUser()" aria-label="Close">
+            <i class="ti ti-x"></i>
+        </button>
     </div>
-    <!-- /Edit User -->
-
-    <!-- delete modal -->
-    <div class="modal fade" id="delete_contact">
-        <div class="modal-dialog modal-dialog-centered modal-sm rounded-0">
-            <div class="modal-content rounded-0">
-                <div class="modal-body p-4 text-center position-relative">
-                    <div class="mb-3 position-relative z-1">
-                        <span class="avatar avatar-xl badge-soft-danger border-0 text-danger rounded-circle"><i class="ti ti-trash fs-24"></i></span>
-                    </div>
-                    <h5 class="mb-1">Delete Confirmation</h5>
-                    <p class="mb-3">Are you sure you want to remove user you selected.</p>
-                    <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light position-relative z-1 me-2 w-100" data-bs-dismiss="modal">Cancel</a>
-                        <a href="javascript:void(0);" class="btn btn-primary position-relative z-1 w-100" data-bs-dismiss="modal">Yes, Delete</a>
-                    </div>
+    <div class="offcanvas-body">
+        <form [formGroup]="editUserForm" (ngSubmit)="onEditSubmit()">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="userName__1">User Name</label>
+                    <input class="form-control" formControlName="userName" id="userName__1">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email__1">Email</label>
+                    <input class="form-control" formControlName="email" id="email__1">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="role__1">Role</label>
+                    <input class="form-control" formControlName="role" id="role__1">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <span class="form-label">
+                        Phone <span class="text-danger">*</span>
+                    </span>
+                    <ngx-intl-tel-input [preferredCountries]="preferredCountries" [onlyCountries]="onlyCountries"
+                        [searchCountryFlag]="true" [selectFirstCountry]="false"
+                        [selectedCountryISO]="CountryISO.Pakistan" [separateDialCode]="true" [enablePlaceholder]="true"
+                        formControlName="phone" id="phone__1">
+                    </ngx-intl-tel-input>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <span class="form-label">
+                        Location< <span class="text-danger">*</span>
+                    </span>
+                    <p-select appSelectFilterId [options]="countries" optionLabel="label" optionValue="value"
+                        formControlName="location" placeholder="Select" class="form-control" id="location__1"
+                        (onShow)="labelFilterInput('companyEdit-filter')">
+                    </p-select>
                 </div>
             </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-light me-2" (click)="closeEditUser()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+<!-- /Edit User -->
+
+<!-- delete modal -->
+<!-- manage‑users.component.html -->
+<!-- … above your existing edit offcanvas … -->
+
+<!-- Delete offcanvas -->
+<div #deleteUserCanvas class="offcanvas off-canvas-custom offcanvas-small" tabindex="-1" aria-hidden="true">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="fw-semibold">Delete Confirmation</h5>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 d-flex align-items-center justify-content-center rounded-circle"
+            aria-label="Close" (click)="closeDeleteModal()">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body text-center">
+        <div class="mb-3 position-relative z-1">
+            <span class="avatar avatar-xl badge-soft-danger border-0 text-danger rounded-circle">
+                <i class="ti ti-trash fs-24"></i>
+            </span>
+        </div>
+        <h5 class="mb-1">Are you sure?</h5>
+        <p class="mb-4">This action cannot be undone.</p>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-light me-2 w-100" (click)="closeDeleteModal()">Cancel</button>
+            <button class="btn btn-danger w-100" (click)="confirmDelete($event)">Yes, Delete</button>
         </div>
     </div>
-    <!-- delete modal -->
+</div>
+
+<!-- delete modal -->
