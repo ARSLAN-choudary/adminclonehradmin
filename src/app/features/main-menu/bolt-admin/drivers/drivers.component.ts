@@ -471,8 +471,8 @@ export class DriversComponent implements OnInit, AfterViewInit {
       limit: limit,
       company_ids: companyIds,
       company_id: companyIds[0],
-      start_ts,
-      end_ts,
+      start_ts: 1756684800,
+      end_ts: 1759276799,
       portal_status: "active",
       search: this.searchDataValue,
     };
