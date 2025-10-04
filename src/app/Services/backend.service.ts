@@ -154,4 +154,9 @@ export class BackendService {
     verifyOtp(payload: any): Observable<any> {
         return this.http.post(CONFIG.verifyOtp, payload);
     }
+
+    getBoltVehicles(parms: any) {
+        return this.http.post(CONFIG.GetBoltVehicle, parms);
+
+    }
 }

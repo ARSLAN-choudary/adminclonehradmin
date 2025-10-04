@@ -27,4 +27,5 @@ export const CONFIG = {
   getBoltCompanies: BASE_URL_BOLT + "/getCompanies",
   getBoltFleetOrder: BASE_URL_BOLT + "/getFleetOrders",
   getBoltDrivers: BASE_URL_BOLT + "/getDrivers",
+  GetBoltVehicle: BASE_URL_BOLT + "/getVehicles",
 };
