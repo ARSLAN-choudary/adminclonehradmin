@@ -21,4 +21,7 @@ export const CONFIG = {
   addUserDetail: BASE_URL_API + "/api/application/userdetail",
   uploadPdfFiles: BASE_URL_API + "/api/application/upload",
   getApplicationDetails: BASE_URL_API + "/api/application/get",
+  boltTokenFromServer: "https://oidc.bolt.eu/token",
+  getBoltCompanies:
+    "https://node.bolt.eu/fleet-integration-gateway/fleetIntegration/v1/getCompanies",
 };

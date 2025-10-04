@@ -1,13 +1,58 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { CONFIG } from "../../config";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
 })
 export class BackendService {
   constructor(private http: HttpClient) {}
+
+  getBoltTokenFromServer(clientId: string, clientSecret: string) {
+    const body = new URLSearchParams();
+    body.set("client_id", clientId);
+    body.set("client_secret", clientSecret);
+    body.set("grant_type", "client_credentials");
+    body.set("scope", "fleet-integration:api");
+
+    return this.http.post<{
+      access_token: string;
+      expires_in: number;
+      token_type: "Bearer";
+      scope: string;
+    }>(CONFIG.boltTokenFromServer, body.toString(), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-Skip-Auth": "true",
+      },
+    });
+  }
+
+  getBoltCompanies(params?: Record<string, string | number | boolean>) {
+    const token = localStorage.getItem("bolt_access_token");
+    if (!token) {
+      return throwError(
+        () => new Error("No bolt_access_token in localStorage")
+      );
+    }
+
+    let httpParams = new HttpParams();
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        httpParams = httpParams.set(k, String(v));
+      }
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<any>(CONFIG.getBoltCompanies, {
+      headers,
+      params: httpParams,
+    });
+  }
 
   addCompany(parms: any): Observable<any> {
     return this.http.post(CONFIG.addCompany, parms);

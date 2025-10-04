@@ -46,6 +46,13 @@ export const routes = {
   superAdminDomain: "/super-admin/domain",
   superAdminPurchaseTransaction: "/super-admin/purchase-transaction",
 
+  boltAdmin: "/bolt-admin",
+  boltAdminDash: "/bolt-admin/dashboard",
+  boltAdminCompanies: "/bolt-admin/companies",
+  boltAdminFleetOrders: "/bolt-admin/fleet-orders",
+  boltAdminFleetStateLogs: "/bolt-admin/fleet-state-logs",
+  boltAdminDrivers: "/bolt-admin/drivers",
+  boltAdminVehicles: "/bolt-admin/vehicles",
   //Layout
   Mini: "/layout-mini",
   fullWidth: "/layout-fullwidth",
