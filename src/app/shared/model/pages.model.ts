@@ -496,6 +496,7 @@ export interface BoltFleetDataTable {
   // driver
   driver_name: string;
   driver_uuid: string;
+  vehicle_uuid: string;
   driver_phone: string;
 
   // partner / vehicle
