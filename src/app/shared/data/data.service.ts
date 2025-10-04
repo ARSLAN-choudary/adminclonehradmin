@@ -558,14 +558,14 @@ export class DataService {
               showSubRoute: false,
               customSubmenuTwo: false,
             },
-            {
-              menuValue: "Companies",
-              route: routes.boltAdminCompanies,
-              base: "companies",
-              hasSubRoute: false,
-              showSubRoute: false,
-              customSubmenuTwo: false,
-            },
+            // {
+            //   menuValue: "Companies",
+            //   route: routes.boltAdminCompanies,
+            //   base: "companies",
+            //   hasSubRoute: false,
+            //   showSubRoute: false,
+            //   customSubmenuTwo: false,
+            // },
             {
               menuValue: "Fleet Orders",
               route: routes.boltAdminFleetOrders,
