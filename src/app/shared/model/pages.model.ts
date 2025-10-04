@@ -474,75 +474,60 @@ export interface companiesDataTable {
   status: string;
 }
 export interface BoltFleetDataTable {
-  // table flags
   isDeleted: boolean;
   isSelected: boolean;
-
-  // company context (if you attach it)
-  company_id: string | number;
-  company_name: string;
-
-  // core order info
+  order_status: string;
   order_reference: string;
-  order_status:
-    | "finished"
-    | "cancelled"
-    | "driver_cancelled"
-    | "rider_cancelled"
-    | "ongoing"
-    | string;
-  payment_method: "in_app" | "cash" | "card" | string;
-
-  // driver
   driver_name: string;
   driver_uuid: string;
-  driver_phone: string;
-
-  // partner / vehicle
   partner_uuid: string;
-  vehicle_model: string | null;
-  vehicle_license_plate: string | null;
-
-  // addresses & distance
-  pickup_address: string | null;
-  ride_distance: number | null; // meters
-
-  // timestamps (Unix seconds)
+  driver_phone: string;
+  payment_method: string;
+  payment_confirmed_timestamp: number;
   order_created_timestamp: number;
-  order_accepted_timestamp: number | null;
-  order_pickup_timestamp: number | null;
-  order_drop_off_timestamp: number | null;
-  order_finished_timestamp: number | null;
-  payment_confirmed_timestamp: number | null;
-
-  // price review
-  price_review_reason: string | null;
-
-  // stops (list of pickup/dropoff points)
-  order_stops: Array<{
-    lat: number;
-    lng: number;
-    real_lat: number;
-    real_lng: number;
-    type: "pickup" | "dropoff" | string;
-  }>;
-
-  // pricing breakdown (kept together for clarity)
+  vehicle_model: string;
+  vehicle_license_plate: string;
+  price_review_reason: string;
+  pickup_address: string;
+  order_stops: [
+    {
+      type: "pickup";
+      lng: number;
+      lat: number;
+      real_lng: number;
+      real_lat: number;
+    }
+  ];
+  ride_distance: number;
+  order_accepted_timestamp: number;
+  order_pickup_timestamp: number;
+  order_drop_off_timestamp: number;
+  order_finished_timestamp: number;
   order_price: {
-    commission: number;
+    ride_price: number;
     booking_fee: number;
+    toll_fee: number;
     cancellation_fee: number;
+    tip: number;
+    net_earnings: number;
     cash_discount: number;
     in_app_discount: number;
-    tip: number;
-    toll_fee: number;
-    ride_price: number;
-    net_earnings: number;
+    commission: number;
   };
+}
 
-  // convenient derived fields for table ops (optional)
-  total_orders?: number; // e.g., when grouping
-  orders_count?: number; // alias if you need another name
+export interface boltDriverDataTable {
+  isDeleted: boolean;
+  isSelected: boolean;
+  driver_uuid: "string";
+  partner_uuid: "string";
+  first_name: "string";
+  last_name: "string";
+  email: "string";
+  phone: "string";
+  state: "active";
+  has_cash_payment: true;
+  suspension_reason: "string";
 }
 
 export interface usersDataTable {

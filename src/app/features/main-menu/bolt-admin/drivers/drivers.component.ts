@@ -242,14 +242,14 @@ export class DriversComponent implements OnInit, AfterViewInit {
       start = new Date(startStr);
       start.setHours(0, 0, 0, 0);
     } else {
-      start = new Date(end.getTime() - 20 * 24 * 60 * 60 * 1000); // last 20 days
+      start = new Date(end.getTime() - 10 * 24 * 60 * 60 * 1000); // last 20 days
       start.setHours(0, 0, 0, 0);
     }
 
     // safety: ensure start <= end
     if (start.getTime() > end.getTime()) {
       // swap or clamp; here we clamp start to 20 days before end
-      start = new Date(end.getTime() - 20 * 24 * 60 * 60 * 1000);
+      start = new Date(end.getTime() - 10 * 24 * 60 * 60 * 1000);
       start.setHours(0, 0, 0, 0);
     }
 
@@ -460,7 +460,7 @@ export class DriversComponent implements OnInit, AfterViewInit {
       start_ts,
       end_ts,
       portal_status: "active",
-      search: this.searchDataValue,
+      search: "search",
     };
 
     this.backendService
