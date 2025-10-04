@@ -91,7 +91,7 @@ export class VehiclesComponent {
     public currentPage = 1;
     public totalData = 0;
 
-    public tableData: companiesDataTable[] = [];
+    public tableData: any[] = [];
     public serialNumberArray: number[] = [];
     currentEditingImageUrl?: string;
     editPreviewUrl?: string;
