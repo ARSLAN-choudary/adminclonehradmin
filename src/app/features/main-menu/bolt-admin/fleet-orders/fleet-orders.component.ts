@@ -38,7 +38,7 @@ import {
   tablePageSize,
 } from "../../../../shared/custom-pagination/pagination.service";
 import {
-  companiesDataTable,
+  BoltFleetDataTable,
   superadmincompanies,
 } from "../../../../shared/model/pages.model";
 import { CollapseHeaderComponent } from "../../../common/collapse-header/collapse-header.component";
@@ -47,6 +47,8 @@ import { CommonModule } from "@angular/common";
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { SelectFilterIdDirective } from "../../../../shared/common/directives/select-filter-id.directive";
 import { CustomPaginationComponent } from "../../../../shared/custom-pagination/custom-pagination.component";
+import { DateRangePickerComponent } from "../../../common/date-range-picker/date-range-picker.component";
+import { DataService } from "../../../../shared/data/data.service";
 interface select {
   data: string;
 }
@@ -64,6 +66,7 @@ interface select {
     ReactiveFormsModule,
     SelectFilterIdDirective,
     NgxIntlTelInputModule,
+    DateRangePickerComponent,
   ],
   templateUrl: "./fleet-orders.component.html",
   styleUrl: "./fleet-orders.component.scss",
@@ -103,12 +106,12 @@ export class FleetOrdersComponent implements OnInit, AfterViewInit {
   public currentPage = 1;
   public totalData = 0;
 
-  public tableData: companiesDataTable[] = [];
+  public tableData: BoltFleetDataTable[] = [];
   public serialNumberArray: number[] = [];
   currentEditingImageUrl?: string;
   editPreviewUrl?: string;
   private editPreviewObjectUrl?: string;
-  public dataSource!: MatTableDataSource<companiesDataTable>;
+  public dataSource!: MatTableDataSource<BoltFleetDataTable>;
   public searchDataValue = "";
   public row = true;
   startDate: string = "";
@@ -159,7 +162,8 @@ export class FleetOrdersComponent implements OnInit, AfterViewInit {
     private backendService: BackendService,
     private cdRef: ChangeDetectorRef,
     private renderer: Renderer2,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dataService: DataService
   ) {}
 
   ngOnInit(): void {
@@ -198,6 +202,38 @@ export class FleetOrdersComponent implements OnInit, AfterViewInit {
       status: ["active", Validators.required],
       image: [null, [this.optionalPngValidator.bind(this)]],
     });
+  }
+  private getUnixRangeSeconds(
+    startStr?: string,
+    endStr?: string
+  ): { start_ts: number; end_ts: number } {
+    const now = new Date();
+
+    // end: end of selected day, or now if not provided
+    const end = endStr && endStr.trim() ? new Date(endStr) : now;
+    if (endStr && endStr.trim()) end.setHours(23, 59, 59, 999);
+
+    // start: start of selected day, or (end - 20 days) if not provided
+    let start: Date;
+    if (startStr && startStr.trim()) {
+      start = new Date(startStr);
+      start.setHours(0, 0, 0, 0);
+    } else {
+      start = new Date(end.getTime() - 20 * 24 * 60 * 60 * 1000); // last 20 days
+      start.setHours(0, 0, 0, 0);
+    }
+
+    // safety: ensure start <= end
+    if (start.getTime() > end.getTime()) {
+      // swap or clamp; here we clamp start to 20 days before end
+      start = new Date(end.getTime() - 20 * 24 * 60 * 60 * 1000);
+      start.setHours(0, 0, 0, 0);
+    }
+
+    return {
+      start_ts: Math.floor(start.getTime() / 1000), // seconds
+      end_ts: Math.floor(end.getTime() / 1000),
+    };
   }
 
   initCreateNewCompanyForm() {
@@ -388,23 +424,18 @@ export class FleetOrdersComponent implements OnInit, AfterViewInit {
   }
   private getTableData(skip: number, limit: number): void {
     const companyIds = this.readCompanyIds();
-    // const payload: any = {
-    //   start: skip,
-    //   length: limit,
-    //   search: { value: this.searchDataValue },
-    // };
-    // if (this.startDate && this.endDate) {
-    //   payload.startDate = this.startDate;
-    //   payload.endDate = this.endDate;
-    // }
+    const { start_ts, end_ts } = this.getUnixRangeSeconds(
+      this.startDate,
+      this.endDate
+    );
 
     const payload: any = {
       offset: 0,
       limit: 20,
       company_ids: companyIds,
       company_id: companyIds[0],
-      start_ts: 1756684800,
-      end_ts: 1759276799,
+      start_ts,
+      end_ts,
       time_range_filter_type: "price_review",
     };
 
@@ -417,8 +448,10 @@ export class FleetOrdersComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((apiRes: any) => {
-        let arr: any[] = Array.isArray(apiRes?.data?.data)
-          ? apiRes.data.data
+        this.dataService.setLoaderState(false);
+
+        let arr: any[] = Array.isArray(apiRes?.data?.orders)
+          ? apiRes.data.orders
           : [];
 
         arr = arr.map((d) => ({ ...d, isDeleted: !!d.isDeleted }));
@@ -435,11 +468,13 @@ export class FleetOrdersComponent implements OnInit, AfterViewInit {
         this.updateCounts(countsSource);
 
         this.tableData = arr;
-        this.totalData = apiRes.data.recordsTotal;
+        console.log(this.tableData);
+
+        this.totalData = apiRes.data.total_orders;
         this.cdRef.markForCheck();
 
         this.serialNumberArray = this.tableData.map((_, i) => skip + i + 1);
-        this.dataSource = new MatTableDataSource<companiesDataTable>(
+        this.dataSource = new MatTableDataSource<BoltFleetDataTable>(
           this.tableData
         );
         this.row = this.tableData.length > 0;

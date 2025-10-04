@@ -345,10 +345,10 @@
                             </div>
                         </div>
                     </div>
-                    <!--                    <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">-->
-                    <!--                        <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)">-->
-                    <!--                        </app-date-range-picker>-->
-                    <!--                    </div>-->
+                    <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">
+                        <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)">
+                        </app-date-range-picker>
+                    </div>
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <div class="dropdown">
@@ -466,12 +466,14 @@
                     class="table table-nowrap dataTable">
                     <thead class="table-light">
                         <tr>
-                            <th mat-sort-header="name">Name</th>
-                            <th mat-sort-header="country">Country</th>
-                            <th mat-sort-header="registrationNo">Registration No</th>
-                            <th mat-sort-header="vatNo">VAT No</th>
-                            <th mat-sort-header="website">Website</th>
-                            <th mat-sort-header="incorporatonDate">Inc Date</th>
+                            <th mat-sort-header="name">Driver Name</th>
+                            <th mat-sort-header="vehicleLicensePlate">Vehicle License plate</th>
+                            <th mat-sort-header="VehicleModel">Vehicle Model</th>
+                            <th mat-sort-header="registrationNo">Driver Phone</th>
+                            <th mat-sort-header="registrationNo">Ride Distance</th>
+                            <th mat-sort-header="vatNo">Order Created at</th>
+                            <th mat-sort-header="website">Order Accepted</th>
+                            <th mat-sort-header="incorporatonDate">Drop off Time</th>
                             <th mat-sort-header="status">Status</th>
                             <th class="text-end">Action</th>
                         </tr>
@@ -479,23 +481,27 @@
                     <tbody>
                         @for (data of tableData; track $index) {
                         <tr [class.isDeleted]="data.isDeleted">
-                            <td>
+                            <td class="text-center">
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="d-flex flex-column fw-medium">
-                                        {{ data.name }}
+                                        {{ data.driver_name }}
                                     </a>
                                 </div>
                             </td>
-                            <td>{{ data.country }}</td>
-                            <td>{{ data.registrationNo }}</td>
-                            <td>{{ data.vatNo }}</td>
-                            <td>{{ data.website }}</td>
-                            <td>{{ data.incorporatonDate |date}}</td>
-                            <td>
+                            <td class="text-center">{{ data.vehicle_license_plate}}</td>
+                            <td class="text-center">{{ data.vehicle_model}}</td>
+                            <td class="text-center">{{ data.driver_phone }}</td>
+                            <td class="text-center">{{data.ride_distance}}</td>
+                            <td class="text-center">{{ data.order_created_timestamp | date }}</td>
+                            <td class="text-center">{{ data.order_accepted_timestamp |date }}</td>
+                            <td class="text-center">{{ data.order_drop_off_timestamp |date}}</td>
+                            <td class="text-center">
                                 <span class="badge badge-pill badge-status cursor-pointer" (click)="toggleStatus(data)"
-                                    [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">{{
-                                    data.status }}</span>
+                                    [ngClass]="{'bg-success': data.order_status === 'finished', 'bg-danger': data.order_status !== 'finished'}">{{
+                                    data.order_status }}</span>
                             </td>
+                            <td>{{ data.driver_phone }}</td>
+
 
                             <td class="text-center">
                                 <div class="dropdown table-action text-center ">

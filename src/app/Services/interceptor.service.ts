@@ -24,7 +24,7 @@ export const interceptorFn: HttpInterceptorFn = (req, next) => {
   const isLoginCall = req.url.includes("/login");
   const isUserDetailsCall = req.url.includes("/userDetails");
   const isForgetPasswordCall = req.url.includes("/forgot-password");
-  const isBoltDomain = req.url.startsWith('https://node.bolt.eu/');
+  const isBoltDomain = req.url.startsWith("https://node.bolt.eu/");
 
   const skipAuth =
     callerWantsSkip ||
