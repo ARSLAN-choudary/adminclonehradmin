@@ -23,9 +23,7 @@ import { MatSortModule, Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { Router, RouterLink } from "@angular/router";
 import { routes } from "../../../../shared/routes/routes";
-import saveAs from "file-saver";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+
 import {
   CountryISO,
   SearchCountryField,
@@ -375,20 +373,43 @@ export class FleetOrdersComponent implements OnInit, AfterViewInit {
     this.activeCompanies.set(active);
     this.inActiveCompanies.set(data.length - active);
   }
-
-  private getTableData(skip: number, limit: number): void {
-    const payload: any = {
-      start: skip,
-      length: limit,
-      search: { value: this.searchDataValue },
-    };
-    if (this.startDate && this.endDate) {
-      payload.startDate = this.startDate;
-      payload.endDate = this.endDate;
+  readCompanyIds(): number[] {
+    const raw = localStorage.getItem("bolt_companies");
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw);
+      const arr = Array.isArray(parsed) ? parsed : [parsed];
+      return arr
+        .map((v) => (typeof v === "string" ? Number(v) : v))
+        .filter((n): n is number => Number.isFinite(n));
+    } catch {
+      return [];
     }
+  }
+  private getTableData(skip: number, limit: number): void {
+    const companyIds = this.readCompanyIds();
+    // const payload: any = {
+    //   start: skip,
+    //   length: limit,
+    //   search: { value: this.searchDataValue },
+    // };
+    // if (this.startDate && this.endDate) {
+    //   payload.startDate = this.startDate;
+    //   payload.endDate = this.endDate;
+    // }
+
+    const payload: any = {
+      offset: 0,
+      limit: 20,
+      company_ids: companyIds,
+      company_id: companyIds[0],
+      start_ts: 1756684800,
+      end_ts: 1759276799,
+      time_range_filter_type: "price_review",
+    };
 
     this.backendService
-      .getCompany(payload)
+      .getBoltFleetOrder(payload)
       .pipe(
         tap((apiRes: any) => {
           const arr = Array.isArray(apiRes?.data?.data) ? apiRes.data.data : [];

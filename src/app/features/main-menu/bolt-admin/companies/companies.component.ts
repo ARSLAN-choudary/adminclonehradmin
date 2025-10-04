@@ -18,7 +18,7 @@ export class CompaniesComponent implements OnInit {
     this.backend.getBoltCompanies().subscribe((res: any) => {
       localStorage.setItem(
         "bolt_companies",
-        JSON.stringify(res.data.company_ids[0])
+        JSON.stringify(res.data.company_ids)
       );
     });
   }

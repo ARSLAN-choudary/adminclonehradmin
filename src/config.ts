@@ -1,4 +1,6 @@
 const BASE_URL_API = "https://my-planent-ld47.onrender.com";
+const BASE_URL_BOLT =
+  "https://node.bolt.eu/fleet-integration-gateway/fleetIntegration/v1";
 // const BASE_URL_API = '';
 
 export const CONFIG = {
@@ -22,6 +24,6 @@ export const CONFIG = {
   uploadPdfFiles: BASE_URL_API + "/api/application/upload",
   getApplicationDetails: BASE_URL_API + "/api/application/get",
   boltTokenFromServer: "https://oidc.bolt.eu/token",
-  getBoltCompanies:
-    "https://node.bolt.eu/fleet-integration-gateway/fleetIntegration/v1/getCompanies",
+  getBoltCompanies: BASE_URL_BOLT + "/getCompanies",
+  getBoltFleetOrder: BASE_URL_BOLT + "/getFleetOrders",
 };

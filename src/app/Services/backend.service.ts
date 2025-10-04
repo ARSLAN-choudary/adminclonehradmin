@@ -53,6 +53,27 @@ export class BackendService {
       params: httpParams,
     });
   }
+  getBoltFleetOrder(params: any): Observable<any> {
+    const token = localStorage.getItem("bolt_access_token");
+    if (!token) {
+      return throwError(
+        () => new Error("No bolt_access_token in localStorage")
+      );
+    }
+
+    let httpParams = new HttpParams();
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        httpParams = httpParams.set(k, String(v));
+      }
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.post<any>(CONFIG.getBoltFleetOrder, params, { headers });
+  }
 
   addCompany(parms: any): Observable<any> {
     return this.http.post(CONFIG.addCompany, parms);
