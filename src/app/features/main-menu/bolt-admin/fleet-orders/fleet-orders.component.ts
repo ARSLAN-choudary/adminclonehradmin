@@ -431,7 +431,7 @@ export class FleetOrdersComponent implements OnInit, AfterViewInit {
 
     const payload: any = {
       offset: 0,
-      limit: 20,
+      limit: limit,
       company_ids: companyIds,
       company_id: companyIds[0],
       start_ts,

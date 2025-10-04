@@ -4,19 +4,19 @@
     <!-- Page Header -->
     <div class="d-flex align-items-center justify-content-between gap-2 mb-4 flex-wrap">
         <div>
-            <h4 class="mb-1">Driver<span class="badge badge-soft-success ms-2">{{activeCompanies()}}</span><span
+            <h4 class="mb-1">Companies<span class="badge badge-soft-success ms-2">{{activeCompanies()}}</span><span
                     class="badge badge-soft-primary ms-2">{{inActiveCompanies()}}</span></h4>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Drivers</li>
+                    <li class="breadcrumb-item active" aria-current="page">Orders</li>
                 </ol>
             </nav>
         </div>
         <div class="gap-2 d-flex align-items-center flex-wrap">
             <div class="dropdown">
                 <a href="javascript:void(0);" class="dropdown-toggle btn btn-outline-light px-2 shadow"
-                   data-bs-toggle="dropdown"><i class="ti ti-package-export me-2"></i>Export</a>
+                    data-bs-toggle="dropdown"><i class="ti ti-package-export me-2"></i>Export</a>
                 <div class="dropdown-menu  dropdown-menu-end">
                     <ul>
                         <li>
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <a href="javascript:void(0);" class="btn btn-icon btn-outline-light shadow" data-bs-toggle="tooltip"
-               data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
+                data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
                     class="ti ti-refresh"></i></a>
             <app-collapse-header />
         </div>
@@ -48,9 +48,11 @@
             <div class="input-icon input-icon-start position-relative">
                 <span class="input-icon-addon text-dark"><i class="ti ti-search"></i></span>
                 <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
-                       (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search"
-                       id="search_data">
+                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search"
+                    id="search_data">
             </div>
+            <!-- <a href="javascript:void(0);" class="btn btn-primary" (click)="openAddCompany()"><i
+                    class="ti ti-square-rounded-plus-filled me-1"></i>Add New Company</a> -->
         </div>
         <div class="card-body">
 
@@ -58,300 +60,300 @@
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <div class="dropdown">
-<!--                        <a href="javascript:void(0);" class="btn btn-outline-light shadow px-2"-->
-<!--                           data-bs-toggle="dropdown" data-bs-auto-close="outside"><i-->
-<!--                                class="ti ti-filter me-2"></i>Filter<i class="ti ti-chevron-down ms-2"></i></a>-->
-<!--                        <div class="filter-dropdown-menu dropdown-menu dropdown-menu-lg p-0">-->
-<!--&lt;!&ndash;                            <div class="filter-header d-flex align-items-center justify-content-between border-bottom">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <h6 class="mb-0"><i class="ti ti-filter me-1"></i>Filter</h6>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <button type="button" class="btn-close close-filter-btn" data-bs-dismiss="dropdown-menu"&ndash;&gt;-->
-<!--&lt;!&ndash;                                        aria-label="Close"></button>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--                            <div class="filter-set-view p-3">-->
-<!--                                <div class="accordion" id="accordionExample">-->
-<!--                                    <div class="filter-set-content">-->
-<!--                                        <div class="filter-set-content-head">-->
-<!--                                            <a href="#" class="collapsed" data-bs-toggle="collapse"-->
-<!--                                               data-bs-target="#country" aria-expanded="false"-->
-<!--                                               aria-controls="country">Country</a>-->
-<!--                                        </div>-->
-<!--                                        <div class="filter-set-contents accordion-collapse collapse" id="country"-->
-<!--                                             data-bs-parent="#accordionExample">-->
-<!--                                            <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">-->
-<!--                                                <div class="mb-1">-->
-<!--                                                    <div class="input-icon-start input-icon position-relative">-->
-<!--                                                        <span class="input-icon-addon fs-12">-->
-<!--                                                            <i class="ti ti-search"></i>-->
-<!--                                                        </span>-->
-<!--                                                        <input type="text" class="form-control form-control-md"-->
-<!--                                                               placeholder="Search" id="search__data">-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                                <ul class="mb-0">-->
-<!--                                                    <li class="mb-1">-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="1">-->
-<!--                                                            USA-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li class="mb-1">-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="2">-->
-<!--                                                            France-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li class="mb-1">-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="3">-->
-<!--                                                            Italy-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li class="mb-1">-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="4">-->
-<!--                                                            Germany-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li>-->
-<!--                                                        <a href="javascript:void(0);"-->
-<!--                                                           class="link-primary text-decoration-underline p-2 pt-0 d-flex">Load-->
-<!--                                                            More</a>-->
-<!--                                                    </li>-->
-<!--                                                </ul>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="filter-set-content">-->
-<!--                                        <div class="filter-set-content-head">-->
-<!--                                            <a href="#" class="collapsed" data-bs-toggle="collapse"-->
-<!--                                               data-bs-target="#owner" aria-expanded="false"-->
-<!--                                               aria-controls="owner">Owner</a>-->
-<!--                                        </div>-->
-<!--                                        <div class="filter-set-contents accordion-collapse collapse" id="owner"-->
-<!--                                             data-bs-parent="#accordionExample">-->
-<!--                                            <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">-->
-<!--                                                <div class="mb-1">-->
-<!--                                                    <div class="input-icon-start input-icon position-relative">-->
-<!--                                                        <span class="input-icon-addon fs-12">-->
-<!--                                                            <i class="ti ti-search"></i>-->
-<!--                                                        </span>-->
-<!--                                                        <input type="text" class="form-control form-control-md" id="5"-->
-<!--                                                               placeholder="Search">-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                                <ul class="mb-0">-->
-<!--                                                    <li class="mb-1">-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="6">-->
-<!--                                                            Hendry Milner-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li class="mb-1">-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="7">-->
-<!--                                                            Guilory Berggren-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li class="mb-1">-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="8">-->
-<!--                                                            Jami Carlile-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li class="mb-1">-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="9">-->
-<!--                                                            Theresa Nelson-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li class="mb-1">-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="10">-->
-<!--                                                            Smith Cooper-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li>-->
-<!--                                                        <a href="javascript:void(0);"-->
-<!--                                                           class="link-primary text-decoration-underline p-2 pt-0 d-flex">Load-->
-<!--                                                            More</a>-->
-<!--                                                    </li>-->
-<!--                                                </ul>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="filter-set-content">-->
-<!--                                        <div class="filter-set-content-head">-->
-<!--                                            <a href="#" class="collapsed" data-bs-toggle="collapse"-->
-<!--                                               data-bs-target="#collapseThree" aria-expanded="false"-->
-<!--                                               aria-controls="collapseThree">Tags</a>-->
-<!--                                        </div>-->
-<!--                                        <div class="filter-set-contents accordion-collapse collapse" id="collapseThree"-->
-<!--                                             data-bs-parent="#accordionExample">-->
-<!--                                            <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">-->
-<!--                                                <ul>-->
-<!--                                                    <li>-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="11">-->
-<!--                                                            Collab-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li>-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="12">-->
-<!--                                                            Promotion-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li>-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="13">-->
-<!--                                                            VIP-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                </ul>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="filter-set-content">-->
-<!--                                        <div class="filter-set-content-head">-->
-<!--                                            <a href="#" class="collapsed" data-bs-toggle="collapse"-->
-<!--                                               data-bs-target="#collapseOne" aria-expanded="false"-->
-<!--                                               aria-controls="collapseOne">Rating</a>-->
-<!--                                        </div>-->
-<!--                                        <div class="filter-set-contents accordion-collapse collapse" id="collapseOne"-->
-<!--                                             data-bs-parent="#accordionExample">-->
-<!--                                            <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">-->
-<!--                                                <ul>-->
-<!--                                                    <li>-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="14">-->
-<!--                                                            <span class="rating">-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <span class="ms-1">5.0</span>-->
-<!--                                                            </span>-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li>-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="15">-->
-<!--                                                            <span class="rating">-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled"></i>-->
-<!--                                                                <span class="ms-1">4.0</span>-->
-<!--                                                            </span>-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li>-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="16">-->
-<!--                                                            <span class="rating">-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled"></i>-->
-<!--                                                                <i class="ti ti-star-filled"></i>-->
-<!--                                                                <span class="ms-1">3.0</span>-->
-<!--                                                            </span>-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li>-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="17">-->
-<!--                                                            <span class="rating">-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled"></i>-->
-<!--                                                                <i class="ti ti-star-filled"></i>-->
-<!--                                                                <i class="ti ti-star-filled"></i>-->
-<!--                                                                <span class="ms-1">2.0</span>-->
-<!--                                                            </span>-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li>-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="18">-->
-<!--                                                            <span class="rating">-->
-<!--                                                                <i class="ti ti-star-filled text-warning"></i>-->
-<!--                                                                <i class="ti ti-star-filled"></i>-->
-<!--                                                                <i class="ti ti-star-filled"></i>-->
-<!--                                                                <i class="ti ti-star-filled"></i>-->
-<!--                                                                <i class="ti ti-star-filled"></i>-->
-<!--                                                                <span class="ms-1">1.0</span>-->
-<!--                                                            </span>-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                </ul>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="filter-set-content">-->
-<!--                                        <div class="filter-set-content-head">-->
-<!--                                            <a href="#" class="collapsed" data-bs-toggle="collapse"-->
-<!--                                               data-bs-target="#Status" aria-expanded="false"-->
-<!--                                               aria-controls="Status">Status</a>-->
-<!--                                        </div>-->
-<!--                                        <div class="filter-set-contents accordion-collapse collapse" id="Status"-->
-<!--                                             data-bs-parent="#accordionExample">-->
-<!--                                            <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">-->
-<!--                                                <ul>-->
-<!--                                                    <li>-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="19">-->
-<!--                                                            Active-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                    <li>-->
-<!--                                                        <label class="dropdown-item px-2 d-flex align-items-center">-->
-<!--                                                            <input class="form-check-input m-0 me-1" type="checkbox"-->
-<!--                                                                   id="20">-->
-<!--                                                            Inactive-->
-<!--                                                        </label>-->
-<!--                                                    </li>-->
-<!--                                                </ul>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="d-flex align-items-center gap-2">-->
-<!--                                    <a href="javascript:void(0);" class="btn btn-outline-light w-100">Reset</a>-->
-<!--                                    <a [routerLink]="routes.companiesGrid" class="btn btn-primary w-100">Filter</a>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <a href="javascript:void(0);" class="btn btn-outline-light shadow px-2"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside"><i
+                                class="ti ti-filter me-2"></i>Filter<i class="ti ti-chevron-down ms-2"></i></a>
+                        <div class="filter-dropdown-menu dropdown-menu dropdown-menu-lg p-0">
+                            <div class="filter-header d-flex align-items-center justify-content-between border-bottom">
+                                <h6 class="mb-0"><i class="ti ti-filter me-1"></i>Filter</h6>
+                                <button type="button" class="btn-close close-filter-btn" data-bs-dismiss="dropdown-menu"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="filter-set-view p-3">
+                                <div class="accordion" id="accordionExample">
+                                    <div class="filter-set-content">
+                                        <div class="filter-set-content-head">
+                                            <a href="#" class="collapsed" data-bs-toggle="collapse"
+                                                data-bs-target="#country" aria-expanded="false"
+                                                aria-controls="country">Country</a>
+                                        </div>
+                                        <div class="filter-set-contents accordion-collapse collapse" id="country"
+                                            data-bs-parent="#accordionExample">
+                                            <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
+                                                <div class="mb-1">
+                                                    <div class="input-icon-start input-icon position-relative">
+                                                        <span class="input-icon-addon fs-12">
+                                                            <i class="ti ti-search"></i>
+                                                        </span>
+                                                        <input type="text" class="form-control form-control-md"
+                                                            placeholder="Search" id="search__data">
+                                                    </div>
+                                                </div>
+                                                <ul class="mb-0">
+                                                    <li class="mb-1">
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="1">
+                                                            USA
+                                                        </label>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="2">
+                                                            France
+                                                        </label>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="3">
+                                                            Italy
+                                                        </label>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="4">
+                                                            Germany
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0);"
+                                                            class="link-primary text-decoration-underline p-2 pt-0 d-flex">Load
+                                                            More</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filter-set-content">
+                                        <div class="filter-set-content-head">
+                                            <a href="#" class="collapsed" data-bs-toggle="collapse"
+                                                data-bs-target="#owner" aria-expanded="false"
+                                                aria-controls="owner">Owner</a>
+                                        </div>
+                                        <div class="filter-set-contents accordion-collapse collapse" id="owner"
+                                            data-bs-parent="#accordionExample">
+                                            <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
+                                                <div class="mb-1">
+                                                    <div class="input-icon-start input-icon position-relative">
+                                                        <span class="input-icon-addon fs-12">
+                                                            <i class="ti ti-search"></i>
+                                                        </span>
+                                                        <input type="text" class="form-control form-control-md" id="5"
+                                                            placeholder="Search">
+                                                    </div>
+                                                </div>
+                                                <ul class="mb-0">
+                                                    <li class="mb-1">
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="6">
+                                                            Hendry Milner
+                                                        </label>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="7">
+                                                            Guilory Berggren
+                                                        </label>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="8">
+                                                            Jami Carlile
+                                                        </label>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="9">
+                                                            Theresa Nelson
+                                                        </label>
+                                                    </li>
+                                                    <li class="mb-1">
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="10">
+                                                            Smith Cooper
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0);"
+                                                            class="link-primary text-decoration-underline p-2 pt-0 d-flex">Load
+                                                            More</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filter-set-content">
+                                        <div class="filter-set-content-head">
+                                            <a href="#" class="collapsed" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseThree" aria-expanded="false"
+                                                aria-controls="collapseThree">Tags</a>
+                                        </div>
+                                        <div class="filter-set-contents accordion-collapse collapse" id="collapseThree"
+                                            data-bs-parent="#accordionExample">
+                                            <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
+                                                <ul>
+                                                    <li>
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="11">
+                                                            Collab
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="12">
+                                                            Promotion
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="13">
+                                                            VIP
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filter-set-content">
+                                        <div class="filter-set-content-head">
+                                            <a href="#" class="collapsed" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseOne" aria-expanded="false"
+                                                aria-controls="collapseOne">Rating</a>
+                                        </div>
+                                        <div class="filter-set-contents accordion-collapse collapse" id="collapseOne"
+                                            data-bs-parent="#accordionExample">
+                                            <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
+                                                <ul>
+                                                    <li>
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="14">
+                                                            <span class="rating">
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <span class="ms-1">5.0</span>
+                                                            </span>
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="15">
+                                                            <span class="rating">
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled"></i>
+                                                                <span class="ms-1">4.0</span>
+                                                            </span>
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="16">
+                                                            <span class="rating">
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled"></i>
+                                                                <i class="ti ti-star-filled"></i>
+                                                                <span class="ms-1">3.0</span>
+                                                            </span>
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="17">
+                                                            <span class="rating">
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled"></i>
+                                                                <i class="ti ti-star-filled"></i>
+                                                                <i class="ti ti-star-filled"></i>
+                                                                <span class="ms-1">2.0</span>
+                                                            </span>
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="18">
+                                                            <span class="rating">
+                                                                <i class="ti ti-star-filled text-warning"></i>
+                                                                <i class="ti ti-star-filled"></i>
+                                                                <i class="ti ti-star-filled"></i>
+                                                                <i class="ti ti-star-filled"></i>
+                                                                <i class="ti ti-star-filled"></i>
+                                                                <span class="ms-1">1.0</span>
+                                                            </span>
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filter-set-content">
+                                        <div class="filter-set-content-head">
+                                            <a href="#" class="collapsed" data-bs-toggle="collapse"
+                                                data-bs-target="#Status" aria-expanded="false"
+                                                aria-controls="Status">Status</a>
+                                        </div>
+                                        <div class="filter-set-contents accordion-collapse collapse" id="Status"
+                                            data-bs-parent="#accordionExample">
+                                            <div class="filter-content-list bg-light rounded border p-2 shadow mt-2">
+                                                <ul>
+                                                    <li>
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="19">
+                                                            Active
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="dropdown-item px-2 d-flex align-items-center">
+                                                            <input class="form-check-input m-0 me-1" type="checkbox"
+                                                                id="20">
+                                                            Inactive
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="javascript:void(0);" class="btn btn-outline-light w-100">Reset</a>
+                                    <a [routerLink]="routes.companiesGrid" class="btn btn-primary w-100">Filter</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!--                    <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">-->
-                    <!--                        <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)">-->
-                    <!--                        </app-date-range-picker>-->
-                    <!--                    </div>-->
+                    <div id="reportrange" class="reportrange-picker d-flex align-items-center shadow">
+                        <app-date-range-picker (dateRangeChange)="onDateRangeChange($event)">
+                        </app-date-range-picker>
+                    </div>
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <div class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-outline-light px-2 shadow"
-                           data-bs-toggle="dropdown"><i class="ti ti-sort-ascending-2 me-2"></i>Sort By</a>
+                            data-bs-toggle="dropdown"><i class="ti ti-sort-ascending-2 me-2"></i>Sort By</a>
                         <div class="dropdown-menu">
                             <ul>
                                 <li>
@@ -370,6 +372,8 @@
                         </div>
                     </div>
                     <div class="dropdown">
+                        <a href="javascript:void(0);" class="btn bg-soft-indigo px-2 border-0" data-bs-toggle="dropdown"
+                            data-bs-auto-close="outside"><i class="ti ti-columns-3 me-2"></i>Manage Columns</a>
                         <div class="dropdown-menu dropdown-menu-md dropdown-md p-3">
                             <ul>
                                 <li class="gap-1 d-flex align-items-center mb-2">
@@ -379,7 +383,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Name</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   role="switch" id="21" checked>
+                                                role="switch" id="21" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -390,7 +394,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Email</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="22" role="switch" checked>
+                                                id="22" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -401,7 +405,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Account URL</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="23" role="switch" checked>
+                                                id="23" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -412,7 +416,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Plan</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="24" role="switch" checked>
+                                                id="24" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -423,7 +427,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Created Dated</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="25" role="switch" checked>
+                                                id="25" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -434,7 +438,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Status</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="26" role="switch" checked>
+                                                id="26" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -445,7 +449,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Action</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="27" role="switch" checked>
+                                                id="27" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -459,64 +463,71 @@
             <!-- Report List -->
             <div class="table-responsive custom-table">
                 <table matSort (matSortChange)="sortData($event)" [matSortDisableClear]="true"
-                       class="table table-nowrap dataTable">
+                    class="table table-nowrap dataTable">
                     <thead class="table-light">
-                    <tr>
-                        <th mat-sort-header="name">Name</th>
-                        <th mat-sort-header="country">Country</th>
-                        <th mat-sort-header="registrationNo">Registration No</th>
-                        <th mat-sort-header="vatNo">VAT No</th>
-                        <th mat-sort-header="website">Website</th>
-                        <th mat-sort-header="incorporatonDate">Inc Date</th>
-                        <th mat-sort-header="status">Status</th>
-                        <th class="text-end">Action</th>
-                    </tr>
+                        <tr>
+                            <th mat-sort-header="name">Driver Name</th>
+                            <th mat-sort-header="vehicleLicensePlate">Vehicle License plate</th>
+                            <th mat-sort-header="VehicleModel">Vehicle Model</th>
+                            <th mat-sort-header="registrationNo">Driver Phone</th>
+                            <th mat-sort-header="registrationNo">Ride Distance</th>
+                            <th mat-sort-header="vatNo">Order Created at</th>
+                            <th mat-sort-header="website">Order Accepted</th>
+                            <th mat-sort-header="incorporatonDate">Drop off Time</th>
+                            <th mat-sort-header="status">Status</th>
+                            <th mat-sort-header="driverPhone">Driver Phone</th>
+                            <th class="text-end">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
                         @for (data of tableData; track $index) {
-                            <tr [class.isDeleted]="data.isDeleted">
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="javascript:void(0);" class="d-flex flex-column fw-medium">
-                                            {{ data.name }}
-                                        </a>
-                                    </div>
-                                </td>
-                                <td>{{ data.country }}</td>
-                                <td>{{ data.registrationNo }}</td>
-                                <td>{{ data.vatNo }}</td>
-                                <td>{{ data.website }}</td>
-                                <td>{{ data.incorporatonDate |date}}</td>
-                                <td>
+                        <tr [class.isDeleted]="data.isDeleted">
+                            <!-- <td class="text-center">
+                                <div class="d-flex align-items-center">
+                                    <a href="javascript:void(0);" class="d-flex flex-column fw-medium">
+                                        {{ data.driver_name }}
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="text-center">{{ data.vehicle_license_plate}}</td>
+                            <td class="text-center">{{ data.vehicle_model}}</td>
+                            <td class="text-center">{{ data.driver_phone }}</td>
+                            <td class="text-center">{{data.ride_distance}}</td>
+                            <td class="text-center">{{ data.order_created_timestamp | date }}</td>
+                            <td class="text-center">{{ data.order_accepted_timestamp |date }}</td>
+                            <td class="text-center">{{ data.order_drop_off_timestamp |date}}</td>
+                            <td class="text-center">
                                 <span class="badge badge-pill badge-status cursor-pointer" (click)="toggleStatus(data)"
-                                      [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">{{
-                                        data.status }}</span>
-                                </td>
+                                    [ngClass]="{'bg-success': data.order_status === 'finished', 'bg-danger': data.order_status !== 'finished'}">{{
+                                    data.order_status }}</span>
+                            </td>
+                            <td>{{ data.driver_phone }}</td> -->
 
-                                <td class="text-center">
-                                    <div class="dropdown table-action text-center ">
-                                        <a href="#" class="action-icon btn btn-xs shadow btn-icon btn-outline-light"
-                                           data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="ti ti-dots-vertical"></i>
+
+                            <td class="text-center">
+                                <div class="dropdown table-action text-center ">
+                                    <a href="#" class="action-icon btn btn-xs shadow btn-icon btn-outline-light"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="ti ti-dots-vertical"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <!-- <a class="dropdown-item" (click)="onEditCompany(data)">
+                                            <i class="ti ti-edit text-blue me-1"></i>Edit
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" (click)="onEditCompany(data)">
-                                                <i class="ti ti-edit text-blue me-1"></i>Edit
-                                            </a>
-                                            <a class="dropdown-item" (click)="deleteUser(data)">
-                                                <i class="ti ti-trash text-blue me-1"></i>Delete
-                                            </a>
-                                        </div>
+                                        <a class="dropdown-item" (click)="deleteUser(data)">
+                                            <i class="ti ti-trash text-blue me-1"></i>Delete
+                                        </a> -->
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
                         }
 
 
-                    <!-- Empty state -->
-                    <tr *ngIf="tableData.length === 0">
-                        <td class="text-center" colspan="12">No Matching Data Found</td>
-                    </tr>
+                        <!-- Empty state -->
+                        <tr *ngIf="tableData.length === 0">
+                            <td class="text-center" colspan="12">No Matching Data Found</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -536,8 +547,8 @@
     <div class="offcanvas-header border-bottom">
         <h5 class="mb-0">Upgrade Package</h5>
         <button type="button"
-                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                data-bs-dismiss="offcanvas" aria-label="Close">
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            data-bs-dismiss="offcanvas" aria-label="Close">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -549,7 +560,7 @@
                 <div class="accordion-item rounded mb-3">
                     <div class="accordion-header">
                         <a href="#" class="accordion-button accordion-custom-button rounded" data-bs-toggle="collapse"
-                           data-bs-target="#basic2">
+                            data-bs-target="#basic2">
                             <span class="avatar avatar-md rounded me-1"><i class="ti ti-details"></i></span>
                             Current Plan Details
                         </a>
@@ -606,7 +617,7 @@
                 <div class="accordion-item border-top rounded mb-3">
                     <div class="accordion-header">
                         <a href="#" class="accordion-button accordion-custom-button rounded" data-bs-toggle="collapse"
-                           data-bs-target="#address2">
+                            data-bs-target="#address2">
                             <span class="avatar avatar-md rounded me-1"><i class="ti ti-chart-circles"></i></span>
                             Change Plan
                         </a>
@@ -620,11 +631,11 @@
                                             Plan Name <span class="text-danger">*</span>
                                         </span>
 
-<!--                                        <p-select appSelectFilterId [options]="selected" [(ngModel)]="selected"-->
-<!--                                                  [ngModelOptions]="{standalone: true}" optionLabel="data"-->
-<!--                                                  inputId="planNameMain" aria-labelledby="planNameMain" placeholder="Select"-->
-<!--                                                  [filter]="true" class="form-control"-->
-<!--                                                  (onShow)="labelFilterInput('plan-filter')" />-->
+                                        <p-select appSelectFilterId [options]="selected" [(ngModel)]="selected"
+                                            [ngModelOptions]="{standalone: true}" optionLabel="data"
+                                            inputId="planNameMain" aria-labelledby="planNameMain" placeholder="Select"
+                                            [filter]="true" class="form-control"
+                                            (onShow)="labelFilterInput('plan-filter')" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -634,10 +645,10 @@
                                         </span>
 
 
-<!--                                        <p-select appSelectFilterId [options]="selected2" [(ngModel)]="selected2"-->
-<!--                                                  [ngModelOptions]="{standalone: true}" optionLabel="data" id="planType"-->
-<!--                                                  placeholder="Select" [filter]="true" class="form-control"-->
-<!--                                                  (onShow)="labelFilterInput('planType-filter')" />-->
+                                        <p-select appSelectFilterId [options]="selected2" [(ngModel)]="selected2"
+                                            [ngModelOptions]="{standalone: true}" optionLabel="data" id="planType"
+                                            placeholder="Select" [filter]="true" class="form-control"
+                                            (onShow)="labelFilterInput('planType-filter')" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -653,8 +664,8 @@
                                                 class="text-danger">*</span></label>
                                         <div class="input-icon-end position-relative ngxdate">
                                             <input type="text" class="form-control" bsDatepicker
-                                                   [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate"
-                                                   placeholder="dd/mm/yyyy" id="payment_date">
+                                                [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate"
+                                                placeholder="dd/mm/yyyy" id="payment_date">
                                             <span class="input-icon-addon">
                                                 <i class="ti ti-calendar text-dark"></i>
                                             </span>
@@ -667,8 +678,8 @@
                                                 class="text-danger">*</span></label>
                                         <div class="input-icon-end position-relative ngxdate2">
                                             <input type="text" class="form-control" bsDatepicker
-                                                   [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate2"
-                                                   placeholder="dd/mm/yyyy" id="next_payment_date">
+                                                [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate2"
+                                                placeholder="dd/mm/yyyy" id="next_payment_date">
                                             <span class="input-icon-addon">
                                                 <i class="ti ti-calendar text-dark"></i>
                                             </span>
@@ -681,8 +692,8 @@
                                                 class="text-danger">*</span></label>
                                         <div class="input-icon-end position-relative ngxdate3">
                                             <input type="text" class="form-control" bsDatepicker
-                                                   [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate3"
-                                                   placeholder="dd/mm/yyyy" id="expiring_on">
+                                                [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate3"
+                                                placeholder="dd/mm/yyyy" id="expiring_on">
                                             <span class="input-icon-addon">
                                                 <i class="ti ti-calendar text-dark"></i>
                                             </span>
@@ -709,8 +720,8 @@
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Add New Company</h5>
         <button type="button"
-                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                aria-label="Close" (click)="closeAddCompany()">
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            aria-label="Close" (click)="closeAddCompany()">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -729,10 +740,10 @@
                                 </div>
                                 <div class="d-inline-flex flex-column align-items-start">
                                     <label for="upload_file"
-                                           class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
+                                        class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                                         <i class="ti ti-file-broken me-1"></i>Upload Image
                                         <input #fileInput type="file" accept="image/png" id="upload_file"
-                                               (change)="onFilesSelected($event)" hidden />
+                                            (change)="onFilesSelected($event)" hidden />
                                     </label>
                                     <span>Only .png images <span class="text-danger">*</span></span>
                                     <ng-container *ngIf="control('files').value as files">
@@ -743,7 +754,7 @@
                                         </ul>
                                     </ng-container>
                                     <div class="mt-1"
-                                         *ngIf="control('files').touched && control('files').errors as errs">
+                                        *ngIf="control('files').touched && control('files').errors as errs">
                                         <small class="text-danger" *ngIf="errs['required']">Image is required.</small>
                                         <small class="text-danger" *ngIf="errs['invalidType']">Only .png images are
                                             allowed.</small>
@@ -762,10 +773,10 @@
                                 <span class="form-label">
                                     Country <span class="text-danger">*</span>
                                 </span>
-<!--                                <p-select appSelectFilterId [options]="countries" optionLabel="label"-->
-<!--                                          optionValue="value" placeholder="Select" [filter]="true" class="form-control"-->
-<!--                                          formControlName="country" id="country"-->
-<!--                                          (onShow)="labelFilterInput('country-filter')"></p-select>-->
+                                <p-select appSelectFilterId [options]="countries" optionLabel="label"
+                                    optionValue="value" placeholder="Select" [filter]="true" class="form-control"
+                                    formControlName="country" id="country"
+                                    (onShow)="labelFilterInput('country-filter')"></p-select>
                                 <div *ngIf="control('country').touched && control('country').invalid">
                                     <small class="text-danger" *ngIf="control('country').hasError('required')">
                                         Country is required
@@ -796,10 +807,10 @@
                                             class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" formControlName="registrationNo"
-                                           id="resgistration_number" />
+                                        id="resgistration_number" />
                                     <div *ngIf="control('registrationNo').touched && control('registrationNo').invalid">
                                         <small class="text-danger"
-                                               *ngIf="control('registrationNo').hasError('required')">
+                                            *ngIf="control('registrationNo').hasError('required')">
                                             Registration Number is required
                                         </small>
                                     </div>
@@ -841,11 +852,11 @@
                                             class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" id="jobsPlusEmp"
-                                           formControlName="jobplusemployeryno" />
+                                        formControlName="jobplusemployeryno" />
                                     <div
-                                            *ngIf="control('jobplusemployeryno').touched && control('jobplusemployeryno').invalid">
+                                        *ngIf="control('jobplusemployeryno').touched && control('jobplusemployeryno').invalid">
                                         <small class="text-danger"
-                                               *ngIf="control('jobplusemployeryno').hasError('required')">
+                                            *ngIf="control('jobplusemployeryno').hasError('required')">
                                             JobsPlus Employer Number is required
                                         </small>
                                     </div>
@@ -859,9 +870,9 @@
                                         Currency<span class="text-danger">*</span>
                                     </span>
                                     <p-select appSelectFilterId [options]="currencies" optionLabel="label"
-                                              optionValue="value" id="currency" placeholder="Select" [filter]="true"
-                                              class="form-control" formControlName="currency"
-                                              (onShow)="labelFilterInput('currency-filter')"></p-select>
+                                        optionValue="value" id="currency" placeholder="Select" [filter]="true"
+                                        class="form-control" formControlName="currency"
+                                        (onShow)="labelFilterInput('currency-filter')"></p-select>
                                     <div *ngIf="control('currency').touched && control('currency').invalid">
                                         <small class="text-danger" *ngIf="control('currency').hasError('required')">
                                             Currency is required
@@ -876,7 +887,7 @@
                                     <label for="phone_Number" class="form-label">Phone Number <span class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" formControlName="phoneNO"
-                                           id="phone_Number" />
+                                        id="phone_Number" />
                                     <div *ngIf="control('phoneNO').touched && control('phoneNO').invalid">
                                         <small class="text-danger" *ngIf="control('phoneNO').hasError('required')">
                                             Phone Number is required
@@ -913,7 +924,7 @@
                                             class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" formControlName="address"
-                                           id="company_address" />
+                                        id="company_address" />
                                     <div *ngIf="control('address').touched && control('address').invalid">
                                         <small class="text-danger" *ngIf="control('address').hasError('required')">
                                             Comapny Address is required
@@ -930,7 +941,7 @@
                                     <label for="website_address" class="form-label">Website <span class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" formControlName="website"
-                                           id="website_address" autocomplete="website" />
+                                        id="website_address" autocomplete="website" />
                                     <div *ngIf="control('website').touched && control('website').errors as e">
                                         <small class="text-danger" *ngIf="e['required']">
                                             Website is required.
@@ -957,13 +968,13 @@
                                             *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="date" class="form-control pass-input"
-                                               formControlName="incorporatonDate" id="incorporatonDate" />
+                                            formControlName="incorporatonDate" id="incorporatonDate" />
 
                                     </div>
                                     <div
-                                            *ngIf="control('incorporatonDate').touched && control('incorporatonDate').invalid">
+                                        *ngIf="control('incorporatonDate').touched && control('incorporatonDate').invalid">
                                         <small class="text-danger"
-                                               *ngIf="control('incorporatonDate').hasError('required')">
+                                            *ngIf="control('incorporatonDate').hasError('required')">
                                             Incorporation Date is required
                                         </small>
                                     </div>
@@ -976,8 +987,8 @@
                                             *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[1]?'text':'password'"
-                                               formControlName="password" id="password_1" class="form-control pass-input"
-                                               autocomplete="new-password">
+                                            formControlName="password" id="password_1" class="form-control pass-input"
+                                            autocomplete="new-password">
                                         <span class="input-group-text toggle-password" (click)="togglePassword(1)">
                                             <i class="ti " [ngClass]="password[1]?'ti-eye':'ti-eye-off'"></i>
                                         </span>
@@ -997,15 +1008,15 @@
                                     <label for="confirm_password" class="form-label">Confirm Password</label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[2]?'text':'password'"
-                                               class="form-control" id="confirm_password"
-                                               formControlName="confirmPassword" />
+                                            class="form-control" id="confirm_password"
+                                            formControlName="confirmPassword" />
                                         <span class="input-group-text toggle-password" (click)="togglePassword(2)">
                                             <i class="ti " [ngClass]="password[2]?'ti-eye':'ti-eye-off'"></i>
                                         </span>
                                     </div>
 
                                     <div
-                                            *ngIf="createNewCompanyForm.hasError('mismatch') && (createNewCompanyForm.get('password')?.touched || createNewCompanyForm.get('confirmPassword')?.touched)">
+                                        *ngIf="createNewCompanyForm.hasError('mismatch') && (createNewCompanyForm.get('password')?.touched || createNewCompanyForm.get('confirmPassword')?.touched)">
                                         <small class="text-danger">Passwords do not match.</small>
                                     </div>
                                 </div>
@@ -1022,16 +1033,16 @@
                                         <div class="d-flex flex-wrap">
                                             <div class="me-2">
                                                 <input type="radio" class="status-radio" id="active_1" value="active"
-                                                       formControlName="status" />
+                                                    formControlName="status" />
                                                 <label for="active_1">Active</label>
                                             </div>
                                             <div>
                                                 <input type="radio" class="status-radio" id="inactive_1"
-                                                       value="inactive" formControlName="status" />
+                                                    value="inactive" formControlName="status" />
                                                 <label for="inactive_1">Inactive</label>
                                             </div>
                                             <div
-                                                    *ngIf="control('status').touched && control('status').hasError('required')">
+                                                *ngIf="control('status').touched && control('status').hasError('required')">
                                                 <small class="text-danger">Status is required</small>
                                             </div>
                                         </div>
@@ -1065,8 +1076,8 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Company Detail</h4>
                     <button type="button"
-                            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                            data-bs-dismiss="offcanvas" aria-label="Close">
+                        class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                        data-bs-dismiss="offcanvas" aria-label="Close">
                         <i class="ti ti-x"></i>
                     </button>
                 </div>
@@ -1078,7 +1089,7 @@
                         <div class="accordion-item rounded mb-3">
                             <div class="accordion-header">
                                 <a href="#" class="accordion-button accordion-custom-button rounded"
-                                   data-bs-toggle="collapse" data-bs-target="#basic3">
+                                    data-bs-toggle="collapse" data-bs-target="#basic3">
                                     <span class="avatar avatar-md rounded me-1"><i
                                             class="ti ti-chart-circles"></i></span>
                                     Basic Info
@@ -1140,7 +1151,7 @@
                         <div class="accordion-item rounded">
                             <div class="accordion-header">
                                 <a href="#" class="accordion-button accordion-custom-button rounded"
-                                   data-bs-toggle="collapse" data-bs-target="#basic4">
+                                    data-bs-toggle="collapse" data-bs-target="#basic4">
                                     <span class="avatar avatar-md rounded me-1"><i
                                             class="ti ti-chart-circles"></i></span>
                                     Plan Details
@@ -1199,12 +1210,12 @@
 
 
 <div #deleteUserCanvas class="offcanvas off-canvas-custom offcanvas-small" tabindex="-1" aria-hidden="true"
-     id="deleteUserCanvas">
+    id="deleteUserCanvas">
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Delete Confirmation</h5>
         <button type="button"
-                class="btn-close custom-btn-close border p-1 d-flex align-items-center justify-content-center rounded-circle"
-                aria-label="Close" (click)="closeDeleteModal()">
+            class="btn-close custom-btn-close border p-1 d-flex align-items-center justify-content-center rounded-circle"
+            aria-label="Close" (click)="closeDeleteModal()">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -1229,8 +1240,8 @@
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Edit Company</h5>
         <button type="button"
-                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                (click)="closeEditCompany()" aria-label="Close">
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            (click)="closeEditCompany()" aria-label="Close">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -1242,20 +1253,20 @@
                     <div class="d-flex mb-3">
                         <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
                             <img *ngIf="editPreviewUrl || currentEditingImageUrl"
-                                 [src]="editPreviewUrl || currentEditingImageUrl" class="img-fluid rounded"
-                                 alt="Company image" style="max-width: 100%; max-height: 120px;" />
+                                [src]="editPreviewUrl || currentEditingImageUrl" class="img-fluid rounded"
+                                alt="Company image" style="max-width: 100%; max-height: 120px;" />
                             <div *ngIf="!editPreviewUrl && !currentEditingImageUrl"
-                                 class="position-relative d-flex align-items-center">
+                                class="position-relative d-flex align-items-center">
                                 <i class="ti ti-photo text-dark fs-16"></i>
                             </div>
                         </div>
 
                         <div class="d-inline-flex flex-column align-items-start">
                             <label for="edit_upload_file"
-                                   class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
+                                class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                                 <i class="ti ti-file-broken me-1"></i>Edit Image
                                 <input type="file" id="edit_upload_file" accept="image/png"
-                                       (change)="onEditFilesSelected($event)" hidden />
+                                    (change)="onEditFilesSelected($event)" hidden />
                             </label>
 
                             <span>Only .png images <span class="text-danger">*</span></span>
@@ -1269,7 +1280,7 @@
                             </ng-container>
 
                             <div class="mt-1"
-                                 *ngIf="editForm.get('image')?.touched && editForm.get('image')?.errors as errs">
+                                *ngIf="editForm.get('image')?.touched && editForm.get('image')?.errors as errs">
                                 <small class="text-danger" *ngIf="errs['invalidType']">Only .png images are
                                     allowed.</small>
                                 <small class="text-danger" *ngIf="errs['fileTooLarge']">Max size is 5 MB.</small>
@@ -1326,12 +1337,12 @@
                         Mobile Number <span class="text-danger">*</span>
                     </span>
                     <ngx-intl-tel-input [cssClass]="'form-control'" [preferredCountries]="preferredCountries"
-                                        [onlyCountries]="onlyCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
-                                        [searchCountryFlag]="true"
-                                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
-                                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan" [maxLength]="15"
-                                        [phoneValidation]="true" [separateDialCode]="true" formControlName="phoneNO" is="phone"
-                                        id="phone">
+                        [onlyCountries]="onlyCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                        [searchCountryFlag]="true"
+                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan" [maxLength]="15"
+                        [phoneValidation]="true" [separateDialCode]="true" formControlName="phoneNO" is="phone"
+                        id="phone">
                     </ngx-intl-tel-input>
 
 
@@ -1354,12 +1365,12 @@
                     <div class="d-flex gap-3">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" id="active_01" formControlName="status"
-                                   value="active" />
+                                value="active" />
                             <label for="active_01" class="form-check-label">Active</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" id="statusInactive" formControlName="status"
-                                   value="inactive" />
+                                value="inactive" />
                             <label class="form-check-label" for="statusInactive">Inactive</label>
                         </div>
                     </div>

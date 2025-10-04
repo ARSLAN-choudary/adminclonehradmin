@@ -1,159 +1,177 @@
-import {Injectable} from "@angular/core";
-import {Observable, throwError} from "rxjs";
-import {CONFIG} from "../../config";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable, throwError } from "rxjs";
+import { CONFIG } from "../../config";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 
 @Injectable({
-    providedIn: "root",
+  providedIn: "root",
 })
 export class BackendService {
-    constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {}
+
+  getBoltTokenFromServer(clientId: string, clientSecret: string) {
+    const body = new URLSearchParams();
+    body.set("client_id", clientId);
+    body.set("client_secret", clientSecret);
+    body.set("grant_type", "client_credentials");
+    body.set("scope", "fleet-integration:api");
+
+    return this.http.post<{
+      access_token: string;
+      expires_in: number;
+      token_type: "Bearer";
+      scope: string;
+    }>(CONFIG.boltTokenFromServer, body.toString(), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-Skip-Auth": "true",
+      },
+    });
+  }
+
+  getBoltCompanies(params?: Record<string, string | number | boolean>) {
+    const token = localStorage.getItem("bolt_access_token");
+    if (!token) {
+      return throwError(
+        () => new Error("No bolt_access_token in localStorage")
+      );
     }
 
-    getBoltTokenFromServer(clientId: string, clientSecret: string) {
-        const body = new URLSearchParams();
-        body.set("client_id", clientId);
-        body.set("client_secret", clientSecret);
-        body.set("grant_type", "client_credentials");
-        body.set("scope", "fleet-integration:api");
-
-        return this.http.post<{
-            access_token: string;
-            expires_in: number;
-            token_type: "Bearer";
-            scope: string;
-        }>(CONFIG.boltTokenFromServer, body.toString(), {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-Skip-Auth": "true",
-            },
-        });
+    let httpParams = new HttpParams();
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        httpParams = httpParams.set(k, String(v));
+      }
     }
 
-    getBoltCompanies(params?: Record<string, string | number | boolean>) {
-        const token = localStorage.getItem("bolt_access_token");
-        if (!token) {
-            return throwError(
-                () => new Error("No bolt_access_token in localStorage")
-            );
-        }
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
 
-        let httpParams = new HttpParams();
-        if (params) {
-            for (const [k, v] of Object.entries(params)) {
-                httpParams = httpParams.set(k, String(v));
-            }
-        }
+    return this.http.get<any>(CONFIG.getBoltCompanies, {
+      headers,
+      params: httpParams,
+    });
+  }
 
-        const headers = new HttpHeaders({
-            Authorization: `Bearer ${token}`,
-        });
-
-        return this.http.get<any>(CONFIG.getBoltCompanies, {
-            headers,
-            params: httpParams,
-        });
+  getBoltFleetOrder(params: any): Observable<any> {
+    const token = localStorage.getItem("bolt_access_token");
+    if (!token) {
+      return throwError(
+        () => new Error("No bolt_access_token in localStorage")
+      );
     }
 
-    getBoltFleetOrder(params: any): Observable<any> {
-        const token = localStorage.getItem("bolt_access_token");
-        if (!token) {
-            return throwError(
-                () => new Error("No bolt_access_token in localStorage")
-            );
-        }
-
-        let httpParams = new HttpParams();
-        if (params) {
-            for (const [k, v] of Object.entries(params)) {
-                httpParams = httpParams.set(k, String(v));
-            }
-        }
-
-        const headers = new HttpHeaders({
-            Authorization: `Bearer ${token}`,
-        });
-
-        return this.http.post<any>(CONFIG.getBoltFleetOrder, params, {headers});
-    }
-    getBoltDrivers(parms: any): Observable<any> {
-        return this.http.post(CONFIG.getBoltDrivers, parms);
-    }
-    addCompany(parms: any): Observable<any> {
-        return this.http.post(CONFIG.addCompany, parms);
+    let httpParams = new HttpParams();
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        httpParams = httpParams.set(k, String(v));
+      }
     }
 
-    getCompany(parms: any): Observable<any> {
-        return this.http.post(CONFIG.getCompany, parms);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.post<any>(CONFIG.getBoltFleetOrder, params, { headers });
+  }
+  getBoltDrivers(params: any): Observable<any> {
+    const token = localStorage.getItem("bolt_access_token");
+    if (!token) {
+      return throwError(
+        () => new Error("No bolt_access_token in localStorage")
+      );
     }
 
-    getManageUsers(parms: any): Observable<any> {
-        return this.http.post(CONFIG.getManageUsers, parms);
+    let httpParams = new HttpParams();
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        httpParams = httpParams.set(k, String(v));
+      }
     }
 
-    addUser(parms: any): Observable<any> {
-        return this.http.post(CONFIG.addUser, parms);
-    }
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
 
-    updateUser(payload: any): Observable<any> {
-        return this.http.put(CONFIG.updateUser, payload);
-    }
+    return this.http.post<any>(CONFIG.getBoltDrivers, params, { headers });
+  }
 
-    updateApplication(payload: any): Observable<any> {
-        return this.http.put(CONFIG.updateApplication, payload);
-    }
+  addCompany(parms: any): Observable<any> {
+    return this.http.post(CONFIG.addCompany, parms);
+  }
 
-    updateCompany(payload: any): Observable<any> {
-        return this.http.put(CONFIG.updateCompany, payload);
-    }
+  getCompany(parms: any): Observable<any> {
+    return this.http.post(CONFIG.getCompany, parms);
+  }
 
-    deleteUser(id: any): Observable<any> {
-        const url = `${CONFIG.deleteUser}/${id}`;
-        return this.http.delete(url);
-    }
+  getManageUsers(parms: any): Observable<any> {
+    return this.http.post(CONFIG.getManageUsers, parms);
+  }
 
-    deleteCompany(id: any): Observable<any> {
-        const url = `${CONFIG.deleteCompany}/${id}`;
-        return this.http.delete(url);
-    }
+  addUser(parms: any): Observable<any> {
+    return this.http.post(CONFIG.addUser, parms);
+  }
 
-    deleteApplication(id: any): Observable<any> {
-        const url = `${CONFIG.deleteApplication}/${id}`;
-        return this.http.delete(url);
-    }
+  updateUser(payload: any): Observable<any> {
+    return this.http.put(CONFIG.updateUser, payload);
+  }
 
-    addApplication(payload: any): Observable<any> {
-        return this.http.post(CONFIG.addApplication, payload);
-    }
+  updateApplication(payload: any): Observable<any> {
+    return this.http.put(CONFIG.updateApplication, payload);
+  }
 
-    applicationResend(payload: any): Observable<any> {
-        return this.http.post(CONFIG.applicationResend, payload);
-    }
+  updateCompany(payload: any): Observable<any> {
+    return this.http.put(CONFIG.updateCompany, payload);
+  }
 
-    getApplications(payload: any): Observable<any> {
-        return this.http.post(CONFIG.getApplications, payload);
-    }
+  deleteUser(id: any): Observable<any> {
+    const url = `${CONFIG.deleteUser}/${id}`;
+    return this.http.delete(url);
+  }
 
-    addUserDetails(payload: any): Observable<any> {
-        return this.http.put(CONFIG.addUserDetail, payload);
-    }
+  deleteCompany(id: any): Observable<any> {
+    const url = `${CONFIG.deleteCompany}/${id}`;
+    return this.http.delete(url);
+  }
 
-    uploadPdfFiles(payload: any): Observable<any> {
-        return this.http.post(CONFIG.uploadPdfFiles, payload);
-    }
+  deleteApplication(id: any): Observable<any> {
+    const url = `${CONFIG.deleteApplication}/${id}`;
+    return this.http.delete(url);
+  }
 
-    getApplicationDetails(id: any): Observable<any> {
-        const url = `${CONFIG.getApplicationDetails}/${id}`;
-        return this.http.get(url);
-    }
+  addApplication(payload: any): Observable<any> {
+    return this.http.post(CONFIG.addApplication, payload);
+  }
 
-    sentOtp(payload: any): Observable<any> {
-        return this.http.post(CONFIG.forgetPassword, payload);
-    }
+  applicationResend(payload: any): Observable<any> {
+    return this.http.post(CONFIG.applicationResend, payload);
+  }
 
-    verifyOtp(payload: any): Observable<any> {
-        return this.http.post(CONFIG.verifyOtp, payload);
-    }
+  getApplications(payload: any): Observable<any> {
+    return this.http.post(CONFIG.getApplications, payload);
+  }
+
+  addUserDetails(payload: any): Observable<any> {
+    return this.http.put(CONFIG.addUserDetail, payload);
+  }
+
+  uploadPdfFiles(payload: any): Observable<any> {
+    return this.http.post(CONFIG.uploadPdfFiles, payload);
+  }
+
+  getApplicationDetails(id: any): Observable<any> {
+    const url = `${CONFIG.getApplicationDetails}/${id}`;
+    return this.http.get(url);
+  }
+
+  sentOtp(payload: any): Observable<any> {
+    return this.http.post(CONFIG.forgetPassword, payload);
+  }
+
+  verifyOtp(payload: any): Observable<any> {
+    return this.http.post(CONFIG.verifyOtp, payload);
+  }
 
     getBoltVehicles(parms: any) {
         return this.http.post(CONFIG.GetBoltVehicle, parms);

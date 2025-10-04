@@ -9,7 +9,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a [routerLink]="routes.index">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Companies</li>
+                    <li class="breadcrumb-item active" aria-current="page">Orders</li>
                 </ol>
             </nav>
         </div>
@@ -51,8 +51,8 @@
                     (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search"
                     id="search_data">
             </div>
-            <a href="javascript:void(0);" class="btn btn-primary" (click)="openAddCompany()"><i
-                    class="ti ti-square-rounded-plus-filled me-1"></i>Add New Company</a>
+            <!-- <a href="javascript:void(0);" class="btn btn-primary" (click)="openAddCompany()"><i
+                    class="ti ti-square-rounded-plus-filled me-1"></i>Add New Company</a> -->
         </div>
         <div class="card-body">
 
@@ -475,6 +475,7 @@
                             <th mat-sort-header="website">Order Accepted</th>
                             <th mat-sort-header="incorporatonDate">Drop off Time</th>
                             <th mat-sort-header="status">Status</th>
+                            <th mat-sort-header="driverPhone">Driver Phone</th>
                             <th class="text-end">Action</th>
                         </tr>
                     </thead>
@@ -510,12 +511,12 @@
                                         <i class="ti ti-dots-vertical"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" (click)="onEditCompany(data)">
+                                        <!-- <a class="dropdown-item" (click)="onEditCompany(data)">
                                             <i class="ti ti-edit text-blue me-1"></i>Edit
                                         </a>
                                         <a class="dropdown-item" (click)="deleteUser(data)">
                                             <i class="ti ti-trash text-blue me-1"></i>Delete
-                                        </a>
+                                        </a> -->
                                     </div>
                                 </div>
                             </td>
