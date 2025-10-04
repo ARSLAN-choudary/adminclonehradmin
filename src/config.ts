@@ -1,4 +1,4 @@
-const BASE_URL_API = "https://my-planent.onrender.com";
+const BASE_URL_API = "https://my-planent-ld47.onrender.com";
 // const BASE_URL_API = '';
 
 export const CONFIG = {
