@@ -89,7 +89,6 @@ interface PhoneInputValue {
     MatIconModule,
     CustomPaginationComponent,
     MatSort,
-    DateRangePickerComponent,
     CollapseHeaderComponent,
     ReactiveFormsModule,
     MatSortModule,

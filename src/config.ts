@@ -26,4 +26,5 @@ export const CONFIG = {
   boltTokenFromServer: "https://oidc.bolt.eu/token",
   getBoltCompanies: BASE_URL_BOLT + "/getCompanies",
   getBoltFleetOrder: BASE_URL_BOLT + "/getFleetOrders",
+  getBoltDrivers: BASE_URL_BOLT + "/getDrivers",
 };
