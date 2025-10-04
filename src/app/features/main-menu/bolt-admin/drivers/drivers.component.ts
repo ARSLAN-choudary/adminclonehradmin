@@ -226,35 +226,45 @@ export class DriversComponent implements OnInit, AfterViewInit {
       image: [null, [this.optionalPngValidator.bind(this)]],
     });
   }
+  // Use local day start/end → Unix seconds (UTC)
   private getUnixRangeSeconds(
     startStr?: string,
-    endStr?: string
+    endStr?: string,
+    opts: { defaultDays?: number; maxDays?: number } = {}
   ): { start_ts: number; end_ts: number } {
+    const defaultDays = opts.defaultDays ?? 20; // ← last 20 days by default
+    const maxDays = opts.maxDays ?? 31; // ← Bolt limit
+
     const now = new Date();
 
-    // end: end of selected day, or now if not provided
-    const end = endStr && endStr.trim() ? new Date(endStr) : now;
-    if (endStr && endStr.trim()) end.setHours(23, 59, 59, 999);
+    // End = end of selected day, or NOW if not provided
+    const end = endStr?.trim() ? new Date(endStr) : new Date(now);
+    if (endStr?.trim()) end.setHours(23, 59, 59, 999);
 
-    // start: start of selected day, or (end - 20 days) if not provided
-    let start: Date;
-    if (startStr && startStr.trim()) {
-      start = new Date(startStr);
-      start.setHours(0, 0, 0, 0);
-    } else {
-      start = new Date(end.getTime() - 20 * 24 * 60 * 60 * 1000); // last 20 days
+    // Start = start of selected day, or (end - defaultDays)
+    let start = startStr?.trim()
+      ? new Date(startStr)
+      : new Date(end.getTime() - defaultDays * 24 * 60 * 60 * 1000);
+    start.setHours(0, 0, 0, 0);
+
+    // Ensure start <= end
+    if (start.getTime() > end.getTime()) {
+      // clamp start to defaultDays before end
+      start = new Date(end.getTime() - defaultDays * 24 * 60 * 60 * 1000);
       start.setHours(0, 0, 0, 0);
     }
 
-    // safety: ensure start <= end
-    if (start.getTime() > end.getTime()) {
-      // swap or clamp; here we clamp start to 20 days before end
-      start = new Date(end.getTime() - 20 * 24 * 60 * 60 * 1000);
-      start.setHours(0, 0, 0, 0);
+    // Clamp to maxDays inclusive (≤ 31 days)
+    const maxSpanMs = maxDays * 24 * 60 * 60 * 1000 - 1;
+    const spanMs = end.getTime() - start.getTime();
+    if (spanMs > maxSpanMs) {
+      // pull start forward to keep end fixed
+      start = new Date(end.getTime() - maxSpanMs);
+      start.setHours(0, 0, 0, 0); // align to start of day after shift
     }
 
     return {
-      start_ts: Math.floor(start.getTime() / 1000), // seconds
+      start_ts: Math.floor(start.getTime() / 1000),
       end_ts: Math.floor(end.getTime() / 1000),
     };
   }
@@ -449,7 +459,11 @@ export class DriversComponent implements OnInit, AfterViewInit {
     const companyIds = this.readCompanyIds();
     const { start_ts, end_ts } = this.getUnixRangeSeconds(
       this.startDate,
-      this.endDate
+      this.endDate,
+      {
+        defaultDays: 20,
+        maxDays: 31,
+      }
     );
 
     const payload: any = {
