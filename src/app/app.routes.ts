@@ -22,6 +22,11 @@ export const routes: Routes = [
           import("./auth/login/login.component").then((m) => m.LoginComponent),
         canActivate: [loginRedirectGuard],
       },
+        {
+    path: 'app-register',
+    loadComponent: () =>
+      import('./auth/app-register/app-register.component').then((m) => m.AppRegisterComponent),
+  },
       {
         path: "forgot-password",
         loadComponent: () =>
@@ -1933,10 +1938,6 @@ export const routes: Routes = [
       ),
   },
 
-   {
-    path: 'app-register',
-    loadComponent: () =>
-      import('./auth/app-register/app-register.component').then((m) => m.AppRegisterComponent),
-  },
+ 
   { path: "**", component: LoginComponent },
 ] as const;

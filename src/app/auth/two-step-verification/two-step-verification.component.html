@@ -1,15 +1,12 @@
 <div class="account-page">
-  <!-- Main Wrapper -->
   <div class="main-wrapper">
     <div class="overflow-hidden p-3 acc-vh">
-      <!-- start row -->
       <div class="row vh-100 w-100 g-0">
         <div class="col-lg-6 vh-100 overflow-y-auto overflow-x-hidden">
-          <!-- start row -->
           <div class="row">
             <div class="col-md-10 mx-auto">
               <form
-                (ngSubmit)="navigation()"
+                (ngSubmit)="verifyOtp()"
                 class="vh-100 d-flex justify-content-between flex-column p-4 pb-0"
               >
                 <!-- Logo -->
@@ -28,10 +25,11 @@
                   data-autosubmit="false"
                 >
                   <div class="mb-4">
-                    <h4 class="mb-2 fs-20">Login With Your Email Address</h4>
+                    <h4 class="mb-2 fs-20">Verify Your Email</h4>
                     <p>
-                      We sent a verification code to your email.
-                      Enter the code below and set your password to continue.
+                      We sent a verification code to your email
+                      <strong>{{ email }}</strong>. Enter the 4-digit code below
+                      to verify your account.
                     </p>
                   </div>
 
@@ -80,24 +78,14 @@
                     />
                   </div>
 
-                  <!-- Password Field -->
-                  <!-- <div class="mb-4 text-center">
-                    <input
-                      type="password"
-                      class="form-control text-center py-2 fs-16 fw-normal rounded "
-                      placeholder="Enter Your Password"
-                      [(ngModel)]="password"
-                      name="password"
-                      required
-                    />
-                  </div> -->
-
+                  <!-- Timer -->
                   <div class="text-center mb-3">
                     <p class="badge bg-light text-dark">
-                      Otp will expire in 09 :10
+                      OTP will expire in 09 :10
                     </p>
                   </div>
 
+                  <!-- Submit -->
                   <div class="mb-3">
                     <button
                       type="submit"
@@ -119,16 +107,11 @@
                 </div>
               </form>
             </div>
-            <!-- end col -->
           </div>
-          <!-- end row -->
         </div>
 
         <div class="col-lg-6 account-bg-06"></div>
-        <!-- end col -->
       </div>
-      <!-- end row -->
     </div>
   </div>
-  <!-- End Wrapper -->
 </div>
