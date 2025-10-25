@@ -4,10 +4,14 @@
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-zoom.css");
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-video.css");
 
-html,
-body {
+html, body {
   touch-action: manipulation;
 }
+
+input, select, textarea {
+  font-size: 18px !important; 
+}
+
 
 // mat sorter
 .mat-sort-header-container {
