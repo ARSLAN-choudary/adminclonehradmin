@@ -4,6 +4,7 @@ import { Observable, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { CONFIG } from "../../config";
 import { JwtHelperService } from "@auth0/angular-jwt";
+
 @Injectable({
   providedIn: "root",
 })
@@ -13,43 +14,47 @@ export class AuthService {
     private router: Router,
     private jwtHelper: JwtHelperService
   ) {}
+
+  // --- LOGIN ---
   login(email: string, password: string): Observable<any> {
     return this.http.post(CONFIG.login, { email, password }).pipe(
       tap((response: any) => {
-        // const token = response.data.accessToken;
-        // localStorage.setItem("token", token);
         localStorage.setItem("role", response.data.details.role);
-        // localStorage.setItem("id", response.data.userDetail._id);
+        // localStorage.setItem("token", response.data.accessToken); // if available
       })
     );
   }
-private apiUrl = 'https://my-planent-admin.fly.dev/api/auth/uservarify';
+
+  // --- LOGOUT ---
   logout(): void {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
   }
 
+  // --- TOKEN HELPERS ---
   getToken(): string | null {
     return localStorage.getItem("token");
   }
 
-  isLoggedIn(): any {
+  isLoggedIn(): boolean {
     const token = this.getToken();
-    return !this.jwtHelper.isTokenExpired(token);
+    return token ? !this.jwtHelper.isTokenExpired(token) : false;
   }
-  clearToken() {
+
+  clearToken(): void {
     localStorage.removeItem("token");
   }
 
-   verifyUser(payload: any): Observable<any> {
-    return this.http.post(this.apiUrl, payload);
+  // --- ✅ OTP Verification (Email + OTP Only, No Password) ---
+  verifyOtp(email: string, otp: string): Observable<any> {
+    const body = { email, otp }; // Only send email + otp
+    return this.http.post(CONFIG.verifyregisterapi, body);
+    // verifyregisterapi = BASE_URL_API + "/api/auth/register"
   }
 
-
-   verifyUserRegister(payload: any): Observable<any> {
-  return this.http.post(CONFIG.verifyregisterapi, payload);
-}
-   registerapi(payload: any): Observable<any> {
-  return this.http.post(CONFIG.registerapi, payload);
-}
-   
+  // --- Register API ---
+  registerapi(payload: any): Observable<any> {
+    return this.http.post(CONFIG.registerapi, payload);
+    // registerapi = BASE_URL_API + "/api/auth/uservarify"
+  }
 }

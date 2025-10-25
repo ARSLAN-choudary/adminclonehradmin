@@ -15,19 +15,17 @@ import { routes } from '../../shared/routes/routes';
 export class TwoStepVerificationComponent {
   public routes = routes;
   public currentYear = new Date().getFullYear();
-  public email: string = ''; // from query param
+  public email: string = '';
   public loading = false;
   public errorMessage = '';
 
-  // OTP and Password fields
+  // OTP input fields
   public oneTimePassword = {
     data1: '',
     data2: '',
     data3: '',
     data4: '',
   };
-
-  public password: string = '';
 
   constructor(
     private router: Router,
@@ -36,36 +34,27 @@ export class TwoStepVerificationComponent {
   ) {}
 
   ngOnInit() {
-    // ✅ Get email from query params (sent from register step)
     this.route.queryParams.subscribe((params) => {
       this.email = params['email'] || '';
       console.log('📩 Received email from previous step:', this.email);
     });
   }
 
-  // --- Input auto-navigation ---
+  // --- Move focus forward ---
   public ValueChanged(data: string, box: string): void {
-    if (box === 'digit-1' && data.length > 0) {
-      document.getElementById('digit-2')?.focus();
-    } else if (box === 'digit-2' && data.length > 0) {
-      document.getElementById('digit-3')?.focus();
-    } else if (box === 'digit-3' && data.length > 0) {
-      document.getElementById('digit-4')?.focus();
-    }
+    if (box === 'digit-1' && data) document.getElementById('digit-2')?.focus();
+    else if (box === 'digit-2' && data) document.getElementById('digit-3')?.focus();
+    else if (box === 'digit-3' && data) document.getElementById('digit-4')?.focus();
   }
 
+  // --- Move focus backward ---
   public tiggerBackspace(data: string, box: string) {
-    const val = data ? data.toString() : null;
-    if (box === 'digit-4' && !val) {
-      document.getElementById('digit-3')?.focus();
-    } else if (box === 'digit-3' && !val) {
-      document.getElementById('digit-2')?.focus();
-    } else if (box === 'digit-2' && !val) {
-      document.getElementById('digit-1')?.focus();
-    }
+    if (box === 'digit-4' && !data) document.getElementById('digit-3')?.focus();
+    else if (box === 'digit-3' && !data) document.getElementById('digit-2')?.focus();
+    else if (box === 'digit-2' && !data) document.getElementById('digit-1')?.focus();
   }
 
-  // --- Combine OTP digits ---
+  // --- Get full OTP string ---
   private getFullOtp(): string {
     return (
       this.oneTimePassword.data1 +
@@ -75,39 +64,32 @@ export class TwoStepVerificationComponent {
     );
   }
 
-  // --- Submit OTP + Password ---
-  navigation() {
+  // --- Verify OTP (email + otp only) ---
+  verifyOtp() {
     const otp = this.getFullOtp();
 
-    if (otp.length < 4 || this.password.length < 6) {
-      this.errorMessage = 'Enter valid 4-digit OTP and minimum 6-char password';
+    if (otp.length !== 4) {
+      this.errorMessage = 'Please enter a valid 4-digit OTP';
       return;
     }
 
     this.loading = true;
     this.errorMessage = '';
 
-    const payload = {
-      email: this.email,
-      otp: otp,
-      password: this.password,
-    };
+    console.log('📤 Sending OTP verification request:', { email: this.email, otp });
 
-    console.log('📤 Sending OTP + Password payload:', payload);
-
-    this.authService.verifyUser(payload).subscribe({
+    this.authService.verifyOtp(this.email, otp).subscribe({
       next: (res: any) => {
-        console.log('✅ OTP Verified & Password Set:', res);
+        console.log('✅ OTP Verified Successfully:', res);
         this.loading = false;
-
-        // Navigate to dashboard or reset-password success page
-        this.router.navigate(['/dashboard']);
+        // ✅ Redirect to login or dashboard after successful verification
+        this.router.navigate(['/login']);
       },
       error: (err: any) => {
         this.loading = false;
-        console.error('❌ Verification failed:', err);
+        console.error('❌ OTP verification failed:', err);
         this.errorMessage =
-          err?.error?.message || 'OTP verification or password setup failed';
+          err?.error?.message || 'OTP verification failed, please try again.';
       },
     });
   }
