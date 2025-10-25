@@ -1,4 +1,5 @@
-const BASE_URL_API = "https://my-planent-ld47.onrender.com";
+// const BASE_URL_API = "https://my-planent-ld47.onrender.com";
+const BASE_URL_API = "https://my-planent-admin.fly.dev";
 const BASE_URL_BOLT =
   "https://node.bolt.eu/fleet-integration-gateway/fleetIntegration/v1";
 // const BASE_URL_API = '';
@@ -29,4 +30,6 @@ export const CONFIG = {
   getBoltDrivers: BASE_URL_BOLT + "/getDrivers",
   GetBoltVehicle: BASE_URL_BOLT + "/getVehicles",
   getBoltFleetStateLogs: BASE_URL_BOLT + "/getFleetStateLogs",
+  verifyregisterapi:BASE_URL_API+"/api/auth/register",
+  registerapi:BASE_URL_API+"/api/auth/uservarify"
 };

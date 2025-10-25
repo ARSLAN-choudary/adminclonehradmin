@@ -23,7 +23,7 @@ export class AuthService {
       })
     );
   }
-
+private apiUrl = 'https://my-planent-admin.fly.dev/api/auth/uservarify';
   logout(): void {
     localStorage.removeItem("token");
   }
@@ -39,4 +39,17 @@ export class AuthService {
   clearToken() {
     localStorage.removeItem("token");
   }
+
+   verifyUser(payload: any): Observable<any> {
+    return this.http.post(this.apiUrl, payload);
+  }
+
+
+   verifyUserRegister(payload: any): Observable<any> {
+  return this.http.post(CONFIG.verifyregisterapi, payload);
+}
+   registerapi(payload: any): Observable<any> {
+  return this.http.post(CONFIG.registerapi, payload);
+}
+   
 }

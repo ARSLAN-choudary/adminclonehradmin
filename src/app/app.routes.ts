@@ -10,6 +10,7 @@ export const routes: Routes = [
     redirectTo: "index",
     pathMatch: "full",
   },
+  
   {
     path: "",
     loadComponent: () =>
@@ -101,6 +102,7 @@ export const routes: Routes = [
       },
     ],
   },
+ 
   {
     path: "",
     loadComponent: () =>
@@ -1929,6 +1931,12 @@ export const routes: Routes = [
       import("./features/pages/coming-soon/coming-soon.component").then(
         (m) => m.ComingSoonComponent
       ),
+  },
+
+   {
+    path: 'app-register',
+    loadComponent: () =>
+      import('./auth/app-register/app-register.component').then((m) => m.AppRegisterComponent),
   },
   { path: "**", component: LoginComponent },
 ] as const;
