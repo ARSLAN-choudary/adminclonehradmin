@@ -34,54 +34,50 @@
                   </div>
 
                   <!-- OTP Boxes -->
-                  <div
-                    class="d-flex align-items-center justify-content-center gap-3 mb-4"
-                  >
-                    <input
-                      type="text"
-                      class="text-center fs-26 fw-bold rounded"
-                      id="digit-1"
-                      name="digit-1"
-                      maxlength="1"
-                      [(ngModel)]="oneTimePassword.data1"
-                      (input)="ValueChanged(oneTimePassword.data1, 'digit-1')"
-                      (keydown.backspace)="tiggerBackspace(oneTimePassword.data1, 'digit-1')"
-                    />
-                    <input
-                      type="text"
-                      class="text-center fs-26 fw-bold rounded"
-                      id="digit-2"
-                      name="digit-2"
-                      maxlength="1"
-                      [(ngModel)]="oneTimePassword.data2"
-                      (input)="ValueChanged(oneTimePassword.data2, 'digit-2')"
-                      (keydown.backspace)="tiggerBackspace(oneTimePassword.data2, 'digit-2')"
-                    />
-                    <input
-                      type="text"
-                      class="text-center fs-26 fw-bold rounded"
-                      id="digit-3"
-                      name="digit-3"
-                      maxlength="1"
-                      [(ngModel)]="oneTimePassword.data3"
-                      (input)="ValueChanged(oneTimePassword.data3, 'digit-3')"
-                      (keydown.backspace)="tiggerBackspace(oneTimePassword.data3, 'digit-3')"
-                    />
-                    <input
-                      type="text"
-                      class="text-center fs-26 fw-bold rounded"
-                      id="digit-4"
-                      name="digit-4"
-                      maxlength="1"
-                      [(ngModel)]="oneTimePassword.data4"
-                      (keydown.backspace)="tiggerBackspace(oneTimePassword.data4, 'digit-4')"
-                    />
-                  </div>
+       <div class="d-flex align-items-center justify-content-center gap-3 mb-4">
+  <input
+    type="text"
+    #otpInput
+    class="text-center fs-26 fw-bold rounded"
+    maxlength="1"
+    [(ngModel)]="oneTimePassword.data1"
+    (input)="ValueChanged(0, $event)"
+    (keydown)="tiggerBackspace(0, $event)"
+  />
+  <input
+    type="text"
+    #otpInput
+    class="text-center fs-26 fw-bold rounded"
+    maxlength="1"
+    [(ngModel)]="oneTimePassword.data2"
+    (input)="ValueChanged(1, $event)"
+    (keydown)="tiggerBackspace(1, $event)"
+  />
+  <input
+    type="text"
+    #otpInput
+    class="text-center fs-26 fw-bold rounded"
+    maxlength="1"
+    [(ngModel)]="oneTimePassword.data3"
+    (input)="ValueChanged(2, $event)"
+    (keydown)="tiggerBackspace(2, $event)"
+  />
+  <input
+    type="text"
+    #otpInput
+    class="text-center fs-26 fw-bold rounded"
+    maxlength="1"
+    [(ngModel)]="oneTimePassword.data4"
+    (keydown)="tiggerBackspace(3, $event)"
+  />
+</div>
+
+
 
                   <!-- Timer -->
                   <div class="text-center mb-3">
                     <p class="badge bg-light text-dark">
-                      OTP will expire in 09 :10
+                      OTP will expire in {{ formattedTime() }}
                     </p>
                   </div>
 
