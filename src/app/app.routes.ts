@@ -5,79 +5,82 @@ import { authGuard, loginRedirectGuard } from "./Services/auth.guard";
 import { BoltAdminComponent } from "./features/main-menu/bolt-admin/bolt-admin/bolt-admin.component";
 
 export const routes: Routes = [
-  {
-    path: "",
-    redirectTo: "index",
-    pathMatch: "full",
-  },
-  
-  {
-    path: "",
-    loadComponent: () =>
-      import("./auth/auth.component").then((m) => m.AuthComponent),
-    children: [
-      {
-        path: "login",
-        loadComponent: () =>
-          import("./auth/login/login.component").then((m) => m.LoginComponent),
-        canActivate: [loginRedirectGuard],
-      },
-        {
-    path: 'app-register',
-    loadComponent: () =>
-      import('./auth/app-register/app-register.component').then((m) => m.AppRegisterComponent),
-  },
-      {
-        path: "forgot-password",
-        loadComponent: () =>
-          import("./auth/forgot-password/forgot-password.component").then(
-            (m) => m.ForgotPasswordComponent
-          ),
-      },
-      {
-        path: "email-verification",
-        loadComponent: () =>
-          import("./auth/email-verification/email-verification.component").then(
-            (m) => m.EmailVerificationComponent
-          ),
-      },
-      {
-        path: "two-step-verification",
-        loadComponent: () =>
-          import(
-            "./auth/two-step-verification/two-step-verification.component"
-          ).then((m) => m.TwoStepVerificationComponent),
-      },
-      {
-        path: "reset-password",
-        loadComponent: () =>
-          import("./auth/reset-password/reset-password.component").then(
-            (m) => m.ResetPasswordComponent
-          ),
-      },
-      {
-        path: "success",
-        loadComponent: () =>
-          import("./auth/success/success.component").then(
-            (m) => m.SuccessComponent
-          ),
-      },
-      {
-        path: "register",
-        loadComponent: () =>
-          import("./auth/register/register.component").then(
-            (m) => m.RegisterComponent
-          ),
-      },
-      {
-        path: "lock-screen",
-        loadComponent: () =>
-          import("./auth/lock-screen/lock-screen.component").then(
-            (m) => m.LockScreenComponent
-          ),
-      },
-    ],
-  },
+{
+  path: "",
+  loadComponent: () =>
+    import("./auth/auth.component").then((m) => m.AuthComponent),
+  children: [
+    {
+      path: "",
+      redirectTo: "app-register",
+      pathMatch: "full",
+    },
+    {
+      path: "login",
+      loadComponent: () =>
+        import("./auth/login/login.component").then(
+          (m) => m.LoginComponent
+        ),
+      canActivate: [loginRedirectGuard],
+    },
+    {
+      path: "app-register",
+      loadComponent: () =>
+        import("./auth/app-register/app-register.component").then(
+          (m) => m.AppRegisterComponent
+        ),
+    },
+    {
+      path: "forgot-password",
+      loadComponent: () =>
+        import("./auth/forgot-password/forgot-password.component").then(
+          (m) => m.ForgotPasswordComponent
+        ),
+    },
+    {
+      path: "email-verification",
+      loadComponent: () =>
+        import("./auth/email-verification/email-verification.component").then(
+          (m) => m.EmailVerificationComponent
+        ),
+    },
+    {
+      path: "two-step-verification",
+      loadComponent: () =>
+        import("./auth/two-step-verification/two-step-verification.component").then(
+          (m) => m.TwoStepVerificationComponent
+        ),
+    },
+    {
+      path: "reset-password",
+      loadComponent: () =>
+        import("./auth/reset-password/reset-password.component").then(
+          (m) => m.ResetPasswordComponent
+        ),
+    },
+    {
+      path: "success",
+      loadComponent: () =>
+        import("./auth/success/success.component").then(
+          (m) => m.SuccessComponent
+        ),
+    },
+    {
+      path: "register",
+      loadComponent: () =>
+        import("./auth/register/register.component").then(
+          (m) => m.RegisterComponent
+        ),
+    },
+    {
+      path: "lock-screen",
+      loadComponent: () =>
+        import("./auth/lock-screen/lock-screen.component").then(
+          (m) => m.LockScreenComponent
+        ),
+    },
+  ],
+},
   //Error
   {
     path: "error",
@@ -1938,6 +1941,10 @@ export const routes: Routes = [
       ),
   },
 
- 
+   {
+    path: 'app-register',
+    loadComponent: () =>
+      import('./auth/app-register/app-register.component').then((m) => m.AppRegisterComponent ),
+  },
   { path: "**", component: LoginComponent },
 ] as const;

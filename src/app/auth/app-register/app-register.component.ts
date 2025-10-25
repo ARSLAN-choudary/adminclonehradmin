@@ -1,65 +1,87 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable, tap } from "rxjs";
-import { Router } from "@angular/router";
-import { CONFIG } from "../../../config";
-import { JwtHelperService } from "@auth0/angular-jwt";
+import { Component, computed, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../Services/auth.service';
 
-@Injectable({
-  providedIn: "root",
+@Component({
+  selector: 'app-register',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './app-register.component.html',
+  styleUrls: ['./app-register.component.scss'],
 })
-export class AuthService {
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private jwtHelper: JwtHelperService
-  ) {}
+export class AppRegisterComponent {
+  // --- Signals ---
+  country = signal<string>('');
+  position = signal<string>('');
+  email = signal<string>('');
+  loading = signal<boolean>(false);
+  errorMessage = signal<string>('');
 
-  // --- LOGIN ---
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(CONFIG.login, { email, password }).pipe(
-      tap((response: any) => {
-        localStorage.setItem("role", response.data.details.role);
-        // localStorage.setItem("token", response.data.accessToken); // if available
-      })
-    );
+  // --- Country → Positions Mapping ---
+private countryPositions: { [key: string]: string[] } = {
+  "United States": ['Manager', 'Developer', 'Designer', 'HR Manager', 'Sales Executive'],
+  "India": ['Team Lead', 'Software Engineer', 'UI/UX Designer', 'Project Manager', 'Business Analyst'],
+  "United Kingdom": ['Director', 'Senior Developer', 'Product Designer', 'Operations Manager', 'Marketing Head'],
+  "Canada": ['Tech Lead', 'Full Stack Developer', 'Frontend Developer', 'System Admin', 'Data Analyst'],
+  "Australia": ['CEO', 'CTO', 'Product Manager', 'DevOps Engineer', 'Quality Analyst'],
+};
+
+
+  // --- Computed Signals ---
+  availablePositions = computed(() => this.countryPositions[this.country()] || []);
+  showPositionField = computed(() => !!this.country());
+  showEmailField = computed(() => !!this.country() && !!this.position());
+  isEmailValid = computed(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email()));
+  isStep1Valid = computed(() => !!this.country() && !!this.position() && this.isEmailValid());
+
+  constructor(private router: Router, private authService: AuthService) {}
+
+  // --- Handlers ---
+  onCountryChange(event: any) {
+    this.country.set(event.target.value);
+    this.position.set('');
+    this.email.set('');
   }
 
-  // --- LOGOUT ---
-  logout(): void {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+  onPositionChange(event: any) {
+    this.position.set(event.target.value);
+    this.email.set('');
   }
 
-  // --- TOKEN HELPERS ---
-  getToken(): string | null {
-    return localStorage.getItem("token");
+  onEmailInput(event: any) {
+    this.email.set(event.target.value);
   }
 
-  isLoggedIn(): boolean {
-    const token = this.getToken();
-    return token ? !this.jwtHelper.isTokenExpired(token) : false;
-  }
+  // --- Send OTP ---
+  sendOtp() {
+    if (!this.isStep1Valid()) return;
 
-  clearToken(): void {
-    localStorage.removeItem("token");
-  }
+    this.loading.set(true);
+    this.errorMessage.set('');
 
-  // --- ✅ STEP 1: Send OTP for registration (email + location + position) ---
-  verifyUserRegister(payload: any): Observable<any> {
-    // ✅ API: /api/auth/register
-    return this.http.post(CONFIG.verifyregisterapi, payload);
-  }
+    const payload = {
+      email: this.email(),
+      location: this.country(),
+      position: this.position(),
+    };
 
-  // --- ✅ STEP 2: Verify OTP (email + otp only) ---
-  verifyOtp(email: string, otp: string): Observable<any> {
-    const body = { email, otp }; // only send email + otp
-    // ✅ API: /api/auth/uservarify
-    return this.http.post(CONFIG.registerapi, body);
-  }
+    console.log('Sending OTP Payload:', payload);
 
-  // --- (Optional) Register API if needed later ---
-  registerapi(payload: any): Observable<any> {
-    return this.http.post(CONFIG.registerapi, payload);
+    this.authService.registerapi(payload).subscribe({
+      next: (res: any) => {
+        console.log('✅ OTP API Response:', res);
+        this.loading.set(false);
+        this.router.navigate(['/two-step-verification'], {
+          queryParams: { email: this.email() },
+        });
+      },
+      error: (err: any) => {
+        console.error('❌ OTP API Error:', err);
+        this.loading.set(false);
+        this.errorMessage.set(err?.error?.message || 'Failed to send OTP');
+      },
+    });
   }
 }

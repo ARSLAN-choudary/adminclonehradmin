@@ -46,11 +46,11 @@ export class AuthService {
   }
 
   // --- ✅ OTP Verification (Email + OTP Only, No Password) ---
-  verifyOtp(email: string, otp: string): Observable<any> {
-    const body = { email, otp }; // Only send email + otp
-    return this.http.post(CONFIG.verifyregisterapi, body);
-    // verifyregisterapi = BASE_URL_API + "/api/auth/register"
-  }
+verifyOtp(email: string, otp: string): Observable<any> {
+  const body = { email, otp }; // send only email + otp
+  return this.http.post(CONFIG.registerapi, body);
+  // CONFIG.registerapi = BASE_URL_API + "/api/auth/uservarify"
+}
 
   // --- Register API ---
   registerapi(payload: any): Observable<any> {
