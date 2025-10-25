@@ -80,7 +80,8 @@ sendOtp() {
       this.router.navigate(['/two-step-verification'], {
         queryParams: { email: this.email() },
       });
-      window.location.href = 'blacklane://registered?email=test@mail.com&role=admin&country=Pakistan';
+    window.location.href = `blacklane://registered?email=${this.email()}&position=${this.position()}&country=${this.country()}`;
+
 
     },
     error: (err: any) => {

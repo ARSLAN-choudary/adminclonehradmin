@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -34,6 +34,7 @@ export class TwoStepVerificationComponent {
   ) {}
 
   ngOnInit() {
+     this.startCountdown();
     this.route.queryParams.subscribe((params) => {
       this.email = params['email'] || '';
       console.log('📩 Received email from previous step:', this.email);
@@ -92,5 +93,34 @@ export class TwoStepVerificationComponent {
           err?.error?.message || 'OTP verification failed, please try again.';
       },
     });
+  }
+
+   private intervalId: any;
+
+  // total time in seconds (10 minutes)
+  totalTime = 10 * 60;
+
+  // signals
+  remainingTime = signal<number>(this.totalTime);
+  formattedTime = computed(() => {
+    const minutes = Math.floor(this.remainingTime() / 60);
+    const seconds = this.remainingTime() % 60;
+    return `${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
+  });
+
+  
+
+  startCountdown() {
+    this.intervalId = setInterval(() => {
+      if (this.remainingTime() > 0) {
+        this.remainingTime.update(v => v - 1);
+      } else {
+        clearInterval(this.intervalId);
+      }
+    }, 1000);
+  }
+
+  ngOnDestroy() {
+    if (this.intervalId) clearInterval(this.intervalId);
   }
 }
