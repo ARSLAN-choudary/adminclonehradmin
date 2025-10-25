@@ -56,32 +56,32 @@ private countryPositions: { [key: string]: string[] } = {
 
   // --- Send OTP ---
   sendOtp() {
-    if (!this.isStep1Valid()) return;
+  if (!this.isStep1Valid()) return;
 
-    this.loading.set(true);
-    this.errorMessage.set('');
+  this.loading.set(true);
+  this.errorMessage.set('');
 
-    const payload = {
-      email: this.email(),
-      location: this.country(),
-      position: this.position(),
-    };
+  const payload = {
+    email: this.email(),
+    position: this.position(),
+    country: this.country(), // ✅ correct field name (not location)
+  };
 
-    console.log('Sending OTP Payload:', payload);
+  console.log('Sending OTP Payload:', payload);
 
-    this.authService.registerapi(payload).subscribe({
-      next: (res: any) => {
-        console.log('✅ OTP API Response:', res);
-        this.loading.set(false);
-        this.router.navigate(['/two-step-verification'], {
-          queryParams: { email: this.email() },
-        });
-      },
-      error: (err: any) => {
-        console.error('❌ OTP API Error:', err);
-        this.loading.set(false);
-        this.errorMessage.set(err?.error?.message || 'Failed to send OTP');
-      },
-    });
-  }
+  this.authService.verifyRegister(payload).subscribe({
+    next: (res: any) => {
+      console.log('✅ OTP Sent Successfully:', res);
+      this.loading.set(false);
+      this.router.navigate(['/two-step-verification'], {
+        queryParams: { email: this.email() },
+      });
+    },
+    error: (err: any) => {
+      console.error('❌ OTP API Error:', err);
+      this.loading.set(false);
+      this.errorMessage.set(err?.error?.message || 'Failed to send OTP');
+    },
+  });
+}
 }
