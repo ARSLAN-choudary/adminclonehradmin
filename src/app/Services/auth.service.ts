@@ -20,7 +20,7 @@ export class AuthService {
     return this.http.post(CONFIG.login, { email, password }).pipe(
       tap((response: any) => {
         localStorage.setItem("role", response.data.details.role);
-        // localStorage.setItem("token", response.data.accessToken); // if available
+        // localStorage.setItem("token", response.data.accessToken); // uncomment if token returned
       })
     );
   }
@@ -45,16 +45,15 @@ export class AuthService {
     localStorage.removeItem("token");
   }
 
-  // --- ✅ OTP Verification (Email + OTP Only, No Password) ---
-verifyOtp(email: string, otp: string): Observable<any> {
-  const body = { email, otp }; // send only email + otp
-  return this.http.post(CONFIG.registerapi, body);
-  // CONFIG.registerapi = BASE_URL_API + "/api/auth/uservarify"
-}
+  // --- ✅ STEP 1: REGISTER (Send Email, Position, Country) ---
+  verifyRegister(payload: { email: string; position: string; country: string }): Observable<any> {
+    return this.http.post(CONFIG.verifyregisterapi, payload);
+    // Endpoint: BASE_URL_API + "/api/auth/register"
+  }
 
-  // --- Register API ---
-  registerapi(payload: any): Observable<any> {
-    return this.http.post(CONFIG.registerapi, payload);
-    // registerapi = BASE_URL_API + "/api/auth/uservarify"
+  // --- ✅ STEP 2: VERIFY OTP (Email + OTP) ---
+  verifyOtp(email: string, otp: string): Observable<any> {
+    return this.http.post(CONFIG.registerapi, { email, otp });
+    // Endpoint: BASE_URL_API + "/api/auth/uservarify"
   }
 }
