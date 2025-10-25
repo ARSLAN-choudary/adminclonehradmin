@@ -18,16 +18,16 @@ export class AppRegisterComponent {
   email = signal<string>('');
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
+  showAppDownloadDialog = signal<boolean>(false); // <-- added
 
   // --- Country → Positions Mapping ---
-private countryPositions: { [key: string]: string[] } = {
-  "United States": ['Manager', 'Developer', 'Designer', 'HR Manager', 'Sales Executive'],
-  "India": ['Team Lead', 'Software Engineer', 'UI/UX Designer', 'Project Manager', 'Business Analyst'],
-  "United Kingdom": ['Director', 'Senior Developer', 'Product Designer', 'Operations Manager', 'Marketing Head'],
-  "Canada": ['Tech Lead', 'Full Stack Developer', 'Frontend Developer', 'System Admin', 'Data Analyst'],
-  "Australia": ['CEO', 'CTO', 'Product Manager', 'DevOps Engineer', 'Quality Analyst'],
-};
-
+  private countryPositions: { [key: string]: string[] } = {
+    "United States": ['Manager', 'Developer', 'Designer', 'HR Manager', 'Sales Executive'],
+    "India": ['Team Lead', 'Software Engineer', 'UI/UX Designer', 'Project Manager', 'Business Analyst'],
+    "United Kingdom": ['Director', 'Senior Developer', 'Product Designer', 'Operations Manager', 'Marketing Head'],
+    "Canada": ['Tech Lead', 'Full Stack Developer', 'Frontend Developer', 'System Admin', 'Data Analyst'],
+    "Australia": ['CEO', 'CTO', 'Product Manager', 'DevOps Engineer', 'Quality Analyst'],
+  };
 
   // --- Computed Signals ---
   availablePositions = computed(() => this.countryPositions[this.country()] || []);
@@ -55,41 +55,58 @@ private countryPositions: { [key: string]: string[] } = {
   }
 
   // --- Send OTP ---
-// --- Send OTP ---
-sendOtp() {
-  if (!this.isStep1Valid()) return;
+  sendOtp() {
+    if (!this.isStep1Valid()) return;
 
-  this.loading.set(true);
-  this.errorMessage.set('');
+    this.loading.set(true);
+    this.errorMessage.set('');
 
-  const payload = {
-    email: this.email(),
-    position: this.position(), // ✅ same value, different key name
-    location: this.country(),
-  };
+    const payload = {
+      email: this.email(),
+      position: this.position(),
+      location: this.country(),
+    };
 
-  console.log('Sending OTP Payload:', payload);
+    console.log('Sending OTP Payload:', payload);
 
-  this.authService.verifyRegister(payload).subscribe({
-    next: (res: any) => {
-      console.log('✅ OTP Sent Successfully:', res);
-      this.loading.set(false);
+    this.authService.verifyRegister(payload).subscribe({
+      next: (res: any) => {
+        console.log('✅ OTP Sent Successfully:', res);
+        this.loading.set(false);
 
+        // Navigate to OTP verification page
+        this.router.navigate(['/two-step-verification'], {
+          queryParams: { email: this.email() },
+        });
 
-      // or normal navigation:
-      this.router.navigate(['/two-step-verification'], {
-        queryParams: { email: this.email() },
-      });
-    window.location.href = `blacklane://registered?email=${this.email()}&position=${this.position()}&country=${this.country()}`;
+        // Trigger Flutter deep link
+        this.onSignUpSuccess({
+          email: this.email(),
+          position: this.position(),
+          country: this.country()
+        });
+      },
+      error: (err: any) => {
+        console.error('❌ OTP API Error:', err);
+        this.loading.set(false);
+        this.errorMessage.set(err?.error?.message || 'Failed to send OTP');
+      },
+    });
+  }
 
-
-    },
-    error: (err: any) => {
-      console.error('❌ OTP API Error:', err);
-      this.loading.set(false);
-      this.errorMessage.set(err?.error?.message || 'Failed to send OTP');
-    },
-  });
-}
-
+  // --- Trigger Flutter App via Deep Link ---
+  onSignUpSuccess(userData: any) {
+    const flutterUrl = `blacklane://registered?email=${encodeURIComponent(userData.email)}&position=${encodeURIComponent(userData.position)}&country=${encodeURIComponent(userData.country)}`;
+    
+    // Trigger Flutter app via deep link
+    window.location.href = flutterUrl;
+    
+    // Fallback if app not opened
+    setTimeout(() => {
+      if (!document.hidden) {
+        alert('Please open the Blacklane app to complete registration!');
+        this.showAppDownloadDialog.set(true);
+      }
+    }, 1000);
+  }
 }

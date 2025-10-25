@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Renderer2 } from "@angular/core";
 import {
     NavigationStart,
     Router,
@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     public base = "";
     public page = "";
 
-    constructor(private router: Router, private dataService: DataService, private tokenRefresh: TokenRefreshService) {
+    constructor(private router: Router, private dataService: DataService, private tokenRefresh: TokenRefreshService,private renderer: Renderer2) {
 
         window.addEventListener('wheel', function (e) {
             if (e.ctrlKey) e.preventDefault();
@@ -87,6 +87,15 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         this.getLoaderState();
+          // Disable pinch-zoom / gesturestart
+    this.renderer.listen('document', 'gesturestart', (event: Event) => {
+      event.preventDefault();
+    });
+
+    // Optional: disable touchmove default if needed
+    this.renderer.listen('document', 'touchmove', (event: TouchEvent) => {
+      // event.preventDefault(); // Uncomment if you want to block scroll
+    });
     }
 
     getLoaderState() {
