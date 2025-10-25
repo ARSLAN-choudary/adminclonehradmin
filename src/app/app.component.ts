@@ -1,13 +1,13 @@
-import {CommonModule} from "@angular/common";
-import {Component, OnInit} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Component, OnInit } from "@angular/core";
 import {
     NavigationStart,
     Router,
     Event as RouterEvent,
     RouterOutlet,
 } from "@angular/router";
-import {DataService} from "./shared/data/data.service";
-import {TokenRefreshService} from "./Services/token-refresh.service";
+import { DataService } from "./shared/data/data.service";
+import { TokenRefreshService } from "./Services/token-refresh.service";
 
 @Component({
     selector: "app-root",
@@ -22,6 +22,16 @@ export class AppComponent implements OnInit {
     public page = "";
 
     constructor(private router: Router, private dataService: DataService, private tokenRefresh: TokenRefreshService) {
+
+        window.addEventListener('wheel', function (e) {
+            if (e.ctrlKey) e.preventDefault();
+        }, { passive: false });
+
+        window.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0'))) {
+                e.preventDefault();
+            }
+        });
         this.router.events.subscribe((event: RouterEvent) => {
             if (event instanceof NavigationStart) {
                 const URL = event.url.split("/");
