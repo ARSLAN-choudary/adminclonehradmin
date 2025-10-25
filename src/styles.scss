@@ -5,11 +5,11 @@
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-video.css");
 
 html, body {
-  touch-action: manipulation;
+  touch-action: manipulation !important;
 }
 
 input, select, textarea {
-  font-size: 18px !important; 
+  font-size: 14px !important; 
 }
 
 
