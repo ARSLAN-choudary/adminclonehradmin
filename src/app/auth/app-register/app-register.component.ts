@@ -55,7 +55,8 @@ private countryPositions: { [key: string]: string[] } = {
   }
 
   // --- Send OTP ---
-  sendOtp() {
+// --- Send OTP ---
+sendOtp() {
   if (!this.isStep1Valid()) return;
 
   this.loading.set(true);
@@ -63,8 +64,8 @@ private countryPositions: { [key: string]: string[] } = {
 
   const payload = {
     email: this.email(),
-    position: this.position(),
-    country: this.country(), // ✅ correct field name (not location)
+    position: this.position(), // ✅ same value, different key name
+    location: this.country(),
   };
 
   console.log('Sending OTP Payload:', payload);
@@ -73,9 +74,14 @@ private countryPositions: { [key: string]: string[] } = {
     next: (res: any) => {
       console.log('✅ OTP Sent Successfully:', res);
       this.loading.set(false);
+
+
+      // or normal navigation:
       this.router.navigate(['/two-step-verification'], {
         queryParams: { email: this.email() },
       });
+      window.location.href = 'blacklane://registered?email=test@mail.com&role=admin&country=Pakistan';
+
     },
     error: (err: any) => {
       console.error('❌ OTP API Error:', err);
@@ -84,4 +90,5 @@ private countryPositions: { [key: string]: string[] } = {
     },
   });
 }
+
 }
