@@ -1,4 +1,11 @@
-import { Component, computed, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  signal,
+  ElementRef,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -27,6 +34,9 @@ export class TwoStepVerificationComponent {
     data4: '',
   };
 
+  // reference to all OTP inputs
+  @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -34,25 +44,37 @@ export class TwoStepVerificationComponent {
   ) {}
 
   ngOnInit() {
-     this.startCountdown();
+    this.startCountdown();
     this.route.queryParams.subscribe((params) => {
       this.email = params['email'] || '';
       console.log('📩 Received email from previous step:', this.email);
     });
   }
 
-  // --- Move focus forward ---
-  public ValueChanged(data: string, box: string): void {
-    if (box === 'digit-1' && data) document.getElementById('digit-2')?.focus();
-    else if (box === 'digit-2' && data) document.getElementById('digit-3')?.focus();
-    else if (box === 'digit-3' && data) document.getElementById('digit-4')?.focus();
+  // --- Handle value change (auto move next) ---
+  public ValueChanged(index: number, event: any): void {
+    const value = event.target.value;
+    const inputs = this.otpInputs.toArray();
+
+    // Move forward only if user typed a value
+    if (value && index < inputs.length - 1) {
+      setTimeout(() => inputs[index + 1].nativeElement.focus(), 10);
+    }
   }
 
-  // --- Move focus backward ---
-  public tiggerBackspace(data: string, box: string) {
-    if (box === 'digit-4' && !data) document.getElementById('digit-3')?.focus();
-    else if (box === 'digit-3' && !data) document.getElementById('digit-2')?.focus();
-    else if (box === 'digit-2' && !data) document.getElementById('digit-1')?.focus();
+  // --- Handle Backspace (move prev + clear) ---
+  public tiggerBackspace(index: number, event: KeyboardEvent): void {
+    const inputs = this.otpInputs.toArray();
+    const input = inputs[index].nativeElement;
+
+    if (event.key === 'Backspace') {
+      if (input.value === '' && index > 0) {
+        setTimeout(() => inputs[index - 1].nativeElement.focus(), 10);
+      } else {
+        // iOS Safari fix — manually clear the value
+        input.value = '';
+      }
+    }
   }
 
   // --- Get full OTP string ---
@@ -77,13 +99,15 @@ export class TwoStepVerificationComponent {
     this.loading = true;
     this.errorMessage = '';
 
-    console.log('📤 Sending OTP verification request:', { email: this.email, otp });
+    console.log('📤 Sending OTP verification request:', {
+      email: this.email,
+      otp,
+    });
 
     this.authService.verifyOtp(this.email, otp).subscribe({
       next: (res: any) => {
         console.log('✅ OTP Verified Successfully:', res);
         this.loading = false;
-        // ✅ Redirect to login or dashboard after successful verification
         this.router.navigate(['/login']);
       },
       error: (err: any) => {
@@ -95,25 +119,22 @@ export class TwoStepVerificationComponent {
     });
   }
 
-   private intervalId: any;
-
-  // total time in seconds (10 minutes)
-  totalTime = 10 * 60;
-
-  // signals
+  // --- Countdown Timer ---
+  private intervalId: any;
+  totalTime = 10 * 60; // 10 minutes
   remainingTime = signal<number>(this.totalTime);
   formattedTime = computed(() => {
     const minutes = Math.floor(this.remainingTime() / 60);
     const seconds = this.remainingTime() % 60;
-    return `${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, '0')} : ${seconds
+      .toString()
+      .padStart(2, '0')}`;
   });
-
-  
 
   startCountdown() {
     this.intervalId = setInterval(() => {
       if (this.remainingTime() > 0) {
-        this.remainingTime.update(v => v - 1);
+        this.remainingTime.update((v) => v - 1);
       } else {
         clearInterval(this.intervalId);
       }
