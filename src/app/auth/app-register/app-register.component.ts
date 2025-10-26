@@ -126,16 +126,22 @@ export class AppRegisterComponent implements OnInit {
   }
 
   // --- Trigger Flutter App via Deep Link ---
-  onSignUpSuccess(userData: any) {
-    const flutterUrl = `blacklane://registered?email=${encodeURIComponent(userData.email)}&position=${encodeURIComponent(userData.position)}&country=${encodeURIComponent(userData.country)}`;
+ onSignUpSuccess(userData: any) {
+  // Include your fixed OTP page URL as an extra param
+  const otpPageUrl = '/two-step-verification';
+  
+  const flutterUrl = `blacklane://registered?email=${encodeURIComponent(userData.email)}&position=${encodeURIComponent(userData.position)}&country=${encodeURIComponent(userData.country)}&redirect=${encodeURIComponent(otpPageUrl)}`;
 
-    window.location.href = flutterUrl;
+  // 🔹 Send data + redirect info to Flutter app
+  window.location.href = flutterUrl;
 
-    setTimeout(() => {
-      if (!document.hidden) {
-        alert('Please open the Blacklane app to complete registration!');
-        this.showAppDownloadDialog.set(true);
-      }
-    }, 1000);
-  }
+  // 🔹 Fallback if Flutter app doesn’t open
+  setTimeout(() => {
+    if (!document.hidden) {
+      alert('Please open the Blacklane app to complete registration!');
+      this.showAppDownloadDialog.set(true);
+    }
+  }, 1000);
+}
+
 }

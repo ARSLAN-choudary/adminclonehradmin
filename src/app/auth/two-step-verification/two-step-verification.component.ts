@@ -168,5 +168,13 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       break;
   }
 }
+ 
+otpSucces(userData: any) {
+  const redirectUrl = '/login';
+  const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(redirectUrl)}`;
+
+  window.location.href = flutterUrl;
+}
+
 
 }
