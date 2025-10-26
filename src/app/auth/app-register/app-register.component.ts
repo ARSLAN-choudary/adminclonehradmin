@@ -35,6 +35,7 @@ export class AppRegisterComponent {
   showEmailField = computed(() => !!this.country() && !!this.position());
   isEmailValid = computed(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email()));
   isStep1Valid = computed(() => !!this.country() && !!this.position() && this.isEmailValid());
+showSendOtpButton = computed(() => !!this.country() && !!this.position() && !!this.email());
 
   constructor(private router: Router, private authService: AuthService) {}
 

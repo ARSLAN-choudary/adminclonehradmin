@@ -53,6 +53,5 @@ verifyRegister(payload: { email: string; position: string; location: string }): 
   // --- ✅ STEP 2: VERIFY OTP (Email + OTP) ---
   verifyOtp(email: string, otp: string): Observable<any> {
     return this.http.post(CONFIG.registerapi, { email, otp });
-    // Endpoint: BASE_URL_API + "/api/auth/uservarify"
   }
 }
