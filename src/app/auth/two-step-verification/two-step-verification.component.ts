@@ -27,10 +27,10 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     data4: '',
   };
 
-  // Countdown timer variables
+  // Countdown timer
   public countdownDisplay: string = '10:00';
   private countdownInterval: any;
-  private totalSeconds: number = 600; // 10 minutes in seconds
+  private totalSeconds: number = 600; // 10 minutes
 
   constructor(
     private router: Router,
@@ -44,20 +44,19 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       console.log('📩 Received email from previous step:', this.email);
     });
 
-    // Start the countdown timer
+    // Start countdown
     this.startCountdown();
   }
 
   ngOnDestroy() {
-    // Clear the interval when component is destroyed
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
     }
   }
 
-  // Start the 10-minute countdown timer
+  // --- Countdown logic ---
   private startCountdown(): void {
-    this.totalSeconds = 600; // Reset to 10 minutes
+    this.totalSeconds = 600;
     this.updateCountdownDisplay();
 
     this.countdownInterval = setInterval(() => {
@@ -70,28 +69,57 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  // Update the countdown display in MM:SS format
   private updateCountdownDisplay(): void {
     const minutes = Math.floor(this.totalSeconds / 60);
     const seconds = this.totalSeconds % 60;
-    this.countdownDisplay = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    this.countdownDisplay = `${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 
-  // --- Move focus forward ---
+  // --- Input handling ---
   public ValueChanged(data: string, box: string): void {
     if (box === 'digit-1' && data) document.getElementById('digit-2')?.focus();
-    else if (box === 'digit-2' && data) document.getElementById('digit-3')?.focus();
-    else if (box === 'digit-3' && data) document.getElementById('digit-4')?.focus();
+    else if (box === 'digit-2' && data)
+      document.getElementById('digit-3')?.focus();
+    else if (box === 'digit-3' && data)
+      document.getElementById('digit-4')?.focus();
   }
 
-  // --- Move focus backward ---
-  // public tiggerBackspace(data: string, box: string) {
-  //   if (box === 'digit-4' && !data) document.getElementById('digit-3')?.focus();
-  //   else if (box === 'digit-3' && !data) document.getElementById('digit-2')?.focus();
-  //   else if (box === 'digit-2' && !data) document.getElementById('digit-1')?.focus();
-  // }
+  public tiggerBackspace(data: string, box: string) {
+    event?.preventDefault();
 
-  // --- Get full OTP string ---
+    switch (box) {
+      case 'digit-4':
+        this.oneTimePassword.data4 = '';
+        if (!data) {
+          const prev = document.getElementById('digit-3') as HTMLInputElement;
+          prev?.focus();
+          prev?.select();
+        }
+        break;
+      case 'digit-3':
+        this.oneTimePassword.data3 = '';
+        if (!data) {
+          const prev = document.getElementById('digit-2') as HTMLInputElement;
+          prev?.focus();
+          prev?.select();
+        }
+        break;
+      case 'digit-2':
+        this.oneTimePassword.data2 = '';
+        if (!data) {
+          const prev = document.getElementById('digit-1') as HTMLInputElement;
+          prev?.focus();
+          prev?.select();
+        }
+        break;
+      case 'digit-1':
+        this.oneTimePassword.data1 = '';
+        break;
+    }
+  }
+
   private getFullOtp(): string {
     return (
       this.oneTimePassword.data1 +
@@ -101,7 +129,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     );
   }
 
-  // --- Verify OTP (email + otp only) ---
+  // --- OTP Verification ---
   verifyOtp() {
     const otp = this.getFullOtp();
 
@@ -113,14 +141,25 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.errorMessage = '';
 
-    console.log('📤 Sending OTP verification request:', { email: this.email, otp });
+    console.log('📤 Sending OTP verification request:', {
+      email: this.email,
+      otp,
+    });
 
     this.authService.verifyOtp(this.email, otp).subscribe({
       next: (res: any) => {
         console.log('✅ OTP Verified Successfully:', res);
         this.loading = false;
-        // ✅ Redirect to login or dashboard after successful verification
-        this.router.navigate(['/index']);
+
+        // 🔹 Send deep link to Flutter app
+        this.otpSucces();
+
+        // 🔹 Optional fallback — navigate on web if app not opened
+        setTimeout(() => {
+          if (!document.hidden) {
+            this.router.navigate(['/login']);
+          }
+        }, 1500);
       },
       error: (err: any) => {
         this.loading = false;
@@ -131,50 +170,12 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     });
   }
 
-  public tiggerBackspace(data: string, box: string) {
-  // Prevent default behavior for iOS Safari
-  event?.preventDefault();
-
-  switch (box) {
-    case 'digit-4':
-      this.oneTimePassword.data4 = '';
-      if (!data) {
-        const prev = document.getElementById('digit-3') as HTMLInputElement;
-        prev?.focus();
-        prev?.select(); // iOS me cursor select karna zaruri hai
-      }
-      break;
-
-    case 'digit-3':
-      this.oneTimePassword.data3 = '';
-      if (!data) {
-        const prev = document.getElementById('digit-2') as HTMLInputElement;
-        prev?.focus();
-        prev?.select();
-      }
-      break;
-
-    case 'digit-2':
-      this.oneTimePassword.data2 = '';
-      if (!data) {
-        const prev = document.getElementById('digit-1') as HTMLInputElement;
-        prev?.focus();
-        prev?.select();
-      }
-      break;
-
-    case 'digit-1':
-      this.oneTimePassword.data1 = '';
-      break;
+  // --- Send deep link to Flutter ---
+  otpSucces() {
+    const redirectUrl = '/login';
+    const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(
+      redirectUrl
+    )}`;
+    window.location.href = flutterUrl;
   }
-}
- 
-otpSucces(userData: any) {
-  const redirectUrl = '/login';
-  const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(redirectUrl)}`;
-
-  window.location.href = flutterUrl;
-}
-
-
 }
