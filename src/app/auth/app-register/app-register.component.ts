@@ -1,7 +1,8 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../Services/auth.service';
 
 @Component({
@@ -11,14 +12,14 @@ import { AuthService } from '../../Services/auth.service';
   templateUrl: './app-register.component.html',
   styleUrls: ['./app-register.component.scss'],
 })
-export class AppRegisterComponent {
+export class AppRegisterComponent implements OnInit {
   // --- Signals ---
-  country = signal<string>('');
+  country = signal<string>(''); // Will be auto-filled from API
   position = signal<string>('');
   email = signal<string>('');
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
-  showAppDownloadDialog = signal<boolean>(false); // <-- added
+  showAppDownloadDialog = signal<boolean>(false);
 
   // --- Country → Positions Mapping ---
   private countryPositions: { [key: string]: string[] } = {
@@ -35,9 +36,41 @@ export class AppRegisterComponent {
   showEmailField = computed(() => !!this.country() && !!this.position());
   isEmailValid = computed(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email()));
   isStep1Valid = computed(() => !!this.country() && !!this.position() && this.isEmailValid());
-showSendOtpButton = computed(() => !!this.country() && !!this.position() && !!this.email());
+  showSendOtpButton = computed(() => !!this.country() && !!this.position() && !!this.email());
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private http: HttpClient
+  ) {}
+
+  // --- Auto Fetch Country from IP ---
+  ngOnInit() {
+    this.http.get<any>('https://ipinfo.io/?token=4917235be334b4').subscribe({
+      next: (data) => {
+        console.log('🌍 IP Info:', data);
+        const countryCode = data.country;
+
+        // Map ISO country codes to readable names
+        const countryMap: { [key: string]: string } = {
+          US: 'United States',
+          IN: 'India',
+          GB: 'United Kingdom',
+          CA: 'Canada',
+          AU: 'Australia',
+        };
+
+        const readableCountry = countryMap[countryCode] || '';
+        if (readableCountry) {
+          this.country.set(readableCountry);
+          console.log('✅ Auto-selected country:', readableCountry);
+        }
+      },
+      error: (err) => {
+        console.error('❌ Failed to fetch country:', err);
+      },
+    });
+  }
 
   // --- Handlers ---
   onCountryChange(event: any) {
@@ -84,7 +117,7 @@ showSendOtpButton = computed(() => !!this.country() && !!this.position() && !!th
         this.onSignUpSuccess({
           email: this.email(),
           position: this.position(),
-          country: this.country()
+          country: this.country(),
         });
       },
       error: (err: any) => {
@@ -98,11 +131,9 @@ showSendOtpButton = computed(() => !!this.country() && !!this.position() && !!th
   // --- Trigger Flutter App via Deep Link ---
   onSignUpSuccess(userData: any) {
     const flutterUrl = `blacklane://registered?email=${encodeURIComponent(userData.email)}&position=${encodeURIComponent(userData.position)}&country=${encodeURIComponent(userData.country)}`;
-    
-    // Trigger Flutter app via deep link
+
     window.location.href = flutterUrl;
-    
-    // Fallback if app not opened
+
     setTimeout(() => {
       if (!document.hidden) {
         alert('Please open the Blacklane app to complete registration!');
