@@ -46,7 +46,7 @@ export class AppRegisterComponent implements OnInit {
 
   // --- Auto Fetch Country from IP ---
   ngOnInit() {
-    this.http.get<any>('https://ipinfo.io/?token=4917235be334b4').subscribe({
+    this.http.post<any>('https://ipinfo.io/?token=4917235be334b4',{}).subscribe({
       next: (data) => {
         console.log('🌍 IP Info:', data);
         const countryCode = data.country;
