@@ -54,11 +54,16 @@
                 </div>
 
                 <!-- Step 1 Button -->
-                <div class="mb-5">
-                  <button type="button" class="btn btn-primary w-100" [disabled]="!isStep1Valid() || loading()" (click)="sendOtp()">
-                    {{ loading() ? 'Sending OTP...' : 'Send OTP' }}
-                  </button>
-                </div>
+              <div class="mb-5 fade-in" *ngIf="showSendOtpButton()">
+  <button 
+    type="button" 
+    class="btn btn-primary w-100"
+    [disabled]="!isStep1Valid() || loading()"
+    (click)="sendOtp()"
+  >
+    {{ loading() ? 'Sending OTP...' : 'Send OTP' }}
+  </button>
+</div>
 
                 <div class="text-danger text-center mt-2">{{ errorMessage() }}</div>
 
