@@ -14,7 +14,7 @@ import { AuthService } from '../../Services/auth.service';
 })
 export class AppRegisterComponent implements OnInit {
   // --- Signals ---
-  country = signal<string>(''); // Will be auto-filled from API
+  country = signal<string>(''); // Auto-filled from API
   position = signal<string>('');
   email = signal<string>('');
   loading = signal<boolean>(false);
@@ -46,30 +46,29 @@ export class AppRegisterComponent implements OnInit {
 
   // --- Auto Fetch Country from IP ---
   ngOnInit() {
-    this.http.post<any>('https://ipinfo.io/?token=4917235be334b4',{}).subscribe({
-      next: (data) => {
-        console.log('🌍 IP Info:', data);
-        const countryCode = data.country;
+    this.detectUserCountry();
+  }
 
-        // Map ISO country codes to readable names
-        const countryMap: { [key: string]: string } = {
-          US: 'United States',
-          IN: 'India',
-          GB: 'United Kingdom',
-          CA: 'Canada',
-          AU: 'Australia',
-        };
+  private detectUserCountry() {
+    this.http.get<any>('https://ipapi.co/json/')
+      .subscribe({
+        next: (data) => {
+          console.log('🌍 IPAPI Response:', data);
+          const countryName = data.country_name;
 
-        const readableCountry = countryMap[countryCode] || '';
-        if (readableCountry) {
-          this.country.set(readableCountry);
-          console.log('✅ Auto-selected country:', readableCountry);
-        }
-      },
-      error: (err) => {
-        console.error('❌ Failed to fetch country:', err);
-      },
-    });
+          // Check if country exists in our supported list
+          const validCountries = Object.keys(this.countryPositions);
+          if (validCountries.includes(countryName)) {
+            this.country.set(countryName);
+            console.log('✅ Auto-selected country:', countryName);
+          } else {
+            console.warn('⚠️ Country not in list:', countryName);
+          }
+        },
+        error: (err) => {
+          console.error('❌ Failed to detect country:', err);
+        },
+      });
   }
 
   // --- Handlers ---
@@ -101,19 +100,17 @@ export class AppRegisterComponent implements OnInit {
       location: this.country(),
     };
 
-    console.log('Sending OTP Payload:', payload);
+    console.log('📤 Sending OTP Payload:', payload);
 
     this.authService.verifyRegister(payload).subscribe({
       next: (res: any) => {
         console.log('✅ OTP Sent Successfully:', res);
         this.loading.set(false);
 
-        // Navigate to OTP verification page
         this.router.navigate(['/two-step-verification'], {
           queryParams: { email: this.email() },
         });
 
-        // Trigger Flutter deep link
         this.onSignUpSuccess({
           email: this.email(),
           position: this.position(),
