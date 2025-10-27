@@ -151,10 +151,8 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
         console.log('✅ OTP Verified Successfully:', res);
         this.loading = false;
 
-        // 🔹 Send deep link to Flutter app
         this.otpSucces();
 
-        // 🔹 Optional fallback — navigate on web if app not opened
         setTimeout(() => {
           if (!document.hidden) {
             this.router.navigate(['/login']);
@@ -171,11 +169,40 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   }
 
   // --- Send deep link to Flutter ---
-  otpSucces() {
-    const redirectUrl = '/login';
-    const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(
-      redirectUrl
-    )}`;
-    window.location.href = flutterUrl;
-  }
+otpSucces() {
+  const redirectUrl = '/login';
+  const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(redirectUrl)}`;
+
+  window.location.href = flutterUrl;
+  setTimeout(() => {
+    if (!document.hidden) {
+      if (this.isMobileDevice()) {
+        if (!this.isInWebView()) {
+          alert('Please open the Blacklane app to complete registration!');
+        }
+      } else {
+        alert('Please open the Blacklane app to complete registration!');
+      }
+    }
+  }, 1000);
+}
+
+private isInWebView(): boolean {
+  const userAgent = navigator.userAgent || navigator.vendor || '';
+  return (
+    /wv/.test(userAgent) || 
+    /\bWebView\b/.test(userAgent) || 
+    /FBAN|FBAV/.test(userAgent) || 
+    /\bInstagram\b/.test(userAgent) || 
+    (window as any).flutter_inappwebview !== undefined 
+  );
+}
+private isMobileDevice(): boolean {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+
+
+
+
 }
