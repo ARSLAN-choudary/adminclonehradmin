@@ -1,5 +1,5 @@
 import { Component, computed, signal, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -14,7 +14,7 @@ import { AuthService } from '../../Services/auth.service';
 })
 export class AppRegisterComponent implements OnInit {
   // --- Signals ---
-  country = signal<string>(''); // Auto-filled from API
+  country = signal<string>(''); 
   position = signal<string>('');
   email = signal<string>('');
   loading = signal<boolean>(false);
@@ -38,14 +38,23 @@ export class AppRegisterComponent implements OnInit {
   isStep1Valid = computed(() => !!this.country() && !!this.position() && this.isEmailValid());
   showSendOtpButton = computed(() => !!this.country() && !!this.position() && !!this.email());
 
+  // --- Flags ---
+  private fromApp: boolean = false;
+
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private http: HttpClient
   ) {}
 
-  // --- Auto Fetch Country from IP ---
+  // --- Auto Fetch Country ---
   ngOnInit() {
+    // ✅ Detect if page opened from Flutter app
+    this.route.queryParams.subscribe(params => {
+      this.fromApp = params['from'] === 'app'; // ← Flutter will open URL with ?from=app
+    });
+
     this.detectUserCountry();
   }
 
@@ -53,21 +62,13 @@ export class AppRegisterComponent implements OnInit {
     this.http.get<any>('https://ipapi.co/json/')
       .subscribe({
         next: (data) => {
-          console.log('🌍 IPAPI Response:', data);
           const countryName = data.country_name;
-
-          // Check if country exists in our supported list
           const validCountries = Object.keys(this.countryPositions);
           if (validCountries.includes(countryName)) {
             this.country.set(countryName);
-            console.log('✅ Auto-selected country:', countryName);
-          } else {
-            console.warn('⚠️ Country not in list:', countryName);
           }
         },
-        error: (err) => {
-          console.error('❌ Failed to detect country:', err);
-        },
+        error: (err) => console.error('❌ Failed to detect country:', err),
       });
   }
 
@@ -87,63 +88,63 @@ export class AppRegisterComponent implements OnInit {
     this.email.set(event.target.value);
   }
 
-  // --- Send OTP ---
-  sendOtp() {
-    if (!this.isStep1Valid()) return;
+ 
+ // --- Send OTP ---
+sendOtp() {
+  if (!this.isStep1Valid()) return;
 
-    this.loading.set(true);
-    this.errorMessage.set('');
+  this.loading.set(true);
+  this.errorMessage.set('');
 
-    const payload = {
-      email: this.email(),
-      position: this.position(),
-      location: this.country(),
-    };
+  const payload = {
+    email: this.email(),
+    position: this.position(),
+    location: this.country(),
+  };
 
-    console.log('📤 Sending OTP Payload:', payload);
+  this.authService.verifyRegister(payload).subscribe({
+    next: (res: any) => {
+      this.loading.set(false);
 
-    this.authService.verifyRegister(payload).subscribe({
-      next: (res: any) => {
-        console.log('✅ OTP Sent Successfully:', res);
-        this.loading.set(false);
+      // ✅ Forward "from=app" param if it exists
+      const queryParams: any = { email: this.email() };
+      if (this.fromApp) queryParams.from = 'app';
 
-        this.router.navigate(['/two-step-verification'], {
-          queryParams: { email: this.email() },
-        });
+      this.router.navigate(['/two-step-verification'], {
+        queryParams,
+      });
 
+      // ✅ Only trigger deep link if NOT opened from app
+      if (!this.fromApp) {
         this.onSignUpSuccess({
           email: this.email(),
           position: this.position(),
           country: this.country(),
         });
-      },
-      error: (err: any) => {
-        console.error('❌ OTP API Error:', err);
-        this.loading.set(false);
-        this.errorMessage.set(err?.error?.message || 'Failed to send OTP');
-      },
-    });
-  }
-
-  // --- Trigger Flutter App via Deep Link ---
- onSignUpSuccess(userData: any) {
-  // Include your fixed OTP page URL as an extra param
-  const otpPageUrl = '/two-step-verification';
-  
-  const flutterUrl = `blacklane://registered?email=${encodeURIComponent(userData.email)}&position=${encodeURIComponent(userData.position)}&country=${encodeURIComponent(userData.country)}&redirect=${encodeURIComponent(otpPageUrl)}`;
-
-  // 🔹 Send data + redirect info to Flutter app
-  window.location.href = flutterUrl;
-
-  // 🔹 Fallback if Flutter app doesn’t open
-  setTimeout(() => {
-    if (!document.hidden) {
-      alert('Please open the Blacklane app to complete registration!');
-      this.showAppDownloadDialog.set(true);
-    }
-  }, 1000);
+      }
+    },
+    error: (err: any) => {
+      this.loading.set(false);
+      this.errorMessage.set(err?.error?.message || 'Failed to send OTP');
+    },
+  });
 }
 
 
+  // --- Deep Link Logic ---
+  onSignUpSuccess(userData: any) {
+    const otpPageUrl = '/two-step-verification';
+    const flutterUrl = `blacklane://registered?email=${encodeURIComponent(userData.email)}&position=${encodeURIComponent(userData.position)}&country=${encodeURIComponent(userData.country)}&redirect=${encodeURIComponent(otpPageUrl)}`;
 
+    // 🔹 Open the app
+    window.location.href = flutterUrl;
+
+    // 🔹 Fallback alert if app not installed
+    setTimeout(() => {
+      if (!document.hidden) {
+        alert('Please open the Blacklane app to complete registration!');
+        this.showAppDownloadDialog.set(true);
+      }
+    }, 1000);
+  }
 }
