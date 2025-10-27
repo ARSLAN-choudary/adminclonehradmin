@@ -170,10 +170,10 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
 
   // --- Send deep link to Flutter ---
 otpSucces() {
-  const redirectUrl = '/login';
-  const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(redirectUrl)}`;
+  // const redirectUrl = '/login';
+  // const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(redirectUrl)}`;
 
-  window.location.href = flutterUrl;
+  // window.location.href = flutterUrl;
   setTimeout(() => {
     if (!document.hidden) {
       if (this.isMobileDevice()) {
