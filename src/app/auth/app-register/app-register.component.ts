@@ -144,4 +144,6 @@ export class AppRegisterComponent implements OnInit {
   }, 1000);
 }
 
+
+
 }
