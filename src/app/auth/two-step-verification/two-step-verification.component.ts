@@ -19,7 +19,6 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   public loading = false;
   public errorMessage = '';
 
-  // OTP input fields
   public oneTimePassword = {
     data1: '',
     data2: '',
@@ -27,10 +26,12 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     data4: '',
   };
 
-  // Countdown timer
   public countdownDisplay: string = '10:00';
   private countdownInterval: any;
-  private totalSeconds: number = 600; // 10 minutes
+  private totalSeconds: number = 600;
+
+  // ✅ Flutter safety check flag
+  private fromApp: boolean = false;
 
   constructor(
     private router: Router,
@@ -41,10 +42,10 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       this.email = params['email'] || '';
-      console.log('📩 Received email from previous step:', this.email);
+      this.fromApp = params['from'] === 'app'; // 🔹 Detect if opened from Flutter
+      console.log('📩 Received email:', this.email, '| fromApp:', this.fromApp);
     });
 
-    // Start countdown
     this.startCountdown();
   }
 
@@ -92,32 +93,26 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     switch (box) {
       case 'digit-4':
         this.oneTimePassword.data4 = '';
-        if (!data) {
-          const prev = document.getElementById('digit-3') as HTMLInputElement;
-          prev?.focus();
-          prev?.select();
-        }
+        if (!data) this.focusPrev('digit-3');
         break;
       case 'digit-3':
         this.oneTimePassword.data3 = '';
-        if (!data) {
-          const prev = document.getElementById('digit-2') as HTMLInputElement;
-          prev?.focus();
-          prev?.select();
-        }
+        if (!data) this.focusPrev('digit-2');
         break;
       case 'digit-2':
         this.oneTimePassword.data2 = '';
-        if (!data) {
-          const prev = document.getElementById('digit-1') as HTMLInputElement;
-          prev?.focus();
-          prev?.select();
-        }
+        if (!data) this.focusPrev('digit-1');
         break;
       case 'digit-1':
         this.oneTimePassword.data1 = '';
         break;
     }
+  }
+
+  private focusPrev(id: string) {
+    const prev = document.getElementById(id) as HTMLInputElement;
+    prev?.focus();
+    prev?.select();
   }
 
   private getFullOtp(): string {
@@ -141,17 +136,14 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.errorMessage = '';
 
-    console.log('📤 Sending OTP verification request:', {
-      email: this.email,
-      otp,
-    });
+    console.log('📤 Verifying OTP:', { email: this.email, otp });
 
     this.authService.verifyOtp(this.email, otp).subscribe({
       next: (res: any) => {
         console.log('✅ OTP Verified Successfully:', res);
         this.loading = false;
 
-        this.otpSucces();
+        this.otpSucces(); // 🔹 Call success handler
 
         setTimeout(() => {
           if (!document.hidden) {
@@ -168,14 +160,16 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     });
   }
 
-  // --- Send deep link to Flutter ---
-otpSucces() {
-  // const redirectUrl = '/login';
-  // const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(redirectUrl)}`;
+  // --- Deep link logic (safe version) ---
+ otpSucces() {
+  if (!this.fromApp) {
+    const redirectUrl = '/login';
+    const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(redirectUrl)}`;
+    window.location.href = flutterUrl;
+  }
 
-  // window.location.href = flutterUrl;
   setTimeout(() => {
-    if (!document.hidden) {
+    if (!document.hidden && !this.fromApp) { 
       if (this.isMobileDevice()) {
         if (!this.isInWebView()) {
           alert('Please open the Blacklane app to complete registration!');
@@ -187,22 +181,19 @@ otpSucces() {
   }, 1000);
 }
 
-private isInWebView(): boolean {
-  const userAgent = navigator.userAgent || navigator.vendor || '';
-  return (
-    /wv/.test(userAgent) || 
-    /\bWebView\b/.test(userAgent) || 
-    /FBAN|FBAV/.test(userAgent) || 
-    /\bInstagram\b/.test(userAgent) || 
-    (window as any).flutter_inappwebview !== undefined 
-  );
-}
-private isMobileDevice(): boolean {
-  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
 
+  private isInWebView(): boolean {
+    const userAgent = navigator.userAgent || navigator.vendor || '';
+    return (
+      /wv/.test(userAgent) ||
+      /\bWebView\b/.test(userAgent) ||
+      /FBAN|FBAV/.test(userAgent) ||
+      /\bInstagram\b/.test(userAgent) ||
+      (window as any).flutter_inappwebview !== undefined
+    );
+  }
 
-
-
-
+  private isMobileDevice(): boolean {
+    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  }
 }
