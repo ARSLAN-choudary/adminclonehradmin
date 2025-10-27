@@ -114,14 +114,12 @@ sendOtp() {
         queryParams,
       });
 
-      // ✅ Only trigger deep link if NOT opened from app
-      if (!this.fromApp) {
-        this.onSignUpSuccess({
-          email: this.email(),
-          position: this.position(),
-          country: this.country(),
-        });
-      }
+      // ✅ Trigger deep link for ALL cases (browser + app both)
+      this.onSignUpSuccess({
+        email: this.email(),
+        position: this.position(),
+        country: this.country(),
+      });
     },
     error: (err: any) => {
       this.loading.set(false);
@@ -131,20 +129,24 @@ sendOtp() {
 }
 
 
-  // --- Deep Link Logic ---
-  onSignUpSuccess(userData: any) {
-    const otpPageUrl = '/two-step-verification';
-    const flutterUrl = `blacklane://registered?email=${encodeURIComponent(userData.email)}&position=${encodeURIComponent(userData.position)}&country=${encodeURIComponent(userData.country)}&redirect=${encodeURIComponent(otpPageUrl)}`;
+// --- Deep Link Logic ---
+onSignUpSuccess(userData: any) {
+  const otpPageUrl = '/two-step-verification';
+  const flutterUrl = `blacklane://registered?email=${encodeURIComponent(
+    userData.email
+  )}&position=${encodeURIComponent(userData.position)}&country=${encodeURIComponent(
+    userData.country
+  )}&redirect=${encodeURIComponent(otpPageUrl)}`;
 
-    // 🔹 Open the app
-    window.location.href = flutterUrl;
+  // 🔹 Always open the app (both web & Flutter)
+  window.location.href = flutterUrl;
 
-    // 🔹 Fallback alert if app not installed
-    setTimeout(() => {
-      if (!document.hidden) {
-        alert('Please open the Blacklane app to complete registration!');
-        this.showAppDownloadDialog.set(true);
-      }
-    }, 1000);
-  }
+  // 🔹 Show alert ONLY if not opened from app
+  setTimeout(() => {
+    if (!document.hidden && !this.fromApp) {
+      alert('Please open the Blacklane app to complete registration!');
+      this.showAppDownloadDialog.set(true);
+    }
+  }, 1000);
+}
 }
