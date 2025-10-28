@@ -45,10 +45,10 @@ export const routes: Routes = [
           ),
       },
       {
-        path: "waiting-for-approval",
+        path: "two-step-verification",
         loadComponent: () =>
-          import("./auth/waiting-approval/waiting-approval.component").then(
-            (m) => m.WaitingApprovalComponent
+          import("./auth/two-step-verification/two-step-verification.component").then(
+            (m) => m.TwoStepVerificationComponent
           ),
       },
 
@@ -59,7 +59,6 @@ export const routes: Routes = [
             (m) => m.TwoStepVerificationComponent
           ),
       },
-      
       {
         path: "reset-password",
         loadComponent: () =>

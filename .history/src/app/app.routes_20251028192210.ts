@@ -45,21 +45,21 @@ export const routes: Routes = [
           ),
       },
       {
-        path: "waiting-for-approval",
-        loadComponent: () =>
-          import("./auth/waiting-approval/waiting-approval.component").then(
-            (m) => m.WaitingApprovalComponent
-          ),
-      },
-
-      {
         path: "two-step-verification",
         loadComponent: () =>
           import("./auth/two-step-verification/two-step-verification.component").then(
             (m) => m.TwoStepVerificationComponent
           ),
       },
-      
+
+      {
+        path: "two-step-verification",
+        loadComponent: () =>
+          import("./auth/").then(
+            (m) => m.TwoStepVerificationComponent
+          ),
+      },
+
       {
         path: "reset-password",
         loadComponent: () =>

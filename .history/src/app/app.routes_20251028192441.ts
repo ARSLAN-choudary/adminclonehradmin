@@ -48,7 +48,7 @@ export const routes: Routes = [
         path: "waiting-for-approval",
         loadComponent: () =>
           import("./auth/waiting-approval/waiting-approval.component").then(
-            (m) => m.WaitingApprovalComponent
+            (m) => m.TwoStepVerificationComponent
           ),
       },
 

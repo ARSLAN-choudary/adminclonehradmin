@@ -1,0 +1,104 @@
+<div class="account-page bg-white">
+  <div class="main-wrapper">
+    <div class="overflow-hidden p-3 acc-vh">
+      <div class="row vh-100 w-100 g-0">
+        <div class="col-lg-6 vh-100 overflow-y-auto overflow-x-hidden">
+          <div class="row">
+            <div class="col-md-10 mx-auto">
+
+              <!-- Step 1: Register / Send OTP -->
+              <form  class="vh-100 d-flex flex-column p-4 pb-0 fade-in">
+
+                <!-- Logo -->
+                <div class="text-center mb-4 auth-logo">
+                  <img src="assets/img/largeLogo.png" class="img-fluid" alt="Logo" />
+                </div>
+
+                <!-- Heading -->
+                <div class="mb-5">
+                  <h3 class="mb-2">Register</h3>
+                  <p class="mb-0">
+                    Please register using your country, position, and email to access the MY PLANET system.
+                  </p>
+                </div>
+
+                <!-- Country -->
+                <!-- <div class="mb-3">
+                  <label for="country" class="form-label">Country</label>
+                  <div class="input-group input-group-flat position-relative">
+                    <select id="country" class="form-select" [value]="country()" (change)="onCountryChange($event)">
+                      <option value="">Select Country</option>
+                      <option value="United States">United States</option>
+                      <option value="India">India</option>
+                      <option value="United Kingdom">United Kingdom</option>
+                      <option value="Canada">Canada</option>
+                      <option value="Australia">Australia</option>
+                    </select>
+                  </div>
+                </div> -->
+
+                <!-- Position -->
+                <div class="mb-3">
+                  <label for="position" class="form-label">Position</label>
+                  <select id="position" class="form-select" [value]="position()" (change)="onPositionChange($event)">
+                    <option value="">Select Position</option>
+                    <option *ngFor="let p of availablePositions()" [value]="p">{{ p }}</option>
+                  </select>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3" *ngIf="showEmailField()">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" [value]="email()" (input)="onEmailInput($event)" placeholder="Enter your email">
+                  <div class="text-danger small mt-1" *ngIf="email() && !isEmailValid()">Please enter a valid email address</div>
+                </div>
+
+                <!-- Step 1 Button -->
+              <div class="mb-5 fade-in" *ngIf="showSendOtpButton()">
+  <button 
+    type="button" 
+    class="btn btn-primary w-100"
+    [disabled]="!isStep1Valid() || loading()"
+    (click)="sendOtp()"
+  >
+    {{ loading() ? 'Sending OTP...' : 'Send OTP' }}
+  </button>
+</div>
+
+                <div class="text-danger text-center mt-2">{{ errorMessage() }}</div>
+
+              </form>
+
+             
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Background Section -->
+        <div class="col-lg-6 account-bg-01 hiding"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 
+<div>
+  <successfully registered for the post of asdfbasdf in malta>
+    pending for amdin approval  -->
+  <!-- </div> -->
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-center">
+  <div class="bg-white shadow-lg rounded-2xl p-8 max-w-md w-full">
+    <div class="text-green-600 text-4xl mb-4">✔️</div>
+    <h2 class="text-xl font-semibold text-gray-800">
+      Successfully registered for the post of
+      <span class="text-blue-600 font-bold">{{ postName }}</span>
+      in Malta
+    </h2>
+    <p class="mt-4 text-gray-500">Pending for admin approval</p>
+
+    <button class="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+      Go Back
+    </button>
+  </div>
+</div>
