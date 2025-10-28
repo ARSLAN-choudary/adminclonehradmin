@@ -23,7 +23,7 @@
                 </div>
 
                 <!-- Country -->
-                <!-- <div class="mb-3">
+                <div class="mb-3">
                   <label for="country" class="form-label">Country</label>
                   <div class="input-group input-group-flat position-relative">
                     <select id="country" class="form-select" [value]="country()" (change)="onCountryChange($event)">
@@ -35,10 +35,10 @@
                       <option value="Australia">Australia</option>
                     </select>
                   </div>
-                </div> -->
+                </div>
 
                 <!-- Position -->
-                <div class="mb-3" *ngIf="showPositionField()">
+                <div class="mb-3">
                   <label for="position" class="form-label">Position</label>
                   <select id="position" class="form-select" [value]="position()" (change)="onPositionChange($event)">
                     <option value="">Select Position</option>

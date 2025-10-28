@@ -59,14 +59,14 @@ export class AppRegisterComponent implements OnInit {
   }
 
   private detectUserCountry() {
-    this.http.get<any>('https://ipwho.is/')
+    this.http.get<any>('https://ipapi.co/json/')
       .subscribe({
         next: (data) => {
-          const countryName = data.country;
+          const countryName = data.country_name;
           const validCountries = Object.keys(this.countryPositions);
           if (validCountries.includes(countryName)) {
             this.country.set(countryName);
-            console.log('object');
+            console.log();
           }
         },
         error: (err) => console.error('❌ Failed to detect country:', err),

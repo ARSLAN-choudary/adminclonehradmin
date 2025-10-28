@@ -14,7 +14,7 @@ import { AuthService } from '../../Services/auth.service';
 })
 export class AppRegisterComponent implements OnInit {
   // --- Signals ---
-  country = signal<string>(''); 
+  country = signal<string>('');
   position = signal<string>('');
   email = signal<string>('');
   loading = signal<boolean>(false);
@@ -46,7 +46,7 @@ export class AppRegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private http: HttpClient
-  ) {}
+  ) { }
 
   // --- Auto Fetch Country ---
   ngOnInit() {
@@ -57,21 +57,25 @@ export class AppRegisterComponent implements OnInit {
 
     this.detectUserCountry();
   }
-
-  private detectUserCountry() {
-    this.http.get<any>('https://ipwho.is/')
+  private loadAllCountries() {
+    this.http.get<any[]>('https://restcountries.com/v3.1/all')
       .subscribe({
-        next: (data) => {
-          const countryName = data.country;
+        next: (countries) => {
+          // Example: get all country names
+          const allCountryNames = countries.map(c => c.name.common);
+          console.log('✅ All countries:', allCountryNames);
+
+          // Agar tumhari countryPositions se match karna ho:
           const validCountries = Object.keys(this.countryPositions);
-          if (validCountries.includes(countryName)) {
-            this.country.set(countryName);
-            console.log('object');
-          }
+          const matched = allCountryNames.filter(c => validCountries.includes(c));
+
+          console.log('Matched countries:', matched);
         },
-        error: (err) => console.error('❌ Failed to detect country:', err),
+        error: (err) => console.error('❌ Failed to load countries:', err),
       });
   }
+
+
 
   // --- Handlers ---
   onCountryChange(event: any) {
@@ -89,65 +93,65 @@ export class AppRegisterComponent implements OnInit {
     this.email.set(event.target.value);
   }
 
- 
- // --- Send OTP ---
-sendOtp() {
-  if (!this.isStep1Valid()) return;
 
-  this.loading.set(true);
-  this.errorMessage.set('');
+  // --- Send OTP ---
+  sendOtp() {
+    if (!this.isStep1Valid()) return;
 
-  const payload = {
-    email: this.email(),
-    position: this.position(),
-    location: this.country(),
-  };
+    this.loading.set(true);
+    this.errorMessage.set('');
 
-  this.authService.verifyRegister(payload).subscribe({
-    next: (res: any) => {
-      this.loading.set(false);
+    const payload = {
+      email: this.email(),
+      position: this.position(),
+      location: this.country(),
+    };
 
-      // ✅ Forward "from=app" param if it exists
-      const queryParams: any = { email: this.email() };
-      if (this.fromApp) queryParams.from = 'app';
+    this.authService.verifyRegister(payload).subscribe({
+      next: (res: any) => {
+        this.loading.set(false);
 
-      this.router.navigate(['/two-step-verification'], {
-        queryParams,
-      });
+        // ✅ Forward "from=app" param if it exists
+        const queryParams: any = { email: this.email() };
+        if (this.fromApp) queryParams.from = 'app';
 
-      // ✅ Trigger deep link for ALL cases (browser + app both)
-      this.onSignUpSuccess({
-        email: this.email(),
-        position: this.position(),
-        country: this.country(),
-      });
-    },
-    error: (err: any) => {
-      this.loading.set(false);
-      this.errorMessage.set(err?.error?.message || 'Failed to send OTP');
-    },
-  });
-}
+        this.router.navigate(['/two-step-verification'], {
+          queryParams,
+        });
+
+        // ✅ Trigger deep link for ALL cases (browser + app both)
+        this.onSignUpSuccess({
+          email: this.email(),
+          position: this.position(),
+          country: this.country(),
+        });
+      },
+      error: (err: any) => {
+        this.loading.set(false);
+        this.errorMessage.set(err?.error?.message || 'Failed to send OTP');
+      },
+    });
+  }
 
 
-// --- Deep Link Logic ---
-onSignUpSuccess(userData: any) {
-  const otpPageUrl = '/two-step-verification';
-  const flutterUrl = `blacklane://registered?email=${encodeURIComponent(
-    userData.email
-  )}&position=${encodeURIComponent(userData.position)}&country=${encodeURIComponent(
-    userData.country
-  )}&redirect=${encodeURIComponent(otpPageUrl)}`;
+  // --- Deep Link Logic ---
+  onSignUpSuccess(userData: any) {
+    const otpPageUrl = '/two-step-verification';
+    const flutterUrl = `blacklane://registered?email=${encodeURIComponent(
+      userData.email
+    )}&position=${encodeURIComponent(userData.position)}&country=${encodeURIComponent(
+      userData.country
+    )}&redirect=${encodeURIComponent(otpPageUrl)}`;
 
-  // 🔹 Always open the app (both web & Flutter)
-  window.location.href = flutterUrl;
+    // 🔹 Always open the app (both web & Flutter)
+    window.location.href = flutterUrl;
 
-  // 🔹 Show alert ONLY if not opened from app
-  setTimeout(() => {
-    if (!document.hidden && !this.fromApp) {
-      alert('Please open the Blacklane app to complete registration!');
-      this.showAppDownloadDialog.set(true);
-    }
-  }, 1000);
-}
+    // 🔹 Show alert ONLY if not opened from app
+    setTimeout(() => {
+      if (!document.hidden && !this.fromApp) {
+        alert('Please open the Blacklane app to complete registration!');
+        this.showAppDownloadDialog.set(true);
+      }
+    }, 1000);
+  }
 }

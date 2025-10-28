@@ -62,7 +62,7 @@ export class AppRegisterComponent implements OnInit {
     this.http.get<any>('https://ipwho.is/')
       .subscribe({
         next: (data) => {
-          const countryName = data.country;
+          const countryName = data.country_name;
           const validCountries = Object.keys(this.countryPositions);
           if (validCountries.includes(countryName)) {
             this.country.set(countryName);
