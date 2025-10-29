@@ -21,8 +21,17 @@ export class AppRegisterComponent implements OnInit {
   errorMessage = signal<string>('');
   showAppDownloadDialog = signal<boolean>(false);
 
-  countryPositions:any = ['Manager', 'Developer', 'Designer', 'HR Manager', 'Sales Executive'] 
+  // --- Country → Positions Mapping ---
+  private countryPositions: { [key: string]: string[] } = {
+     ['Manager', 'Developer', 'Designer', 'HR Manager', 'Sales Executive']
+    "India": ['Team Lead', 'Software Engineer', 'UI/UX Designer', 'Project Manager', 'Business Analyst'],
+    "United Kingdom": ['Director', 'Senior Developer', 'Product Designer', 'Operations Manager', 'Marketing Head'],
+    "Canada": ['Tech Lead', 'Full Stack Developer', 'Frontend Developer', 'System Admin', 'Data Analyst'],
+    "Australia": ['CEO', 'CTO', 'Product Manager', 'DevOps Engineer', 'Quality Analyst'],
+  };
+
   // --- Computed Signals ---
+  availablePositions = computed(() => this.countryPositions[this.country()] || []);
   showPositionField = computed(() => !!this.country());
   showEmailField = computed(() => !!this.country() && !!this.position());
   isEmailValid = computed(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email()));

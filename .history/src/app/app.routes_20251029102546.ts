@@ -12,7 +12,7 @@ export const routes: Routes = [
     children: [
       {
         path: "",
-        redirectTo: "",
+        redirectTo: "app-register",
         pathMatch: "full",
       },
       {

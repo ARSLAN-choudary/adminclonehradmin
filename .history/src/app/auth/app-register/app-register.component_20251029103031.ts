@@ -20,9 +20,10 @@ export class AppRegisterComponent implements OnInit {
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
   showAppDownloadDialog = signal<boolean>(false);
-
+  
   countryPositions:any = ['Manager', 'Developer', 'Designer', 'HR Manager', 'Sales Executive'] 
   // --- Computed Signals ---
+  availablePositions = computed(() => this.countryPositions[this.country()] || []);
   showPositionField = computed(() => !!this.country());
   showEmailField = computed(() => !!this.country() && !!this.position());
   isEmailValid = computed(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email()));

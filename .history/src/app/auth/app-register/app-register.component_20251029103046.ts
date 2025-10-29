@@ -23,6 +23,7 @@ export class AppRegisterComponent implements OnInit {
 
   countryPositions:any = ['Manager', 'Developer', 'Designer', 'HR Manager', 'Sales Executive'] 
   // --- Computed Signals ---
+  
   showPositionField = computed(() => !!this.country());
   showEmailField = computed(() => !!this.country() && !!this.position());
   isEmailValid = computed(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email()));
