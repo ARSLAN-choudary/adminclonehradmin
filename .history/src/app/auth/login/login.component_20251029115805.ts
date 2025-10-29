@@ -1,7 +1,7 @@
-import { Component, OnInit, signal, WritableSignal } from "@angular/core";
-import { routes } from "../../shared/routes/routes";
-import { Router, RouterLink } from "@angular/router";
-import { CommonModule } from "@angular/common";
+import {Component, OnInit, signal, WritableSignal} from "@angular/core";
+import {routes} from "../../shared/routes/routes";
+import {Router, RouterLink} from "@angular/router";
+import {CommonModule} from "@angular/common";
 import {
     FormBuilder,
     FormGroup,
@@ -9,9 +9,9 @@ import {
     ReactiveFormsModule,
     Validators,
 } from "@angular/forms";
-import { AuthService } from "../../Services/auth.service";
-import { ToastrService } from "ngx-toastr";
-import { HttpErrorResponse } from "@angular/common/http";
+import {AuthService} from "../../Services/auth.service";
+import {ToastrService} from "ngx-toastr";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
     selector: "app-login",
@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
             return;
         }
 
-        const { email, password } = this.loginForm.value;
+        const {email, password} = this.loginForm.value;
 
         this.auth.login(email, password).subscribe(
             (data) => {

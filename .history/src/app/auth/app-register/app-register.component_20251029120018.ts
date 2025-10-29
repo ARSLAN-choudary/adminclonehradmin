@@ -21,8 +21,8 @@ export class AppRegisterComponent implements OnInit {
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
   showAppDownloadDialog = signal<boolean>(false);
+  
   countryPositions: any = []
-  noPositionAvailable: any
   // --- Computed Signals ---
   showPositionField = computed(() => !!this.country());
   showEmailField = computed(() => !!this.country() && !!this.position());
@@ -69,13 +69,8 @@ export class AppRegisterComponent implements OnInit {
     }
     this.http.post(CONFIG.getCountryList, req).subscribe({
       next: (res: any) => {
-        if (res.data[0]?.positions) {
-          this.countryPositions = res.data[0]?.positions
-          console.log('this.countryPositions', this.countryPositions);
-        } else {
-          this.noPositionAvailable = res.message
-        }
-
+        this.countryPositions = res.data[0]?.positions
+        console.log('this.countryPositions', this.countryPositions);
       },
       error: (err) => console.error('❌ Failed to detect position:', err),
     });

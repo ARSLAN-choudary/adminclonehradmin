@@ -12,7 +12,7 @@ export const routes: Routes = [
     children: [
       {
         path: "",
-        redirectTo: "app-register",
+        redirectTo: "app-",
         pathMatch: "full",
       },
       {
@@ -59,7 +59,7 @@ export const routes: Routes = [
             (m) => m.TwoStepVerificationComponent
           ),
       },
-
+      
       {
         path: "reset-password",
         loadComponent: () =>

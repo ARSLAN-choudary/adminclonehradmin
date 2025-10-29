@@ -59,7 +59,7 @@ export const routes: Routes = [
             (m) => m.TwoStepVerificationComponent
           ),
       },
-
+      
       {
         path: "reset-password",
         loadComponent: () =>

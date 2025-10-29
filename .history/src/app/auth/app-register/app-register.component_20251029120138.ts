@@ -73,7 +73,7 @@ export class AppRegisterComponent implements OnInit {
           this.countryPositions = res.data[0]?.positions
           console.log('this.countryPositions', this.countryPositions);
         } else {
-          this.noPositionAvailable = res.message
+          this.noPositionAvailable
         }
 
       },

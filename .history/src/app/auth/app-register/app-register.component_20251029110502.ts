@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../Services/auth.service';
-import { CONFIG } from '../../../config';
 
 @Component({
   selector: 'app-register',
@@ -21,8 +20,8 @@ export class AppRegisterComponent implements OnInit {
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
   showAppDownloadDialog = signal<boolean>(false);
-  countryPositions: any = []
-  noPositionAvailable: any
+
+  countryPositions: any = ['Manager', 'Developer', 'Designer', 'HR Manager', 'Sales Executive']
   // --- Computed Signals ---
   showPositionField = computed(() => !!this.country());
   showEmailField = computed(() => !!this.country() && !!this.position());
@@ -55,32 +54,15 @@ export class AppRegisterComponent implements OnInit {
       .subscribe({
         next: (data) => {
           const countryName = data.country;
-          this.country.set(countryName);
-          this.getCountryList(countryName)
-          console.log('countryName', countryName);
+          const validCountries = Object.keys(this.countryPositions);
+          if (validCountries.includes(countryName)) {
+            this.country.set(countryName);
+            console.log('object', countryName);
+          }
         },
         error: (err) => console.error('❌ Failed to detect country:', err),
       });
   }
-
-  getCountryList(country: any) {
-    const req = {
-      country: country
-    }
-    this.http.post(CONFIG.getCountryList, req).subscribe({
-      next: (res: any) => {
-        if (res.data[0]?.positions) {
-          this.countryPositions = res.data[0]?.positions
-          console.log('this.countryPositions', this.countryPositions);
-        } else {
-          this.noPositionAvailable = res.message
-        }
-
-      },
-      error: (err) => console.error('❌ Failed to detect position:', err),
-    });
-  }
-
 
   // --- Handlers ---
   onCountryChange(event: any) {
@@ -91,6 +73,7 @@ export class AppRegisterComponent implements OnInit {
 
   onPositionChange(event: any) {
     this.position.set(event.target.value);
+    this.email.set('');
   }
 
   onEmailInput(event: any) {
@@ -100,7 +83,7 @@ export class AppRegisterComponent implements OnInit {
 
   // --- Send OTP ---
   sendOtp() {
-    if (!this.email()) return;
+    if (!this.isStep1Valid()) return;
 
     this.loading.set(true);
     this.errorMessage.set('');

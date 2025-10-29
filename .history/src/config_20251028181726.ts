@@ -31,6 +31,5 @@ export const CONFIG = {
   GetBoltVehicle: BASE_URL_BOLT + "/getVehicles",
   getBoltFleetStateLogs: BASE_URL_BOLT + "/getFleetStateLogs",
   verifyregisterapi:BASE_URL_API+"/api/auth/register",
-  registerapi:BASE_URL_API+"/api/auth/uservarify",
-  getCountryList: BASE_URL_API +'/api/position/getposition'
+  registerapi:BASE_URL_API+"/api/auth/uservarify"
 };

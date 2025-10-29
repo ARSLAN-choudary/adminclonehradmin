@@ -11,7 +11,7 @@ export const routes: Routes = [
       import("./auth/auth.component").then((m) => m.AuthComponent),
     children: [
       {
-        path: "",
+        path: ",
         redirectTo: "app-register",
         pathMatch: "full",
       },

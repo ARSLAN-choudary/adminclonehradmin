@@ -10,11 +10,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import("./auth/auth.component").then((m) => m.AuthComponent),
     children: [
-      {
-        path: "",
-        redirectTo: "app-register",
-        pathMatch: "full",
-      },
+      // {
+      //   path: "app-register",
+      //   redirectTo: "app-register",
+      //   pathMatch: "full",
+      // },
       {
         path: "login",
         loadComponent: () =>

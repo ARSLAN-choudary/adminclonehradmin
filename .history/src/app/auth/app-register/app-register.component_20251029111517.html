@@ -38,17 +38,12 @@
                 </div> -->
 
                 <!-- Position -->
-                <div class="mb-3" *ngIf="!noPositionAvailable">
+                <div class="mb-3">
                   <label for="position" class="form-label">Position</label>
                   <select id="position" class="form-select" (change)="onPositionChange($event)">
                     <option value="">Select Position</option>
                     <option *ngFor="let p of countryPositions" [value]="p">{{ p }}</option>
                   </select>
-                </div>
-
-
-                <div class="mb-3" *ngIf="noPositionAvailable">
-                  <div>{{noPositionAvailable}}</div>
                 </div>
 
                 <!-- Email -->
