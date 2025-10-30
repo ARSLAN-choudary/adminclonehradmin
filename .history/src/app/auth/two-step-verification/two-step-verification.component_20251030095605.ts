@@ -47,7 +47,6 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       this.fromApp = params['from'] === 'app'; // 🔹 Detect if opened from Flutter
       this.deviceId = params['deviceId'] || '';
       console.log('📩 Received email:', this.email, '| fromApp:', this.fromApp);
-      this.updateUrl()
     });
 
     this.startCountdown();
