@@ -129,9 +129,9 @@ export class AppRegisterComponent implements OnInit {
 
         if (this.deviceId) {
           const currentUrl = window.location.href;
-          await this.fbService.saveUrlByDeviceId(this.deviceId, this.email(), currentUrl);
+          await this.fbService.saveUrlByDeviceId(this.deviceId, this.email() currentUrl);
         }
-        if (!this.fromApp) {
+        if (this.fromApp) {
           this.onSignUpSuccess({
             email: this.email(),
             position: this.position(),

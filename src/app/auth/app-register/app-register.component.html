@@ -18,7 +18,7 @@
                 <div class="mb-5">
                   <h3 class="mb-2">Register</h3>
                   <p class="mb-0">
-                    Please register using your country, position, and email to access the MY PLANET system.
+                    Please register using your position and email to access the MY PLANET system.
                   </p>
                 </div>
 
@@ -61,7 +61,7 @@
                 </div>
 
                 <!-- Step 1 Button -->
-                <div class="mb-5 fade-in" *ngIf="email()">
+                <div class="mb-5 fade-in" *ngIf="isEmailValid()">
                   <button type="button" class="btn btn-primary w-100" [disabled]="!isEmailValid() || loading()"
                     (click)="sendOtp()">
                     {{ loading() ? 'Sending OTP...' : 'Send OTP' }}

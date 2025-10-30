@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../Services/auth.service';
 import { routes } from '../../shared/routes/routes';
+import { FirebaseStoreService } from '../../Services/firebase-store.service';
 
 @Component({
   selector: 'app-two-step-verification',
@@ -18,7 +19,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   public email: string = '';
   public loading = false;
   public errorMessage = '';
-
+  deviceId: any
   public oneTimePassword = {
     data1: '',
     data2: '',
@@ -36,13 +37,15 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private firebaseStore: FirebaseStoreService
+  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       this.email = params['email'] || '';
       this.fromApp = params['from'] === 'app'; // 🔹 Detect if opened from Flutter
+      this.deviceId = params['deviceId'] || '';
       console.log('📩 Received email:', this.email, '| fromApp:', this.fromApp);
     });
 
@@ -52,6 +55,14 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
+    }
+  }
+
+
+  updateUrl() {
+    if (this.deviceId) {
+      const currentUrl = window.location.href;
+      this.firebaseStore.updateUrlByDeviceId(this.deviceId, currentUrl)
     }
   }
 
@@ -143,13 +154,9 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
         console.log('✅ OTP Verified Successfully:', res);
         this.loading = false;
         this.router.navigateByUrl('/waiting-for-approval')
-        this.otpSucces(); // 🔹 Call success handler
-
-        setTimeout(() => {
-          if (!document.hidden) {
-            this.router.navigate(['/login']);
-          }
-        }, 1500);
+        if (!this.fromApp) {
+          this.otpSucces();
+        }
       },
       error: (err: any) => {
         this.loading = false;
@@ -161,25 +168,25 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   }
 
   // --- Deep link logic (safe version) ---
- otpSucces() {
-  if (!this.fromApp) {
-    const redirectUrl = '/login';
-    const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(redirectUrl)}`;
-    window.location.href = flutterUrl;
-  }
+  otpSucces() {
+    if (!this.fromApp) {
+      const redirectUrl = '/login';
+      const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(redirectUrl)}`;
+      window.location.href = flutterUrl;
+    }
 
-  setTimeout(() => {
-    if (!document.hidden && !this.fromApp) { 
-      if (this.isMobileDevice()) {
-        if (!this.isInWebView()) {
+    setTimeout(() => {
+      if (!document.hidden && !this.fromApp) {
+        if (this.isMobileDevice()) {
+          if (!this.isInWebView()) {
+            alert('Please open the Blacklane app to complete registration!');
+          }
+        } else {
           alert('Please open the Blacklane app to complete registration!');
         }
-      } else {
-        alert('Please open the Blacklane app to complete registration!');
       }
-    }
-  }, 1000);
-}
+    }, 1000);
+  }
 
 
   private isInWebView(): boolean {
@@ -196,4 +203,10 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   private isMobileDevice(): boolean {
     return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   }
+
+  // async save() {
+  //   await this.fbService.saveUrlByEmail(this.email, this.url);
+  //   const data = await this.fbService.getUrlsByEmail(this.email);
+  //   console.log("📦 Firestore data for user:", data);
+  // }
 }
