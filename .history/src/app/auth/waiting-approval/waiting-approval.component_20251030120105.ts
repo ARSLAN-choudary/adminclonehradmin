@@ -17,6 +17,7 @@ export class WaitingApprovalComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.deviceId = params['deviceId'] || '';
       if (this.deviceId) {
+        // Delay thoda dena taake URL ready ho
         setTimeout(() => {
           this.updateUrl();
         }, 100);
