@@ -19,6 +19,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   public email: string = '';
   public loading = false;
   public errorMessage = '';
+  deviceId: any
   public oneTimePassword = {
     data1: '',
     data2: '',
@@ -44,7 +45,9 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       this.email = params['email'] || '';
       this.fromApp = params['from'] === 'app'; // 🔹 Detect if opened from Flutter
+      this.deviceId = params['deviceId'] || '';
       console.log('📩 Received email:', this.email, '| fromApp:', this.fromApp);
+      this.updateUrl()
     });
 
     this.startCountdown();

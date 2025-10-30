@@ -19,6 +19,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   public email: string = '';
   public loading = false;
   public errorMessage = '';
+  deviceId: any
   public oneTimePassword = {
     data1: '',
     data2: '',
