@@ -2,8 +2,7 @@
 .account-bg-01 {
   background: url("/assets/img/app-register/login-bg.jpg") center center no-repeat;
   background-size: cover;
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100dvh;
 }
 
 .acc-vh {
@@ -114,7 +113,7 @@
 
   .vh-100 {
     height: auto !important;
-    height: 100dvh;
+    min-height: 100vh;
   }
 
   .auth-logo img {
@@ -150,7 +149,7 @@
   text-align: center;
 }
 .vh-100 {
-  height: 100dvh;
+  height: 100vh;
 }
 .w-100 {
   width: 100%;
