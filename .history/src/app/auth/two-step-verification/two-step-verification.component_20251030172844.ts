@@ -47,6 +47,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       this.fromApp = params['from'] === 'app'; // 🔹 Detect if opened from Flutter
       this.deviceId = params['deviceId'] || '';
       console.log('📩 Received email:', this.email, '| fromApp:', this.fromApp);
+      this.updateUrl()
     });
 
     this.startCountdown();
@@ -59,7 +60,13 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   }
 
 
- 
+  updateUrl() {
+    if (this.deviceId) {
+      const currentUrl = window.location.href;
+      this.firebaseStore.updateUrlByDeviceId(this.deviceId, currentUrl)
+    }
+  }
+
   // --- Countdown logic ---
   private startCountdown(): void {
     this.totalSeconds = 600;
