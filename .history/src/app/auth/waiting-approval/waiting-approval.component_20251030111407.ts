@@ -16,9 +16,8 @@ export class WaitingApprovalComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.deviceId = params['deviceId'] || '';
-      this.updateUrl()
     })
-
+    this.updateUrl()
   }
 
 
