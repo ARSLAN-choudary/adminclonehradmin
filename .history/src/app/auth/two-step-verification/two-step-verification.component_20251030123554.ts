@@ -158,8 +158,8 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
           this.router.navigate(['/waiting-for-approval'], {
             queryParams: { deviceId: this.deviceId, from: 'app' },
           });
-        } else {
-          this.router.navigateByUrl('waiting-for-approval')
+        }else{
+          this.router.navi
         }
 
         if (!this.fromApp) {

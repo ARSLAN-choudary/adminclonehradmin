@@ -154,12 +154,10 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         console.log('✅ OTP Verified Successfully:', res);
         this.loading = false;
-        if (this.fromApp) {
+        if () {
           this.router.navigate(['/waiting-for-approval'], {
             queryParams: { deviceId: this.deviceId, from: 'app' },
           });
-        } else {
-          this.router.navigateByUrl('waiting-for-approval')
         }
 
         if (!this.fromApp) {
