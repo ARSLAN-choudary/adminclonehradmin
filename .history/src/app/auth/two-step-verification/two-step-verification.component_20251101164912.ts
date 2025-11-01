@@ -110,6 +110,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     }
 
 
+    // 🔹 Auto verify OTP when 4th digit entered
     const otp = this.getFullOtp();
     if (otp.length === 4) {
       setTimeout(() => this.verifyOtp(), 100); 

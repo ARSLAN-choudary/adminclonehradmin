@@ -59,7 +59,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   }
 
 
-
+ 
   // --- Countdown logic ---
   private startCountdown(): void {
     this.totalSeconds = 600;
@@ -107,12 +107,6 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       case 'digit-4':
         this.oneTimePassword.data4 = input.value;
         break;
-    }
-
-
-    const otp = this.getFullOtp();
-    if (otp.length === 4) {
-      setTimeout(() => this.verifyOtp(), 100); 
     }
   }
 
