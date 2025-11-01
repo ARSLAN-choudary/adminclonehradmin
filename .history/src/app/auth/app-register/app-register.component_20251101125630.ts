@@ -17,7 +17,7 @@ import { FirebaseStoreService } from '../../Services/firebase-store.service';
 export class AppRegisterComponent implements OnInit {
   // --- Signals ---
   country = signal<string>('');
-  isLoading: boolean = false
+  isLoading:boolean = false
   position = signal<string>('');
   email = signal<string>('');
   loading = signal<boolean>(false);
@@ -56,7 +56,6 @@ export class AppRegisterComponent implements OnInit {
   }
 
   private detectUserCountry() {
-    this.isLoading = true
     this.http.get<any>('https://ipwho.is/')
       .subscribe({
         next: (data) => {
@@ -81,7 +80,7 @@ export class AppRegisterComponent implements OnInit {
         } else {
           this.noPositionAvailable = res.message
         }
-        this.isLoading = false
+
       },
       error: (err) => console.error('❌ Failed to detect position:', err),
     });

@@ -70,6 +70,7 @@ export class AppRegisterComponent implements OnInit {
   }
 
   getCountryList(country: any) {
+    this.isLoading = true
     const req = {
       country: country
     }

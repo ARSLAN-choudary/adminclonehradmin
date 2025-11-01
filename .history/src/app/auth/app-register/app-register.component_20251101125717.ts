@@ -56,7 +56,6 @@ export class AppRegisterComponent implements OnInit {
   }
 
   private detectUserCountry() {
-    this.isLoading = true
     this.http.get<any>('https://ipwho.is/')
       .subscribe({
         next: (data) => {
@@ -70,6 +69,7 @@ export class AppRegisterComponent implements OnInit {
   }
 
   getCountryList(country: any) {
+    this.isLoading = true
     const req = {
       country: country
     }
@@ -82,6 +82,7 @@ export class AppRegisterComponent implements OnInit {
           this.noPositionAvailable = res.message
         }
         this.isLoading = false
+
       },
       error: (err) => console.error('❌ Failed to detect position:', err),
     });
