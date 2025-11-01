@@ -6,6 +6,10 @@
   overflow: hidden;
 }
 
+.vh-100, .acc-vh, .account-bg-01 {
+  height: 100%;
+  min-height: aut; /* dynamic viewport height */
+}
 
 .acc-vh {
   min-height: 100dvh;
@@ -243,4 +247,9 @@
 .spinner-border {
   width: 60px !important;
   height: 60px !important;
+}
+
+
+body.keyboard-open {
+  position: static !important;
 }

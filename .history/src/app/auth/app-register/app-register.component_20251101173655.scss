@@ -6,6 +6,10 @@
   overflow: hidden;
 }
 
+.vh-100, .acc-vh, .account-bg-01 {
+  height: 100%;
+  min-height: 100dvh; /* dynamic viewport height */
+}
 
 .acc-vh {
   min-height: 100dvh;
