@@ -172,5 +172,19 @@ export class AppRegisterComponent implements OnInit {
       }
     }, 1000);
   }
-  
+
+  scrollToInput(el: HTMLElement) {
+    if (!el) return;
+
+    setTimeout(() => {
+      // Scroll the nearest scrollable container to top
+      const scrollContainer = el.closest('.form-scroll') as HTMLElement;
+      if (scrollContainer) {
+        scrollContainer.scrollTo({ top: 0, behavior: 'auto' }); // scroll instantly to top
+      } else {
+        window.scrollTo({ top: 0, behavior: 'auto' }); // fallback
+      }
+    }, 500); // wait for keyboard to open
+  }
+
 }

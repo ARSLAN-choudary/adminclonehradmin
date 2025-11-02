@@ -1,7 +1,7 @@
-<div class="account-page bg-white overflow-hidden">
-  <div class="main-wrapper overflow-hidden">
-    <div class=" p-3 acc-vh">
-      <div class="row vh-100 w-100 g-0">
+<div class="account-page bg-white ">
+  <div class="main-wrapper ">
+    <div class=" p-3 acc-vh ">
+      <div class="row vh-100 w-100 g-0 ">
         <div class="col-lg-6 overflow-y-auto overflow-x-hidden">
           <div class="row">
             <div class="col-md-10 mx-auto">
@@ -54,8 +54,8 @@
                 <!-- Email -->
                 <div class="mb-3" *ngIf="position()">
                   <label for="email" class="form-label">Email</label>
-                  <input type="email" class="form-control" [value]="email()" (input)="onEmailInput($event)"
-                    placeholder="Enter your email">
+                  <input #emailInput type="email" class="form-control" [value]="email()" (input)="onEmailInput($event)"
+                    (focus)="scrollToInput(emailInput)" placeholder="Enter your email">
                   <div class="text-danger small mt-1" *ngIf="email() && !isEmailValid()">Please enter a valid email
                     address</div>
                 </div>

@@ -172,5 +172,12 @@ export class AppRegisterComponent implements OnInit {
       }
     }, 1000);
   }
-  
+
+  scrollToInput(el: HTMLElement) {
+    if (!el) return;
+
+    setTimeout(() => {
+      el.scrollIntoView({ block: 'center' });
+    }, 00);
+  }
 }
