@@ -173,11 +173,17 @@ export class AppRegisterComponent implements OnInit {
     }, 1000);
   }
 
-  scrollToInput(el: HTMLElement) {
-    if (!el) return;
-
-    setTimeout(() => {
-      el.scrollIntoView({ block: 'center' });
-    }, 500);
+  lockBodyScroll() {
+    const scrollY = window.scrollY;
+    document.body.classList.add('body-locked');
+    document.body.style.top = `-${scrollY}px`;
   }
+
+  unlockBodyScroll() {
+    const scrollY = Math.abs(parseInt(document.body.style.top || '0'));
+    document.body.classList.remove('body-locked');
+    document.body.style.top = '';
+    window.scrollTo(0, scrollY);
+  }
+
 }

@@ -3640,4 +3640,10 @@ tag-input {
   display: none;
 }
 
-
+.body-locked {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+}

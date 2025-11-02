@@ -244,15 +244,3 @@
   width: 60px !important;
   height: 60px !important;
 }
-
-.form-scroll {
-  height: 100%;
-  overflow-y: auto; /* only this container scrolls */
-  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
-  padding-bottom: 50px; /* extra space so keyboard doesn’t hide last input */
-}
-
-/* Prevent iOS zoom/jump on inputs */
-input, select, textarea {
-  font-size: 16px !important;
-}

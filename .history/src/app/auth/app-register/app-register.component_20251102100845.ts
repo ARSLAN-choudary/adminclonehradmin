@@ -176,8 +176,7 @@ export class AppRegisterComponent implements OnInit {
   scrollToInput(el: HTMLElement) {
     if (!el) return;
 
-    setTimeout(() => {
-      el.scrollIntoView({ block: 'center' });
-    }, 500);
+    // Scroll the nearest scrollable container
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }

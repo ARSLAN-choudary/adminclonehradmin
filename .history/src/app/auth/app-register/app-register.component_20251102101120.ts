@@ -177,7 +177,7 @@ export class AppRegisterComponent implements OnInit {
     if (!el) return;
 
     setTimeout(() => {
-      el.scrollIntoView({ block: 'center' });
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 500);
   }
 }
