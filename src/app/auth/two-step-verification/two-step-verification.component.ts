@@ -1,33 +1,34 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { AuthService } from '../../Services/auth.service';
-import { routes } from '../../shared/routes/routes';
-import { FirebaseStoreService } from '../../Services/firebase-store.service';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import { CommonModule } from "@angular/common";
+import { AuthService } from "../../Services/auth.service";
+import { routes } from "../../shared/routes/routes";
+import { FirebaseStoreService } from "../../Services/firebase-store.service";
 
 @Component({
-  selector: 'app-two-step-verification',
+  selector: "app-two-step-verification",
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './two-step-verification.component.html',
-  styleUrls: ['./two-step-verification.component.scss'],
+  templateUrl: "./two-step-verification.component.html",
+  styleUrls: ["./two-step-verification.component.scss"],
 })
 export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   public routes = routes;
   public currentYear = new Date().getFullYear();
-  public email: string = '';
+  public email: string = "";
   public loading = false;
-  public errorMessage = '';
-  deviceId: any
+  public errorMessage = "";
+  deviceId: any;
+  private fcmToken: string = "";
   public oneTimePassword = {
-    data1: '',
-    data2: '',
-    data3: '',
-    data4: '',
+    data1: "",
+    data2: "",
+    data3: "",
+    data4: "",
   };
 
-  public countdownDisplay: string = '10:00';
+  public countdownDisplay: string = "10:00";
   private countdownInterval: any;
   private totalSeconds: number = 600;
 
@@ -39,14 +40,16 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private authService: AuthService,
     private firebaseStore: FirebaseStoreService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      this.email = params['email'] || '';
-      this.fromApp = params['from'] === 'app'; // 🔹 Detect if opened from Flutter
-      this.deviceId = params['deviceId'] || '';
-      console.log('📩 Received email:', this.email, '| fromApp:', this.fromApp);
+      this.email = params["email"] || "";
+      this.fromApp = params["from"] === "app"; // 🔹 Detect if opened from Flutter
+      this.deviceId = params["deviceId"] || "";
+      this.fcmToken = params["fcmToken"] || "";
+
+      console.log("📩 Received email:", this.email, "| fromApp:", this.fromApp);
     });
 
     this.startCountdown();
@@ -57,8 +60,6 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       clearInterval(this.countdownInterval);
     }
   }
-
-
 
   // --- Countdown logic ---
   private startCountdown(): void {
@@ -78,9 +79,9 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   private updateCountdownDisplay(): void {
     const minutes = Math.floor(this.totalSeconds / 60);
     const seconds = this.totalSeconds % 60;
-    this.countdownDisplay = `${minutes
+    this.countdownDisplay = `${minutes.toString().padStart(2, "0")}:${seconds
       .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      .padStart(2, "0")}`;
   }
 
   // --- Input handling ---
@@ -88,47 +89,46 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   public ValueChanged(event: any, box: string): void {
     const input = event.target as HTMLInputElement;
     // Allow only digits and max 1 character
-    input.value = input.value.replace(/[^0-9]/g, '').slice(0, 1);
+    input.value = input.value.replace(/[^0-9]/g, "").slice(0, 1);
 
     // Sync model
     switch (box) {
-      case 'digit-1':
+      case "digit-1":
         this.oneTimePassword.data1 = input.value;
-        if (input.value) document.getElementById('digit-2')?.focus();
+        if (input.value) document.getElementById("digit-2")?.focus();
         break;
-      case 'digit-2':
+      case "digit-2":
         this.oneTimePassword.data2 = input.value;
-        if (input.value) document.getElementById('digit-3')?.focus();
+        if (input.value) document.getElementById("digit-3")?.focus();
         break;
-      case 'digit-3':
+      case "digit-3":
         this.oneTimePassword.data3 = input.value;
-        if (input.value) document.getElementById('digit-4')?.focus();
+        if (input.value) document.getElementById("digit-4")?.focus();
         break;
-      case 'digit-4':
+      case "digit-4":
         this.oneTimePassword.data4 = input.value;
         break;
     }
 
-
     const otp = this.getFullOtp();
     if (otp.length === 4) {
-      setTimeout(() => this.verifyOtp(), 100); 
+      setTimeout(() => this.verifyOtp(), 100);
     }
   }
 
   public tiggerBackspace(event: any, box: string): void {
     const input = event.target as HTMLInputElement;
 
-    if (event.key === 'Backspace' && !input.value) {
+    if (event.key === "Backspace" && !input.value) {
       switch (box) {
-        case 'digit-4':
-          this.focusPrev('digit-3');
+        case "digit-4":
+          this.focusPrev("digit-3");
           break;
-        case 'digit-3':
-          this.focusPrev('digit-2');
+        case "digit-3":
+          this.focusPrev("digit-2");
           break;
-        case 'digit-2':
-          this.focusPrev('digit-1');
+        case "digit-2":
+          this.focusPrev("digit-1");
           break;
       }
     }
@@ -154,25 +154,25 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     const otp = this.getFullOtp();
 
     if (otp.length !== 4) {
-      this.errorMessage = 'Please enter a valid 4-digit OTP';
+      this.errorMessage = "Please enter a valid 4-digit OTP";
       return;
     }
 
     this.loading = true;
-    this.errorMessage = '';
+    this.errorMessage = "";
 
-    console.log('📤 Verifying OTP:', { email: this.email, otp });
+    console.log("📤 Verifying OTP:", { email: this.email, otp });
 
     this.authService.verifyOtp(this.email, otp).subscribe({
       next: (res: any) => {
-        console.log('✅ OTP Verified Successfully:', res);
+        console.log("✅ OTP Verified Successfully:", res);
         this.loading = false;
         if (this.fromApp) {
-          this.router.navigate(['/waiting-for-approval'], {
-            queryParams: { deviceId: this.deviceId, from: 'app' },
+          this.router.navigate(["/waiting-for-approval"], {
+            queryParams: { deviceId: this.deviceId, from: "app" },
           });
         } else {
-          this.router.navigateByUrl('waiting-for-approval')
+          this.router.navigateByUrl("waiting-for-approval");
         }
 
         if (!this.fromApp) {
@@ -181,9 +181,9 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       },
       error: (err: any) => {
         this.loading = false;
-        console.error('❌ OTP verification failed:', err);
+        console.error("❌ OTP verification failed:", err);
         this.errorMessage =
-          err?.error?.message || 'OTP verification failed, please try again.';
+          err?.error?.message || "OTP verification failed, please try again.";
       },
     });
   }
@@ -191,8 +191,10 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
   // --- Deep link logic (safe version) ---
   otpSucces() {
     if (!this.fromApp) {
-      const redirectUrl = '/login';
-      const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(redirectUrl)}`;
+      const redirectUrl = "/login";
+      const flutterUrl = `blacklane://registered?redirect=${encodeURIComponent(
+        redirectUrl
+      )}`;
       window.location.href = flutterUrl;
     }
 
@@ -200,18 +202,17 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       if (!document.hidden && !this.fromApp) {
         if (this.isMobileDevice()) {
           if (!this.isInWebView()) {
-            alert('Please open the Blacklane app to complete registration!');
+            alert("Please open the Blacklane app to complete registration!");
           }
         } else {
-          alert('Please open the Blacklane app to complete registration!');
+          alert("Please open the Blacklane app to complete registration!");
         }
       }
     }, 1000);
   }
 
-
   private isInWebView(): boolean {
-    const userAgent = navigator.userAgent || navigator.vendor || '';
+    const userAgent = navigator.userAgent || navigator.vendor || "";
     return (
       /wv/.test(userAgent) ||
       /\bWebView\b/.test(userAgent) ||

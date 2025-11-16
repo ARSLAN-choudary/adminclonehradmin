@@ -18,9 +18,7 @@ export const routes: Routes = [
       {
         path: "login",
         loadComponent: () =>
-          import("./auth/login/login.component").then(
-            (m) => m.LoginComponent
-          ),
+          import("./auth/login/login.component").then((m) => m.LoginComponent),
         canActivate: [loginRedirectGuard],
       },
       {
@@ -55,9 +53,9 @@ export const routes: Routes = [
       {
         path: "two-step-verification",
         loadComponent: () =>
-          import("./auth/two-step-verification/two-step-verification.component").then(
-            (m) => m.TwoStepVerificationComponent
-          ),
+          import(
+            "./auth/two-step-verification/two-step-verification.component"
+          ).then((m) => m.TwoStepVerificationComponent),
       },
 
       {
@@ -1951,9 +1949,11 @@ export const routes: Routes = [
   },
 
   {
-    path: 'app-register',
+    path: "app-register",
     loadComponent: () =>
-      import('./auth/app-register/app-register.component').then((m) => m.AppRegisterComponent),
+      import("./auth/app-register/app-register.component").then(
+        (m) => m.AppRegisterComponent
+      ),
   },
   { path: "**", component: LoginComponent },
 ] as const;

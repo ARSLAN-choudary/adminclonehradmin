@@ -22,7 +22,7 @@ const firebaseConfig = {
   storageBucket: "blacklane-bdbf4.firebasestorage.app",
   messagingSenderId: "636602181517",
   appId: "1:636602181517:web:23df830edc2a258bed3fc4",
-  measurementId: "G-0QSVE900ZY"
+  measurementId: "G-0QSVE900ZY",
 };
 
 export const appConfig: ApplicationConfig = {

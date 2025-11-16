@@ -1,0 +1,185 @@
+.doc-upload-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: system-ui, sans-serif;
+}
+
+h2 {
+  margin-bottom: 0.75rem;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.doc-card {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem 0.9rem;
+  cursor: pointer;
+  background: #fff;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.doc-card h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+}
+
+.doc-card p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.doc-card span {
+  font-weight: 600;
+}
+
+.doc-card span.done {
+  color: #16a34a;
+}
+
+.doc-card span.pending {
+  color: #ef4444;
+}
+
+.doc-card.active {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px #2563eb33;
+  transform: translateY(-1px);
+}
+
+/* Status */
+.hint {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.hint.good {
+  color: #16a34a;
+}
+.hint.blurry {
+  color: #ef4444;
+}
+.hint.too_far {
+  color: #eab308;
+}
+.hint.too_close {
+  color: #3b82f6;
+}
+.hint.unknown {
+  color: #6b7280;
+}
+
+.debug {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+/* Camera box */
+.camera-box {
+  width: 100%;
+  padding-top: 56.25%;
+  position: relative;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.camera-box video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.actions button {
+  flex: 1 1 0;
+  min-width: 120px;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.actions button[type="submit"] {
+  background: #111827;
+}
+
+.actions button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.actions button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/* Hidden analysis canvas */
+.hidden-canvas {
+  display: none;
+}
+
+/* Permission dialog */
+.permission-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.permission-dialog {
+  max-width: 360px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  font-family: system-ui, sans-serif;
+}
+
+.permission-dialog h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.permission-dialog p {
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.permission-dialog button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+}
