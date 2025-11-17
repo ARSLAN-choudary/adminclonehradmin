@@ -468,7 +468,7 @@
                                 </span>
 
                                 <span class="badge badge-pill cursor-pointer text-white bg-info"
-                                    (click)="openDocs()">Docs</span>
+                                    (click)="openDocs(data)">Docs</span>
 
                             </td>
 
@@ -715,7 +715,6 @@
     </div>
 
     <div class="container py-4">
-
         <!-- TABLE -->
         <div class="card shadow-sm">
             <div class="table-responsive">
@@ -730,10 +729,9 @@
                     </thead>
 
                     <tbody class="doc-table main">
-                        <tr *ngFor="let doc of documents" (click)="onRowClick(doc)">
-                            <td class="d-flex align-items-center gap-2">
-                                <!-- <i [class]="getFileIcon(doc.fileType)"></i> -->
-                                 <img src="/assets/img/app-register/login-bg.jpg" alt="file icon" class="file-icon" />
+                        <tr *ngFor="let doc of currentUserDocs">
+                            <td class="d-flex align-items-center gap-2" (click)="onRowClick(doc)">
+                                <img src="/assets/img/app-register/login-bg.jpg" alt="file icon" class="file-icon" />
                                 <span>{{ doc.name }}</span>
                             </td>
 
@@ -745,63 +743,49 @@
                             </td>
 
                             <td>
-                                <!-- <button class="btn btn-info btn-sm me-2" (click)="openPreview(doc)">
-                                    Preview
-                                </button> -->
-
                                 <div class="d-flex align-items-center">
                                     <ng-container *ngIf="doc.status === 'pending'">
                                         <button
                                             class="btn btn-success btn-sm me-2 d-flex align-items-center gap-1 approve-btn"
-                                            (click)="approve(doc.id)">
+                                            (click)="approve(doc)">
                                             <i class="ti ti-check"></i> Approve
                                         </button>
 
                                         <button class="btn btn-danger btn-sm d-flex align-items-center gap-1"
-                                            (click)="reject(doc.id)">
+                                            (click)="reject(doc)">
                                             <i class="ti ti-x"></i> Reject
                                         </button>
                                     </ng-container>
                                 </div>
-
-
                             </td>
                         </tr>
                     </tbody>
-
                 </table>
             </div>
         </div>
 
-        <!-- PREVIEW MODAL -->
-        <div class="modal fade show d-block" *ngIf="showPreview" style="background: rgba(0,0,0,0.5);">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal fade show d-block preview-modal" *ngIf="showPreview">
+            <div class="modal-dialog modal-lg modal-dialog-centered preview-modal-dialog">
                 <div class="modal-content">
 
-                    <div class="modal-header">
+                    <div class="modal-header preview-modal-header">
                         <div>
                             <h5 class="modal-title fw-bold">{{ selectedDoc?.name }}</h5>
-                            <small class="text-muted">
-                                • {{ selectedDoc?.uploadDate }}
-                            </small>
                         </div>
-
                         <button class="btn-close" (click)="closePreview()"></button>
                     </div>
 
-                    <div class="modal-body bg-light" style="max-height: 70vh; overflow: auto;">
+                    <div
+                        class="modal-body bg-light d-flex justify-content-center align-items-center p-2 preview-modal-body">
 
-                        <!-- Image Preview -->
                         <img *ngIf="selectedDoc?.fileType === 'image'" [src]="getSafeUrl(selectedDoc?.previewUrl!)"
-                            class="img-fluid rounded shadow-sm">
-
-                        <!-- PDF Preview -->
-                        <iframe *ngIf="selectedDoc?.fileType === 'pdf'" [src]="getSafeUrl(selectedDoc?.previewUrl!)"
-                            class="w-100 rounded shadow-sm" style="height: 70vh;" frameborder="0">
-                        </iframe>
+                            class="img-fluid"
+                            style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;">
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
 </div>

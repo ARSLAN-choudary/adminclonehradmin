@@ -219,4 +219,9 @@ export class BackendService {
   verifyOtp(payload: any): Observable<any> {
     return this.http.post(CONFIG.verifyOtp, payload);
   }
+
+ updateDocStatus(payload: any) {
+  return this.http.post(CONFIG.updateDocStatus, payload); 
+  }
+
 }

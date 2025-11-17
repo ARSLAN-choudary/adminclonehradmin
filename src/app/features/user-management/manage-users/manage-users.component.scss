@@ -76,3 +76,22 @@
   object-fit: contain;
 }
 
+.preview-modal-header{
+  padding:5px 20px !important;
+}
+
+.preview-modal{
+  background: rgba(0,0,0,0.5);
+}
+
+.preview-modal-dialog{
+  max-width: 650px;
+}
+
+.preview-modal-body{
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  height: 70vh; 
+  overflow: hidden;
+}
+

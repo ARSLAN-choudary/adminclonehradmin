@@ -119,6 +119,9 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   });
   startDate: string = "";
   endDate: string = "";
+  currentUserId: string = '';
+  currentUserDocs: any[] = [];
+  limit: number = 10;
 
   inActiveUsers: WritableSignal<number> = signal(0);
   activeUsers: WritableSignal<number> = signal(0);
@@ -756,7 +759,22 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
 
 
   // DOCS OFFCANVAS
-  openDocs() {
+  openDocs(user: any) {
+
+    this.currentUserId = user._id;
+
+    this.currentUserDocs = Object.entries(user.documents).map(
+      ([key, value]: any, index) => ({
+        id: index + 1,
+        name: key.toUpperCase(),
+        uploadDate: user.createdAt,
+        previewUrl: value.url,
+        status: value.status,
+        fileType: value.url ? 'image' : 'unknown',
+        key: key
+      })
+    );
+
     const panel = this.docsCanvas.nativeElement;
 
     this.renderer.addClass(panel, "show");
@@ -824,49 +842,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   }
 
 
-  documents: DocumentItem[] = [
-    {
-      id: 1,
-      name: 'Sample Invoice.pdf',
-      uploadDate: '2025-11-10',
-      status: 'pending',
-      previewUrl: '/assets/img/receipt.pdf',
-      fileType: 'pdf'
-    },
-    {
-      id: 2,
-      name: 'Company Logo.png',
-      uploadDate: '2025-11-12',
-      status: 'pending',
-      previewUrl: '/assets/img/receipt.pdf',
-      fileType: 'pdf'
-    },
-    {
-      id: 3,
-      name: 'Sample Photo.jpg',
-      uploadDate: '2025-11-14',
-      status: 'pending',
-      previewUrl: '/assets/img/logo.svg',
-      fileType: 'image'
-    },
-    {
-      id: 4,
-      name: 'Technical Document.pdf',
-      uploadDate: '2025-11-15',
-      status: 'pending',
-      previewUrl: '/assets/img/receipt.pdf',
-      fileType: 'pdf'
-    },
-    {
-      id: 5,
-      name: 'Diagram.svg',
-      uploadDate: '2025-11-16',
-      status: 'pending',
-      previewUrl: '/assets/img/app-register/login-bg.jpg',
-      fileType: 'image'
-    }
-  ];
-
   selectedDoc: DocumentItem | null = null;
   showPreview: boolean = false;
 
@@ -875,19 +850,37 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.showPreview = false;
     this.selectedDoc = null;
   }
+  approve(doc: any) {
+    const payload = {
+      userId: this.currentUserId,
+      documentKey: doc.key,
+      status: 'approved'
+    };
 
-  approve(id: number) {
-    this.documents = this.documents.map(doc =>
-      doc.id === id ? { ...doc, status: 'approved' } : doc
-    );
-    this.closePreview();
+    this.backend.updateDocStatus(payload).subscribe(() => {
+      this.currentUserDocs = this.currentUserDocs.map(d =>
+        d.key === doc.key ? { ...d, status: 'approved' } : d
+      );
+      this.getTableData(this.skip, this.limit);
+      this.closePreview();
+    });
   }
 
-  reject(id: number) {
-    this.documents = this.documents.map(doc =>
-      doc.id === id ? { ...doc, status: 'rejected' } : doc
-    );
-    this.closePreview();
+  reject(doc: any) {
+    const payload = {
+      userId: this.currentUserId,
+      documentKey: doc.key,
+      status: 'rejected'
+    };
+
+    this.backend.updateDocStatus(payload).subscribe(() => {
+      this.currentUserDocs = this.currentUserDocs.map(d =>
+        d.key === doc.key ? { ...d, status: 'rejected' } : d
+      );
+      this.getTableData(this.skip, this.limit);
+
+      this.closePreview();
+    });
   }
 
 
@@ -903,32 +896,17 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     }[status];
   }
 
-  getFileIcon(fileType: string) {
-    switch (fileType) {
-      case 'pdf':
-        return 'ti ti-file-type-pdf text-danger fs-4';
-      case 'image':
-        return 'ti ti-file-type-jpg text-primary fs-4';
-      case 'doc':
-        return 'ti ti-file-type-doc text-info fs-4';
-      case 'excel':
-        return 'ti ti-file-type-xls text-success fs-4';
-      default:
-        return 'ti ti-file text-secondary fs-4';
-    }
-  }
-
   openPreview(doc: DocumentItem) {
     this.selectedDoc = doc;
     this.showPreview = true;
   }
 
- onRowClick(doc: DocumentItem) {
-  this.openPreview(doc);
-}
+  onRowClick(doc: DocumentItem) {
+    this.openPreview(doc);
+  }
 
 
-  pendingCount() { return this.documents.filter(d => d.status === 'pending').length; }
-  approvedCount() { return this.documents.filter(d => d.status === 'approved').length; }
-  rejectedCount() { return this.documents.filter(d => d.status === 'rejected').length; }
+  pendingCount() { return this.currentUserDocs.filter(d => d.status === 'pending').length; }
+  approvedCount() { return this.currentUserDocs.filter(d => d.status === 'approved').length; }
+  rejectedCount() { return this.currentUserDocs.filter(d => d.status === 'rejected').length; }
 }
