@@ -130,6 +130,7 @@ export const routes: Routes = [
           import(
             "./features/main-menu/dashboards/deals-dashboard/deals-dashboard.component"
           ).then((m) => m.DealsDashboardComponent),
+          canActivate: [authGuard],
       },
       {
         path: "lead-dashboard",

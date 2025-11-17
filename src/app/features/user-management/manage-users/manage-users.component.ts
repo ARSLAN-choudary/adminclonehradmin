@@ -44,7 +44,7 @@ import {
   tablePageSize,
 } from "../../../shared/custom-pagination/pagination.service";
 import { DataService } from "../../../shared/data/data.service";
-import { DomSanitizer } from "@angular/platform-browser";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { DateRangePickerComponent } from "../../common/date-range-picker/date-range-picker.component";
 import { ReplaySubject, Subject, takeUntil, tap } from "rxjs";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
@@ -68,6 +68,14 @@ interface Country {
   name: string;
 }
 
+interface DocumentItem {
+  id: number;
+  name: string;
+  uploadDate: string;
+  status: 'pending' | 'approved' | 'rejected';
+  previewUrl: string;
+  fileType: 'pdf' | 'image';
+}
 interface PhoneInputValue {
   number: string;
   nationalNumber: string;
@@ -127,11 +135,15 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   public searchDataValue = "";
   public row = true;
 
+
   deleteUserId!: any;
   @ViewChild("addUserCanvas", { static: true })
   addUserCanvas!: ElementRef<HTMLElement>;
   @ViewChild("editUserCanvas", { static: true })
   editUserCanvas!: ElementRef<HTMLElement>;
+  @ViewChild("docsCanvas") docsCanvas!: ElementRef;
+  docsBackdrop: any;
+
 
   private addBackdrop?: HTMLElement;
   private editBackdrop?: HTMLElement;
@@ -181,7 +193,8 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     private backend: BackendService,
     private toastr: ToastrService,
     private toaster: ToastrService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+
   ) {
     this.countries = [
       { label: "United Arab Emirates", value: "uae" },
@@ -740,4 +753,182 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.tableData = data;
     this.dataSource.data = this.tableData;
   }
+
+
+  // DOCS OFFCANVAS
+  openDocs() {
+    const panel = this.docsCanvas.nativeElement;
+
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.docsBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.docsBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.docsBackdrop, "fade");
+    this.renderer.addClass(this.docsBackdrop, "show");
+
+    if (this.docsBackdrop) {
+      this.docsBackdrop.addEventListener("click", () => this.closeDocs());
+    }
+
+    this.renderer.appendChild(document.body, this.docsBackdrop);
+  }
+
+  closeDocs() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
+    const panel = this.docsCanvas.nativeElement;
+
+    this.renderer.removeClass(panel, "show");
+
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        // hide offcanvas
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+
+        this.renderer.removeStyle(document.body, "overflow");
+
+        if (this.docsBackdrop) {
+          this.renderer.removeChild(document.body, this.docsBackdrop);
+          this.docsBackdrop = undefined;
+        }
+
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+
+        this.renderer.removeStyle(panel, "transform");
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
+
+    panel.addEventListener("transitionend", onTransition);
+
+    if (this.docsBackdrop) {
+      this.renderer.removeChild(document.body, this.docsBackdrop);
+      this.docsBackdrop = undefined;
+    }
+
+    this.renderer.removeStyle(document.body, "overflow");
+  }
+
+
+  documents: DocumentItem[] = [
+    {
+      id: 1,
+      name: 'Sample Invoice.pdf',
+      uploadDate: '2025-11-10',
+      status: 'pending',
+      previewUrl: '/assets/img/receipt.pdf',
+      fileType: 'pdf'
+    },
+    {
+      id: 2,
+      name: 'Company Logo.png',
+      uploadDate: '2025-11-12',
+      status: 'pending',
+      previewUrl: '/assets/img/receipt.pdf',
+      fileType: 'pdf'
+    },
+    {
+      id: 3,
+      name: 'Sample Photo.jpg',
+      uploadDate: '2025-11-14',
+      status: 'pending',
+      previewUrl: '/assets/img/logo.svg',
+      fileType: 'image'
+    },
+    {
+      id: 4,
+      name: 'Technical Document.pdf',
+      uploadDate: '2025-11-15',
+      status: 'pending',
+      previewUrl: '/assets/img/receipt.pdf',
+      fileType: 'pdf'
+    },
+    {
+      id: 5,
+      name: 'Diagram.svg',
+      uploadDate: '2025-11-16',
+      status: 'pending',
+      previewUrl: '/assets/img/app-register/login-bg.jpg',
+      fileType: 'image'
+    }
+  ];
+
+  selectedDoc: DocumentItem | null = null;
+  showPreview: boolean = false;
+
+
+  closePreview() {
+    this.showPreview = false;
+    this.selectedDoc = null;
+  }
+
+  approve(id: number) {
+    this.documents = this.documents.map(doc =>
+      doc.id === id ? { ...doc, status: 'approved' } : doc
+    );
+    this.closePreview();
+  }
+
+  reject(id: number) {
+    this.documents = this.documents.map(doc =>
+      doc.id === id ? { ...doc, status: 'rejected' } : doc
+    );
+    this.closePreview();
+  }
+
+
+  getSafeUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  getBadgeClass(status: string) {
+    return {
+      pending: 'badge bg-warning text-dark',
+      approved: 'badge bg-success',
+      rejected: 'badge bg-danger'
+    }[status];
+  }
+
+  getFileIcon(fileType: string) {
+    switch (fileType) {
+      case 'pdf':
+        return 'ti ti-file-type-pdf text-danger fs-4';
+      case 'image':
+        return 'ti ti-file-type-jpg text-primary fs-4';
+      case 'doc':
+        return 'ti ti-file-type-doc text-info fs-4';
+      case 'excel':
+        return 'ti ti-file-type-xls text-success fs-4';
+      default:
+        return 'ti ti-file text-secondary fs-4';
+    }
+  }
+
+  openPreview(doc: DocumentItem) {
+    this.selectedDoc = doc;
+    this.showPreview = true;
+  }
+
+ onRowClick(doc: DocumentItem) {
+  this.openPreview(doc);
+}
+
+
+  pendingCount() { return this.documents.filter(d => d.status === 'pending').length; }
+  approvedCount() { return this.documents.filter(d => d.status === 'approved').length; }
+  rejectedCount() { return this.documents.filter(d => d.status === 'rejected').length; }
 }

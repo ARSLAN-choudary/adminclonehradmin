@@ -55,3 +55,24 @@
   padding: 0;
   margin: -1px;
 }
+
+.doc-table{
+  cursor: pointer;
+}
+
+.approve-btn {
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.approve-btn:hover {
+  border: #157347;
+  background-color: #157347 !important; 
+  opacity: 0.95;
+}
+
+.file-icon {
+  width: 24px;
+  height: 30px;
+  object-fit: contain;
+}
+
