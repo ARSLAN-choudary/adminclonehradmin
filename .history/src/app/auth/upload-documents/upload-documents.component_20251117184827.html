@@ -2,7 +2,7 @@
     <form class="doc-upload-container" [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <!-- SECTION 1: PERSONAL DETAILS -->
-        <div class="form-section" formGroupName="personalDetails">
+        <div class="form-section">
             <h2>SECTION 1: PERSONAL DETAILS</h2>
 
             <div class="form-grid">
@@ -56,7 +56,7 @@
 
                 <div class="form-group">
                     <label>Date of Birth (DD/MM/YYYY) *</label>
-                    <input type="date" formControlName="dateOfBirth"
+                    <input type="text" formControlName="dateOfBirth" placeholder="DD/MM/YYYY"
                         [class.error]="personalDetails.get('dateOfBirth')?.invalid && personalDetails.get('dateOfBirth')?.touched">
                     <div class="error-message"
                         *ngIf="personalDetails.get('dateOfBirth')?.invalid && personalDetails.get('dateOfBirth')?.touched">
@@ -69,42 +69,30 @@
                 <label>Gender *</label>
                 <div class="radio-group">
                     <label>
-                        <input type="radio" name="gender" formControlName="gender" value="male">
+                        <input type="radio" formControlName="gender" value="male">
                         Male
                     </label>
                     <label>
-                        <input type="radio" name="gender" formControlName="gender" value="female">
+                        <input type="radio" formControlName="gender" value="female">
                         Female
                     </label>
-                </div>
-                <div class="error-message"
-                    *ngIf="personalDetails.get('gender')?.invalid && personalDetails.get('gender')?.touched">
-                    This field is required
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Marital Status *</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="maritalStatus" formControlName="maritalStatus" value="single">
-                        Single</label>
-                    <label><input type="radio" name="maritalStatus" formControlName="maritalStatus" value="married">
-                        Married</label>
-                    <label><input type="radio" name="maritalStatus" formControlName="maritalStatus" value="divorced">
-                        Divorced</label>
-                    <label><input type="radio" name="maritalStatus" formControlName="maritalStatus" value="widowed">
-                        Widowed</label>
-                </div>
-                <div class="error-message"
-                    *ngIf="personalDetails.get('maritalStatus')?.invalid && personalDetails.get('maritalStatus')?.touched">
-                    This field is required
+                    <label><input type="radio" formControlName="maritalStatus" value="single"> Single</label>
+                    <label><input type="radio" formControlName="maritalStatus" value="married"> Married</label>
+                    <label><input type="radio" formControlName="maritalStatus" value="divorced"> Divorced</label>
+                    <label><input type="radio" formControlName="maritalStatus" value="widowed"> Widowed</label>
                 </div>
             </div>
 
             <div class="form-grid">
                 <div class="form-group">
                     <label>Contact Number *</label>
-                    <input type="number" formControlName="contactNumber" placeholder="+995 555 12 34 56"
+                    <input type="tel" formControlName="contactNumber" placeholder="+995 555 12 34 56"
                         [class.error]="personalDetails.get('contactNumber')?.invalid && personalDetails.get('contactNumber')?.touched">
                     <div class="error-message"
                         *ngIf="personalDetails.get('contactNumber')?.invalid && personalDetails.get('contactNumber')?.touched">
@@ -173,41 +161,23 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label>From (MM/YYYY) *</label>
-                            <input type="month" formControlName="from">
-                            <div class="error-message"
-                                *ngIf="education.get('from')?.invalid && education.get('from')?.touched">
-                                This field is required
-                            </div>
+                            <input type="text" formControlName="from" placeholder="MM/YYYY">
                         </div>
 
                         <div class="form-group">
                             <label>To (MM/YYYY) *</label>
-                            <input type="month" formControlName="to">
-                            <div class="error-message"
-                                *ngIf="education.get('to')?.invalid && education.get('to')?.touched">
-                                This field is required
-                            </div>
+                            <input type="text" formControlName="to" placeholder="MM/YYYY">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Institution *</label>
-                        <input type="text" formControlName="institution" placeholder="School / College / University"
-                            [class.error]="education.get('institution')?.invalid && education.get('institution')?.touched">
-                        <div class="error-message"
-                            *ngIf="education.get('institution')?.invalid && education.get('institution')?.touched">
-                            This field is required
-                        </div>
+                        <input type="text" formControlName="institution" placeholder="School / College / University">
                     </div>
 
                     <div class="form-group">
                         <label>Qualification / Degree *</label>
-                        <input type="text" formControlName="qualification" placeholder="Degree or qualification earned"
-                            [class.error]="education.get('qualification')?.invalid && education.get('qualification')?.touched">
-                        <div class="error-message"
-                            *ngIf="education.get('qualification')?.invalid && education.get('qualification')?.touched">
-                            This field is required
-                        </div>
+                        <input type="text" formControlName="qualification" placeholder="Degree or qualification earned">
                     </div>
 
                     <div class="form-group">
@@ -244,57 +214,34 @@
 
                     <div class="form-group">
                         <label>Company Name *</label>
-                        <input type="text" formControlName="companyName" placeholder="Enter company name"
-                            [class.error]="work.get('companyName')?.invalid && work.get('companyName')?.touched">
-                        <div class="error-message"
-                            *ngIf="work.get('companyName')?.invalid && work.get('companyName')?.touched">
-                            This field is required
-                        </div>
+                        <input type="text" formControlName="companyName" placeholder="Enter company name">
                     </div>
 
                     <div class="form-group">
                         <label>City, Country *</label>
-                        <input type="text" formControlName="cityCountry" placeholder="e.g., Tbilisi, Georgia"
-                            [class.error]="work.get('cityCountry')?.invalid && work.get('cityCountry')?.touched">
-                        <div class="error-message"
-                            *ngIf="work.get('cityCountry')?.invalid && work.get('cityCountry')?.touched">
-                            This field is required
-                        </div>
+                        <input type="text" formControlName="cityCountry" placeholder="e.g., Tbilisi, Georgia">
                     </div>
 
                     <div class="form-group">
                         <label>Job Title / Position *</label>
-                        <input type="text" formControlName="jobTitle" placeholder="Your job title"
-                            [class.error]="work.get('jobTitle')?.invalid && work.get('jobTitle')?.touched">
-                        <div class="error-message"
-                            *ngIf="work.get('jobTitle')?.invalid && work.get('jobTitle')?.touched">
-                            This field is required
-                        </div>
+                        <input type="text" formControlName="jobTitle" placeholder="Your job title">
                     </div>
 
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Employment Period From *</label>
-                            <input type="month" formControlName="employmentPeriodFrom">
-                            <div class="error-message"
-                                *ngIf="work.get('employmentPeriodFrom')?.invalid && work.get('employmentPeriodFrom')?.touched">
-                                This field is required
-                            </div>
+                            <input type="text" formControlName="employmentPeriodFrom" placeholder="MM/YYYY">
                         </div>
 
                         <div class="form-group">
                             <label>Employment Period To *</label>
-                            <input type="month" formControlName="employmentPeriodTo">
-                            <div class="error-message"
-                                *ngIf="work.get('employmentPeriodTo')?.invalid && work.get('employmentPeriodTo')?.touched">
-                                This field is required
-                            </div>
+                            <input type="text" formControlName="employmentPeriodTo" placeholder="MM/YYYY">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Gross Salary (Optional)</label>
-                        <input type="number" formControlName="grossSalary" placeholder="Monthly gross salary">
+                        <input type="text" formControlName="grossSalary" placeholder="Monthly gross salary">
                     </div>
 
                     <div class="form-group">
@@ -365,10 +312,10 @@
         </div>
 
         <!-- SECTION 5: SKILLS -->
-        <div class="form-section" formGroupName="skills">
+        <div class="form-section">
             <h2>SECTION 5: SKILLS</h2>
 
-            <div>
+            <div formGroupName="skills">
                 <h3>A. PROFESSIONAL / TECHNICAL SKILLS</h3>
                 <p class="section-description">Select all skills that apply to you:</p>
 
@@ -392,7 +339,7 @@
                     <label>Rate your overall skill level:</label>
                     <div class="radio-group">
                         <label *ngFor="let level of skillLevels">
-                            <input type="radio" name="skillRating" formControlName="skillRating" [value]="level">
+                            <input type="radio" formControlName="skillRating" [value]="level">
                             {{level}}
                         </label>
                     </div>
@@ -401,10 +348,10 @@
         </div>
 
         <!-- SECTION 6: BANK DETAILS -->
-        <div class="form-section" formGroupName="bankDetails">
+        <div class="form-section">
             <h2>SECTION 6: BANK DETAILS</h2>
 
-            <div>
+            <div formGroupName="bankDetails">
                 <div class="form-group">
                     <label>Select Your Bank *</label>
                     <select formControlName="bank">
@@ -414,24 +361,14 @@
 
                 <div class="form-group">
                     <label>Account Number (IBAN) *</label>
-                    <input type="text" formControlName="accountNumber" placeholder="GE__ ____ ____ ____ ____"
-                        [class.error]="bankDetails.get('accountNumber')?.invalid && bankDetails.get('accountNumber')?.touched">
+                    <input type="text" formControlName="accountNumber" placeholder="GE__ ____ ____ ____ ____">
                     <small>Format: GE00 TBBC 0000 0000 0000 0000</small>
-                    <div class="error-message"
-                        *ngIf="bankDetails.get('accountNumber')?.invalid && bankDetails.get('accountNumber')?.touched">
-                        This field is required
-                    </div>
                 </div>
 
                 <div class="form-group">
                     <label>Account Holder Name *</label>
                     <input type="text" formControlName="accountHolderName"
-                        placeholder="Name as it appears on bank account"
-                        [class.error]="bankDetails.get('accountHolderName')?.invalid && bankDetails.get('accountHolderName')?.touched">
-                    <div class="error-message"
-                        *ngIf="bankDetails.get('accountHolderName')?.invalid && bankDetails.get('accountHolderName')?.touched">
-                        This field is required
-                    </div>
+                        placeholder="Name as it appears on bank account">
                 </div>
 
                 <div class="bank-checkbox">
@@ -443,49 +380,29 @@
         </div>
 
         <!-- SECTION 7: EMERGENCY CONTACT -->
-        <div class="form-section" formGroupName="emergencyContact">
+        <div class="form-section">
             <h2>SECTION 7: EMERGENCY CONTACT</h2>
 
-            <div>
+            <div formGroupName="emergencyContact">
                 <div class="form-group">
                     <label>Full Name *</label>
-                    <input type="text" formControlName="fullName" placeholder="Emergency contact full name"
-                        [class.error]="emergencyContact.get('fullName')?.invalid && emergencyContact.get('fullName')?.touched">
-                    <div class="error-message"
-                        *ngIf="emergencyContact.get('fullName')?.invalid && emergencyContact.get('fullName')?.touched">
-                        This field is required
-                    </div>
+                    <input type="text" formControlName="fullName" placeholder="Emergency contact full name">
                 </div>
 
                 <div class="form-group">
                     <label>Relationship *</label>
                     <input type="text" formControlName="relationship"
-                        placeholder="e.g., Spouse, Parent, Sibling, Friend"
-                        [class.error]="emergencyContact.get('relationship')?.invalid && emergencyContact.get('relationship')?.touched">
-                    <div class="error-message"
-                        *ngIf="emergencyContact.get('relationship')?.invalid && emergencyContact.get('relationship')?.touched">
-                        This field is required
-                    </div>
+                        placeholder="e.g., Spouse, Parent, Sibling, Friend">
                 </div>
 
                 <div class="form-group">
                     <label>Address *</label>
-                    <input type="text" formControlName="address" placeholder="Emergency contact address"
-                        [class.error]="emergencyContact.get('address')?.invalid && emergencyContact.get('address')?.touched">
-                    <div class="error-message"
-                        *ngIf="emergencyContact.get('address')?.invalid && emergencyContact.get('address')?.touched">
-                        This field is required
-                    </div>
+                    <input type="text" formControlName="address" placeholder="Emergency contact address">
                 </div>
 
                 <div class="form-group">
                     <label>Contact Number *</label>
-                    <input type="number" formControlName="contactNumber" placeholder="Emergency contact phone number"
-                        [class.error]="emergencyContact.get('contactNumber')?.invalid && emergencyContact.get('contactNumber')?.touched">
-                    <div class="error-message"
-                        *ngIf="emergencyContact.get('contactNumber')?.invalid && emergencyContact.get('contactNumber')?.touched">
-                        This field is required
-                    </div>
+                    <input type="tel" formControlName="contactNumber" placeholder="Emergency contact phone number">
                 </div>
 
                 <div class="form-group">
@@ -496,22 +413,16 @@
         </div>
 
         <!-- SECTION 8: RIGHT TO WORK IN GEORGIA -->
-        <div class="form-section" formGroupName="rightToWork">
+        <div class="form-section">
             <h2>SECTION 8: RIGHT TO WORK IN GEORGIA</h2>
             <p class="section-description">For non-Georgian citizens only</p>
 
-            <div>
+            <div formGroupName="rightToWork">
                 <div class="form-group">
                     <label>Are you legally allowed to work in Georgia? *</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="allowedToWork" formControlName="allowedToWork" value="yes">
-                            Yes</label>
-                        <label><input type="radio" name="allowedToWork" formControlName="allowedToWork" value="no">
-                            No</label>
-                    </div>
-                    <div class="error-message"
-                        *ngIf="rightToWork.get('allowedToWork')?.invalid && rightToWork.get('allowedToWork')?.touched">
-                        This field is required
+                        <label><input type="radio" formControlName="allowedToWork" value="yes"> Yes</label>
+                        <label><input type="radio" formControlName="allowedToWork" value="no"> No</label>
                     </div>
                 </div>
 

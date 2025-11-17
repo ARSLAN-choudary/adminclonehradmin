@@ -223,8 +223,8 @@ export class BackendService {
  updateDocStatus(payload: any) {
   return this.http.post(CONFIG.updateDocStatus, payload); 
   }
- uploadDocuments(payload: any) {
-  return this.http.post(CONFIG.uploadDocuments, payload); 
+ updateDocStatus(payload: any) {
+  return this.http.post(CONFIG.updateDocStatus, payload); 
   }
 
 }

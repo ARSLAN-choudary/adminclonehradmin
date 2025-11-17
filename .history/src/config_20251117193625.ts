@@ -34,6 +34,6 @@ export const CONFIG = {
   registerapi:BASE_URL_API+"/api/auth/uservarify",
   getCountryList: BASE_URL_API +'/api/position/getposition',
   updateDocStatus: BASE_URL_API + '/api/users/updatedocuments',
-  uploadDocuments: BASE_URL_API + '/api/users/uploaddocuments',
+  updateDocStatus: BASE_URL_API + '/api/users/uploaddocuments',
   
 };

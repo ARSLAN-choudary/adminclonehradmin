@@ -2,7 +2,7 @@
     <form class="doc-upload-container" [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <!-- SECTION 1: PERSONAL DETAILS -->
-        <div class="form-section" formGroupName="personalDetails">
+        <div class="form-section">
             <h2>SECTION 1: PERSONAL DETAILS</h2>
 
             <div class="form-grid">
@@ -365,10 +365,10 @@
         </div>
 
         <!-- SECTION 5: SKILLS -->
-        <div class="form-section" formGroupName="skills">
+        <div class="form-section">
             <h2>SECTION 5: SKILLS</h2>
 
-            <div>
+            <div formGroupName="skills">
                 <h3>A. PROFESSIONAL / TECHNICAL SKILLS</h3>
                 <p class="section-description">Select all skills that apply to you:</p>
 
@@ -401,10 +401,10 @@
         </div>
 
         <!-- SECTION 6: BANK DETAILS -->
-        <div class="form-section" formGroupName="bankDetails">
+        <div class="form-section">
             <h2>SECTION 6: BANK DETAILS</h2>
 
-            <div>
+            <div formGroupName="bankDetails">
                 <div class="form-group">
                     <label>Select Your Bank *</label>
                     <select formControlName="bank">
@@ -443,10 +443,10 @@
         </div>
 
         <!-- SECTION 7: EMERGENCY CONTACT -->
-        <div class="form-section" formGroupName="emergencyContact">
+        <div class="form-section">
             <h2>SECTION 7: EMERGENCY CONTACT</h2>
 
-            <div>
+            <div formGroupName="emergencyContact">
                 <div class="form-group">
                     <label>Full Name *</label>
                     <input type="text" formControlName="fullName" placeholder="Emergency contact full name"
@@ -496,11 +496,11 @@
         </div>
 
         <!-- SECTION 8: RIGHT TO WORK IN GEORGIA -->
-        <div class="form-section" formGroupName="rightToWork">
+        <div class="form-section">
             <h2>SECTION 8: RIGHT TO WORK IN GEORGIA</h2>
             <p class="section-description">For non-Georgian citizens only</p>
 
-            <div>
+            <div formGroupName="rightToWork">
                 <div class="form-group">
                     <label>Are you legally allowed to work in Georgia? *</label>
                     <div class="radio-group">

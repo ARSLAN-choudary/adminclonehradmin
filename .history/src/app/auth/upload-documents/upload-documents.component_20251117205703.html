@@ -1,0 +1,114 @@
+// Convert form data to match backend schema
+private transformFormData(formValue: any): any {
+const personal = formValue.personalDetails;
+const [userNameEnglish, surnameEnglish] = personal.givenNameSurnameEnglish.split(' ').filter(Boolean);
+const [userNameGeorgian, surnameGeorgian] = personal.givenNameSurnameGeorgian.split(' ').filter(Boolean);
+
+return {
+// User ID from localStorage
+userId: this.getUserId(),
+
+// Personal Details
+userNameEnglish: userNameEnglish || '',
+surnameEnglish: surnameEnglish || '',
+userNameGeorgian: userNameGeorgian || '',
+surnameGeorgian: surnameGeorgian || '',
+documentType: personal.documentType,
+documentNumber: parseInt(personal.documentNumber) || 0,
+email: personal.emailAddress,
+phone: personal.contactNumber.toString(), // Convert to String
+location: `${personal.legalHomeAddress.city}, ${personal.legalHomeAddress.region}`,
+dateOfBirth: personal.dateOfBirth,
+gender: personal.gender,
+martialStatus: personal.maritalStatus,
+legalAdress: personal.legalHomeAddress.streetBuildingApartment,
+position: '', // You might want to add this field to your form
+citizenship: personal.citizenship, // ADDED: Include citizenship in payload
+
+// Education
+education: formValue.education.map((edu: any) => ({
+from: edu.from,
+to: edu.to,
+institution: edu.institution,
+qualification: edu.qualification,
+notes: edu.notes,
+currentlyStudying: edu.currentlyStudying
+})),
+
+// Work Experience
+workExperience: formValue.workExperience.map((work: any) => ({
+companyName: work.companyName,
+cityCountry: work.cityCountry,
+jobTitle: work.jobTitle,
+from: work.employmentPeriodFrom,
+to: work.employmentPeriodTo,
+stillWorking: work.stillWorking,
+grossSalary: work.grossSalary.toString(), // Convert to String
+reasonForLeaving: work.reasonForLeaving,
+notes: work.additionalNotes
+})),
+
+// Languages
+languages: formValue.languages.map((lang: any) => ({
+language: lang.language,
+level: lang.proficiency
+})),
+
+// Skills
+computerSkills: formValue.skills.professionalSkills || [],
+administrativeSkills: [], // You might want to add this field to your form
+otherSkills: formValue.skills.otherSkills,
+skillRating: formValue.skills.skillRating,
+
+// Bank Details
+bankName: formValue.bankDetails.bank,
+accountNumber: formValue.bankDetails.accountNumber,
+accountHolderName: formValue.bankDetails.accountHolderName,
+
+// Emergency Contact
+emergencyFullName: formValue.emergencyContact.fullName,
+emergencyRelationship: formValue.emergencyContact.relationship,
+emergencyAddress: formValue.emergencyContact.address,
+emergencyContactNumber: formValue.emergencyContact.contactNumber.toString(), // Convert to String
+emergencyNotes: formValue.emergencyContact.notes,
+
+// Right to Work
+allowedToWork: formValue.rightToWork.allowedToWork === 'yes',
+rightToWorkRemarks: formValue.rightToWork.allowedToWork === 'no' ? formValue.rightToWork.explanation : '',
+
+// Additional Notes
+additionalNotes: formValue.additionalField,
+
+// Documents - Add the missing documents object
+documents: {
+doc1: {
+url: formValue.passport.dataUrl || '',
+status: formValue.passport.uploaded ? "pending" : "pending"
+},
+doc2: {
+url: formValue.residenceCard.dataUrl || '',
+status: formValue.residenceCard.uploaded ? "pending" : "pending"
+},
+doc3: {
+url: formValue.healthCard.dataUrl || '',
+status: formValue.healthCard.uploaded ? "pending" : "pending"
+},
+doc4: {
+url: formValue.drivingLicense.dataUrl || '',
+status: formValue.drivingLicense.uploaded ? "pending" : "pending"
+}
+},
+
+// Default values for required fields in schema
+role: 'USER',
+status: 'active',
+isLoggedIn: 0,
+password: '',
+currentToken: '',
+otp: '',
+otpCreatedAt: null, // Add missing field
+fcmToken: null,
+deviceId: null,
+isDeleted: false
+};
+}

@@ -1,0 +1,576 @@
+<div class="main-doc-container">
+  <form class="doc-upload-container" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- SECTION 1: PERSONAL DETAILS -->
+    <div class="form-section">
+      <h2>SECTION 1: PERSONAL DETAILS</h2>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Given Name, Surname (English) *</label>
+          <input type="text" formControlName="givenNameSurnameEnglish"
+                 placeholder="Enter your full name in English"
+                 [class.error]="isFieldInvalid('personalDetails.givenNameSurnameEnglish')">
+          <div class="error-message" *ngIf="isFieldInvalid('personalDetails.givenNameSurnameEnglish')">
+            This field is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Given Name, Surname (Georgian)</label>
+          <input type="text" formControlName="givenNameSurnameGeorgian"
+                 placeholder="Enter your full name in Georgian">
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Citizenship *</label>
+          <select formControlName="citizenship" 
+                  [class.error]="isFieldInvalid('personalDetails.citizenship')">
+            <option value="georgian">Georgian</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Document Type *</label>
+          <select formControlName="documentType"
+                  [class.error]="isFieldInvalid('personalDetails.documentType')">
+            <option value="georgianId">Georgian ID Card</option>
+            <option value="residencePermit">Residence Permit</option>
+            <option value="passport">Passport</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Document Number *</label>
+          <input type="text" formControlName="documentNumber" 
+                 placeholder="Enter document number"
+                 [class.error]="isFieldInvalid('personalDetails.documentNumber')">
+          <div class="error-message" *ngIf="isFieldInvalid('personalDetails.documentNumber')">
+            This field is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Date of Birth (DD/MM/YYYY) *</label>
+          <input type="text" formControlName="dateOfBirth" 
+                 placeholder="DD/MM/YYYY"
+                 [class.error]="isFieldInvalid('personalDetails.dateOfBirth')">
+          <div class="error-message" *ngIf="isFieldInvalid('personalDetails.dateOfBirth')">
+            This field is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Gender *</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" formControlName="gender" value="male">
+            Male
+          </label>
+          <label>
+            <input type="radio" formControlName="gender" value="female">
+            Female
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Marital Status *</label>
+        <div class="radio-group">
+          <label><input type="radio" formControlName="maritalStatus" value="single"> Single</label>
+          <label><input type="radio" formControlName="maritalStatus" value="married"> Married</label>
+          <label><input type="radio" formControlName="maritalStatus" value="divorced"> Divorced</label>
+          <label><input type="radio" formControlName="maritalStatus" value="widowed"> Widowed</label>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Contact Number *</label>
+          <input type="tel" formControlName="contactNumber" 
+                 placeholder="+995 555 12 34 56"
+                 [class.error]="isFieldInvalid('personalDetails.contactNumber')">
+          <div class="error-message" *ngIf="isFieldInvalid('personalDetails.contactNumber')">
+            This field is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" formControlName="emailAddress" 
+                 placeholder="your.email@example.com"
+                 [class.error]="isFieldInvalid('personalDetails.emailAddress')">
+          <div class="error-message" *ngIf="isFieldInvalid('personalDetails.emailAddress')">
+            Valid email is required
+          </div>
+        </div>
+      </div>
+
+      <div formGroupName="legalHomeAddress" class="address-group">
+        <h3>Legal Home Address</h3>
+
+        <div class="form-group">
+          <label>Street / Building / Apartment *</label>
+          <input type="text" formControlName="streetBuildingApartment" 
+                 placeholder="Enter your street address"
+                 [class.error]="isFieldInvalid('personalDetails.legalHomeAddress.streetBuildingApartment')">
+          <div class="error-message" *ngIf="isFieldInvalid('personalDetails.legalHomeAddress.streetBuildingApartment')">
+            This field is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Village (Optional)</label>
+          <input type="text" formControlName="village" placeholder="Enter village name if applicable">
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>City *</label>
+            <select formControlName="city"
+                    [class.error]="isFieldInvalid('personalDetails.legalHomeAddress.city')">
+              <option *ngFor="let city of cities" [value]="city">{{city}}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Region *</label>
+            <select formControlName="region"
+                    [class.error]="isFieldInvalid('personalDetails.legalHomeAddress.region')">
+              <option *ngFor="let region of regions" [value]="region">{{region}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: EDUCATION -->
+    <div class="form-section">
+      <h2>SECTION 2: EDUCATION</h2>
+
+      <div formArrayName="education" *ngFor="let education of educationForms.controls; let i = index">
+        <div [formGroupName]="i" class="education-item">
+          <h3>Education {{i + 1}}</h3>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>From (MM/YYYY) *</label>
+              <input type="text" formControlName="from" placeholder="MM/YYYY">
+            </div>
+
+            <div class="form-group">
+              <label>To (MM/YYYY) *</label>
+              <input type="text" formControlName="to" placeholder="MM/YYYY">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Institution *</label>
+            <input type="text" formControlName="institution" placeholder="School / College / University">
+          </div>
+
+          <div class="form-group">
+            <label>Qualification / Degree *</label>
+            <input type="text" formControlName="qualification" placeholder="Degree or qualification earned">
+          </div>
+
+          <div class="form-group">
+            <label>Notes (Optional)</label>
+            <input type="text" formControlName="notes" placeholder="Additional notes">
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" formControlName="currentlyStudying">
+              Currently Studying here
+            </label>
+          </div>
+
+          <button type="button" class="remove-btn" (click)="removeEducation(i)" *ngIf="educationForms.length > 1">
+            Remove Education
+          </button>
+        </div>
+      </div>
+
+      <button type="button" class="add-btn" (click)="addEducation()">
+        + Add Another Education
+      </button>
+    </div>
+
+    <!-- SECTION 3: WORK EXPERIENCE -->
+    <div class="form-section">
+      <h2>SECTION 3: WORK EXPERIENCE</h2>
+
+      <div formArrayName="workExperience" *ngFor="let work of workExperienceForms.controls; let i = index">
+        <div [formGroupName]="i" class="work-item">
+          <h3>Work Experience {{i + 1}}</h3>
+
+          <div class="form-group">
+            <label>Company Name *</label>
+            <input type="text" formControlName="companyName" placeholder="Enter company name">
+          </div>
+
+          <div class="form-group">
+            <label>City, Country *</label>
+            <input type="text" formControlName="cityCountry" placeholder="e.g., Tbilisi, Georgia">
+          </div>
+
+          <div class="form-group">
+            <label>Job Title / Position *</label>
+            <input type="text" formControlName="jobTitle" placeholder="Your job title">
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Employment Period From *</label>
+              <input type="text" formControlName="employmentPeriodFrom" placeholder="MM/YYYY">
+            </div>
+
+            <div class="form-group">
+              <label>Employment Period To *</label>
+              <input type="text" formControlName="employmentPeriodTo" placeholder="MM/YYYY">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Gross Salary (Optional)</label>
+            <input type="text" formControlName="grossSalary" placeholder="Monthly gross salary">
+          </div>
+
+          <div class="form-group">
+            <label>Reason for Leaving</label>
+            <input type="text" formControlName="reasonForLeaving"
+                   placeholder="Reason for leaving this position">
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" formControlName="stillWorking">
+              I currently work here
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>Additional Notes</label>
+            <textarea formControlName="additionalNotes"
+                      placeholder="Any additional information about this role"></textarea>
+          </div>
+
+          <button type="button" class="remove-btn" (click)="removeWorkExperience(i)"
+                  *ngIf="workExperienceForms.length > 1">
+            Remove Experience
+          </button>
+        </div>
+      </div>
+
+      <button type="button" class="add-btn" (click)="addWorkExperience()">
+        + Add Another Work Experience
+      </button>
+    </div>
+
+    <!-- SECTION 4: LANGUAGES KNOWN -->
+    <div class="form-section">
+      <h2>SECTION 4: LANGUAGES KNOWN</h2>
+
+      <div formArrayName="languages" *ngFor="let language of languageForms.controls; let i = index">
+        <div [formGroupName]="i" class="language-item">
+          <h3>Language {{i + 1}}</h3>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Language *</label>
+              <select formControlName="language">
+                <option *ngFor="let lang of languages" [value]="lang">{{lang}}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Proficiency Level *</label>
+              <select formControlName="proficiency">
+                <option *ngFor="let level of proficiencyLevels" [value]="level">{{level}}</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="remove-btn" (click)="removeLanguage(i)" *ngIf="languageForms.length > 1">
+            Remove Language
+          </button>
+        </div>
+      </div>
+
+      <button type="button" class="add-btn" (click)="addLanguage()">
+        + Add Another Language
+      </button>
+    </div>
+
+    <!-- SECTION 5: SKILLS -->
+    <div class="form-section">
+      <h2>SECTION 5: SKILLS</h2>
+
+      <div formGroupName="skills">
+        <h3>A. PROFESSIONAL / TECHNICAL SKILLS</h3>
+        <p class="section-description">Select all skills that apply to you:</p>
+
+        <div class="skills-grid">
+          <div *ngFor="let skill of professionalSkills" class="skill-checkbox">
+            <input type="checkbox" [id]="'skill-' + skill" (change)="toggleProfessionalSkill(skill)"
+                   [checked]="isProfessionalSkillSelected(skill)">
+            <label [for]="'skill-' + skill">{{skill}}</label>
+          </div>
+        </div>
+
+        <h3>B. OTHER SKILLS</h3>
+        <div class="form-group">
+          <label>Your skills:</label>
+          <textarea formControlName="otherSkills" placeholder="List any additional skills you have..."></textarea>
+        </div>
+
+        <h3>C. RATING YOUR SKILLS (Optional)</h3>
+        <div class="form-group">
+          <label>Rate your overall skill level:</label>
+          <div class="radio-group">
+            <label *ngFor="let level of skillLevels">
+              <input type="radio" formControlName="skillRating" [value]="level">
+              {{level}}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: BANK DETAILS -->
+    <div class="form-section">
+      <h2>SECTION 6: BANK DETAILS</h2>
+
+      <div formGroupName="bankDetails">
+        <div class="form-group">
+          <label>Select Your Bank *</label>
+          <select formControlName="bank">
+            <option *ngFor="let bank of banks" [value]="bank">{{bank}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Account Number (IBAN) *</label>
+          <input type="text" formControlName="accountNumber" placeholder="GE__ ____ ____ ____ ____">
+          <small>Format: GE00 TBBC 0000 0000 0000 0000</small>
+        </div>
+
+        <div class="form-group">
+          <label>Account Holder Name *</label>
+          <input type="text" formControlName="accountHolderName" placeholder="Name as it appears on bank account">
+        </div>
+
+        <div class="bank-checkbox">
+          <input type="checkbox" formControlName="useSameName" (change)="onUseSameNameChange($event)"
+                 id="useSameName">
+          <label for="useSameName">Use same name as personal details</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 7: EMERGENCY CONTACT -->
+    <div class="form-section">
+      <h2>SECTION 7: EMERGENCY CONTACT</h2>
+
+      <div formGroupName="emergencyContact">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" formControlName="fullName" placeholder="Emergency contact full name">
+        </div>
+
+        <div class="form-group">
+          <label>Relationship *</label>
+          <input type="text" formControlName="relationship" placeholder="e.g., Spouse, Parent, Sibling, Friend">
+        </div>
+
+        <div class="form-group">
+          <label>Address *</label>
+          <input type="text" formControlName="address" placeholder="Emergency contact address">
+        </div>
+
+        <div class="form-group">
+          <label>Contact Number *</label>
+          <input type="tel" formControlName="contactNumber" placeholder="Emergency contact phone number">
+        </div>
+
+        <div class="form-group">
+          <label>Notes (Optional)</label>
+          <input type="text" formControlName="notes" placeholder="Any additional information">
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 8: RIGHT TO WORK IN GEORGIA -->
+    <div class="form-section">
+      <h2>SECTION 8: RIGHT TO WORK IN GEORGIA</h2>
+      <p class="section-description">For non-Georgian citizens only</p>
+
+      <div formGroupName="rightToWork">
+        <div class="form-group">
+          <label>Are you legally allowed to work in Georgia? *</label>
+          <div class="radio-group">
+            <label><input type="radio" formControlName="allowedToWork" value="yes"> Yes</label>
+            <label><input type="radio" formControlName="allowedToWork" value="no"> No</label>
+          </div>
+        </div>
+
+        <div class="conditional-field" *ngIf="form.get('rightToWork.allowedToWork')?.value === 'no'">
+          <div class="form-group">
+            <label>If No, please explain:</label>
+            <input type="text" formControlName="explanation" placeholder="Please provide explanation...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 9: DOCUMENT UPLOAD -->
+    <div class="form-section">
+      <h2>SECTION 9: DOCUMENT UPLOAD</h2>
+      <p class="section-description">Capture clear images of your documents using your camera</p>
+
+      <div *ngIf="!showCamera">
+        <div class="card-grid">
+          <!-- Passport -->
+          <div class="doc-card" [class.active]="activeDocType === 'passport'" (click)="selectDocType('passport')">
+            <h3>Passport</h3>
+            <p>
+              Status:
+              <span [class.done]="form.get('passport.uploaded')?.value"
+                    [class.pending]="!form.get('passport.uploaded')?.value">
+                {{ form.get('passport.uploaded')?.value ? 'Captured' : 'Not captured' }}
+              </span>
+            </p>
+            <div class="doc-image-wrapper" *ngIf="form.get('passport.dataUrl')?.value as img">
+              <img [src]="img" alt="Passport preview" class="doc-image" />
+              <button type="button" class="doc-image-remove" (click)="clearDoc('passport', $event)">
+                ✕
+              </button>
+            </div>
+          </div>
+
+          <!-- Residence Card -->
+          <div class="doc-card" [class.active]="activeDocType === 'residenceCard'"
+               (click)="selectDocType('residenceCard')">
+            <h3>Residence Card</h3>
+            <p>
+              Status:
+              <span [class.done]="form.get('residenceCard.uploaded')?.value"
+                    [class.pending]="!form.get('residenceCard.uploaded')?.value">
+                {{ form.get('residenceCard.uploaded')?.value ? 'Captured' : 'Not captured' }}
+              </span>
+            </p>
+            <div class="doc-image-wrapper" *ngIf="form.get('residenceCard.dataUrl')?.value as img">
+              <img [src]="img" alt="Residence card preview" class="doc-image" />
+              <button type="button" class="doc-image-remove" (click)="clearDoc('residenceCard', $event)">
+                ✕
+              </button>
+            </div>
+          </div>
+
+          <!-- Health Card -->
+          <div class="doc-card" [class.active]="activeDocType === 'healthCard'"
+               (click)="selectDocType('healthCard')">
+            <h3>Health Card</h3>
+            <p>
+              Status:
+              <span [class.done]="form.get('healthCard.uploaded')?.value"
+                    [class.pending]="!form.get('healthCard.uploaded')?.value">
+                {{ form.get('healthCard.uploaded')?.value ? 'Captured' : 'Not captured' }}
+              </span>
+            </p>
+            <div class="doc-image-wrapper" *ngIf="form.get('healthCard.dataUrl')?.value as img">
+              <img [src]="img" alt="Health card preview" class="doc-image" />
+              <button type="button" class="doc-image-remove" (click)="clearDoc('healthCard', $event)">
+                ✕
+              </button>
+            </div>
+          </div>
+
+          <!-- Driving License -->
+          <div class="doc-card" [class.active]="activeDocType === 'drivingLicense'"
+               (click)="selectDocType('drivingLicense')">
+            <h3>Driving License</h3>
+            <p>
+              Status:
+              <span [class.done]="form.get('drivingLicense.uploaded')?.value"
+                    [class.pending]="!form.get('drivingLicense.uploaded')?.value">
+                {{
+                form.get('drivingLicense.uploaded')?.value
+                ? 'Captured'
+                : 'Not captured'
+                }}
+              </span>
+            </p>
+            <div class="doc-image-wrapper" *ngIf="form.get('drivingLicense.dataUrl')?.value as img">
+              <img [src]="img" alt="Driving license preview" class="doc-image" />
+              <button type="button" class="doc-image-remove" (click)="clearDoc('drivingLicense', $event)">
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="hint">
+          {{ hint }}
+        </p>
+      </div>
+
+      <!-- Camera overlay -->
+      <div class="camera-overlay" *ngIf="showCamera">
+        <div class="camera-header">
+          <div class="camera-title">
+            {{ activeDocType ? labelFor(activeDocType) : 'Document' }}
+          </div>
+          <button type="button" class="camera-close" (click)="onCloseCamera()">
+            ✕
+          </button>
+        </div>
+
+        <div class="camera-content">
+          <div class="camera-box">
+            <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
+                    (initError)="handleCameraInitError($event)"></webcam>
+          </div>
+
+          <div class="camera-hint-pill">
+            {{ hint }}
+          </div>
+
+          <div class="camera-actions">
+            <button type="button" class="btn-outline" (click)="onCloseCamera()">
+              Cancel
+            </button>
+            <button type="button" class="btn-primary" (click)="triggerSnapshot()">
+              Capture {{ activeDocType ? '(' + labelFor(activeDocType) + ')' : '' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 10: ADDITIONAL FIELD -->
+    <div class="form-section">
+      <h2>SECTION 10: ADDITIONAL FIELD (OPTIONAL)</h2>
+      <p class="section-description">Share any additional information you'd like us to know</p>
+
+      <div class="form-group">
+        <textarea formControlName="additionalField"
+                  placeholder="Write anything additional you want to share about your experience, skills, or anything else relevant to your application..."></textarea>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="submit-section">
+      <button type="submit" class="submit-btn">
+        Submit Application
+      </button>
+    </div>
+  </form>
+</div>
