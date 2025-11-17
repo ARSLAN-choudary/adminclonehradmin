@@ -9,10 +9,9 @@ h2 {
   margin-bottom: 0.75rem;
 }
 
-/* Cards */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 0.75rem;
   margin-bottom: 1rem;
 }
@@ -63,14 +62,18 @@ h2 {
   transform: translateY(-1px);
 }
 
-/* Status hint */
+/* ============================================
+     STATUS HINT BELOW CARDS
+  ============================================ */
 .hint {
   font-size: 0.9rem;
   margin-top: 0.5rem;
   margin-bottom: 0.75rem;
 }
 
-/* Submit button row */
+/* ============================================
+     SUBMIT BUTTON
+  ============================================ */
 .actions {
   display: flex;
   justify-content: flex-end;
@@ -81,7 +84,7 @@ h2 {
   padding: 0.5rem 1.1rem;
   border-radius: 999px;
   border: none;
-  background: #111827;
+  background: #e41f07;
   color: #fff;
   font-weight: 500;
   font-size: 0.9rem;
@@ -90,14 +93,13 @@ h2 {
 }
 
 .actions button:hover {
-  background: #020617;
+  background: #e41f07;
 }
 
 .actions button:active {
   transform: translateY(1px) scale(0.99);
 }
 
-/* ============== FULL-SCREEN CAMERA OVERLAY ============== */
 .camera-overlay {
   position: fixed;
   inset: 0;
@@ -106,11 +108,10 @@ h2 {
   flex-direction: column;
   z-index: 9999;
   color: #f9fafb;
-  padding: 0.75rem 0.9rem 1.25rem;
+  padding: 0.75rem 0.9rem 1.2rem;
   box-sizing: border-box;
 }
 
-/* Top bar */
 .camera-header {
   display: flex;
   align-items: center;
@@ -126,7 +127,7 @@ h2 {
   color: #e5e7eb;
 }
 
-/* Close button – rounded with subtle shadow */
+/* Close button */
 .camera-close {
   border: 1px solid rgba(148, 163, 184, 0.6);
   background: rgba(15, 23, 42, 0.85);
@@ -155,22 +156,19 @@ h2 {
   box-shadow: 0 3px 10px rgba(15, 23, 42, 0.6);
 }
 
-/* center camera content */
 .camera-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
+  justify-content: center;
   gap: 0.75rem;
 }
 
-/* Camera box with frame & soft glow */
 .camera-box {
   position: relative;
   width: 100%;
-  max-width: 420px;
+  max-width: 360px;
   aspect-ratio: 3 / 4;
   border-radius: 18px;
   overflow: hidden;
@@ -186,34 +184,18 @@ h2 {
   object-fit: cover;
 }
 
-/* translucent frame overlay inside camera view */
 .camera-box::before {
   content: "";
   position: absolute;
-  inset: 7%;
-  border-radius: 14px;
-  border: 2px solid rgba(248, 250, 252, 0.6);
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.6);
+  inset: 8%;
+  border-radius: 12px;
+  border: 2px solid rgba(248, 250, 252, 0.75);
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.4);
   pointer-events: none;
 }
 
-/* corner accents */
-.camera-box::after {
-  content: "";
-  position: absolute;
-  inset: 7%;
-  border-radius: 14px;
-  border-style: solid;
-  border-width: 18px;
-  border-color: transparent;
-  box-shadow: 0 0 0 1px transparent;
-  pointer-events: none;
-}
-
-/* Hint pill */
 .camera-hint-pill {
-  max-width: 420px;
-  margin-top: 0.15rem;
+  max-width: 360px;
   padding: 0.45rem 0.9rem;
   font-size: 0.8rem;
   text-align: center;
@@ -224,62 +206,107 @@ h2 {
   box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
 }
 
-/* bottom buttons */
 .camera-actions {
-  margin-top: auto;
+  margin-top: 0.5rem;
   display: flex;
   gap: 0.6rem;
   justify-content: center;
   width: 100%;
-  max-width: 420px;
+  max-width: 360px;
 }
 
-/* base button style */
 .camera-actions button {
   flex: 1 1 0;
-  min-width: 0;
   padding: 0.6rem 1.1rem;
   border-radius: 999px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  border-width: 1px;
-  border-style: solid;
-  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease,
-    box-shadow 0.15s ease, border-color 0.15s ease;
+  border: 1px solid;
 }
 
-/* outline (Cancel) */
-.camera-actions .btn-outline {
+.btn-outline {
   border-color: rgba(148, 163, 184, 0.9);
   background: rgba(15, 23, 42, 0.9);
   color: #e5e7eb;
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.85);
 }
 
-.camera-actions .btn-outline:hover {
-  border-color: rgba(248, 250, 252, 0.9);
+.btn-outline:hover {
+  border-color: #fff;
   background: rgba(15, 23, 42, 1);
 }
 
-.camera-actions .btn-outline:active {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.8);
-}
-
-/* primary (Capture) */
-.camera-actions .btn-primary {
+.btn-primary {
   border-color: transparent;
   background: linear-gradient(135deg, #2563eb, #4f46e5);
-  color: #f9fafb;
+  color: #fff;
   box-shadow: 0 16px 32px rgba(37, 99, 235, 0.7);
 }
 
-.camera-actions .btn-primary:hover {
+.btn-primary:hover {
   background: linear-gradient(135deg, #1d4ed8, #4338ca);
 }
 
-.camera-actions .btn-primary:active {
+.btn-primary:active,
+.btn-outline:active {
   transform: translateY(1px) scale(0.98);
-  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.8);
+}
+.doc-image-wrapper {
+  position: relative;
+  margin-top: 0.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.doc-image {
+  display: block;
+  width: 100%;
+  max-height: 120px;
+  object-fit: cover;
+}
+
+.doc-image-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(15, 23, 42, 0.9);
+  color: #f9fafb;
+  font-size: 0.9rem;
+  line-height: 1;
+
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.6);
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.doc-image-remove:hover {
+  background: #b91c1c;
+}
+
+.doc-image-remove:active {
+  transform: translateY(1px) scale(0.96);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.5);
+}
+@media (max-width: 640px) {
+  .camera-box {
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .camera-hint-pill,
+  .camera-actions {
+    max-width: 100%;
+  }
 }

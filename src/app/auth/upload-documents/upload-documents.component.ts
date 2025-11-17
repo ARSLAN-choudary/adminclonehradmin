@@ -317,4 +317,15 @@ export class UploadDocumentsComponent {
       img.src = dataUrl;
     });
   }
+  clearDoc(type: DocType, event: MouseEvent) {
+    event.stopPropagation();
+  
+    const group = this.form.get(type) as FormGroup;
+    if (!group) return;
+  
+    group.patchValue({
+      dataUrl: '',
+      uploaded: false,
+    });
+  }
 }

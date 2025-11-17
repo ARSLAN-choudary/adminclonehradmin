@@ -1,6 +1,11 @@
 {
   "name": "template",
   "version": "0.0.0",
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -33,6 +38,7 @@
     "@fullcalendar/web-component": "^6.1.15",
     "@ng-bootstrap/ng-bootstrap": "^18.0.0",
     "@techstark/opencv-js": "^4.12.0-release.1",
+    "@types/file-saver": "^2.0.7",
     "@types/quill": "^2.0.14",
     "apexcharts": "^5.3.5",
     "axios": "^1.12.2",

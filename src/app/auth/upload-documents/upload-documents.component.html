@@ -5,6 +5,7 @@
 
         <!-- 4 cards -->
         <div class="card-grid">
+            <!-- Passport -->
             <div class="doc-card" [class.active]="activeDocType === 'passport'" (click)="selectDocType('passport')">
                 <h3>Passport</h3>
                 <p>
@@ -14,8 +15,17 @@
                         {{ form.get('passport.uploaded')?.value ? 'Captured' : 'Not captured' }}
                     </span>
                 </p>
+
+                <!-- Image preview inside card -->
+                <div class="doc-image-wrapper" *ngIf="form.get('passport.dataUrl')?.value as img">
+                    <img [src]="img" alt="Passport preview" class="doc-image" />
+                    <button type="button" class="doc-image-remove" (click)="clearDoc('passport', $event)">
+                        ✕
+                    </button>
+                </div>
             </div>
 
+            <!-- Residence Card -->
             <div class="doc-card" [class.active]="activeDocType === 'residenceCard'"
                 (click)="selectDocType('residenceCard')">
                 <h3>Residence Card</h3>
@@ -26,8 +36,16 @@
                         {{ form.get('residenceCard.uploaded')?.value ? 'Captured' : 'Not captured' }}
                     </span>
                 </p>
+
+                <div class="doc-image-wrapper" *ngIf="form.get('residenceCard.dataUrl')?.value as img">
+                    <img [src]="img" alt="Residence card preview" class="doc-image" />
+                    <button type="button" class="doc-image-remove" (click)="clearDoc('residenceCard', $event)">
+                        ✕
+                    </button>
+                </div>
             </div>
 
+            <!-- Health Card -->
             <div class="doc-card" [class.active]="activeDocType === 'healthCard'" (click)="selectDocType('healthCard')">
                 <h3>Health Card</h3>
                 <p>
@@ -37,8 +55,16 @@
                         {{ form.get('healthCard.uploaded')?.value ? 'Captured' : 'Not captured' }}
                     </span>
                 </p>
+
+                <div class="doc-image-wrapper" *ngIf="form.get('healthCard.dataUrl')?.value as img">
+                    <img [src]="img" alt="Health card preview" class="doc-image" />
+                    <button type="button" class="doc-image-remove" (click)="clearDoc('healthCard', $event)">
+                        ✕
+                    </button>
+                </div>
             </div>
 
+            <!-- Driving License -->
             <div class="doc-card" [class.active]="activeDocType === 'drivingLicense'"
                 (click)="selectDocType('drivingLicense')">
                 <h3>Driving License</h3>
@@ -53,6 +79,13 @@
                         }}
                     </span>
                 </p>
+
+                <div class="doc-image-wrapper" *ngIf="form.get('drivingLicense.dataUrl')?.value as img">
+                    <img [src]="img" alt="Driving license preview" class="doc-image" />
+                    <button type="button" class="doc-image-remove" (click)="clearDoc('drivingLicense', $event)">
+                        ✕
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -67,7 +100,7 @@
         </div>
     </div>
 
-    <!-- Full-screen camera overlay -->
+    <!-- Camera overlay stays the same as you already have -->
     <div class="camera-overlay" *ngIf="showCamera">
         <div class="camera-header">
             <div class="camera-title">
