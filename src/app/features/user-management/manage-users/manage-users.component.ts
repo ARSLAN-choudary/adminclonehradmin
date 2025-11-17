@@ -850,38 +850,73 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.showPreview = false;
     this.selectedDoc = null;
   }
-  approve(doc: any) {
-    const payload = {
-      userId: this.currentUserId,
-      documentKey: doc.key,
-      status: 'approved'
-    };
+approve(doc: any) {
+  const payload = {
+    userId: this.currentUserId,
+    documentKey: doc.key,
+    status: 'approved'
+  };
 
-    this.backend.updateDocStatus(payload).subscribe(() => {
+  this.backend.updateDocStatus(payload).subscribe({
+    next: (res: any) => {
+
+      const msg =
+        res?.meta?.message ||
+        res?.message ||
+        res?.data?.message ||
+        "Document approved successfully";
+
+      this.toastr.success(msg, "Success");
+
       this.currentUserDocs = this.currentUserDocs.map(d =>
         d.key === doc.key ? { ...d, status: 'approved' } : d
       );
+
       this.getTableData(this.skip, this.limit);
       this.closePreview();
-    });
-  }
+    },
+    error: (err) => {
+      const errorMsg = err?.error?.meta?.message || 
+                       err?.error?.message || 
+                       "Something went wrong";
+      this.toastr.error(errorMsg, "Error");
+    }
+  });
+}
 
-  reject(doc: any) {
-    const payload = {
-      userId: this.currentUserId,
-      documentKey: doc.key,
-      status: 'rejected'
-    };
+reject(doc: any) {
+  const payload = {
+    userId: this.currentUserId,
+    documentKey: doc.key,
+    status: 'rejected'
+  };
 
-    this.backend.updateDocStatus(payload).subscribe(() => {
+  this.backend.updateDocStatus(payload).subscribe({
+    next: (res: any) => {
+
+      const msg = 
+        res?.meta?.message || 
+        res?.message || 
+        res?.data?.message || 
+        "Document rejected successfully";
+        
+      this.toastr.info(msg, "Updated");
+
       this.currentUserDocs = this.currentUserDocs.map(d =>
         d.key === doc.key ? { ...d, status: 'rejected' } : d
       );
-      this.getTableData(this.skip, this.limit);
 
+      this.getTableData(this.skip, this.limit);
       this.closePreview();
-    });
-  }
+    },
+    error: (err) => {
+      const errorMsg = err?.error?.meta?.message || 
+                       err?.error?.message || 
+                       "Something went wrong";
+      this.toastr.error(errorMsg, "Error");
+    }
+  });
+}
 
 
   getSafeUrl(url: string): SafeResourceUrl {
