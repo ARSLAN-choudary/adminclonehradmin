@@ -1,9 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  ViewChild,
-} from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -11,59 +6,45 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 
+import { Subject } from 'rxjs';
+import { WebcamImage, WebcamModule } from 'ngx-webcam';
+
+// OpenCV.js
+import cvModule from '@techstark/opencv-js';
+
 type DocType = 'passport' | 'residenceCard' | 'healthCard' | 'drivingLicense';
 
 @Component({
   selector: 'app-upload-documents',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, WebcamModule],
   templateUrl: './upload-documents.component.html',
   styleUrls: ['./upload-documents.component.scss'],
 })
-export class UploadDocumentsComponent implements OnDestroy {
-  @ViewChild('videoEl', { static: false })
-  videoRef!: ElementRef<HTMLVideoElement>;
-
-  @ViewChild('canvasEl', { static: false })
-  canvasRef!: ElementRef<HTMLCanvasElement>;
-
+export class UploadDocumentsComponent {
   form: FormGroup;
 
-  // Which card is currently active for capture
   activeDocType: DocType | null = null;
 
-  hint = 'Click a card to start capturing.';
+  // when true: show full-screen camera, hide cards
+  showCamera = false;
+
+  hint = 'Click a card to capture its document.';
   qualityStatus: 'unknown' | 'good' | 'blurry' | 'too_far' | 'too_close' =
     'unknown';
 
-  debug = {
-    blurScore: 0,
-    edgeCount: 0,
-    borderEdgeRatio: 0,
-  };
+  // ngx-webcam trigger
+  private snapshotTrigger: Subject<void> = new Subject<void>();
+  triggerObservable = this.snapshotTrigger.asObservable();
 
-  showPermissionHelp = false;
+  // OpenCV
+  private cv: any | null = null;
+  private cvReady = false;
 
-  private stream: MediaStream | null = null;
-  private analyzeIntervalId: any = null;
-  private isCameraReady = false;
-
-  // ========== Analysis settings ==========
-  private readonly ANALYZE_INTERVAL_MS = 700;
-  private readonly ANALYZE_WIDTH = 160;
-  private readonly ANALYZE_HEIGHT = 120;
-
-  private readonly BLUR_THRESHOLD = 80;
-  private readonly EDGE_TOO_FAR_MAX = 130;
-  private readonly EDGE_TOO_CLOSE_MIN = 450;
-  private readonly BORDER_EDGE_RATIO_MAX = 0.32;
-
-  private readonly METRICS_WINDOW = 5;
-  private metricsHistory: {
-    blurScore: number;
-    edgeCount: number;
-    borderEdgeRatio: number;
-  }[] = [];
+  // thresholds (relaxed!)
+  private readonly BLUR_THRESHOLD = 40;      // was 80, now easier to pass
+  private readonly AREA_TOO_FAR_MAX = 0.05;  // < 5% of frame area = too far
+  private readonly AREA_TOO_CLOSE_MIN = 0.85; // > 85% of frame area = too close
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -84,363 +65,256 @@ export class UploadDocumentsComponent implements OnDestroy {
         uploaded: [false],
       }),
     });
+
+    this.initOpenCv();
   }
 
-  ngOnDestroy(): void {
-    this.stopCamera();
+  // --------- OpenCV init ----------
+  private async initOpenCv() {
+    let cvAny: any;
+
+    if ((cvModule as any) instanceof Promise) {
+      cvAny = await (cvModule as any);
+    } else {
+      const mod: any = cvModule;
+      if (mod.Mat) {
+        cvAny = mod;
+      } else {
+        await new Promise<void>((resolve) => {
+          mod.onRuntimeInitialized = () => resolve();
+        });
+        cvAny = mod;
+      }
+    }
+
+    this.cv = cvAny;
+    this.cvReady = true;
+    console.log('OpenCV.js is ready');
   }
 
-  // ========== CARD SELECTION ==========
-  async selectDocType(type: DocType) {
+  // ========== Card selection ==========
+  selectDocType(type: DocType) {
     this.activeDocType = type;
-    this.hint = `Preparing camera for ${this.labelFor(type)}...`;
+    this.hint = `Align your ${this.labelFor(
+      type
+    )} inside the frame and tap Capture.`;
     this.qualityStatus = 'unknown';
+    this.showCamera = true; // show overlay, hide cards
+  }
 
-    // (re)start camera when a card is clicked
-    await this.startCamera();
+  // Close camera overlay (X button)
+  onCloseCamera() {
+    this.showCamera = false;
+    this.qualityStatus = 'unknown';
+    this.hint = 'Click a card to capture its document.';
   }
 
   labelFor(type: DocType): string {
     switch (type) {
-      case 'passport': return 'Passport';
-      case 'residenceCard': return 'Residence Card';
-      case 'healthCard': return 'Health Card';
-      case 'drivingLicense': return 'Driving License';
+      case 'passport':
+        return 'Passport';
+      case 'residenceCard':
+        return 'Residence Card';
+      case 'healthCard':
+        return 'Health Card';
+      case 'drivingLicense':
+        return 'Driving License';
     }
   }
 
-  // ========== CAMERA ==========
-  private async startCamera() {
-    try {
-      this.showPermissionHelp = false;
-      this.stopCamera(); // make sure no old stream is alive
-
-      this.stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: 'environment' } },
-        audio: false,
-      });
-
-      const video = this.videoRef.nativeElement;
-      video.srcObject = this.stream;
-      await video.play();
-
-      this.isCameraReady = true;
-      this.hint = 'Hold your document inside the frame.';
-      this.startAnalysisLoop();
-    } catch (err: any) {
-      console.error('Error starting camera', err);
-      this.handleGetUserMediaError(err);
-    }
-  }
-
-  private handleGetUserMediaError(err: any) {
-    const name = err?.name;
-    console.log('getUserMedia error name:', name);
-
-    if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
-      this.hint = 'Cannot access camera. Please allow camera permission.';
-      this.showPermissionHelp = true;
-    } else if (name === 'NotFoundError' || name === 'DevicesNotFoundError') {
-      this.hint = 'No camera found on this device.';
-    } else if (
-      window.location.protocol !== 'https:' &&
-      window.location.hostname !== 'localhost'
-    ) {
-      this.hint = 'Camera only works on HTTPS or http://localhost for security.';
-      this.showPermissionHelp = true;
-    } else {
-      this.hint = 'Error starting camera. Please check browser permissions.';
-      this.showPermissionHelp = true;
-    }
-  }
-
-  private stopCamera() {
-    if (this.analyzeIntervalId) {
-      clearInterval(this.analyzeIntervalId);
-      this.analyzeIntervalId = null;
-    }
-    if (this.stream) {
-      this.stream.getTracks().forEach((t) => t.stop());
-      this.stream = null;
-    }
-    this.isCameraReady = false;
-    this.metricsHistory = [];
-    this.debug = { blurScore: 0, edgeCount: 0, borderEdgeRatio: 0 };
-    this.qualityStatus = 'unknown';
-  }
-
-  async onRetryPermission() {
+  // ========== Capture via ngx-webcam ==========
+  triggerSnapshot() {
     if (!this.activeDocType) return;
-    await this.startCamera();
+    this.snapshotTrigger.next();
   }
 
-  // ========== ANALYSIS LOOP ==========
-  private startAnalysisLoop() {
-    if (this.analyzeIntervalId) {
-      clearInterval(this.analyzeIntervalId);
-    }
+  // async so we can await analysis
+  async handleImage(webcamImage: WebcamImage) {
+    if (!this.activeDocType) return;
 
-    this.analyzeIntervalId = setInterval(() => {
-      this.analyzeFrame();
-    }, this.ANALYZE_INTERVAL_MS);
-  }
+    const dataUrl = webcamImage.imageAsDataUrl;
 
-  private analyzeFrame() {
-    const video = this.videoRef?.nativeElement;
-    const canvas = this.canvasRef?.nativeElement;
-    if (!video || !canvas || !this.isCameraReady) return;
-    if (!video.videoWidth || !video.videoHeight) return;
+    // 1) analyze blur / too far / too close
+    const quality = await this.analyzeQuality(dataUrl);
+    this.qualityStatus = quality.status;
+    this.hint = quality.message;
 
-    canvas.width = this.ANALYZE_WIDTH;
-    canvas.height = this.ANALYZE_HEIGHT;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    try {
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    } catch {
+    // If not good, keep camera open so user can try again
+    if (quality.status !== 'good') {
+      console.warn('Quality not good, not saving image', quality);
       return;
     }
 
+    // 2) Save to form (good quality)
+    const group = this.form.get(this.activeDocType) as FormGroup;
+    group.patchValue({
+      dataUrl,
+      uploaded: true,
+    });
+
+    console.log(`Captured for ${this.activeDocType}:`, group.value);
+
+    // 3) Close camera & go back to cards
+    this.showCamera = false;
+    this.hint = `Captured ${this.labelFor(
+      this.activeDocType
+    )}. Click another card to capture again.`;
+    this.qualityStatus = 'good';
+  }
+
+  handleCameraInitError(error: any) {
+    console.error('Camera init error', error);
+    this.hint = 'Cannot access camera. Please allow camera permission.';
+  }
+
+  // ========== Submit ==========
+  onSubmit() {
+    console.log('Full form value:', this.form.value);
+  }
+
+  // ========== QUALITY ANALYSIS WITH OPENCV ==========
+  private async analyzeQuality(
+    dataUrl: string
+  ): Promise<{
+    status: 'good' | 'blurry' | 'too_far' | 'too_close' | 'unknown';
+    message: string;
+  }> {
+    if (!this.cvReady || !this.cv) {
+      console.warn('OpenCV not ready, skipping quality check');
+      return {
+        status: 'good',
+        message: 'Captured (quality check not ready).',
+      };
+    }
+
+    const cv = this.cv;
+    const img = await this.loadImage(dataUrl);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      return {
+        status: 'unknown',
+        message: 'Unable to analyze image quality.',
+      };
+    }
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const gray = this.toGrayscale(imageData.data, canvas.width, canvas.height);
 
-    const blurScore = this.computeLaplacianVariance(
-      gray,
-      canvas.width,
-      canvas.height
-    );
-    const { edgeCount, borderEdgeRatio } = this.computeEdgeStats(
-      gray,
-      canvas.width,
-      canvas.height
-    );
+    // Convert to cv.Mat
+    const src = cv.matFromImageData(imageData);
+    const gray = new cv.Mat();
+    cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
 
-    this.pushMetricsSample({ blurScore, edgeCount, borderEdgeRatio });
+    // 1) Blur detection using Laplacian variance
+    const lap = new cv.Mat();
+    cv.Laplacian(gray, lap, cv.CV_64F);
 
-    const avg = this.getAveragedMetrics();
-
-    this.debug.blurScore = Math.round(avg.blurScore);
-    this.debug.edgeCount = Math.round(avg.edgeCount);
-    this.debug.borderEdgeRatio = Number(avg.borderEdgeRatio.toFixed(2));
-
-    this.updateQualityFromMetrics(
-      avg.blurScore,
-      avg.edgeCount,
-      avg.borderEdgeRatio
-    );
-  }
-
-  // ========== METRICS SMOOTHING ==========
-  private pushMetricsSample(sample: {
-    blurScore: number;
-    edgeCount: number;
-    borderEdgeRatio: number;
-  }) {
-    this.metricsHistory.push(sample);
-    if (this.metricsHistory.length > this.METRICS_WINDOW) {
-      this.metricsHistory.shift();
+    const data = lap.data64F as Float64Array;
+    let sum = 0;
+    let sumSq = 0;
+    const n = data.length;
+    for (let i = 0; i < n; i++) {
+      const v = data[i];
+      sum += v;
+      sumSq += v * v;
     }
-  }
+    const mean = n > 0 ? sum / n : 0;
+    const variance = n > 0 ? sumSq / n - mean * mean : 0;
+    const blurScore = variance;
 
-  private getAveragedMetrics() {
-    if (this.metricsHistory.length === 0) {
-      return { blurScore: 0, edgeCount: 0, borderEdgeRatio: 0 };
-    }
+    // 2) Document size / distance via largest contour area
+    const edges = new cv.Mat();
+    cv.Canny(gray, edges, 50, 150);
 
-    let blurSum = 0;
-    let edgeSum = 0;
-    let borderSum = 0;
+    const contours = new cv.MatVector();
+    const hierarchy = new cv.Mat();
+    cv.findContours(
+      edges,
+      contours,
+      hierarchy,
+      cv.RETR_EXTERNAL,
+      cv.CHAIN_APPROX_SIMPLE
+    );
 
-    for (const m of this.metricsHistory) {
-      blurSum += m.blurScore;
-      edgeSum += m.edgeCount;
-      borderSum += m.borderEdgeRatio;
+    let maxArea = 0;
+    for (let i = 0; i < contours.size(); i++) {
+      const cnt = contours.get(i);
+      const area = cv.contourArea(cnt);
+      if (area > maxArea) {
+        maxArea = area;
+      }
+      cnt.delete();
     }
 
-    const n = this.metricsHistory.length;
+    const totalArea = gray.rows * gray.cols;
+    const areaRatio = totalArea > 0 ? maxArea / totalArea : 0;
+
+    // cleanup
+    src.delete();
+    gray.delete();
+    lap.delete();
+    edges.delete();
+    contours.delete();
+    hierarchy.delete();
+
+    console.log(
+      'blurScore:',
+      blurScore.toFixed(1),
+      'areaRatio:',
+      areaRatio.toFixed(2)
+    );
+
+    // 3) Map to messages
+
+    // Blur has highest priority
+    if (blurScore < this.BLUR_THRESHOLD) {
+      return {
+        status: 'blurry',
+        message: 'Image is blurry. Hold still and try again.',
+      };
+    }
+
+    // If we couldn't detect any clear contour, don't block the user
+    if (areaRatio === 0) {
+      return {
+        status: 'good',
+        message: 'Looks good! Image captured successfully.',
+      };
+    }
+
+    if (areaRatio < this.AREA_TOO_FAR_MAX) {
+      return {
+        status: 'too_far',
+        message:
+          'Document is too far. Move it closer so it fills more of the frame.',
+      };
+    }
+
+    if (areaRatio > this.AREA_TOO_CLOSE_MIN) {
+      return {
+        status: 'too_close',
+        message:
+          'Document is too close. Move it a bit away so edges are visible.',
+      };
+    }
 
     return {
-      blurScore: blurSum / n,
-      edgeCount: edgeSum / n,
-      borderEdgeRatio: borderSum / n,
+      status: 'good',
+      message: 'Looks good! Image captured successfully.',
     };
   }
 
-  private updateQualityFromMetrics(
-    blurScore: number,
-    edgeCount: number,
-    borderEdgeRatio: number
-  ) {
-    if (!this.isCameraReady) return;
-
-    if (blurScore < this.BLUR_THRESHOLD) {
-      this.qualityStatus = 'blurry';
-      this.hint = 'Image is blurry. Hold still or move slightly closer.';
-      return;
-    }
-
-    if (edgeCount < this.EDGE_TOO_FAR_MAX) {
-      this.qualityStatus = 'too_far';
-      this.hint = 'Move the document closer and fill more of the frame.';
-      return;
-    }
-
-    if (
-      edgeCount > this.EDGE_TOO_CLOSE_MIN &&
-      borderEdgeRatio > this.BORDER_EDGE_RATIO_MAX
-    ) {
-      this.qualityStatus = 'too_close';
-      this.hint = 'Move the document a bit farther. Edges are getting cut off.';
-      return;
-    }
-
-    this.qualityStatus = 'good';
-    this.hint = 'Perfect! Keep it like this and tap Capture.';
-  }
-
-  // ========== IMAGE HELPERS ==========
-  private toGrayscale(
-    data: Uint8ClampedArray,
-    width: number,
-    height: number
-  ): Float32Array {
-    const gray = new Float32Array(width * height);
-    for (let i = 0, j = 0; i < data.length; i += 4, j++) {
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-      gray[j] = 0.299 * r + 0.587 * g + 0.114 * b;
-    }
-    return gray;
-  }
-
-  private computeLaplacianVariance(
-    gray: Float32Array,
-    width: number,
-    height: number
-  ): number {
-    let sum = 0;
-    let sumSq = 0;
-    let count = 0;
-
-    for (let y = 1; y < height - 1; y++) {
-      for (let x = 1; x < width - 1; x++) {
-        const idx = y * width + x;
-        const up = gray[idx - width];
-        const down = gray[idx + width];
-        const left = gray[idx - 1];
-        const right = gray[idx + 1];
-        const center = gray[idx];
-
-        const lap = up + down + left + right - 4 * center;
-
-        sum += lap;
-        sumSq += lap * lap;
-        count++;
-      }
-    }
-
-    if (count === 0) return 0;
-    const mean = sum / count;
-    const variance = sumSq / count - mean * mean;
-    return variance;
-  }
-
-  private computeEdgeStats(
-    gray: Float32Array,
-    width: number,
-    height: number
-  ): { edgeCount: number; borderEdgeRatio: number } {
-    const EDGE_THRESHOLD = 18;
-    const borderX = Math.floor(width * 0.18);
-    const borderY = Math.floor(height * 0.18);
-
-    let edgeCount = 0;
-    let borderEdgeCount = 0;
-
-    for (let y = 1; y < height - 1; y++) {
-      for (let x = 1; x < width - 1; x++) {
-        const idx = y * width + x;
-
-        const gx = gray[idx + 1] - gray[idx - 1];
-        const gy = gray[idx + width] - gray[idx - width];
-        const mag = Math.abs(gx) + Math.abs(gy);
-
-        if (mag > EDGE_THRESHOLD) {
-          edgeCount++;
-
-          const isBorder =
-            x < borderX ||
-            x > width - borderX ||
-            y < borderY ||
-            y > height - borderY;
-
-          if (isBorder) borderEdgeCount++;
-        }
-      }
-    }
-
-    const borderEdgeRatio = edgeCount > 0 ? borderEdgeCount / edgeCount : 0;
-    return { edgeCount, borderEdgeRatio };
-  }
-
-  // ========== CAPTURE AND FORM UPDATE ==========
-  async capture() {
-    if (!this.activeDocType) return;
-
-    const video = this.videoRef?.nativeElement;
-    if (!video || !this.isCameraReady) return;
-
-    const captureCanvas = document.createElement('canvas');
-    const ctx = captureCanvas.getContext('2d');
-    if (!ctx) return;
-
-    const videoWidth = video.videoWidth || 1280;
-    const videoHeight = video.videoHeight || 720;
-    captureCanvas.width = videoWidth;
-    captureCanvas.height = videoHeight;
-
-    ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
-
-    captureCanvas.toBlob(
-      (blob) => {
-        if (!blob) return;
-
-        const file = new File([blob], `${this.activeDocType}.jpg`, {
-          type: 'image/jpeg',
-        });
-
-        const reader = new FileReader();
-        reader.onload = () => {
-          const dataUrl = reader.result as string;
-
-          const group = this.form.get(this.activeDocType!) as FormGroup;
-          group.patchValue({
-            dataUrl,
-            uploaded: true,
-          });
-
-          console.log(
-            `Captured for ${this.activeDocType}:`,
-            group.value
-          );
-
-          // ✅ Close the camera after capturing
-          this.stopCamera();
-          this.hint = `Captured ${this.labelFor(this.activeDocType!)}. Click another card to capture again.`;
-        };
-        reader.readAsDataURL(file);
-      },
-      'image/jpeg',
-      0.9
-    );
-  }
-
-  // ========== SUBMIT ==========
-  onSubmit() {
-    console.log('Full form value:', this.form.value);
-    // Later: send this.form.value to API
+  // helper to load image from data URL
+  private loadImage(dataUrl: string): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = (err) => reject(err);
+      img.src = dataUrl;
+    });
   }
 }

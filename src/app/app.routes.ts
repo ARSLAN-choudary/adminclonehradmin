@@ -29,6 +29,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: "upload-docs",
+        loadComponent: () =>
+          import("./auth/upload-documents/upload-documents.component").then(
+            (m) => m.UploadDocumentsComponent
+          ),
+      },
+      {
         path: "forgot-password",
         loadComponent: () =>
           import("./auth/forgot-password/forgot-password.component").then(
