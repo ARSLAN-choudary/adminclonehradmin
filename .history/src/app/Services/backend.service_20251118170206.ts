@@ -227,7 +227,7 @@ export class BackendService {
   return this.http.post(CONFIG.uploadDocuments, payload); 
   }
  userDetail(userId: any) {
-   return this.http.post(`${CONFIG.userDetail}/${userId}`, {}); 
+   return this.http.post(CONFIG.userDetail, ); 
   }
 
 }
