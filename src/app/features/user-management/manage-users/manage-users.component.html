@@ -708,7 +708,7 @@
 <!-- Documents modal -->
 <div #docsCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_docs">
     <div class="offcanvas-header border-bottom">
-        <h5 class="fw-semibold">Details</h5>
+        <h5 class="fw-semibold mb-0">Details</h5>
         <button type="button"
             class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
             (click)="closeDocs()" aria-label="Close">
@@ -716,56 +716,97 @@
         </button>
     </div>
 
-    <div class="container mt-3 body-content">
+    <div class="container mt-1 body-content" id="detailsAccordion">
 
         <div *ngFor="let section of docData; let i = index" class="mb-1 px-3 py-2 rounded border shadow-sm">
 
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="fw-bold text-primary mb-0">
-                    {{ section.section }}
-                </h5>
 
-                <i class="ti ti-chevron-down fs-4 cursor-pointer" data-bs-toggle="collapse"
-                    [attr.data-bs-target]="'#sectionCollapse' + i" aria-expanded="false"
-                    [attr.aria-controls]="'sectionCollapse' + i" style="cursor: pointer;">
-                </i>
+                <div class="fw-bold text-primary mb-0">
+                    {{ section.section }}
+                </div>
+
+                <i class="ti ti-chevron-down fs-4 cursor-pointer"
+                   [ngClass]="{ 'rotate-icon': openedIndex === i }"
+                   data-bs-toggle="collapse"
+                   (click)="toggleSection(i)"
+                   [attr.data-bs-target]="'#sectionCollapse' + i"
+                   aria-expanded="false"
+                   [attr.aria-controls]="'sectionCollapse' + i"></i>
             </div>
 
-            <div class="collapse mt-3" [id]="'sectionCollapse' + i">
+            <div class="collapse mt-3"
+                 [id]="'sectionCollapse' + i"
+                 data-bs-parent="#detailsAccordion">
 
-                <div class="row">
-                    <ng-container *ngFor="let field of section.fields; let last = last; let j = index">
+                <ng-container *ngIf="section.entries; else normalSection">
 
-                        <div class="col-md-6 mb-2" [class.col-12]="last && section.fields.length % 2 !== 0">
+                    <div *ngFor="let group of section.entries" class="mb-1 p-2 rounded bg-light border">
 
-                            <div class="fw-semibold text-dark">
-                                {{ field.label }}
-                            </div>
+                        <h6 class="fw-bold mb-1 text-secondary">{{ group.title }}</h6>
 
-                            <div class="text-gray">
-                                {{ field.value }}
-                            </div>
+                        <div class="row">
+                            <ng-container *ngFor="let field of group.fields; let last = last">
+
+                                <div class="col-md-6 mb-2"
+                                     [class.col-12]="last && group.fields.length % 2 !== 0">
+
+                                    <div class="fw-semibold text-dark">
+                                        {{ field.label }}
+                                    </div>
+
+                                    <div class="text-gray">
+                                        {{ field.value }}
+                                    </div>
+                                </div>
+
+                            </ng-container>
                         </div>
 
-                    </ng-container>
-                </div>
+                    </div>
+
+                </ng-container>
+
+                <ng-template #normalSection>
+                    <div class="row">
+                        <ng-container *ngFor="let field of section.fields">
+
+                            <div class="col-md-6 mb-2">
+                                <div class="fw-semibold text-dark">
+                                    {{ field.label }}
+                                </div>
+                                <div class="text-gray">
+                                    {{ field.value }}
+                                </div>
+                            </div>
+
+                        </ng-container>
+                    </div>
+                </ng-template>
 
             </div>
 
         </div>
 
+
         <div class=" mb-1 px-3 py-2 rounded border shadow-sm">
-
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="fw-semibold mb-0 text-primary">Documents</h5>
+                <div class="fw-bold mb-0 text-primary">Documents</div>
 
-                <i class="ti ti-chevron-down fs-4 cursor-pointer" data-bs-toggle="collapse"
-                    data-bs-target="#docsTableCollapse" aria-expanded="false" aria-controls="docsTableCollapse"
-                    style="cursor: pointer;">
+                <i class="ti ti-chevron-down fs-4 cursor-pointer"
+                   [ngClass]="{ 'rotate-icon': openedIndex === 'docs' }"
+                   data-bs-toggle="collapse"
+                   (click)="toggleSection('docs')"
+                   data-bs-target="#docsTableCollapse"
+                   aria-expanded="false"
+                   aria-controls="docsTableCollapse">
                 </i>
             </div>
 
-            <div class="collapse" id="docsTableCollapse">
+            <div class="collapse"
+                 id="docsTableCollapse"
+                 data-bs-parent="#detailsAccordion">
+
                 <div class="card shadow-sm mt-3">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -780,9 +821,9 @@
 
                             <tbody class="doc-table main">
                                 <tr *ngFor="let doc of currentUserDocs">
+
                                     <td class="d-flex align-items-center gap-2" (click)="onRowClick(doc)">
-                                        <img src="/assets/img/app-register/login-bg.jpg" alt="file icon"
-                                            class="file-icon" />
+                                        <img src="/assets/img/app-register/login-bg.jpg" class="file-icon" />
                                         <span>{{ doc.name }}</span>
                                     </td>
 
@@ -808,14 +849,17 @@
                                                 (click)="reject(doc)">
                                                 <i class="ti ti-x"></i> Reject
                                             </button>
+
                                         </div>
                                     </td>
+
                                 </tr>
                             </tbody>
 
                         </table>
                     </div>
                 </div>
+
             </div>
 
         </div>
@@ -828,13 +872,7 @@
     </button>
 
 
-    <div class="container">
-
-
-
-
-
-
+     <div class="container">
 
         <!-- Preview Modal -->
         <div class="modal fade show d-block preview-modal" *ngIf="showPreview">
