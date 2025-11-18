@@ -64,6 +64,13 @@ export const routes: Routes = [
             (m) => m.WaitingSubmissionComponent
           ),
       },
+           {
+        path: "terms-and-conditions",
+        loadComponent: () =>
+          import(
+            "./features/terms-and-conditions/terms-and-conditions.component"
+          ).then((m) => m.TermsAndConditionsComponent),
+      },
 
       {
         path: "two-step-verification",
