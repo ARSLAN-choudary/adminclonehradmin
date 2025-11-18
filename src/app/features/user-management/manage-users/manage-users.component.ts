@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, NgClass } from "@angular/common";
 import {
   AfterViewInit,
   Component,
@@ -106,7 +106,7 @@ interface PhoneInputValue {
     MatInputModule,
     NgxIntlTelInputModule,
     Select,
-    SelectFilterIdDirective,
+    SelectFilterIdDirective, NgClass
   ],
   templateUrl: "./manage-users.component.html",
   styleUrl: "./manage-users.component.scss",
@@ -1109,53 +1109,156 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
 
   docData = [
     {
-      section: "Personal Information",
+      section: 'Personal Information',
       fields: [
-        { label: "Given Name (English)", value: "Areesh" },
-        { label: "Surname (Georgian)", value: "ქართული" },
-        { label: "Citizenship", value: "Georgia" },
-        { label: "Document Type ", value: "Georgian ID Card" },
-        { label: "Document Number", value: "1997865" },
-        { label: "Date of Birth", value: "1998-06-15" },
-        { label: "Gender", value: "Male" },
-        { label: "Marital Status ", value: "Single" },
-        { label: "Contact Number", value: "+99556830" },
-        { label: "Email Address", value: "areesh@gmail.com" },
+        { label: 'Given Name (English)', value: 'Areesh' },
+        { label: 'Surname (Georgian)', value: 'ქართული' },
+        { label: 'Citizenship', value: 'Georgia' },
+        { label: 'Document Type ', value: 'Georgian ID Card' },
+        { label: 'Document Number', value: '1997865' },
+        { label: 'Date of Birth', value: '1998-06-15' },
+        { label: 'Gender', value: 'Male' },
+        { label: 'Marital Status ', value: 'Single' },
+        { label: 'Contact Number', value: '+99556830' },
+        { label: 'Email Address', value: 'areesh@gmail.com' },
+        { label: 'Legal Home Address', value: '12 Rustaveli Avenue,Apartment 34,Tbilisi 0108,Georgia' },
+      ]
+    },
+
+    {
+      section: 'Education',
+      entries: [
         {
-          label: "Legal Home Address",
-          value: "12 Rustaveli Avenue,Apartment 34,Tbilisi 0108,Georgia",
+          title: 'Education 1',
+          fields: [
+            { label: 'From (MM/YYYY)', value: '09/2018' },
+            { label: 'To (MM/YYYY)', value: '06/2022' },
+            { label: 'Institution', value: 'Tbilisi State University' },
+            { label: 'Qualification', value: 'Bachelors in CS' },
+            { label: 'Notes', value: 'Graduated with strong academic performance' },
+            { label: 'Currently Studying', value: 'No' },
+          ]
         },
-      ],
+        {
+          title: 'Education 2',
+          fields: [
+            { label: 'From (MM/YYYY)', value: '09/2023' },
+            { label: 'To (MM/YYYY)', value: 'Present' },
+            { label: 'Institution', value: 'Ilia State University' },
+            { label: 'Qualification', value: 'Masters in AI' },
+            { label: 'Notes', value: 'Research on Machine Learning' },
+            { label: 'Currently Studying', value: 'Yes' },
+          ]
+        }
+      ]
+    },
+
+    {
+      section: 'Work Experience',
+      entries: [
+        {
+          title: 'Work Experience 1',
+          fields: [
+            { label: 'Company Name', value: 'TechSolutions LLC' },
+            { label: 'City, Country', value: 'Tbilisi, Georgia' },
+            { label: 'Job Title / Position', value: 'Frontend Developer' },
+            { label: 'Employment Period', value: '08/2020 → 12/2023' },
+            { label: 'Gross Salary', value: '$1200/month' },
+            { label: 'Reason for Leaving', value: 'Career growth opportunity' },
+            { label: 'Still Working Here', value: 'No' },
+            { label: 'Additional Notes', value: 'Angular-based enterprise apps' },
+          ]
+        },
+        {
+          title: 'Work Experience 2',
+          fields: [
+            { label: 'Company Name', value: 'GlobalTech' },
+            { label: 'City, Country', value: 'Batumi, Georgia' },
+            { label: 'Job Title / Position', value: 'Senior Frontend Engineer' },
+            { label: 'Employment Period', value: '01/2024 → Present' },
+            { label: 'Gross Salary', value: '$1800/month' },
+            { label: 'Reason for Leaving', value: '-' },
+            { label: 'Still Working Here', value: 'Yes' },
+            { label: 'Additional Notes', value: 'Leading Angular migration project' },
+          ]
+        }
+      ]
+    },
+
+    {
+      section: "Language Known",
+      entries: [
+        {
+          title: 'English',
+          fields: [
+            { label: 'Proficiency Level', value: 'Advance' },
+          ]
+        },
+        {
+          title: 'Urdu',
+          fields: [
+            { label: 'Proficiency Level', value: 'Advance' },
+          ]
+        }
+      ]
+    },
+
+    {
+      section: "Skills",
+      entries: [
+        {
+          title: 'Computer Skills',
+          fields: [
+            { label: 'Microsoft Word', value: "Advance" },
+            { label: 'Microsoft Excel', value: "Intermediate" },
+          ]
+        },
+        {
+          title: 'Administrative Skills',
+          fields: [
+            { label: 'Record Keeping', value: 'Advance' },
+            { label: 'Office Management', value: 'Expert' },
+
+          ]
+        }
+      ]
+    },
+
+    {
+      section: "Bank Details",
+      fields: [
+        { label: 'Bank Name', value: 'TCB Bank' },
+        { label: 'Account Number (IBAN)', value: 'GE08BG0000000586711374' },
+        { label: 'Account Holder Name', value: 'Areesh' },
+      ]
+    },
+
+    {
+      section: "Emergency Contact",
+      fields: [
+        { label: 'Full Name', value: 'John Doe' },
+        { label: 'Relationship', value: 'Brother' },
+        { label: 'Address', value: 'Tbilisi, Georgia' },
+        { label: 'Contact Number', value: '+995 555 123456' },
+        { label: 'Notes (optional)', value: 'N/A' }
+      ]
     },
     {
-      section: "Education",
+      section: "Right to work in Georgia",
       fields: [
-        { label: "From (MM/YYYY)", value: "09/2018" },
-        { label: "To (MM/YYYY)", value: "06/2022" },
-        { label: "Institution", value: "Tbilisi State University" },
-        { label: "Qualification", value: "Bachelor of Computer Science" },
-        { label: "Notes", value: "Graduated with strong academic performance" },
-        { label: "Currently Studying", value: "No" },
-      ],
-    },
-    {
-      section: "Work Experience",
-      fields: [
-        { label: "Work Experience", value: "1" },
-        { label: "Company Name", value: "TechSolutions LLC" },
-        { label: "City, Country", value: "Tbilisi, Georgia" },
-        { label: "Job Title / Position", value: "Frontend Developer" },
-        { label: "Employment Period", value: "08/2020 → 12/2023" },
-        { label: "Gross Salary (optional)", value: "$1,200 / month" },
-        { label: "Reason for Leaving", value: "Career growth opportunity" },
-        { label: "Still Working Here", value: "No" },
-        {
-          label: "Additional Notes",
-          value: "Worked on Angular-based enterprise apps",
-        },
-      ],
-    },
+        { label: 'Legally Allowed', value: 'Yes' },
+      ]
+    }
+
+
+
   ];
+
+  openedIndex: number | string | null = null;
+
+  toggleSection(index: number | string) {
+    this.openedIndex = this.openedIndex === index ? null : index;
+  }
 
   allDocsApproved(): boolean {
     if (!this.currentUserDocs || this.currentUserDocs.length === 0)
@@ -1163,7 +1266,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     return this.currentUserDocs.every((doc) => doc.status === "approved");
   }
   approveTrainee() {
-
     const payload = {
       id: this.currentUserId,
       role: "TRAINEE",

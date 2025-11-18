@@ -50,7 +50,6 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       this.fromApp = params["from"] === "app"; // 🔹 Detect if opened from Flutter
       this.deviceId = params["deviceId"] || "";
       this.fcmToken = params["fcmToken"] || "";
-
     });
 
     this.startCountdown();
@@ -176,10 +175,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         console.log("✅ OTP Verified Successfully:", res);
         localStorage.setItem("userId", res.data?.details?._id);
-        this.toggle.setOtpData({
-          email: this.email,
-          otp: otp,
-        });
+        this.toggle.setOtpData(this.email);
         this.loading = false;
         if (this.fromApp) {
           this.router.navigate(["/waiting-for-approval"], {

@@ -1,21 +1,22 @@
 import { Injectable, signal, WritableSignal } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-export interface OtpData {
-  email: string;
-  otp: string;
+import { BehaviorSubject, Observable } from "rxjs";
+interface OtpData {
+  email: string | null;
 }
+
 @Injectable({
   providedIn: "root",
 })
 export class ToggleService {
-  private otpData: BehaviorSubject<OtpData | null> = new BehaviorSubject<OtpData | null>(null);
+  private otpData$ = new BehaviorSubject<OtpData>({ email: null });
 
   constructor() {}
 
-  getOtpData() {
-    return this.otpData;
+  getOtpData(): Observable<OtpData> {
+    return this.otpData$.asObservable();
   }
-  setOtpData(data: any) {
-    this.otpData.next(data);
+
+  setOtpData(email: string) {
+    this.otpData$.next({ email });
   }
 }

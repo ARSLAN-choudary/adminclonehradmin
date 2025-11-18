@@ -36,6 +36,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: "trainee-dashboard",
+        loadComponent: () =>
+          import("./Modules/trainee-dashboard/dashboard/dashboard.component").then(
+            (m) => m.DashboardComponent
+          ),
+      },
+      {
         path: "forgot-password",
         loadComponent: () =>
           import("./auth/forgot-password/forgot-password.component").then(
@@ -64,7 +71,7 @@ export const routes: Routes = [
             (m) => m.WaitingSubmissionComponent
           ),
       },
-           {
+      {
         path: "terms-and-conditions",
         loadComponent: () =>
           import(
@@ -161,13 +168,7 @@ export const routes: Routes = [
             "./features/main-menu/dashboards/lead-dashboard/lead-dashboard.component"
           ).then((m) => m.LeadDashboardComponent),
       },
-      {
-        path: "trainee-dashboard",
-        loadComponent: () =>
-          import("./Modules/trainee-dashboard/trainee-dashboard.module").then(
-            (m) => m.TraineeDashboardModule
-          ),
-      },
+
       {
         path: "project-dashboard",
         loadComponent: () =>
