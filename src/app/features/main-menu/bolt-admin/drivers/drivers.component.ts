@@ -73,7 +73,6 @@ interface select {
     BsDatepickerInputDirective,
     CollapseHeaderComponent,
     CustomPaginationComponent,
-    DatePipe,
     DecimalPipe,
     FormsModule,
     MatSort,

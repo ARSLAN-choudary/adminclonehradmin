@@ -16,7 +16,7 @@
         <div class="gap-2 d-flex align-items-center flex-wrap">
             <div class="dropdown">
                 <a href="javascript:void(0);" class="dropdown-toggle btn btn-outline-light px-2 shadow"
-                   data-bs-toggle="dropdown"><i class="ti ti-package-export me-2"></i>Export</a>
+                    data-bs-toggle="dropdown"><i class="ti ti-package-export me-2"></i>Export</a>
                 <div class="dropdown-menu  dropdown-menu-end">
                     <ul>
                         <li>
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <a href="javascript:void(0);" class="btn btn-icon btn-outline-light shadow" data-bs-toggle="tooltip"
-               data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
+                data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
                     class="ti ti-refresh"></i></a>
             <app-collapse-header />
         </div>
@@ -48,8 +48,8 @@
             <div class="input-icon input-icon-start position-relative">
                 <span class="input-icon-addon text-dark"><i class="ti ti-search"></i></span>
                 <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }" type="search"
-                       (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search"
-                       id="search_data">
+                    (ngModelChange)="searchData(searchDataValue)" class="form-control" placeholder="Search"
+                    id="search_data">
             </div>
         </div>
         <div class="card-body">
@@ -68,7 +68,7 @@
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <div class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-outline-light px-2 shadow"
-                           data-bs-toggle="dropdown"><i class="ti ti-sort-ascending-2 me-2"></i>Sort By</a>
+                            data-bs-toggle="dropdown"><i class="ti ti-sort-ascending-2 me-2"></i>Sort By</a>
                         <div class="dropdown-menu">
                             <ul>
                                 <li>
@@ -96,7 +96,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Name</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   role="switch" id="21" checked>
+                                                role="switch" id="21" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -107,7 +107,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Email</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="22" role="switch" checked>
+                                                id="22" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -118,7 +118,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Account URL</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="23" role="switch" checked>
+                                                id="23" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -129,7 +129,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Plan</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="24" role="switch" checked>
+                                                id="24" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -140,7 +140,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Created Dated</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="25" role="switch" checked>
+                                                id="25" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -151,7 +151,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Status</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="26" role="switch" checked>
+                                                id="26" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -162,7 +162,7 @@
                                         <label class="form-check-label d-flex align-items-center gap-2 w-100">
                                             <span>Action</span>
                                             <input class="form-check-input switchCheckDefault ms-auto" type="checkbox"
-                                                   id="27" role="switch" checked>
+                                                id="27" role="switch" checked>
                                         </label>
                                     </div>
                                 </li>
@@ -176,36 +176,36 @@
             <!-- Report List -->
             <div class="table-responsive custom-table">
                 <table matSort (matSortChange)="sortData($event)" [matSortDisableClear]="true"
-                       class="table table-nowrap dataTable">
+                    class="table table-nowrap dataTable">
                     <thead class="table-light">
-                    <tr>
-                        <th mat-sort-header="name">Model</th>
-                        <th mat-sort-header="country">Year</th>
-                        <th mat-sort-header="registrationNo">Reg Number</th>
-                        <th mat-sort-header="vatNo">UUID</th>
-                        <th mat-sort-header="website">State</th>
-                        <th mat-sort-header="incorporatonDate">Suspension Reason</th>
-                    </tr>
+                        <tr>
+                            <th mat-sort-header="name">Model</th>
+                            <th mat-sort-header="country">Year</th>
+                            <th mat-sort-header="registrationNo">Reg Number</th>
+                            <th mat-sort-header="vatNo">UUID</th>
+                            <th mat-sort-header="website">State</th>
+                            <th mat-sort-header="incorporatonDate">Suspension Reason</th>
+                        </tr>
                     </thead>
                     <tbody>
                         @for (data of tableData; track $index) {
-                            <tr [class.isDeleted]="data.isDeleted">
-                                <td>{{ data.model }}</td>
-                                <td>{{ data.year }}</td>
-                                <td>{{ data.reg_number }}</td>
-                                <td>{{ data.uuid }}</td>
-                                <td>{{ data.state }}</td>
-                                <td>{{ data.suspension_reason}}</td>
-                                <td>
-                                </td>
-                            </tr>
+                        <tr [class.isDeleted]="data.isDeleted">
+                            <td>{{ data.model }}</td>
+                            <td>{{ data.year }}</td>
+                            <td>{{ data.reg_number }}</td>
+                            <td>{{ data.uuid }}</td>
+                            <td>{{ data.state }}</td>
+                            <td>{{ data.suspension_reason}}</td>
+                            <td>
+                            </td>
+                        </tr>
                         }
 
 
-                    <!-- Empty state -->
-                    <tr *ngIf="tableData.length === 0">
-                        <td class="text-center" colspan="12">No Matching Data Found</td>
-                    </tr>
+                        <!-- Empty state -->
+                        <tr *ngIf="tableData.length === 0">
+                            <td class="text-center" colspan="12">No Matching Data Found</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -225,8 +225,8 @@
     <div class="offcanvas-header border-bottom">
         <h5 class="mb-0">Upgrade Package</h5>
         <button type="button"
-                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                data-bs-dismiss="offcanvas" aria-label="Close">
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            data-bs-dismiss="offcanvas" aria-label="Close">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -238,7 +238,7 @@
                 <div class="accordion-item rounded mb-3">
                     <div class="accordion-header">
                         <a href="#" class="accordion-button accordion-custom-button rounded" data-bs-toggle="collapse"
-                           data-bs-target="#basic2">
+                            data-bs-target="#basic2">
                             <span class="avatar avatar-md rounded me-1"><i class="ti ti-details"></i></span>
                             Current Plan Details
                         </a>
@@ -295,7 +295,7 @@
                 <div class="accordion-item border-top rounded mb-3">
                     <div class="accordion-header">
                         <a href="#" class="accordion-button accordion-custom-button rounded" data-bs-toggle="collapse"
-                           data-bs-target="#address2">
+                            data-bs-target="#address2">
                             <span class="avatar avatar-md rounded me-1"><i class="ti ti-chart-circles"></i></span>
                             Change Plan
                         </a>
@@ -342,8 +342,8 @@
                                                 class="text-danger">*</span></label>
                                         <div class="input-icon-end position-relative ngxdate">
                                             <input type="text" class="form-control" bsDatepicker
-                                                   [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate"
-                                                   placeholder="dd/mm/yyyy" id="payment_date">
+                                                [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate"
+                                                placeholder="dd/mm/yyyy" id="payment_date">
                                             <span class="input-icon-addon">
                                                 <i class="ti ti-calendar text-dark"></i>
                                             </span>
@@ -356,8 +356,8 @@
                                                 class="text-danger">*</span></label>
                                         <div class="input-icon-end position-relative ngxdate2">
                                             <input type="text" class="form-control" bsDatepicker
-                                                   [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate2"
-                                                   placeholder="dd/mm/yyyy" id="next_payment_date">
+                                                [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate2"
+                                                placeholder="dd/mm/yyyy" id="next_payment_date">
                                             <span class="input-icon-addon">
                                                 <i class="ti ti-calendar text-dark"></i>
                                             </span>
@@ -370,8 +370,8 @@
                                                 class="text-danger">*</span></label>
                                         <div class="input-icon-end position-relative ngxdate3">
                                             <input type="text" class="form-control" bsDatepicker
-                                                   [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate3"
-                                                   placeholder="dd/mm/yyyy" id="expiring_on">
+                                                [bsConfig]="{dateInputFormat:'DD MMM,YYYY'}" container=".ngxdate3"
+                                                placeholder="dd/mm/yyyy" id="expiring_on">
                                             <span class="input-icon-addon">
                                                 <i class="ti ti-calendar text-dark"></i>
                                             </span>
@@ -398,8 +398,8 @@
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Add New Company</h5>
         <button type="button"
-                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                aria-label="Close" (click)="closeAddCompany()">
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            aria-label="Close" (click)="closeAddCompany()">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -418,10 +418,10 @@
                                 </div>
                                 <div class="d-inline-flex flex-column align-items-start">
                                     <label for="upload_file"
-                                           class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
+                                        class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                                         <i class="ti ti-file-broken me-1"></i>Upload Image
                                         <input #fileInput type="file" accept="image/png" id="upload_file"
-                                               (change)="onFilesSelected($event)" hidden />
+                                            (change)="onFilesSelected($event)" hidden />
                                     </label>
                                     <span>Only .png images <span class="text-danger">*</span></span>
                                     <ng-container *ngIf="control('files').value as files">
@@ -432,7 +432,7 @@
                                         </ul>
                                     </ng-container>
                                     <div class="mt-1"
-                                         *ngIf="control('files').touched && control('files').errors as errs">
+                                        *ngIf="control('files').touched && control('files').errors as errs">
                                         <small class="text-danger" *ngIf="errs['required']">Image is required.</small>
                                         <small class="text-danger" *ngIf="errs['invalidType']">Only .png images are
                                             allowed.</small>
@@ -485,10 +485,10 @@
                                             class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" formControlName="registrationNo"
-                                           id="resgistration_number" />
+                                        id="resgistration_number" />
                                     <div *ngIf="control('registrationNo').touched && control('registrationNo').invalid">
                                         <small class="text-danger"
-                                               *ngIf="control('registrationNo').hasError('required')">
+                                            *ngIf="control('registrationNo').hasError('required')">
                                             Registration Number is required
                                         </small>
                                     </div>
@@ -530,11 +530,11 @@
                                             class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" id="jobsPlusEmp"
-                                           formControlName="jobplusemployeryno" />
+                                        formControlName="jobplusemployeryno" />
                                     <div
-                                            *ngIf="control('jobplusemployeryno').touched && control('jobplusemployeryno').invalid">
+                                        *ngIf="control('jobplusemployeryno').touched && control('jobplusemployeryno').invalid">
                                         <small class="text-danger"
-                                               *ngIf="control('jobplusemployeryno').hasError('required')">
+                                            *ngIf="control('jobplusemployeryno').hasError('required')">
                                             JobsPlus Employer Number is required
                                         </small>
                                     </div>
@@ -548,9 +548,9 @@
                                         Currency<span class="text-danger">*</span>
                                     </span>
                                     <p-select appSelectFilterId [options]="currencies" optionLabel="label"
-                                              optionValue="value" id="currency" placeholder="Select" [filter]="true"
-                                              class="form-control" formControlName="currency"
-                                              (onShow)="labelFilterInput('currency-filter')"></p-select>
+                                        optionValue="value" id="currency" placeholder="Select" [filter]="true"
+                                        class="form-control" formControlName="currency"
+                                        (onShow)="labelFilterInput('currency-filter')"></p-select>
                                     <div *ngIf="control('currency').touched && control('currency').invalid">
                                         <small class="text-danger" *ngIf="control('currency').hasError('required')">
                                             Currency is required
@@ -565,7 +565,7 @@
                                     <label for="phone_Number" class="form-label">Phone Number <span class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" formControlName="phoneNO"
-                                           id="phone_Number" />
+                                        id="phone_Number" />
                                     <div *ngIf="control('phoneNO').touched && control('phoneNO').invalid">
                                         <small class="text-danger" *ngIf="control('phoneNO').hasError('required')">
                                             Phone Number is required
@@ -602,7 +602,7 @@
                                             class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" formControlName="address"
-                                           id="company_address" />
+                                        id="company_address" />
                                     <div *ngIf="control('address').touched && control('address').invalid">
                                         <small class="text-danger" *ngIf="control('address').hasError('required')">
                                             Comapny Address is required
@@ -619,7 +619,7 @@
                                     <label for="website_address" class="form-label">Website <span class="text-danger">
                                             *</span></label>
                                     <input type="text" class="form-control" formControlName="website"
-                                           id="website_address" autocomplete="website" />
+                                        id="website_address" autocomplete="website" />
                                     <div *ngIf="control('website').touched && control('website').errors as e">
                                         <small class="text-danger" *ngIf="e['required']">
                                             Website is required.
@@ -646,13 +646,13 @@
                                             *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="date" class="form-control pass-input"
-                                               formControlName="incorporatonDate" id="incorporatonDate" />
+                                            formControlName="incorporatonDate" id="incorporatonDate" />
 
                                     </div>
                                     <div
-                                            *ngIf="control('incorporatonDate').touched && control('incorporatonDate').invalid">
+                                        *ngIf="control('incorporatonDate').touched && control('incorporatonDate').invalid">
                                         <small class="text-danger"
-                                               *ngIf="control('incorporatonDate').hasError('required')">
+                                            *ngIf="control('incorporatonDate').hasError('required')">
                                             Incorporation Date is required
                                         </small>
                                     </div>
@@ -665,8 +665,8 @@
                                             *</span></label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[1]?'text':'password'"
-                                               formControlName="password" id="password_1" class="form-control pass-input"
-                                               autocomplete="new-password">
+                                            formControlName="password" id="password_1" class="form-control pass-input"
+                                            autocomplete="new-password">
                                         <span class="input-group-text toggle-password" (click)="togglePassword(1)">
                                             <i class="ti " [ngClass]="password[1]?'ti-eye':'ti-eye-off'"></i>
                                         </span>
@@ -686,15 +686,15 @@
                                     <label for="confirm_password" class="form-label">Confirm Password</label>
                                     <div class="input-group input-group-flat pass-group">
                                         <input type="password" [type]="password[2]?'text':'password'"
-                                               class="form-control" id="confirm_password"
-                                               formControlName="confirmPassword" />
+                                            class="form-control" id="confirm_password"
+                                            formControlName="confirmPassword" />
                                         <span class="input-group-text toggle-password" (click)="togglePassword(2)">
                                             <i class="ti " [ngClass]="password[2]?'ti-eye':'ti-eye-off'"></i>
                                         </span>
                                     </div>
 
                                     <div
-                                            *ngIf="createNewCompanyForm.hasError('mismatch') && (createNewCompanyForm.get('password')?.touched || createNewCompanyForm.get('confirmPassword')?.touched)">
+                                        *ngIf="createNewCompanyForm.hasError('mismatch') && (createNewCompanyForm.get('password')?.touched || createNewCompanyForm.get('confirmPassword')?.touched)">
                                         <small class="text-danger">Passwords do not match.</small>
                                     </div>
                                 </div>
@@ -711,16 +711,16 @@
                                         <div class="d-flex flex-wrap">
                                             <div class="me-2">
                                                 <input type="radio" class="status-radio" id="active_1" value="active"
-                                                       formControlName="status" />
+                                                    formControlName="status" />
                                                 <label for="active_1">Active</label>
                                             </div>
                                             <div>
                                                 <input type="radio" class="status-radio" id="inactive_1"
-                                                       value="inactive" formControlName="status" />
+                                                    value="inactive" formControlName="status" />
                                                 <label for="inactive_1">Inactive</label>
                                             </div>
                                             <div
-                                                    *ngIf="control('status').touched && control('status').hasError('required')">
+                                                *ngIf="control('status').touched && control('status').hasError('required')">
                                                 <small class="text-danger">Status is required</small>
                                             </div>
                                         </div>
@@ -754,8 +754,8 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Company Detail</h4>
                     <button type="button"
-                            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                            data-bs-dismiss="offcanvas" aria-label="Close">
+                        class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+                        data-bs-dismiss="offcanvas" aria-label="Close">
                         <i class="ti ti-x"></i>
                     </button>
                 </div>
@@ -767,7 +767,7 @@
                         <div class="accordion-item rounded mb-3">
                             <div class="accordion-header">
                                 <a href="#" class="accordion-button accordion-custom-button rounded"
-                                   data-bs-toggle="collapse" data-bs-target="#basic3">
+                                    data-bs-toggle="collapse" data-bs-target="#basic3">
                                     <span class="avatar avatar-md rounded me-1"><i
                                             class="ti ti-chart-circles"></i></span>
                                     Basic Info
@@ -829,7 +829,7 @@
                         <div class="accordion-item rounded">
                             <div class="accordion-header">
                                 <a href="#" class="accordion-button accordion-custom-button rounded"
-                                   data-bs-toggle="collapse" data-bs-target="#basic4">
+                                    data-bs-toggle="collapse" data-bs-target="#basic4">
                                     <span class="avatar avatar-md rounded me-1"><i
                                             class="ti ti-chart-circles"></i></span>
                                     Plan Details
@@ -888,12 +888,12 @@
 
 
 <div #deleteUserCanvas class="offcanvas off-canvas-custom offcanvas-small" tabindex="-1" aria-hidden="true"
-     id="deleteUserCanvas">
+    id="deleteUserCanvas">
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Delete Confirmation</h5>
         <button type="button"
-                class="btn-close custom-btn-close border p-1 d-flex align-items-center justify-content-center rounded-circle"
-                aria-label="Close" (click)="closeDeleteModal()">
+            class="btn-close custom-btn-close border p-1 d-flex align-items-center justify-content-center rounded-circle"
+            aria-label="Close" (click)="closeDeleteModal()">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -918,8 +918,8 @@
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Edit Company</h5>
         <button type="button"
-                class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
-                (click)="closeEditCompany()" aria-label="Close">
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            (click)="closeEditCompany()" aria-label="Close">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -931,20 +931,20 @@
                     <div class="d-flex mb-3">
                         <div class="avatar avatar-xxl border border-dashed me-3 flex-shrink-0">
                             <img *ngIf="editPreviewUrl || currentEditingImageUrl"
-                                 [src]="editPreviewUrl || currentEditingImageUrl" class="img-fluid rounded"
-                                 alt="Company image" style="max-width: 100%; max-height: 120px;" />
+                                [src]="editPreviewUrl || currentEditingImageUrl" class="img-fluid rounded"
+                                alt="Company image" style="max-width: 100%; max-height: 120px;" />
                             <div *ngIf="!editPreviewUrl && !currentEditingImageUrl"
-                                 class="position-relative d-flex align-items-center">
+                                class="position-relative d-flex align-items-center">
                                 <i class="ti ti-photo text-dark fs-16"></i>
                             </div>
                         </div>
 
                         <div class="d-inline-flex flex-column align-items-start">
                             <label for="edit_upload_file"
-                                   class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
+                                class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
                                 <i class="ti ti-file-broken me-1"></i>Edit Image
                                 <input type="file" id="edit_upload_file" accept="image/png"
-                                       (change)="onEditFilesSelected($event)" hidden />
+                                    (change)="onEditFilesSelected($event)" hidden />
                             </label>
 
                             <span>Only .png images <span class="text-danger">*</span></span>
@@ -958,7 +958,7 @@
                             </ng-container>
 
                             <div class="mt-1"
-                                 *ngIf="editForm.get('image')?.touched && editForm.get('image')?.errors as errs">
+                                *ngIf="editForm.get('image')?.touched && editForm.get('image')?.errors as errs">
                                 <small class="text-danger" *ngIf="errs['invalidType']">Only .png images are
                                     allowed.</small>
                                 <small class="text-danger" *ngIf="errs['fileTooLarge']">Max size is 5 MB.</small>
@@ -1015,12 +1015,12 @@
                         Mobile Number <span class="text-danger">*</span>
                     </span>
                     <ngx-intl-tel-input [cssClass]="'form-control'" [preferredCountries]="preferredCountries"
-                                        [onlyCountries]="onlyCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
-                                        [searchCountryFlag]="true"
-                                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
-                                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan" [maxLength]="15"
-                                        [phoneValidation]="true" [separateDialCode]="true" formControlName="phoneNO" is="phone"
-                                        id="phone">
+                        [onlyCountries]="onlyCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                        [searchCountryFlag]="true"
+                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Pakistan" [maxLength]="15"
+                        [phoneValidation]="true" [separateDialCode]="true" formControlName="phoneNO" is="phone"
+                        id="phone">
                     </ngx-intl-tel-input>
 
 
@@ -1043,12 +1043,12 @@
                     <div class="d-flex gap-3">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" id="active_01" formControlName="status"
-                                   value="active" />
+                                value="active" />
                             <label for="active_01" class="form-check-label">Active</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" id="statusInactive" formControlName="status"
-                                   value="inactive" />
+                                value="inactive" />
                             <label class="form-check-label" for="statusInactive">Inactive</label>
                         </div>
                     </div>
@@ -1066,4 +1066,3 @@
         </form>
     </div>
 </div>
-
