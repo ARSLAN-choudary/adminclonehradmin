@@ -461,15 +461,17 @@
                             <td>{{ data.createdAt | date }}</td>
                             <td>{{ data.role }}</td>
 
-                            <td class="d-flex flex-row gap-2 justify-content-between">
-                                <span class="badge badge-pill badge-status cursor-pointer" (click)="toggleStatus(data)"
-                                    [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">
-                                    {{ data.status }}
-                                </span>
+                            <td>
+                                <div class="d-flex flex-row gap-2 justify-content-between">
+                                    <span class="badge badge-pill badge-status cursor-pointer "
+                                        (click)="toggleStatus(data)"
+                                        [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">
+                                        {{ data.status }}
+                                    </span>
 
-                                <span class="badge badge-pill cursor-pointer text-white bg-info"
-                                    (click)="openDocs(data)">Details</span>
-
+                                    <span class="badge badge-pill cursor-pointer text-white bg-info"
+                                        (click)="openDocs(data)">Details</span>
+                                </div>
                             </td>
 
                             <td class="text-end">
@@ -821,8 +823,7 @@
 
     </div>
 
-    <button class="btn btn-primary btn-lg fw-bold trainee-btn" 
-        (click)="approveTrainee()">
+    <button class="btn btn-primary btn-lg fw-bold trainee-btn" (click)="approveTrainee()">
         Approved as Trainee
     </button>
 
