@@ -175,9 +175,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         console.log("✅ OTP Verified Successfully:", res);
         localStorage.setItem("userId", res.data?.details?._id);
-        this.toggle.setOtpData({
-          email: this.email,
-        });
+        this.toggle.setOtpData(this.email);
         this.loading = false;
         if (this.fromApp) {
           this.router.navigate(["/waiting-for-approval"], {

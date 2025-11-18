@@ -163,16 +163,13 @@ export class AppRegisterComponent implements OnInit {
       error: (err: any) => {
         this.loading.set(false);
         console.log(err);
-        if (err.error.data.status === "active" ) {
-          if(err.error.data.role==='TRAINEE'){
+        if (err.error.data.status === "active") {
+          if (err.error.data.role === "TRAINEE") {
             this.router.navigate(["/trainee-dashboard"]);
-          }else{
-            this.toggle.setOtpData({
-              email: this.email,
-            });
+          } else {
+            this.toggle.setOtpData(this.email);
             this.router.navigate(["/upload-docs"]);
           }
-     
         } else if (err.error.data.status === "inactive") {
           this.errorMessage.set(
             err?.error?.message + "  try again with new email" ||
