@@ -30,10 +30,10 @@ export const CONFIG = {
   getBoltDrivers: BASE_URL_BOLT + "/getDrivers",
   GetBoltVehicle: BASE_URL_BOLT + "/getVehicles",
   getBoltFleetStateLogs: BASE_URL_BOLT + "/getFleetStateLogs",
-  verifyregisterapi:BASE_URL_API+"/api/auth/register",
-  registerapi:BASE_URL_API+"/api/auth/uservarify",
-  getCountryList: BASE_URL_API +'/api/position/getposition',
-  updateDocStatus: BASE_URL_API + '/api/users/updatedocuments',
-  uploadDocuments: BASE_URL_API + '/api/users/uploaddocuments',
-  
+  verifyregisterapi: BASE_URL_API + "/api/auth/register",
+  registerapi: BASE_URL_API + "/api/auth/uservarify",
+  verifyUser: BASE_URL_API + "/api/users/userstatus",
+  getCountryList: BASE_URL_API + "/api/position/getposition",
+  updateDocStatus: BASE_URL_API + "/api/users/updatedocuments",
+  uploadDocuments: BASE_URL_API + "/api/users/uploaddocuments",
 };

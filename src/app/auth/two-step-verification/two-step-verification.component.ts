@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import { AuthService } from "../../Services/auth.service";
 import { routes } from "../../shared/routes/routes";
 import { FirebaseStoreService } from "../../Services/firebase-store.service";
+import { ToggleService } from "../../Services/toggle.service";
 
 @Component({
   selector: "app-two-step-verification",
@@ -39,7 +40,8 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private firebaseStore: FirebaseStoreService
+    private firebaseStore: FirebaseStoreService,
+    private toggle: ToggleService
   ) {}
 
   ngOnInit() {
@@ -161,12 +163,16 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.errorMessage = "";
 
-    console.log("📤 Verifying OTP:", { email: this.email, otp });
+    // console.log("📤 Verifying OTP:", { email: this.email, otp });
 
     this.authService.verifyOtp(this.email, otp).subscribe({
       next: (res: any) => {
         console.log("✅ OTP Verified Successfully:", res);
-        localStorage.setItem('userId', res.data?.details?._id);
+        localStorage.setItem("userId", res.data?.details?._id);
+        this.toggle.setOtpData({
+          email: this.email,
+          otp: otp,
+        });
         this.loading = false;
         if (this.fromApp) {
           this.router.navigate(["/waiting-for-approval"], {

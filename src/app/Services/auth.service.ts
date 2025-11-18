@@ -46,12 +46,19 @@ export class AuthService {
   }
 
   // --- ✅ STEP 1: REGISTER (Send Email, Position, Country) ---
-verifyRegister(payload: { email: string; position: string; location: string }): Observable<any> {
-  return this.http.post(CONFIG.verifyregisterapi, payload);
-}
+  verifyRegister(payload: {
+    email: string;
+    position: string;
+    location: string;
+  }): Observable<any> {
+    return this.http.post(CONFIG.verifyregisterapi, payload);
+  }
 
   // --- ✅ STEP 2: VERIFY OTP (Email + OTP) ---
   verifyOtp(email: string, otp: string): Observable<any> {
     return this.http.post(CONFIG.registerapi, { email, otp });
+  }
+  verifyUser(email: string): Observable<any> {
+    return this.http.post(CONFIG.verifyUser, { email });
   }
 }
