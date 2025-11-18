@@ -3,7 +3,7 @@
 
         <!-- SECTION 1: PERSONAL DETAILS -->
         <div class="form-section" formGroupName="personalDetails">
-            <h2>PERSONAL DETAILS</h2>
+            <h2>SECTION 1: PERSONAL DETAILS</h2>
 
             <div class="row">
                 <div class="col-md-6">
@@ -199,18 +199,21 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <span class="form-label">City *</span>
-                            <p-select appSelectFilterId [options]="cities" optionLabel="label" optionValue="value"
-                                placeholder="Select" [filter]="true" class="form-control" formControlName="city"
-                                id="city" (onShow)="labelFilterInput('city-filter')"></p-select>
+                            <p-select appSelectFilterId [options]="cities"
+                                optionLabel="label" optionValue="value" placeholder="Select" [filter]="true"
+                                class="form-control" formControlName="city" id="city"
+                                (onShow)="labelFilterInput('city-filter')"></p-select>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="mb-3">
                             <span class="form-label">Region *</span>
-                            <p-select appSelectFilterId [options]="regions" optionLabel="label" optionValue="value"
-                                placeholder="Select" [filter]="true" class="form-control" formControlName="region"
-                                id="region" (onShow)="labelFilterInput('region-filter')"></p-select>
+                            <p-select appSelectFilterId
+                                [options]="regions" optionLabel="label"
+                                optionValue="value" placeholder="Select" [filter]="true" class="form-control"
+                                formControlName="region" id="region"
+                                (onShow)="labelFilterInput('region-filter')"></p-select>
                         </div>
                     </div>
                 </div>
@@ -219,7 +222,7 @@
 
         <!-- SECTION 2: EDUCATION -->
         <div class="form-section">
-            <h2> EDUCATION</h2>
+            <h2>SECTION 2: EDUCATION</h2>
 
             <div formArrayName="education" *ngFor="let education of educationForms.controls; let i = index">
                 <div [formGroupName]="i" class="education-item mb-4 p-3 border rounded">
@@ -298,7 +301,7 @@
 
         <!-- SECTION 3: WORK EXPERIENCE -->
         <div class="form-section">
-            <h2>WORK EXPERIENCE</h2>
+            <h2>SECTION 3: WORK EXPERIENCE</h2>
 
             <div formArrayName="workExperience" *ngFor="let work of workExperienceForms.controls; let i = index">
                 <div [formGroupName]="i" class="work-item mb-4 p-3 border rounded">
@@ -399,7 +402,7 @@
 
         <!-- SECTION 4: LANGUAGES KNOWN -->
         <div class="form-section">
-            <h2> LANGUAGES KNOWN</h2>
+            <h2>SECTION 4: LANGUAGES KNOWN</h2>
 
             <div formArrayName="languages" *ngFor="let language of languageForms.controls; let i = index">
                 <div [formGroupName]="i" class="language-item mb-3 p-3 border rounded">
@@ -409,7 +412,8 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <span class="form-label">Language *</span>
-                                <p-select appSelectFilterId [options]="languages" optionLabel="label"
+                                <p-select appSelectFilterId
+                                    [options]="languages" optionLabel="label"
                                     optionValue="value" placeholder="Select" [filter]="true" class="form-control"
                                     formControlName="language" id="language{{i}}"
                                     (onShow)="labelFilterInput('language-filter')"></p-select>
@@ -419,9 +423,10 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <span class="form-label">Proficiency Level *</span>
-                                <p-select appSelectFilterId [options]="proficiencyLevels" optionLabel="label"
-                                    optionValue="value" placeholder="Select" [filter]="true" class="form-control"
-                                    formControlName="proficiency" id="proficiency{{i}}"
+                                <p-select appSelectFilterId
+                                    [options]="proficiencyLevels"
+                                    optionLabel="label" optionValue="value" placeholder="Select" [filter]="true"
+                                    class="form-control" formControlName="proficiency" id="proficiency{{i}}"
                                     (onShow)="labelFilterInput('proficiency-filter')"></p-select>
                             </div>
                         </div>
@@ -441,7 +446,7 @@
 
         <!-- SECTION 5: SKILLS -->
         <div class="form-section" formGroupName="skills">
-            <h2> SKILLS</h2>
+            <h2>SECTION 5: SKILLS</h2>
 
             <div>
                 <h3>A. PROFESSIONAL / TECHNICAL SKILLS</h3>
@@ -453,8 +458,7 @@
                             <input class="form-check-input" type="checkbox" [id]="'skill-' + skillOption.value"
                                 (change)="toggleProfessionalSkill(skillOption.value)"
                                 [checked]="isProfessionalSkillSelected(skillOption.value)">
-                            <label class="form-check-label"
-                                [for]="'skill-' + skillOption.value">{{skillOption.label}}</label>
+                            <label class="form-check-label" [for]="'skill-' + skillOption.value">{{skillOption.label}}</label>
                         </div>
                     </div>
                 </div>
@@ -466,19 +470,32 @@
                         placeholder="List any additional skills you have..." rows="3"></textarea>
                 </div>
 
-
+                <h3>C. RATING YOUR SKILLS (Optional)</h3>
+                <div class="mb-3">
+                    <span class="form-label">Rate your overall skill level:</span>
+                    <div class="radio-wrap">
+                        <div class="d-flex flex-wrap">
+                            <label *ngFor="let level of skillLevels" class="me-3">
+                                <input type="radio" class="status-radio" name="skillRating"
+                                    formControlName="skillRating" [value]="level" [id]="'skillRating-' + level">
+                                {{level}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- SECTION 6: BANK DETAILS -->
         <div class="form-section" formGroupName="bankDetails">
-            <h2> BANK DETAILS</h2>
+            <h2>SECTION 6: BANK DETAILS</h2>
 
             <div>
                 <div class="mb-3">
                     <span class="form-label">Select Your Bank *</span>
-                    <p-select appSelectFilterId [options]="banks" optionLabel="label" optionValue="value"
-                        placeholder="Select" [filter]="true" class="form-control" formControlName="bank" id="bank"
+                    <p-select appSelectFilterId [options]="banks"
+                        optionLabel="label" optionValue="value" placeholder="Select" [filter]="true"
+                        class="form-control" formControlName="bank" id="bank"
                         (onShow)="labelFilterInput('bank-filter')"></p-select>
                 </div>
 
@@ -517,7 +534,7 @@
 
         <!-- SECTION 7: EMERGENCY CONTACT -->
         <div class="form-section" formGroupName="emergencyContact">
-            <h2>EMERGENCY CONTACT</h2>
+            <h2>SECTION 7: EMERGENCY CONTACT</h2>
 
             <div>
                 <div class="mb-3">
