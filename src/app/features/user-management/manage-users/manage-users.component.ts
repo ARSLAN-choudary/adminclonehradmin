@@ -988,4 +988,15 @@ docData = [
   ]
 }
 ];
+
+allDocsApproved(): boolean {
+  if (!this.currentUserDocs || this.currentUserDocs.length === 0) return false;
+  return this.currentUserDocs.every(doc => doc.status === 'approved');
+}
+approveTrainee() {
+  if (this.allDocsApproved()) {
+    this.router.navigate(['/leads-dashboard']);
+  }
+}
+
 }
