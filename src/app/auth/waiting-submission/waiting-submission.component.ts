@@ -51,7 +51,7 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   startOtpAutoCheck() {
-    interval(60000)
+    interval(5000)
       .pipe(
         takeUntil(this.destroy$),
         switchMap(() => this.toggle.getOtpData()),

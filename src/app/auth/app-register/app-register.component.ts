@@ -7,6 +7,7 @@ import { AuthService } from "../../Services/auth.service";
 import { CONFIG } from "../../../config";
 import { FirebaseStoreService } from "../../Services/firebase-store.service";
 import { log } from "@techstark/opencv-js";
+import { ToggleService } from "../../Services/toggle.service";
 
 @Component({
   selector: "app-register",
@@ -50,7 +51,8 @@ export class AppRegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private http: HttpClient,
-    private fbService: FirebaseStoreService
+    private fbService: FirebaseStoreService,
+    private toggle: ToggleService
   ) {}
 
   // --- Auto Fetch Country ---
@@ -160,7 +162,25 @@ export class AppRegisterComponent implements OnInit {
       },
       error: (err: any) => {
         this.loading.set(false);
-        this.errorMessage.set(err?.error?.message || "Failed to send OTP");
+        console.log(err);
+        if (err.error.data.status === "active" ) {
+          if(err.error.data.role==='TRAINEE'){
+            this.router.navigate(["/trainee-dashboard"]);
+          }else{
+            this.toggle.setOtpData({
+              email: this.email,
+            });
+            this.router.navigate(["/upload-docs"]);
+          }
+     
+        } else if (err.error.data.status === "inactive") {
+          this.errorMessage.set(
+            err?.error?.message + "  try again with new email" ||
+              "Failed to send OTP"
+          );
+        } else {
+          this.errorMessage.set(err?.error?.message || "Failed to send OTP");
+        }
       },
     });
   }

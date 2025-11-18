@@ -2,13 +2,13 @@ import { Injectable, signal, WritableSignal } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 export interface OtpData {
   email: string;
-  otp: string;
 }
 @Injectable({
   providedIn: "root",
 })
 export class ToggleService {
-  private otpData: BehaviorSubject<OtpData | null> = new BehaviorSubject<OtpData | null>(null);
+  private otpData: BehaviorSubject<OtpData | null> =
+    new BehaviorSubject<OtpData | null>(null);
 
   constructor() {}
 
