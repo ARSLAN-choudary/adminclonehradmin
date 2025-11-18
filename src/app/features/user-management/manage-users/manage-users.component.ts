@@ -756,28 +756,43 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   }
 
   // DOCS OFFCANVAS
+  // Replace the current openDocs method with this updated version
   openDocs(user: any) {
     this.currentUserId = user._id;
 
-    this.currentUserDocs = Object.entries(user.documents).map(
-      ([key, value]: any, index) => ({
-        id: index + 1,
-        name: key.toUpperCase(),
-        uploadDate: user.createdAt,
-        previewUrl: value.url,
-        status: value.status,
-        fileType: value.url ? "image" : "unknown",
-        key: key,
-      })
-    );
+    // Call the API to get user details
+    this.backend.userDetail(user._id).subscribe({
+      next: (apiRes: any) => {
+        const userData = apiRes.data;
 
+        // Update documents from API response
+        this.currentUserDocs = Object.entries(userData.documents).map(
+          ([key, value]: any, index) => ({
+            id: index + 1,
+            name: key.toUpperCase(),
+            uploadDate: userData.createdAt,
+            previewUrl: value.url,
+            status: value.status,
+            fileType: value.url ? "image" : "unknown",
+            key: key,
+          })
+        );
+
+        // Map API response to docData structure
+        this.docData = this.mapApiResponseToDocData(userData);
+      },
+      error: (err) => {
+        this.toastr.error('Failed to load user details');
+        console.error('Error loading user details:', err);
+      }
+    });
+
+    // Rest of your existing modal opening code remains the same
     const panel = this.docsCanvas.nativeElement;
-
     this.renderer.addClass(panel, "show");
     this.renderer.setStyle(panel, "visibility", "visible");
     this.renderer.setAttribute(panel, "aria-modal", "true");
     this.renderer.removeAttribute(panel, "aria-hidden");
-
     this.renderer.setStyle(document.body, "overflow", "hidden");
 
     this.docsBackdrop = this.renderer.createElement("div");
@@ -790,6 +805,155 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     }
 
     this.renderer.appendChild(document.body, this.docsBackdrop);
+  }
+
+  // Add this new method to map API response to your docData structure
+  private mapApiResponseToDocData(userData: any): any[] {
+    return [
+      {
+        section: "Personal Information",
+        fields: [
+          { label: "Given Name (English)", value: userData.userNameEnglish || 'N/A' },
+          { label: "Surname (Georgian)", value: userData.surnameGeorgian || 'N/A' },
+          { label: "Citizenship", value: userData.location || 'N/A' },
+          { label: "Document Type", value: this.formatDocumentType(userData.documentType) || 'N/A' },
+          { label: "Document Number", value: userData.documentNumber?.toString() || 'N/A' },
+          { label: "Date of Birth", value: this.formatDateDisplay(userData.dateOfBirth) || 'N/A' },
+          { label: "Gender", value: this.formatGender(userData.gender) || 'N/A' },
+          { label: "Marital Status", value: 'N/A' }, // This field doesn't exist in API
+          { label: "Contact Number", value: userData.phone || 'N/A' },
+          { label: "Email Address", value: userData.email || 'N/A' },
+          { label: "Legal Home Address", value: userData.legalAdress || 'N/A' },
+        ],
+      },
+      {
+        section: "Education",
+        fields: this.mapEducationData(userData.education),
+      },
+      {
+        section: "Work Experience",
+        fields: this.mapWorkExperienceData(userData.workExperience),
+      },
+      {
+        section: "Bank Information",
+        fields: [
+          { label: "Account Holder Name", value: userData.accountHolderName || 'N/A' },
+          { label: "Account Number", value: userData.accountNumber || 'N/A' },
+          { label: "Bank Name", value: userData.bankName || 'N/A' },
+        ],
+      },
+      {
+        section: "Emergency Contact",
+        fields: [
+          { label: "Full Name", value: userData.emergencyFullName || 'N/A' },
+          { label: "Relationship", value: userData.emergencyRelationship || 'N/A' },
+          { label: "Contact Number", value: userData.emergencyContactNumber || 'N/A' },
+          { label: "Address", value: userData.emergencyAddress || 'N/A' },
+        ],
+      },
+      {
+        section: "Skills & Languages",
+        fields: [
+          { label: "Skill Rating", value: userData.skillRating || 'N/A' },
+          { label: "Computer Skills", value: this.formatArrayData(userData.computerSkills) || 'N/A' },
+          { label: "Administrative Skills", value: this.formatArrayData(userData.administrativeSkills) || 'N/A' },
+          { label: "Languages", value: this.formatLanguages(userData.languages) || 'N/A' },
+          { label: "Allowed to Work", value: userData.allowedToWork ? 'Yes' : 'No' },
+        ],
+      }
+    ];
+  }
+
+  // Helper methods for data formatting
+  private formatDocumentType(docType: string): string {
+    const types: { [key: string]: string } = {
+      'residencePermit': 'Residence Permit',
+      'passport': 'Passport',
+      'idCard': 'ID Card'
+    };
+    return types[docType] || docType;
+  }
+
+  private formatGender(gender: string): string {
+    return gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : 'N/A';
+  }
+
+  private formatDateDisplay(dateString: string): string {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString();
+  }
+
+  private mapEducationData(education: any[]): any[] {
+    if (!education || education.length === 0) {
+      return [{ label: "No education data available", value: "" }];
+    }
+
+    const fields:any = [];
+    education.forEach((edu, index) => {
+      if (index > 0) fields.push({ label: "", value: "---" }); // Separator for multiple entries
+
+      fields.push(
+        { label: "From (MM/YYYY)", value: edu.from || 'N/A' },
+        { label: "To (MM/YYYY)", value: edu.to || 'N/A' },
+        { label: "Institution", value: edu.institution || 'N/A' },
+        { label: "Qualification", value: edu.qualification || 'N/A' },
+        { label: "Notes", value: edu.notes || 'N/A' },
+        { label: "Currently Studying", value: edu.currentlyStudying ? 'Yes' : 'No' }
+      );
+    });
+
+    return fields;
+  }
+
+  private mapWorkExperienceData(workExperience: any[]): any[] {
+    if (!workExperience || workExperience.length === 0) {
+      return [{ label: "No work experience data available", value: "" }];
+    }
+
+    const fields :any= [];
+    workExperience.forEach((work, index) => {
+      if (index > 0) fields.push({ label: "", value: "---" }); // Separator for multiple entries
+
+      fields.push(
+        { label: "Company Name", value: work.companyName || 'N/A' },
+        { label: "City, Country", value: work.cityCountry || 'N/A' },
+        { label: "Job Title / Position", value: work.jobTitle || 'N/A' },
+        { label: "Employment Period", value: `${work.from || 'N/A'} → ${work.to || 'N/A'}` },
+        { label: "Gross Salary", value: work.grossSalary ? `$${work.grossSalary} / month` : 'N/A' },
+        { label: "Reason for Leaving", value: work.reasonForLeaving || 'N/A' },
+        { label: "Still Working Here", value: work.stillWorking ? 'Yes' : 'No' },
+        { label: "Additional Notes", value: work.notes || 'N/A' }
+      );
+    });
+
+    return fields;
+  }
+
+  private formatArrayData(arrayData: any[]): string {
+    if (!arrayData || arrayData.length === 0) return 'N/A';
+
+    return arrayData
+      .map(item => {
+        if (typeof item === 'string') {
+          try {
+            const parsed = JSON.parse(item);
+            return Array.isArray(parsed) ? parsed.join(', ') : parsed;
+          } catch {
+            return item;
+          }
+        }
+        return item;
+      })
+      .filter(item => item && item !== '[]' && item !== '[]')
+      .join(', ');
+  }
+
+  private formatLanguages(languages: any[]): string {
+    if (!languages || languages.length === 0) return 'N/A';
+
+    return languages
+      .map(lang => `${lang.language} (${lang.level})`)
+      .join(', ');
   }
 
   closeDocs() {
