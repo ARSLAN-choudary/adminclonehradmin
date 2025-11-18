@@ -944,4 +944,48 @@ reject(doc: any) {
   pendingCount() { return this.currentUserDocs.filter(d => d.status === 'pending').length; }
   approvedCount() { return this.currentUserDocs.filter(d => d.status === 'approved').length; }
   rejectedCount() { return this.currentUserDocs.filter(d => d.status === 'rejected').length; }
+
+docData = [
+  {
+    section: 'Personal Information',
+    fields: [
+      { label: 'Given Name (English)', value: 'Areesh' },
+      { label: 'Surname (Georgian)', value: 'ქართული' },
+      { label: 'Citizenship', value: 'Georgia' },
+      { label: 'Document Type ', value: 'Georgian ID Card' },
+      { label: 'Document Number', value: '1997865' },
+      { label: 'Date of Birth', value: '1998-06-15' },
+      { label: 'Gender', value: 'Male' },
+      { label: 'Marital Status ', value: 'Single' },
+       { label: 'Contact Number', value: '+99556830' },
+      { label: 'Email Address', value: 'areesh@gmail.com' },
+      { label: 'Legal Home Address', value: '12 Rustaveli Avenue,Apartment 34,Tbilisi 0108,Georgia' },
+    ]
+  },
+ {
+  section: 'Education',
+  fields: [
+    { label: 'From (MM/YYYY)', value: '09/2018' },
+    { label: 'To (MM/YYYY)', value: '06/2022' },
+    { label: 'Institution', value: 'Tbilisi State University' },
+    { label: 'Qualification', value: 'Bachelor of Computer Science' },
+    { label: 'Notes', value: 'Graduated with strong academic performance' },
+    { label: 'Currently Studying', value: 'No' },
+  ]
+},
+{
+  section: 'Work Experience',
+  fields: [
+    { label: 'Work Experience', value: '1' },
+    { label: 'Company Name', value: 'TechSolutions LLC' },
+    { label: 'City, Country', value: 'Tbilisi, Georgia' },
+    { label: 'Job Title / Position', value: 'Frontend Developer' },
+    { label: 'Employment Period', value: '08/2020 → 12/2023' },
+    { label: 'Gross Salary (optional)', value: '$1,200 / month' },
+    { label: 'Reason for Leaving', value: 'Career growth opportunity' },
+    { label: 'Still Working Here', value: 'No' },
+    { label: 'Additional Notes', value: 'Worked on Angular-based enterprise apps' },
+  ]
+}
+];
 }

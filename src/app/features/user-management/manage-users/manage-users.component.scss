@@ -95,3 +95,11 @@
   overflow: hidden;
 }
 
+#offcanvas_docs{
+  overflow-y: auto !important;
+  height: 100vh;
+}
+
+.text-gray{
+  color: gray !important;
+}

@@ -6,7 +6,8 @@
 
 html, body {
   touch-action: manipulation !important;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y:auto !important;
 }
 
 input, select, textarea {
