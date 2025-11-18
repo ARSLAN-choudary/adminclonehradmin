@@ -57,18 +57,16 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   startOtpAutoCheck() {
-    timer(0, 60000) // 0 = fire immediately, then every 60s
+    timer(0, 60000)
       .pipe(
         takeUntil(this.destroy$),
         switchMap(() => this.toggle.getOtpData()),
-        tap((data) => console.log("🔍 OTP data from ToggleService:", data)),
-        filter((data: any) => !!data && !!data.email),
-        switchMap((data: any) => {
-          console.log("✅ Passed filter. Using data:", data);
+        tap((email) => console.log("🔍 Email from ToggleService:", email)),
+        filter((email: string) => !!email),
+        switchMap((email: string) => {
+          console.log("✅ Passed filter. Using email:", email);
 
-          const payload: any = {
-            email: data.email,
-          };
+          const payload: any = { email };
 
           if (this.fromApp) {
             payload.fcmToken = this.fcmToken;
@@ -76,7 +74,7 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
           }
 
           console.log("📡 Calling verifyUser with payload:", payload);
-          return this.authService.verifyUser(payload);
+          return this.authService.verifyRole(payload);
         })
       )
       .subscribe({
@@ -93,7 +91,7 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
             );
           }
 
-          if (res.data.status === "active") {
+          if (res.data.role === "TRAINEE") {
             this.router.navigate(["/trainee-dashboard"], {
               queryParams: { deviceId: this.deviceId, from: "app" },
             });

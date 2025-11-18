@@ -59,10 +59,10 @@ export class AuthService {
     return this.http.post(CONFIG.registerapi, payload);
   }
   verifyUser(email: string): Observable<any> {
-    return this.http.post(CONFIG.verifyUser, { email });
+    return this.http.post(CONFIG.verifyUser, email);
   }
 
   verifyRole(email: string): Observable<any> {
-    return this.http.post(CONFIG.verifyRole, { email });
+    return this.http.post(CONFIG.verifyRole, email);
   }
 }

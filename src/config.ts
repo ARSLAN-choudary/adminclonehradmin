@@ -33,7 +33,7 @@ export const CONFIG = {
   verifyregisterapi: BASE_URL_API + "/api/auth/register",
   registerapi: BASE_URL_API + "/api/auth/uservarify",
   verifyUser: BASE_URL_API + "/api/users/userstatus",
-  verifyRole: BASE_URL_API + "api/users/userrole",
+  verifyRole: BASE_URL_API + "/api/users/userrole",
   getCountryList: BASE_URL_API + "/api/position/getposition",
   updateDocStatus: BASE_URL_API + "/api/users/updatedocuments",
   uploadDocuments: BASE_URL_API + "/api/users/uploaddocuments",

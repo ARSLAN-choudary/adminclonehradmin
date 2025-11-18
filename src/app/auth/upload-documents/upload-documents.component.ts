@@ -14,9 +14,11 @@ import { WebcamImage, WebcamModule } from "ngx-webcam";
 import { BackendService } from "../../Services/backend.service";
 
 // OpenCV.js
-import cvModule from "@techstark/opencv-js";
+import cvModule, { log } from "@techstark/opencv-js";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FirebaseStoreService } from "../../Services/firebase-store.service";
+import { AuthService } from "../../Services/auth.service";
+import { ToggleService } from "../../Services/toggle.service";
 
 type DocType = "passport" | "residenceCard" | "healthCard" | "drivingLicense";
 
@@ -182,9 +184,10 @@ export class UploadDocumentsComponent implements OnInit {
     { label: "Expert", value: "Expert" },
   ];
   private fromApp: boolean = false;
-  email = signal<string>("");
+  email: string = "";
   private deviceId: string = "";
   private fcmToken: string = "";
+  userEmail: any;
 
   private _filterIdCounter = 0;
   constructor(
@@ -193,6 +196,8 @@ export class UploadDocumentsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private firebaseStore: FirebaseStoreService,
+    private authService: AuthService,
+    private toggle: ToggleService
   ) {
     this.form = this.fb.group({
       personalDetails: this.fb.group({
@@ -298,7 +303,33 @@ export class UploadDocumentsComponent implements OnInit {
       }
     });
 
-   
+    this.toggle.getOtpData().subscribe((data: any) => {
+      this.userEmail = data;
+    });
+
+    const payload: any = { email: this.userEmail };
+
+    if (this.fromApp) {
+      payload.fcmToken = this.fcmToken;
+      payload.deviceId = this.deviceId;
+    }
+
+    this.authService.verifyRole(payload).subscribe((res: any) => {
+      if (res.data.id) {
+        localStorage.setItem("userId", res.data.id);
+        const currentUrl = window.location.href;
+        this.firebaseStore.updateUrlByDeviceAndUserId(
+          this.deviceId,
+          currentUrl,
+          res.data.id
+        );
+      }
+      if (res.data.role === "TRAINEE") {
+        this.router.navigate(["/trainee-dashboard"], {
+          queryParams: { deviceId: this.deviceId, from: "app" },
+        });
+      }
+    });
   }
 
   updateUrl() {
