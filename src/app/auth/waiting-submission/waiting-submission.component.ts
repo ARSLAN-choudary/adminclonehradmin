@@ -51,11 +51,11 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   startOtpAutoCheck() {
-    interval(5000)
+    interval(60000)
       .pipe(
         takeUntil(this.destroy$),
         switchMap(() => this.toggle.getOtpData()),
-        filter((data: any) => data && data.email && data.otp),
+        filter((data: any) => data && data.email),
         switchMap((data: any) => {
           const payload: any = {
             email: data.email,

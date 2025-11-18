@@ -53,7 +53,7 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         switchMap(() => this.toggle.getOtpData()),
-        filter((data: any) => data && data.email && data.otp),
+        filter((data: any) => data && data.email),
         switchMap((data: any) => {
           const payload: any = {
             email: data.email,
