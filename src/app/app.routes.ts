@@ -56,6 +56,7 @@ export const routes: Routes = [
             (m) => m.WaitingApprovalComponent
           ),
       },
+      
        {
         path: "waiting-for-application-submission",
         loadComponent: () =>

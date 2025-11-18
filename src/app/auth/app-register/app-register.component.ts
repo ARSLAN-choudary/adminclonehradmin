@@ -62,8 +62,6 @@ export class AppRegisterComponent implements OnInit {
       this.fcmToken = params["fcmToken"] || "";
     });
 
-
-
     this.detectUserCountry();
   }
 
@@ -120,13 +118,16 @@ export class AppRegisterComponent implements OnInit {
     this.loading.set(true);
     this.errorMessage.set("");
 
-    const payload = {
+    const payload: any = {
       email: this.email(),
       position: this.position(),
       location: this.country(),
-      fcmToken: this.fcmToken,
-      deviceId: this.deviceId,
     };
+
+    if (this.fromApp) {
+      payload.fcmToken = this.fcmToken;
+      payload.deviceId = this.deviceId;
+    }
 
     this.authService.verifyRegister(payload).subscribe({
       next: async (res: any) => {
@@ -154,8 +155,6 @@ export class AppRegisterComponent implements OnInit {
             email: this.email(),
             position: this.position(),
             country: this.country(),
-            fcmToken: this.fcmToken,
-            deviceId: this.deviceId,
           });
         }
       },

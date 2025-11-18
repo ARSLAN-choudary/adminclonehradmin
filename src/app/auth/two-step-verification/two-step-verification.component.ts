@@ -164,8 +164,16 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     this.errorMessage = "";
 
     // console.log("📤 Verifying OTP:", { email: this.email, otp });
+    let payload: any = {
+      email: this.email,
+      otp: otp,
+    };
+    if (this.fromApp) {
+      payload.fcmToken = this.fcmToken;
+      payload.deviceId = this.deviceId;
+    }
 
-    this.authService.verifyOtp(this.email, otp).subscribe({
+    this.authService.verifyOtp(payload).subscribe({
       next: (res: any) => {
         console.log("✅ OTP Verified Successfully:", res);
         localStorage.setItem("userId", res.data?.details?._id);
