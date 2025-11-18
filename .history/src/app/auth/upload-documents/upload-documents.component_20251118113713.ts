@@ -15,7 +15,6 @@ import { BackendService } from '../../Services/backend.service';
 
 // OpenCV.js
 import cvModule from '@techstark/opencv-js';
-import { Router } from '@angular/router';
 
 type DocType = 'passport' | 'residenceCard' | 'healthCard' | 'drivingLicense';
 
@@ -49,135 +48,41 @@ export class UploadDocumentsComponent {
 
   // Data for dropdowns with default values
   cities = [
-    { label: 'Tbilisi', value: 'Tbilisi' },
-    { label: 'Batumi', value: 'Batumi' },
-    { label: 'Rustavi', value: 'Rustavi' },
-    { label: 'Kutaisi', value: 'Kutaisi' },
-    { label: 'Gori', value: 'Gori' },
-    { label: 'Poti', value: 'Poti' },
-    { label: 'Zugdidi', value: 'Zugdidi' },
-    { label: 'Khashuri', value: 'Khashuri' },
-    { label: 'Kobuleti', value: 'Kobuleti' },
-    { label: 'Marneuli', value: 'Marneuli' },
-    { label: 'Samtredia', value: 'Samtredia' },
-    { label: 'Zestaponi', value: 'Zestaponi' },
-    { label: 'Telavi', value: 'Telavi' },
-    { label: 'Akhaltsikhe', value: 'Akhaltsikhe' },
-    { label: 'Senaki', value: 'Senaki' },
-    { label: 'Ozurgeti', value: 'Ozurgeti' },
-    { label: 'Kaspi', value: 'Kaspi' },
-    { label: 'Gardabani', value: 'Gardabani' },
-    { label: 'Chiatura', value: 'Chiatura' },
-    { label: 'Borjomi', value: 'Borjomi' },
-    { label: 'Sagarejo', value: 'Sagarejo' },
-    { label: 'Kvareli', value: 'Kvareli' },
-    { label: 'Bolnisi', value: 'Bolnisi' },
-    { label: 'Tkibuli', value: 'Tkibuli' },
-    { label: 'Khoni', value: 'Khoni' },
-    { label: 'Akhalkalaki', value: 'Akhalkalaki' },
-    { label: 'Tskaltubo', value: 'Tskaltubo' },
-    { label: 'Mtskheta', value: 'Mtskheta' },
-    { label: 'Gurjaani', value: 'Gurjaani' },
-    { label: 'Dusheti', value: 'Dusheti' },
-    { label: 'Kareli', value: 'Kareli' },
-    { label: 'Lanchkhuti', value: 'Lanchkhuti' },
-    { label: 'Akhmeta', value: 'Akhmeta' },
-    { label: 'Lagodekhi', value: 'Lagodekhi' },
-    { label: 'Dedoplistsqaro', value: 'Dedoplistsqaro' },
-    { label: 'Sachkhere', value: 'Sachkhere' },
-    { label: 'Vale', value: 'Vale' },
-    { label: 'Tsnori', value: 'Tsnori' },
-    { label: 'Terjola', value: 'Terjola' },
-    { label: 'Tetritsqaro', value: 'Tetritsqaro' },
-    { label: 'Abasha', value: 'Abasha' },
-    { label: 'Ninotsminda', value: 'Ninotsminda' },
-    { label: 'Martvili', value: 'Martvili' },
-    { label: 'Tsalka', value: 'Tsalka' },
-    { label: 'Vani', value: 'Vani' },
-    { label: 'Khobi', value: 'Khobi' },
-    { label: 'Dmanisi', value: 'Dmanisi' },
-    { label: 'Tsalenjikha', value: 'Tsalenjikha' },
-    { label: 'Baghdati', value: 'Baghdati' },
-    { label: 'Oni', value: 'Oni' },
-    { label: 'Ambrolauri', value: 'Ambrolauri' },
-    { label: 'Sighnaghi', value: 'Sighnaghi' },
-    { label: 'Jvari', value: 'Jvari' },
-    { label: 'Tsageri', value: 'Tsageri' }
+    'Tbilisi', 'Batumi', 'Rustavi', 'Kutaisi', 'Gori', 'Poti', 'Zugdidi', 'Khashuri',
+    'Kobuleti', 'Marneuli', 'Samtredia', 'Zestaponi', 'Telavi', 'Akhaltsikhe', 'Senaki',
+    'Ozurgeti', 'Kaspi', 'Gardabani', 'Chiatura', 'Borjomi', 'Sagarejo', 'Kvareli',
+    'Bolnisi', 'Tkibuli', 'Khoni', 'Akhalkalaki', 'Tskaltubo', 'Mtskheta', 'Gurjaani',
+    'Dusheti', 'Kareli', 'Lanchkhuti', 'Akhmeta', 'Lagodekhi', 'Dedoplistsqaro',
+    'Sachkhere', 'Vale', 'Tsnori', 'Terjola', 'Tetritsqaro', 'Abasha', 'Ninotsminda',
+    'Martvili', 'Tsalka', 'Vani', 'Khobi', 'Dmanisi', 'Tsalenjikha', 'Baghdati', 'Oni',
+    'Ambrolauri', 'Sighnaghi', 'Jvari', 'Tsageri'
   ];
 
   regions = [
-    { label: 'Tbilisi', value: 'Tbilisi' },
-    { label: 'Imereti', value: 'Imereti' },
-    { label: 'Adjara', value: 'Adjara' },
-    { label: 'Kvemo Kartli', value: 'Kvemo Kartli' },
-    { label: 'Samegrelo-Zemo Svaneti', value: 'Samegrelo-Zemo Svaneti' },
-    { label: 'Kakheti', value: 'Kakheti' },
-    { label: 'Shida Kartli', value: 'Shida Kartli' },
-    { label: 'Abkhazia', value: 'Abkhazia' },
-    { label: 'Samtskhe-Javakheti', value: 'Samtskhe-Javakheti' },
-    { label: 'Guria', value: 'Guria' },
-    { label: 'Mtskheta-Mtianeti', value: 'Mtskheta-Mtianeti' },
-    { label: 'Racha-Lechkhumi and Kvemo Svaneti', value: 'Racha-Lechkhumi and Kvemo Svaneti' }
+    'Tbilisi', 'Imereti', 'Adjara', 'Kvemo Kartli', 'Samegrelo-Zemo Svaneti',
+    'Kakheti', 'Shida Kartli', 'Abkhazia', 'Samtskhe-Javakheti', 'Guria',
+    'Mtskheta-Mtianeti', 'Racha-Lechkhumi and Kvemo Svaneti'
   ];
 
   banks = [
-    { label: 'TBC Bank', value: 'TBC Bank' },
-    { label: 'Bank of Georgia', value: 'Bank of Georgia' },
-    { label: 'Liberty Bank (Georgia)', value: 'Liberty Bank (Georgia)' },
-    { label: 'Basis Bank', value: 'Basis Bank' },
-    { label: 'ProCredit Bank', value: 'ProCredit Bank' },
-    { label: 'Credo Bank', value: 'Credo Bank' },
-    { label: 'Terabank', value: 'Terabank' },
-    { label: 'Cartu Bank', value: 'Cartu Bank' },
-    { label: 'Halyk Bank', value: 'Halyk Bank' },
-    { label: 'VTB Bank of Georgia', value: 'VTB Bank of Georgia' },
-    { label: 'PASHA Bank Georgia', value: 'PASHA Bank Georgia' },
-    { label: 'Isbank', value: 'Isbank' },
-    { label: 'Ziraat Bank', value: 'Ziraat Bank' },
-    { label: 'Silk Road Bank', value: 'Silk Road Bank' }
+    'TBC Bank', 'Bank of Georgia', 'Liberty Bank (Georgia)', 'Basis Bank',
+    'ProCredit Bank', 'Credo Bank', 'Terabank', 'Cartu Bank', 'Halyk Bank',
+    'VTB Bank of Georgia', 'PASHA Bank Georgia', 'Isbank', 'Ziraat Bank', 'Silk Road Bank'
   ];
 
   languages = [
-    { label: 'Georgian', value: 'Georgian' },
-    { label: 'English', value: 'English' },
-    { label: 'Russian', value: 'Russian' },
-    { label: 'Turkish', value: 'Turkish' },
-    { label: 'Hindi', value: 'Hindi' },
-    { label: 'Arabic', value: 'Arabic' },
-    { label: 'Other', value: 'Other' }
+    'Georgian', 'English', 'Russian', 'Turkish', 'Hindi', 'Arabic', 'Other'
   ];
 
-  proficiencyLevels = [
-    { label: 'Basic', value: 'Basic' },
-    { label: 'Intermediate', value: 'Intermediate' },
-    { label: 'Fluent', value: 'Fluent' },
-    { label: 'Native', value: 'Native' }
-  ];
-
+  proficiencyLevels = ['Basic', 'Intermediate', 'Fluent', 'Native'];
   professionalSkills = [
-    { label: 'Microsoft Word', value: 'Microsoft Word' },
-    { label: 'Microsoft Excel', value: 'Microsoft Excel' },
-    { label: 'Microsoft PowerPoint', value: 'Microsoft PowerPoint' },
-    { label: 'Email & Outlook', value: 'Email & Outlook' },
-    { label: 'Data Entry', value: 'Data Entry' },
-    { label: 'Basic IT / Troubleshooting', value: 'Basic IT / Troubleshooting' },
-    { label: 'Filing & Documentation', value: 'Filing & Documentation' },
-    { label: 'Scheduling / Planning', value: 'Scheduling / Planning' },
-    { label: 'Record Keeping', value: 'Record Keeping' },
-    { label: 'Office Management', value: 'Office Management' }
+    'Microsoft Word', 'Microsoft Excel', 'Microsoft PowerPoint', 'Email & Outlook',
+    'Data Entry', 'Basic IT / Troubleshooting', 'Filing & Documentation',
+    'Scheduling / Planning', 'Record Keeping', 'Office Management'
   ];
+  skillLevels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
-  skillLevels = [
-    { label: 'Beginner', value: 'Beginner' },
-    { label: 'Intermediate', value: 'Intermediate' },
-    { label: 'Advanced', value: 'Advanced' },
-    { label: 'Expert', value: 'Expert' }
-  ];
-
-
-  
-  private _filterIdCounter = 0;
-  constructor(private fb: FormBuilder, private backend: BackendService, private router: Router) {
+  constructor(private fb: FormBuilder, private backend: BackendService) {
     this.form = this.fb.group({
 
       personalDetails: this.fb.group({
@@ -571,7 +476,8 @@ export class UploadDocumentsComponent {
     setTimeout(apply, 120);
   }
 
-
+  // Add this property to your component class
+  private _filterIdCounter = 0;
   // Use same name for bank account
   onUseSameNameChange(event: any) {
     if (event.target.checked) {
@@ -838,7 +744,6 @@ export class UploadDocumentsComponent {
         next: (res) => {
           console.log('Document upload response:', res);
           alert('Form submitted successfully!');
-          this.router.navigate(['/waiting-for-application-submission']);
         },
         error: (err) => {
           console.error('Error submitting form:', err);

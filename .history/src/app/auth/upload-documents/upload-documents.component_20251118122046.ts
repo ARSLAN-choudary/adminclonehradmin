@@ -174,10 +174,7 @@ export class UploadDocumentsComponent {
     { label: 'Expert', value: 'Expert' }
   ];
 
-
-  
-  private _filterIdCounter = 0;
-  constructor(private fb: FormBuilder, private backend: BackendService, private router: Router) {
+  constructor(private fb: FormBuilder, private backend: BackendService) {
     this.form = this.fb.group({
 
       personalDetails: this.fb.group({

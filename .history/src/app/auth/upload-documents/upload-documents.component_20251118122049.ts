@@ -177,7 +177,7 @@ export class UploadDocumentsComponent {
 
   
   private _filterIdCounter = 0;
-  constructor(private fb: FormBuilder, private backend: BackendService, private router: Router) {
+  constructor(private fb: FormBuilder, private backend: BackendService) {
     this.form = this.fb.group({
 
       personalDetails: this.fb.group({

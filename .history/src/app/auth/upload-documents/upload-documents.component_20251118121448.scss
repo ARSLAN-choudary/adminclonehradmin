@@ -305,6 +305,11 @@ h2 {
   }
 }
 
+.main-doc-container{
+  width: 100%;
+  height: 100dvh !important;
+  overflow-y: auto;
+}
 
 .section-description {
   color: #6b7280;
@@ -573,7 +578,7 @@ h2 {
   border-top: 2px solid #f3f4f6;
 
   .submit-btn {
-  
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
     color: white;
     border: none;
     padding: 1rem 2.5rem;

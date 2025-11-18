@@ -15,7 +15,6 @@ import { BackendService } from '../../Services/backend.service';
 
 // OpenCV.js
 import cvModule from '@techstark/opencv-js';
-import { Router } from '@angular/router';
 
 type DocType = 'passport' | 'residenceCard' | 'healthCard' | 'drivingLicense';
 
@@ -177,7 +176,7 @@ export class UploadDocumentsComponent {
 
   
   private _filterIdCounter = 0;
-  constructor(private fb: FormBuilder, private backend: BackendService, private router: Router) {
+  constructor(private fb: FormBuilder, private backend: BackendService) {
     this.form = this.fb.group({
 
       personalDetails: this.fb.group({
@@ -838,7 +837,6 @@ export class UploadDocumentsComponent {
         next: (res) => {
           console.log('Document upload response:', res);
           alert('Form submitted successfully!');
-          this.router.navigate(['/waiting-for-application-submission']);
         },
         error: (err) => {
           console.error('Error submitting form:', err);
