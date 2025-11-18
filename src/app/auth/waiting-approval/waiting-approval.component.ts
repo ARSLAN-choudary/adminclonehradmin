@@ -49,6 +49,12 @@ export class WaitingApprovalComponent implements OnInit {
         next: (res: any) => {
           if (res.data.id) {
             localStorage.setItem("userId", res.data.id);
+            const currentUrl = window.location.href;
+            this.firebaseStore.updateUrlByDeviceAndUserId(
+              this.deviceId,
+              currentUrl,
+              res.data.id
+            );
           }
           if (res.data.status === "active") {
             this.router.navigate(["/upload-docs"], {

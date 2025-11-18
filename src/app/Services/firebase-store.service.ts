@@ -1,16 +1,11 @@
-import { Injectable } from '@angular/core';
-import {
-  Firestore,
-  doc,
-  getDoc,
-  setDoc
-} from '@angular/fire/firestore';
+import { Injectable } from "@angular/core";
+import { Firestore, doc, getDoc, setDoc } from "@angular/fire/firestore";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class FirebaseStoreService {
-  constructor(private firestore: Firestore) { }
+  constructor(private firestore: Firestore) {}
 
   // ✅ Save (or update) email + URL by deviceId
   async saveUrlByDeviceId(deviceId: string, email: string, url: string) {
@@ -20,14 +15,18 @@ export class FirebaseStoreService {
       // Always overwrite with latest email and url
       await setDoc(docRef, { email, url }, { merge: true });
 
-      console.log(`✅ Email & URL saved successfully for deviceId: ${deviceId}`);
+      console.log(
+        `✅ Email & URL saved successfully for deviceId: ${deviceId}`
+      );
     } catch (error) {
-      console.error('❌ Error saving email/url:', error);
+      console.error("❌ Error saving email/url:", error);
     }
   }
 
   // ✅ Get email + URL by deviceId
-  async getDeviceData(deviceId: string): Promise<{ email?: string; url?: string } | null> {
+  async getDeviceData(
+    deviceId: string
+  ): Promise<{ email?: string; url?: string } | null> {
     try {
       const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
       const docSnap = await getDoc(docRef);
@@ -39,7 +38,7 @@ export class FirebaseStoreService {
         return null;
       }
     } catch (error) {
-      console.error('❌ Error fetching data:', error);
+      console.error("❌ Error fetching data:", error);
       return null;
     }
   }
@@ -51,7 +50,31 @@ export class FirebaseStoreService {
       await setDoc(docRef, { url: newUrl }, { merge: true });
       console.log(`🔄 URL updated successfully for deviceId: ${deviceId}`);
     } catch (error) {
-      console.error('❌ Error updating URL:', error);
+      console.error("❌ Error updating URL:", error);
+    }
+  }
+  async updateUrlByDeviceAndUserId(
+    deviceId: string,
+    newUrl: string,
+    userId: string
+  ) {
+    try {
+      const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
+
+      await setDoc(
+        docRef,
+        {
+          url: newUrl,
+          userId: userId,
+        },
+        { merge: true }
+      );
+
+      console.log(
+        `🔄 URL & userId updated successfully for deviceId: ${deviceId}`
+      );
+    } catch (error) {
+      console.error("❌ Error updating URL:", error);
     }
   }
 }

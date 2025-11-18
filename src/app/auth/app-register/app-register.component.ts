@@ -6,6 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { AuthService } from "../../Services/auth.service";
 import { CONFIG } from "../../../config";
 import { FirebaseStoreService } from "../../Services/firebase-store.service";
+import { log } from "@techstark/opencv-js";
 
 @Component({
   selector: "app-register",
@@ -58,8 +59,10 @@ export class AppRegisterComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.fromApp = params["from"] === "app"; // ← Flutter will open URL with ?from=app
       this.deviceId = params["deviceId"] || "";
-      this.fcmToken = params["fmcToken"] || "";
+      this.fcmToken = params["fcmToken"] || "";
     });
+
+
 
     this.detectUserCountry();
   }
@@ -133,6 +136,7 @@ export class AppRegisterComponent implements OnInit {
         const queryParams: any = { email: this.email() };
         if (this.fromApp) queryParams.from = "app";
         if (this.deviceId) queryParams.deviceId = this.deviceId;
+        if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
         this.router.navigate(["/two-step-verification"], {
           queryParams,
         });
