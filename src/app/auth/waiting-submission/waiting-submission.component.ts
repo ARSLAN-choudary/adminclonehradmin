@@ -1,5 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { filter, interval, Subject, switchMap, takeUntil } from "rxjs";
+import {
+  filter,
+  interval,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+  timer,
+} from "rxjs";
 import { FirebaseStoreService } from "../../Services/firebase-store.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToggleService } from "../../Services/toggle.service";
@@ -27,8 +35,6 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.startOtpAutoCheck();
-
     this.route.queryParams.subscribe((params) => {
       this.email = params["email"] || "";
       this.fromApp = params["from"] === "app";
@@ -42,8 +48,8 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
       } else {
         console.warn("⚠️ deviceId missing in query params");
       }
+      this.startOtpAutoCheck();
     });
-    console.log(this.email);
   }
 
   ngOnDestroy(): void {
@@ -51,24 +57,32 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   startOtpAutoCheck() {
-    interval(60000)
+    timer(0, 60000) // 0 = fire immediately, then every 60s
       .pipe(
         takeUntil(this.destroy$),
         switchMap(() => this.toggle.getOtpData()),
-        filter((data: any) => data && data.email),
+        tap((data) => console.log("🔍 OTP data from ToggleService:", data)),
+        filter((data: any) => !!data && !!data.email),
         switchMap((data: any) => {
+          console.log("✅ Passed filter. Using data:", data);
+
           const payload: any = {
             email: data.email,
           };
+
           if (this.fromApp) {
             payload.fcmToken = this.fcmToken;
             payload.deviceId = this.deviceId;
           }
-          return this.authService.verifyRole(payload);
+
+          console.log("📡 Calling verifyUser with payload:", payload);
+          return this.authService.verifyUser(payload);
         })
       )
       .subscribe({
         next: (res: any) => {
+          console.log("✅ verifyUser response:", res);
+
           if (res.data.id) {
             localStorage.setItem("userId", res.data.id);
             const currentUrl = window.location.href;
@@ -78,11 +92,11 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
               res.data.id
             );
           }
-          if (res.data.role === "TRAINEE") {
+
+          if (res.data.status === "active") {
             this.router.navigate(["/trainee-dashboard"], {
               queryParams: { deviceId: this.deviceId, from: "app" },
             });
-            // console.log("active");
           }
         },
         error: (err: any) => {

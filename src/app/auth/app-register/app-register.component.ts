@@ -167,7 +167,7 @@ export class AppRegisterComponent implements OnInit {
           if (err.error.data.role === "TRAINEE") {
             this.router.navigate(["/trainee-dashboard"]);
           } else {
-            this.toggle.setOtpData(this.email);
+            this.toggle.setOtpData(this.email());
             this.router.navigate(["/upload-docs"]);
           }
         } else if (err.error.data.status === "inactive") {
