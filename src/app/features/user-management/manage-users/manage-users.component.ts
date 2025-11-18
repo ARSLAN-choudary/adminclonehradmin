@@ -63,6 +63,7 @@ import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { SelectFilterIdDirective } from "../../../shared/common/directives/select-filter-id.directive";
+import { log } from "@techstark/opencv-js";
 interface Country {
   id: number;
   name: string;
@@ -72,9 +73,9 @@ interface DocumentItem {
   id: number;
   name: string;
   uploadDate: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
   previewUrl: string;
-  fileType: 'pdf' | 'image';
+  fileType: "pdf" | "image";
 }
 interface PhoneInputValue {
   number: string;
@@ -119,7 +120,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   });
   startDate: string = "";
   endDate: string = "";
-  currentUserId: string = '';
+  currentUserId: string = "";
   currentUserDocs: any[] = [];
   limit: number = 10;
 
@@ -138,7 +139,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   public searchDataValue = "";
   public row = true;
 
-
   deleteUserId!: any;
   @ViewChild("addUserCanvas", { static: true })
   addUserCanvas!: ElementRef<HTMLElement>;
@@ -146,7 +146,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   editUserCanvas!: ElementRef<HTMLElement>;
   @ViewChild("docsCanvas") docsCanvas!: ElementRef;
   docsBackdrop: any;
-
 
   private addBackdrop?: HTMLElement;
   private editBackdrop?: HTMLElement;
@@ -196,8 +195,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     private backend: BackendService,
     private toastr: ToastrService,
     private toaster: ToastrService,
-    private renderer: Renderer2,
-
+    private renderer: Renderer2
   ) {
     this.countries = [
       { label: "United Arab Emirates", value: "uae" },
@@ -757,10 +755,8 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.dataSource.data = this.tableData;
   }
 
-
   // DOCS OFFCANVAS
   openDocs(user: any) {
-
     this.currentUserId = user._id;
 
     this.currentUserDocs = Object.entries(user.documents).map(
@@ -770,8 +766,8 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         uploadDate: user.createdAt,
         previewUrl: value.url,
         status: value.status,
-        fileType: value.url ? 'image' : 'unknown',
-        key: key
+        fileType: value.url ? "image" : "unknown",
+        key: key,
       })
     );
 
@@ -841,83 +837,80 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     this.renderer.removeStyle(document.body, "overflow");
   }
 
-
   selectedDoc: DocumentItem | null = null;
   showPreview: boolean = false;
-
 
   closePreview() {
     this.showPreview = false;
     this.selectedDoc = null;
   }
-approve(doc: any) {
-  const payload = {
-    userId: this.currentUserId,
-    documentKey: doc.key,
-    status: 'approved'
-  };
+  approve(doc: any) {
+    const payload = {
+      userId: this.currentUserId,
+      documentKey: doc.key,
+      status: "approved",
+    };
 
-  this.backend.updateDocStatus(payload).subscribe({
-    next: (res: any) => {
+    this.backend.updateDocStatus(payload).subscribe({
+      next: (res: any) => {
+        const msg =
+          res?.meta?.message ||
+          res?.message ||
+          res?.data?.message ||
+          "Document approved successfully";
 
-      const msg =
-        res?.meta?.message ||
-        res?.message ||
-        res?.data?.message ||
-        "Document approved successfully";
+        this.toastr.success(msg, "Success");
 
-      this.toastr.success(msg, "Success");
+        this.currentUserDocs = this.currentUserDocs.map((d) =>
+          d.key === doc.key ? { ...d, status: "approved" } : d
+        );
 
-      this.currentUserDocs = this.currentUserDocs.map(d =>
-        d.key === doc.key ? { ...d, status: 'approved' } : d
-      );
+        this.getTableData(this.skip, this.limit);
+        this.closePreview();
+      },
+      error: (err) => {
+        const errorMsg =
+          err?.error?.meta?.message ||
+          err?.error?.message ||
+          "Something went wrong";
+        this.toastr.error(errorMsg, "Error");
+      },
+    });
+  }
 
-      this.getTableData(this.skip, this.limit);
-      this.closePreview();
-    },
-    error: (err) => {
-      const errorMsg = err?.error?.meta?.message || 
-                       err?.error?.message || 
-                       "Something went wrong";
-      this.toastr.error(errorMsg, "Error");
-    }
-  });
-}
+  reject(doc: any) {
+    const payload = {
+      userId: this.currentUserId,
+      documentKey: doc.key,
+      status: "rejected",
+    };
 
-reject(doc: any) {
-  const payload = {
-    userId: this.currentUserId,
-    documentKey: doc.key,
-    status: 'rejected'
-  };
+    this.backend.updateDocStatus(payload).subscribe({
+      next: (res: any) => {
+        const msg =
+          res?.meta?.message ||
+          res?.message ||
+          res?.data?.message ||
+          "Document rejected successfully";
 
-  this.backend.updateDocStatus(payload).subscribe({
-    next: (res: any) => {
+        this.toastr.info(msg, "Updated");
 
-      const msg = 
-        res?.meta?.message || 
-        res?.message || 
-        res?.data?.message || 
-        "Document rejected successfully";
-        
-      this.toastr.info(msg, "Updated");
+        this.currentUserDocs = this.currentUserDocs.map((d) =>
+          d.key === doc.key ? { ...d, status: "rejected" } : d
+        );
 
-      this.currentUserDocs = this.currentUserDocs.map(d =>
-        d.key === doc.key ? { ...d, status: 'rejected' } : d
-      );
-
-      this.getTableData(this.skip, this.limit);
-      this.closePreview();
-    },
-    error: (err) => {
-      const errorMsg = err?.error?.meta?.message || 
-                       err?.error?.message || 
-                       "Something went wrong";
-      this.toastr.error(errorMsg, "Error");
-    }
-  });
-}
-
+        this.getTableData(this.skip, this.limit);
+        this.closePreview();
+      },
+      error: (err) => {
+        const errorMsg =
+          err?.error?.meta?.message ||
+          err?.error?.message ||
+          "Something went wrong";
+        this.toastr.error(errorMsg, "Error");
+      },
+    });
+  }
 
   getSafeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -925,9 +918,9 @@ reject(doc: any) {
 
   getBadgeClass(status: string) {
     return {
-      pending: 'badge bg-warning text-dark',
-      approved: 'badge bg-success',
-      rejected: 'badge bg-danger'
+      pending: "badge bg-warning text-dark",
+      approved: "badge bg-success",
+      rejected: "badge bg-danger",
     }[status];
   }
 
@@ -940,63 +933,90 @@ reject(doc: any) {
     this.openPreview(doc);
   }
 
-
-  pendingCount() { return this.currentUserDocs.filter(d => d.status === 'pending').length; }
-  approvedCount() { return this.currentUserDocs.filter(d => d.status === 'approved').length; }
-  rejectedCount() { return this.currentUserDocs.filter(d => d.status === 'rejected').length; }
-
-docData = [
-  {
-    section: 'Personal Information',
-    fields: [
-      { label: 'Given Name (English)', value: 'Areesh' },
-      { label: 'Surname (Georgian)', value: 'ქართული' },
-      { label: 'Citizenship', value: 'Georgia' },
-      { label: 'Document Type ', value: 'Georgian ID Card' },
-      { label: 'Document Number', value: '1997865' },
-      { label: 'Date of Birth', value: '1998-06-15' },
-      { label: 'Gender', value: 'Male' },
-      { label: 'Marital Status ', value: 'Single' },
-       { label: 'Contact Number', value: '+99556830' },
-      { label: 'Email Address', value: 'areesh@gmail.com' },
-      { label: 'Legal Home Address', value: '12 Rustaveli Avenue,Apartment 34,Tbilisi 0108,Georgia' },
-    ]
-  },
- {
-  section: 'Education',
-  fields: [
-    { label: 'From (MM/YYYY)', value: '09/2018' },
-    { label: 'To (MM/YYYY)', value: '06/2022' },
-    { label: 'Institution', value: 'Tbilisi State University' },
-    { label: 'Qualification', value: 'Bachelor of Computer Science' },
-    { label: 'Notes', value: 'Graduated with strong academic performance' },
-    { label: 'Currently Studying', value: 'No' },
-  ]
-},
-{
-  section: 'Work Experience',
-  fields: [
-    { label: 'Work Experience', value: '1' },
-    { label: 'Company Name', value: 'TechSolutions LLC' },
-    { label: 'City, Country', value: 'Tbilisi, Georgia' },
-    { label: 'Job Title / Position', value: 'Frontend Developer' },
-    { label: 'Employment Period', value: '08/2020 → 12/2023' },
-    { label: 'Gross Salary (optional)', value: '$1,200 / month' },
-    { label: 'Reason for Leaving', value: 'Career growth opportunity' },
-    { label: 'Still Working Here', value: 'No' },
-    { label: 'Additional Notes', value: 'Worked on Angular-based enterprise apps' },
-  ]
-}
-];
-
-allDocsApproved(): boolean {
-  if (!this.currentUserDocs || this.currentUserDocs.length === 0) return false;
-  return this.currentUserDocs.every(doc => doc.status === 'approved');
-}
-approveTrainee() {
-  if (this.allDocsApproved()) {
-    this.router.navigate(['/leads-dashboard']);
+  pendingCount() {
+    return this.currentUserDocs.filter((d) => d.status === "pending").length;
   }
-}
+  approvedCount() {
+    return this.currentUserDocs.filter((d) => d.status === "approved").length;
+  }
+  rejectedCount() {
+    return this.currentUserDocs.filter((d) => d.status === "rejected").length;
+  }
 
+  docData = [
+    {
+      section: "Personal Information",
+      fields: [
+        { label: "Given Name (English)", value: "Areesh" },
+        { label: "Surname (Georgian)", value: "ქართული" },
+        { label: "Citizenship", value: "Georgia" },
+        { label: "Document Type ", value: "Georgian ID Card" },
+        { label: "Document Number", value: "1997865" },
+        { label: "Date of Birth", value: "1998-06-15" },
+        { label: "Gender", value: "Male" },
+        { label: "Marital Status ", value: "Single" },
+        { label: "Contact Number", value: "+99556830" },
+        { label: "Email Address", value: "areesh@gmail.com" },
+        {
+          label: "Legal Home Address",
+          value: "12 Rustaveli Avenue,Apartment 34,Tbilisi 0108,Georgia",
+        },
+      ],
+    },
+    {
+      section: "Education",
+      fields: [
+        { label: "From (MM/YYYY)", value: "09/2018" },
+        { label: "To (MM/YYYY)", value: "06/2022" },
+        { label: "Institution", value: "Tbilisi State University" },
+        { label: "Qualification", value: "Bachelor of Computer Science" },
+        { label: "Notes", value: "Graduated with strong academic performance" },
+        { label: "Currently Studying", value: "No" },
+      ],
+    },
+    {
+      section: "Work Experience",
+      fields: [
+        { label: "Work Experience", value: "1" },
+        { label: "Company Name", value: "TechSolutions LLC" },
+        { label: "City, Country", value: "Tbilisi, Georgia" },
+        { label: "Job Title / Position", value: "Frontend Developer" },
+        { label: "Employment Period", value: "08/2020 → 12/2023" },
+        { label: "Gross Salary (optional)", value: "$1,200 / month" },
+        { label: "Reason for Leaving", value: "Career growth opportunity" },
+        { label: "Still Working Here", value: "No" },
+        {
+          label: "Additional Notes",
+          value: "Worked on Angular-based enterprise apps",
+        },
+      ],
+    },
+  ];
+
+  allDocsApproved(): boolean {
+    if (!this.currentUserDocs || this.currentUserDocs.length === 0)
+      return false;
+    return this.currentUserDocs.every((doc) => doc.status === "approved");
+  }
+  approveTrainee() {
+
+    const payload = {
+      id: this.currentUserId,
+      role: "TRAINEE",
+    };
+
+    this.backend.updateUser(payload).subscribe({
+      next: (res: any) => {
+        if (res?.status === "success" || res?.success === true) {
+          this.toastr.success(res.message || "Status updated");
+          this.getTableData(this.skip, this.pageSize);
+        } else {
+          this.toastr.error(res?.message || "Failed to Update status");
+        }
+      },
+      error: (err: any) => {
+        this.toastr.error("Failed to toggle status");
+      },
+    });
+  }
 }

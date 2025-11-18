@@ -56,8 +56,8 @@ export const routes: Routes = [
             (m) => m.WaitingApprovalComponent
           ),
       },
-      
-       {
+
+      {
         path: "waiting-for-application-submission",
         loadComponent: () =>
           import("./auth/waiting-submission/waiting-submission.component").then(
@@ -145,7 +145,7 @@ export const routes: Routes = [
           import(
             "./features/main-menu/dashboards/deals-dashboard/deals-dashboard.component"
           ).then((m) => m.DealsDashboardComponent),
-          canActivate: [authGuard],
+        canActivate: [authGuard],
       },
       {
         path: "lead-dashboard",
@@ -153,6 +153,13 @@ export const routes: Routes = [
           import(
             "./features/main-menu/dashboards/lead-dashboard/lead-dashboard.component"
           ).then((m) => m.LeadDashboardComponent),
+      },
+      {
+        path: "trainee-dashboard",
+        loadComponent: () =>
+          import("./Modules/trainee-dashboard/trainee-dashboard.module").then(
+            (m) => m.TraineeDashboardModule
+          ),
       },
       {
         path: "project-dashboard",

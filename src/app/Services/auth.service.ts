@@ -55,10 +55,14 @@ export class AuthService {
   }
 
   // --- ✅ STEP 2: VERIFY OTP (Email + OTP) ---
-  verifyOtp(payload:any): Observable<any> {
+  verifyOtp(payload: any): Observable<any> {
     return this.http.post(CONFIG.registerapi, payload);
   }
   verifyUser(email: string): Observable<any> {
     return this.http.post(CONFIG.verifyUser, { email });
+  }
+
+  verifyRole(email: string): Observable<any> {
+    return this.http.post(CONFIG.verifyRole, { email });
   }
 }

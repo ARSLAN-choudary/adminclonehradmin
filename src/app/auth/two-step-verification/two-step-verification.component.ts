@@ -51,7 +51,6 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
       this.deviceId = params["deviceId"] || "";
       this.fcmToken = params["fcmToken"] || "";
 
-      console.log("📩 Received email:", this.email, "| fromApp:", this.fromApp);
     });
 
     this.startCountdown();

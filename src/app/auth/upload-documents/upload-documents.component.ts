@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, signal } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import {
   FormBuilder,
   FormGroup,
@@ -7,32 +7,34 @@ import {
   Validators,
   FormArray,
   AbstractControl,
-} from '@angular/forms';
+} from "@angular/forms";
 import { SelectModule } from "primeng/select";
-import { Subject } from 'rxjs';
-import { WebcamImage, WebcamModule } from 'ngx-webcam';
-import { BackendService } from '../../Services/backend.service';
+import { Subject } from "rxjs";
+import { WebcamImage, WebcamModule } from "ngx-webcam";
+import { BackendService } from "../../Services/backend.service";
 
 // OpenCV.js
-import cvModule from '@techstark/opencv-js';
-import { Router } from '@angular/router';
+import cvModule from "@techstark/opencv-js";
+import { ActivatedRoute, Router } from "@angular/router";
+import { FirebaseStoreService } from "../../Services/firebase-store.service";
 
-type DocType = 'passport' | 'residenceCard' | 'healthCard' | 'drivingLicense';
+type DocType = "passport" | "residenceCard" | "healthCard" | "drivingLicense";
 
 @Component({
-  selector: 'app-upload-documents',
+  selector: "app-upload-documents",
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, WebcamModule, SelectModule],
-  templateUrl: './upload-documents.component.html',
-  styleUrls: ['./upload-documents.component.scss'],
+  templateUrl: "./upload-documents.component.html",
+  styleUrls: ["./upload-documents.component.scss"],
 })
-export class UploadDocumentsComponent {
+export class UploadDocumentsComponent implements OnInit {
   form: FormGroup;
 
   activeDocType: DocType | null = null;
   showCamera = false;
-  hint = 'Click a card to capture its document.';
-  qualityStatus: 'unknown' | 'good' | 'blurry' | 'too_far' | 'too_close' = 'unknown';
+  hint = "Click a card to capture its document.";
+  qualityStatus: "unknown" | "good" | "blurry" | "too_far" | "too_close" =
+    "unknown";
 
   // ngx-webcam trigger
   private snapshotTrigger: Subject<void> = new Subject<void>();
@@ -43,160 +45,173 @@ export class UploadDocumentsComponent {
   private cvReady = false;
 
   // thresholds (relaxed!)
-  private readonly BLUR_THRESHOLD = 40;      // was 80, now easier to pass
-  private readonly AREA_TOO_FAR_MAX = 0.05;  // < 5% of frame area = too far
+  private readonly BLUR_THRESHOLD = 40; // was 80, now easier to pass
+  private readonly AREA_TOO_FAR_MAX = 0.05; // < 5% of frame area = too far
   private readonly AREA_TOO_CLOSE_MIN = 0.85; // > 85% of frame area = too close
 
   // Data for dropdowns with default values
   cities = [
-    { label: 'Tbilisi', value: 'Tbilisi' },
-    { label: 'Batumi', value: 'Batumi' },
-    { label: 'Rustavi', value: 'Rustavi' },
-    { label: 'Kutaisi', value: 'Kutaisi' },
-    { label: 'Gori', value: 'Gori' },
-    { label: 'Poti', value: 'Poti' },
-    { label: 'Zugdidi', value: 'Zugdidi' },
-    { label: 'Khashuri', value: 'Khashuri' },
-    { label: 'Kobuleti', value: 'Kobuleti' },
-    { label: 'Marneuli', value: 'Marneuli' },
-    { label: 'Samtredia', value: 'Samtredia' },
-    { label: 'Zestaponi', value: 'Zestaponi' },
-    { label: 'Telavi', value: 'Telavi' },
-    { label: 'Akhaltsikhe', value: 'Akhaltsikhe' },
-    { label: 'Senaki', value: 'Senaki' },
-    { label: 'Ozurgeti', value: 'Ozurgeti' },
-    { label: 'Kaspi', value: 'Kaspi' },
-    { label: 'Gardabani', value: 'Gardabani' },
-    { label: 'Chiatura', value: 'Chiatura' },
-    { label: 'Borjomi', value: 'Borjomi' },
-    { label: 'Sagarejo', value: 'Sagarejo' },
-    { label: 'Kvareli', value: 'Kvareli' },
-    { label: 'Bolnisi', value: 'Bolnisi' },
-    { label: 'Tkibuli', value: 'Tkibuli' },
-    { label: 'Khoni', value: 'Khoni' },
-    { label: 'Akhalkalaki', value: 'Akhalkalaki' },
-    { label: 'Tskaltubo', value: 'Tskaltubo' },
-    { label: 'Mtskheta', value: 'Mtskheta' },
-    { label: 'Gurjaani', value: 'Gurjaani' },
-    { label: 'Dusheti', value: 'Dusheti' },
-    { label: 'Kareli', value: 'Kareli' },
-    { label: 'Lanchkhuti', value: 'Lanchkhuti' },
-    { label: 'Akhmeta', value: 'Akhmeta' },
-    { label: 'Lagodekhi', value: 'Lagodekhi' },
-    { label: 'Dedoplistsqaro', value: 'Dedoplistsqaro' },
-    { label: 'Sachkhere', value: 'Sachkhere' },
-    { label: 'Vale', value: 'Vale' },
-    { label: 'Tsnori', value: 'Tsnori' },
-    { label: 'Terjola', value: 'Terjola' },
-    { label: 'Tetritsqaro', value: 'Tetritsqaro' },
-    { label: 'Abasha', value: 'Abasha' },
-    { label: 'Ninotsminda', value: 'Ninotsminda' },
-    { label: 'Martvili', value: 'Martvili' },
-    { label: 'Tsalka', value: 'Tsalka' },
-    { label: 'Vani', value: 'Vani' },
-    { label: 'Khobi', value: 'Khobi' },
-    { label: 'Dmanisi', value: 'Dmanisi' },
-    { label: 'Tsalenjikha', value: 'Tsalenjikha' },
-    { label: 'Baghdati', value: 'Baghdati' },
-    { label: 'Oni', value: 'Oni' },
-    { label: 'Ambrolauri', value: 'Ambrolauri' },
-    { label: 'Sighnaghi', value: 'Sighnaghi' },
-    { label: 'Jvari', value: 'Jvari' },
-    { label: 'Tsageri', value: 'Tsageri' }
+    { label: "Tbilisi", value: "Tbilisi" },
+    { label: "Batumi", value: "Batumi" },
+    { label: "Rustavi", value: "Rustavi" },
+    { label: "Kutaisi", value: "Kutaisi" },
+    { label: "Gori", value: "Gori" },
+    { label: "Poti", value: "Poti" },
+    { label: "Zugdidi", value: "Zugdidi" },
+    { label: "Khashuri", value: "Khashuri" },
+    { label: "Kobuleti", value: "Kobuleti" },
+    { label: "Marneuli", value: "Marneuli" },
+    { label: "Samtredia", value: "Samtredia" },
+    { label: "Zestaponi", value: "Zestaponi" },
+    { label: "Telavi", value: "Telavi" },
+    { label: "Akhaltsikhe", value: "Akhaltsikhe" },
+    { label: "Senaki", value: "Senaki" },
+    { label: "Ozurgeti", value: "Ozurgeti" },
+    { label: "Kaspi", value: "Kaspi" },
+    { label: "Gardabani", value: "Gardabani" },
+    { label: "Chiatura", value: "Chiatura" },
+    { label: "Borjomi", value: "Borjomi" },
+    { label: "Sagarejo", value: "Sagarejo" },
+    { label: "Kvareli", value: "Kvareli" },
+    { label: "Bolnisi", value: "Bolnisi" },
+    { label: "Tkibuli", value: "Tkibuli" },
+    { label: "Khoni", value: "Khoni" },
+    { label: "Akhalkalaki", value: "Akhalkalaki" },
+    { label: "Tskaltubo", value: "Tskaltubo" },
+    { label: "Mtskheta", value: "Mtskheta" },
+    { label: "Gurjaani", value: "Gurjaani" },
+    { label: "Dusheti", value: "Dusheti" },
+    { label: "Kareli", value: "Kareli" },
+    { label: "Lanchkhuti", value: "Lanchkhuti" },
+    { label: "Akhmeta", value: "Akhmeta" },
+    { label: "Lagodekhi", value: "Lagodekhi" },
+    { label: "Dedoplistsqaro", value: "Dedoplistsqaro" },
+    { label: "Sachkhere", value: "Sachkhere" },
+    { label: "Vale", value: "Vale" },
+    { label: "Tsnori", value: "Tsnori" },
+    { label: "Terjola", value: "Terjola" },
+    { label: "Tetritsqaro", value: "Tetritsqaro" },
+    { label: "Abasha", value: "Abasha" },
+    { label: "Ninotsminda", value: "Ninotsminda" },
+    { label: "Martvili", value: "Martvili" },
+    { label: "Tsalka", value: "Tsalka" },
+    { label: "Vani", value: "Vani" },
+    { label: "Khobi", value: "Khobi" },
+    { label: "Dmanisi", value: "Dmanisi" },
+    { label: "Tsalenjikha", value: "Tsalenjikha" },
+    { label: "Baghdati", value: "Baghdati" },
+    { label: "Oni", value: "Oni" },
+    { label: "Ambrolauri", value: "Ambrolauri" },
+    { label: "Sighnaghi", value: "Sighnaghi" },
+    { label: "Jvari", value: "Jvari" },
+    { label: "Tsageri", value: "Tsageri" },
   ];
 
   regions = [
-    { label: 'Tbilisi', value: 'Tbilisi' },
-    { label: 'Imereti', value: 'Imereti' },
-    { label: 'Adjara', value: 'Adjara' },
-    { label: 'Kvemo Kartli', value: 'Kvemo Kartli' },
-    { label: 'Samegrelo-Zemo Svaneti', value: 'Samegrelo-Zemo Svaneti' },
-    { label: 'Kakheti', value: 'Kakheti' },
-    { label: 'Shida Kartli', value: 'Shida Kartli' },
-    { label: 'Abkhazia', value: 'Abkhazia' },
-    { label: 'Samtskhe-Javakheti', value: 'Samtskhe-Javakheti' },
-    { label: 'Guria', value: 'Guria' },
-    { label: 'Mtskheta-Mtianeti', value: 'Mtskheta-Mtianeti' },
-    { label: 'Racha-Lechkhumi and Kvemo Svaneti', value: 'Racha-Lechkhumi and Kvemo Svaneti' }
+    { label: "Tbilisi", value: "Tbilisi" },
+    { label: "Imereti", value: "Imereti" },
+    { label: "Adjara", value: "Adjara" },
+    { label: "Kvemo Kartli", value: "Kvemo Kartli" },
+    { label: "Samegrelo-Zemo Svaneti", value: "Samegrelo-Zemo Svaneti" },
+    { label: "Kakheti", value: "Kakheti" },
+    { label: "Shida Kartli", value: "Shida Kartli" },
+    { label: "Abkhazia", value: "Abkhazia" },
+    { label: "Samtskhe-Javakheti", value: "Samtskhe-Javakheti" },
+    { label: "Guria", value: "Guria" },
+    { label: "Mtskheta-Mtianeti", value: "Mtskheta-Mtianeti" },
+    {
+      label: "Racha-Lechkhumi and Kvemo Svaneti",
+      value: "Racha-Lechkhumi and Kvemo Svaneti",
+    },
   ];
 
   banks = [
-    { label: 'TBC Bank', value: 'TBC Bank' },
-    { label: 'Bank of Georgia', value: 'Bank of Georgia' },
-    { label: 'Liberty Bank (Georgia)', value: 'Liberty Bank (Georgia)' },
-    { label: 'Basis Bank', value: 'Basis Bank' },
-    { label: 'ProCredit Bank', value: 'ProCredit Bank' },
-    { label: 'Credo Bank', value: 'Credo Bank' },
-    { label: 'Terabank', value: 'Terabank' },
-    { label: 'Cartu Bank', value: 'Cartu Bank' },
-    { label: 'Halyk Bank', value: 'Halyk Bank' },
-    { label: 'VTB Bank of Georgia', value: 'VTB Bank of Georgia' },
-    { label: 'PASHA Bank Georgia', value: 'PASHA Bank Georgia' },
-    { label: 'Isbank', value: 'Isbank' },
-    { label: 'Ziraat Bank', value: 'Ziraat Bank' },
-    { label: 'Silk Road Bank', value: 'Silk Road Bank' }
+    { label: "TBC Bank", value: "TBC Bank" },
+    { label: "Bank of Georgia", value: "Bank of Georgia" },
+    { label: "Liberty Bank (Georgia)", value: "Liberty Bank (Georgia)" },
+    { label: "Basis Bank", value: "Basis Bank" },
+    { label: "ProCredit Bank", value: "ProCredit Bank" },
+    { label: "Credo Bank", value: "Credo Bank" },
+    { label: "Terabank", value: "Terabank" },
+    { label: "Cartu Bank", value: "Cartu Bank" },
+    { label: "Halyk Bank", value: "Halyk Bank" },
+    { label: "VTB Bank of Georgia", value: "VTB Bank of Georgia" },
+    { label: "PASHA Bank Georgia", value: "PASHA Bank Georgia" },
+    { label: "Isbank", value: "Isbank" },
+    { label: "Ziraat Bank", value: "Ziraat Bank" },
+    { label: "Silk Road Bank", value: "Silk Road Bank" },
   ];
 
   languages = [
-    { label: 'Georgian', value: 'Georgian' },
-    { label: 'English', value: 'English' },
-    { label: 'Russian', value: 'Russian' },
-    { label: 'Turkish', value: 'Turkish' },
-    { label: 'Hindi', value: 'Hindi' },
-    { label: 'Arabic', value: 'Arabic' },
-    { label: 'Other', value: 'Other' }
+    { label: "Georgian", value: "Georgian" },
+    { label: "English", value: "English" },
+    { label: "Russian", value: "Russian" },
+    { label: "Turkish", value: "Turkish" },
+    { label: "Hindi", value: "Hindi" },
+    { label: "Arabic", value: "Arabic" },
+    { label: "Other", value: "Other" },
   ];
 
   proficiencyLevels = [
-    { label: 'Basic', value: 'Basic' },
-    { label: 'Intermediate', value: 'Intermediate' },
-    { label: 'Fluent', value: 'Fluent' },
-    { label: 'Native', value: 'Native' }
+    { label: "Basic", value: "Basic" },
+    { label: "Intermediate", value: "Intermediate" },
+    { label: "Fluent", value: "Fluent" },
+    { label: "Native", value: "Native" },
   ];
 
   professionalSkills = [
-    { label: 'Microsoft Word', value: 'Microsoft Word' },
-    { label: 'Microsoft Excel', value: 'Microsoft Excel' },
-    { label: 'Microsoft PowerPoint', value: 'Microsoft PowerPoint' },
-    { label: 'Email & Outlook', value: 'Email & Outlook' },
-    { label: 'Data Entry', value: 'Data Entry' },
-    { label: 'Basic IT / Troubleshooting', value: 'Basic IT / Troubleshooting' },
-    { label: 'Filing & Documentation', value: 'Filing & Documentation' },
-    { label: 'Scheduling / Planning', value: 'Scheduling / Planning' },
-    { label: 'Record Keeping', value: 'Record Keeping' },
-    { label: 'Office Management', value: 'Office Management' }
+    { label: "Microsoft Word", value: "Microsoft Word" },
+    { label: "Microsoft Excel", value: "Microsoft Excel" },
+    { label: "Microsoft PowerPoint", value: "Microsoft PowerPoint" },
+    { label: "Email & Outlook", value: "Email & Outlook" },
+    { label: "Data Entry", value: "Data Entry" },
+    {
+      label: "Basic IT / Troubleshooting",
+      value: "Basic IT / Troubleshooting",
+    },
+    { label: "Filing & Documentation", value: "Filing & Documentation" },
+    { label: "Scheduling / Planning", value: "Scheduling / Planning" },
+    { label: "Record Keeping", value: "Record Keeping" },
+    { label: "Office Management", value: "Office Management" },
   ];
 
   skillLevels = [
-    { label: 'Beginner', value: 'Beginner' },
-    { label: 'Intermediate', value: 'Intermediate' },
-    { label: 'Advanced', value: 'Advanced' },
-    { label: 'Expert', value: 'Expert' }
+    { label: "Beginner", value: "Beginner" },
+    { label: "Intermediate", value: "Intermediate" },
+    { label: "Advanced", value: "Advanced" },
+    { label: "Expert", value: "Expert" },
   ];
+  private fromApp: boolean = false;
+  email = signal<string>("");
+  private deviceId: string = "";
+  private fcmToken: string = "";
 
-
-  
   private _filterIdCounter = 0;
-  constructor(private fb: FormBuilder, private backend: BackendService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private backend: BackendService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private firebaseStore: FirebaseStoreService,
+  ) {
     this.form = this.fb.group({
-
       personalDetails: this.fb.group({
-        givenNameSurnameEnglish: ['', [Validators.required]],
-        givenNameSurnameGeorgian: [''],
-        citizenship: ['georgian', [Validators.required]],
-        documentType: ['georgianId', [Validators.required]],
-        documentNumber: ['', [Validators.required]],
-        dateOfBirth: ['', [Validators.required]],
-        gender: ['male', [Validators.required]],
-        maritalStatus: ['single', [Validators.required]],
-        contactNumber: ['', [Validators.required]],
-        emailAddress: ['', [Validators.required, Validators.email]],
+        givenNameSurnameEnglish: ["", [Validators.required]],
+        givenNameSurnameGeorgian: [""],
+        citizenship: ["georgian", [Validators.required]],
+        documentType: ["georgianId", [Validators.required]],
+        documentNumber: ["", [Validators.required]],
+        dateOfBirth: ["", [Validators.required]],
+        gender: ["male", [Validators.required]],
+        maritalStatus: ["single", [Validators.required]],
+        contactNumber: ["", [Validators.required]],
+        emailAddress: ["", [Validators.required, Validators.email]],
         legalHomeAddress: this.fb.group({
-          streetBuildingApartment: ['', [Validators.required]],
-          village: [''],
-          city: ['Tbilisi', [Validators.required]],
-          region: ['Tbilisi', [Validators.required]]
-        })
+          streetBuildingApartment: ["", [Validators.required]],
+          village: [""],
+          city: ["Tbilisi", [Validators.required]],
+          region: ["Tbilisi", [Validators.required]],
+        }),
       }),
 
       // SECTION 2: EDUCATION
@@ -211,53 +226,53 @@ export class UploadDocumentsComponent {
       // SECTION 5: SKILLS
       skills: this.fb.group({
         professionalSkills: this.fb.array([]),
-        otherSkills: [''],
-        skillRating: ['Intermediate']
+        otherSkills: [""],
+        skillRating: ["Intermediate"],
       }),
 
       // SECTION 6: BANK DETAILS
       bankDetails: this.fb.group({
-        bank: ['TBC Bank', [Validators.required]],
-        accountNumber: ['', [Validators.required]],
-        accountHolderName: ['', [Validators.required]],
-        useSameName: [false]
+        bank: ["TBC Bank", [Validators.required]],
+        accountNumber: ["", [Validators.required]],
+        accountHolderName: ["", [Validators.required]],
+        useSameName: [false],
       }),
 
       // SECTION 7: EMERGENCY CONTACT
       emergencyContact: this.fb.group({
-        fullName: ['', [Validators.required]],
-        relationship: ['', [Validators.required]],
-        address: ['', [Validators.required]],
-        contactNumber: ['', [Validators.required]],
-        notes: ['']
+        fullName: ["", [Validators.required]],
+        relationship: ["", [Validators.required]],
+        address: ["", [Validators.required]],
+        contactNumber: ["", [Validators.required]],
+        notes: [""],
       }),
 
       // SECTION 8: RIGHT TO WORK IN GEORGIA
       rightToWork: this.fb.group({
-        allowedToWork: ['yes', [Validators.required]],
-        explanation: ['']
+        allowedToWork: ["yes", [Validators.required]],
+        explanation: [""],
       }),
 
       // SECTION 9: DOCUMENT UPLOAD
       passport: this.fb.group({
-        dataUrl: [''],
+        dataUrl: [""],
         uploaded: [false],
       }),
       residenceCard: this.fb.group({
-        dataUrl: [''],
+        dataUrl: [""],
         uploaded: [false],
       }),
       healthCard: this.fb.group({
-        dataUrl: [''],
+        dataUrl: [""],
         uploaded: [false],
       }),
       drivingLicense: this.fb.group({
-        dataUrl: [''],
+        dataUrl: [""],
         uploaded: [false],
       }),
 
       // SECTION 10: ADDITIONAL FIELD
-      additionalField: ['']
+      additionalField: [""],
     });
 
     // Add initial entries
@@ -269,6 +284,29 @@ export class UploadDocumentsComponent {
     this.initOpenCv();
   }
 
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.email = params["email"] || "";
+      this.fromApp = params["from"] === "app";
+      this.deviceId = params["deviceId"] || "";
+      this.fcmToken = params["fcmToken"] || "";
+
+      if (this.deviceId) {
+        setTimeout(() => {
+          this.updateUrl();
+        }, 100);
+      }
+    });
+
+   
+  }
+
+  updateUrl() {
+    if (this.deviceId) {
+      const currentUrl = window.location.href;
+      this.firebaseStore.updateUrlByDeviceId(this.deviceId, currentUrl);
+    }
+  }
   // --------- OpenCV init ----------
   private async initOpenCv() {
     try {
@@ -290,39 +328,37 @@ export class UploadDocumentsComponent {
 
       this.cv = cvAny;
       this.cvReady = true;
-      console.log('OpenCV.js is ready');
+      console.log("OpenCV.js is ready");
     } catch (error) {
-      console.error('Failed to initialize OpenCV:', error);
+      console.error("Failed to initialize OpenCV:", error);
       this.cvReady = false;
     }
   }
 
   // ========== QUALITY ANALYSIS WITH OPENCV ==========
-  private async analyzeQuality(
-    dataUrl: string
-  ): Promise<{
-    status: 'good' | 'blurry' | 'too_far' | 'too_close' | 'unknown';
+  private async analyzeQuality(dataUrl: string): Promise<{
+    status: "good" | "blurry" | "too_far" | "too_close" | "unknown";
     message: string;
   }> {
     if (!this.cvReady || !this.cv) {
-      console.warn('OpenCV not ready, skipping quality check');
+      console.warn("OpenCV not ready, skipping quality check");
       return {
-        status: 'good',
-        message: 'Captured (quality check not ready).',
+        status: "good",
+        message: "Captured (quality check not ready).",
       };
     }
 
     const cv = this.cv;
     const img = await this.loadImage(dataUrl);
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = img.width;
     canvas.height = img.height;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) {
       return {
-        status: 'unknown',
-        message: 'Unable to analyze image quality.',
+        status: "unknown",
+        message: "Unable to analyze image quality.",
       };
     }
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -387,9 +423,9 @@ export class UploadDocumentsComponent {
     hierarchy.delete();
 
     console.log(
-      'blurScore:',
+      "blurScore:",
       blurScore.toFixed(1),
-      'areaRatio:',
+      "areaRatio:",
       areaRatio.toFixed(2)
     );
 
@@ -398,38 +434,38 @@ export class UploadDocumentsComponent {
     // Blur has highest priority
     if (blurScore < this.BLUR_THRESHOLD) {
       return {
-        status: 'blurry',
-        message: 'Image is blurry. Hold still and try again.',
+        status: "blurry",
+        message: "Image is blurry. Hold still and try again.",
       };
     }
 
     // If we couldn't detect any clear contour, don't block the user
     if (areaRatio === 0) {
       return {
-        status: 'good',
-        message: 'Looks good! Image captured successfully.',
+        status: "good",
+        message: "Looks good! Image captured successfully.",
       };
     }
 
     if (areaRatio < this.AREA_TOO_FAR_MAX) {
       return {
-        status: 'too_far',
+        status: "too_far",
         message:
-          'Document is too far. Move it closer so it fills more of the frame.',
+          "Document is too far. Move it closer so it fills more of the frame.",
       };
     }
 
     if (areaRatio > this.AREA_TOO_CLOSE_MIN) {
       return {
-        status: 'too_close',
+        status: "too_close",
         message:
-          'Document is too close. Move it a bit away so edges are visible.',
+          "Document is too close. Move it a bit away so edges are visible.",
       };
     }
 
     return {
-      status: 'good',
-      message: 'Looks good! Image captured successfully.',
+      status: "good",
+      message: "Looks good! Image captured successfully.",
     };
   }
 
@@ -445,47 +481,47 @@ export class UploadDocumentsComponent {
 
   // Getter for personal details form group
   get personalDetails(): FormGroup {
-    return this.form.get('personalDetails') as FormGroup;
+    return this.form.get("personalDetails") as FormGroup;
   }
 
   // Getter for legal home address form group
   get legalHomeAddress(): FormGroup {
-    return this.personalDetails.get('legalHomeAddress') as FormGroup;
+    return this.personalDetails.get("legalHomeAddress") as FormGroup;
   }
 
   // Getter for skills form group
   get skills(): FormGroup {
-    return this.form.get('skills') as FormGroup;
+    return this.form.get("skills") as FormGroup;
   }
 
   // Getter for bank details form group
   get bankDetails(): FormGroup {
-    return this.form.get('bankDetails') as FormGroup;
+    return this.form.get("bankDetails") as FormGroup;
   }
 
   // Getter for emergency contact form group
   get emergencyContact(): FormGroup {
-    return this.form.get('emergencyContact') as FormGroup;
+    return this.form.get("emergencyContact") as FormGroup;
   }
 
   // Getter for right to work form group
   get rightToWork(): FormGroup {
-    return this.form.get('rightToWork') as FormGroup;
+    return this.form.get("rightToWork") as FormGroup;
   }
 
   // Education FormArray methods
   get educationForms() {
-    return this.form.get('education') as FormArray;
+    return this.form.get("education") as FormArray;
   }
 
   addEducation() {
     const educationGroup = this.fb.group({
-      from: ['', [Validators.required]],
-      to: ['', [Validators.required]],
-      institution: ['', [Validators.required]],
-      qualification: ['', [Validators.required]],
-      notes: [''],
-      currentlyStudying: [false]
+      from: ["", [Validators.required]],
+      to: ["", [Validators.required]],
+      institution: ["", [Validators.required]],
+      qualification: ["", [Validators.required]],
+      notes: [""],
+      currentlyStudying: [false],
     });
     this.educationForms.push(educationGroup);
   }
@@ -496,20 +532,20 @@ export class UploadDocumentsComponent {
 
   // Work Experience FormArray methods
   get workExperienceForms() {
-    return this.form.get('workExperience') as FormArray;
+    return this.form.get("workExperience") as FormArray;
   }
 
   addWorkExperience() {
     const workGroup = this.fb.group({
-      companyName: ['', [Validators.required]],
-      cityCountry: ['', [Validators.required]],
-      jobTitle: ['', [Validators.required]],
-      employmentPeriodFrom: ['', [Validators.required]],
-      employmentPeriodTo: ['', [Validators.required]],
-      grossSalary: [''],
-      reasonForLeaving: [''],
+      companyName: ["", [Validators.required]],
+      cityCountry: ["", [Validators.required]],
+      jobTitle: ["", [Validators.required]],
+      employmentPeriodFrom: ["", [Validators.required]],
+      employmentPeriodTo: ["", [Validators.required]],
+      grossSalary: [""],
+      reasonForLeaving: [""],
       stillWorking: [false],
-      additionalNotes: ['']
+      additionalNotes: [""],
     });
     this.workExperienceForms.push(workGroup);
   }
@@ -520,13 +556,13 @@ export class UploadDocumentsComponent {
 
   // Languages FormArray methods
   get languageForms() {
-    return this.form.get('languages') as FormArray;
+    return this.form.get("languages") as FormArray;
   }
 
   addLanguage() {
     const languageGroup = this.fb.group({
-      language: ['English', [Validators.required]],
-      proficiency: ['Intermediate', [Validators.required]]
+      language: ["English", [Validators.required]],
+      proficiency: ["Intermediate", [Validators.required]],
     });
     this.languageForms.push(languageGroup);
   }
@@ -537,12 +573,14 @@ export class UploadDocumentsComponent {
 
   // Professional Skills FormArray methods
   get professionalSkillsForms() {
-    return this.skills.get('professionalSkills') as FormArray;
+    return this.skills.get("professionalSkills") as FormArray;
   }
 
   toggleProfessionalSkill(skill: string) {
     const skillsArray = this.professionalSkillsForms;
-    const index = skillsArray.controls.findIndex(control => control.value === skill);
+    const index = skillsArray.controls.findIndex(
+      (control) => control.value === skill
+    );
 
     if (index > -1) {
       skillsArray.removeAt(index);
@@ -571,12 +609,13 @@ export class UploadDocumentsComponent {
     setTimeout(apply, 120);
   }
 
-
   // Use same name for bank account
   onUseSameNameChange(event: any) {
     if (event.target.checked) {
-      const personalName = this.personalDetails.get('givenNameSurnameEnglish')?.value;
-      this.bankDetails.get('accountHolderName')?.setValue(personalName);
+      const personalName = this.personalDetails.get(
+        "givenNameSurnameEnglish"
+      )?.value;
+      this.bankDetails.get("accountHolderName")?.setValue(personalName);
     }
   }
 
@@ -595,39 +634,47 @@ export class UploadDocumentsComponent {
   private getUserId(): string {
     try {
       // Try different possible keys for userId in localStorage
-      const userId = localStorage.getItem('userId') ||
-        localStorage.getItem('user_id') ||
-        localStorage.getItem('id') ||
-        localStorage.getItem('_id');
+      const userId =
+        localStorage.getItem("userId") ||
+        localStorage.getItem("user_id") ||
+        localStorage.getItem("id") ||
+        localStorage.getItem("_id");
 
       if (userId) {
-        console.log('Found userId in localStorage:', userId);
+        console.log("Found userId in localStorage:", userId);
         return userId;
       } else {
-        console.warn('No userId found in localStorage. Available keys:', Object.keys(localStorage));
-        return '';
+        console.warn(
+          "No userId found in localStorage. Available keys:",
+          Object.keys(localStorage)
+        );
+        return "";
       }
     } catch (error) {
-      console.error('Error accessing localStorage:', error);
-      return '';
+      console.error("Error accessing localStorage:", error);
+      return "";
     }
   }
 
   // Convert form data to match backend schema
   private transformFormData(formValue: any): any {
     const personal = formValue.personalDetails;
-    const [userNameEnglish, surnameEnglish] = personal.givenNameSurnameEnglish.split(' ').filter(Boolean);
-    const [userNameGeorgian, surnameGeorgian] = personal.givenNameSurnameGeorgian.split(' ').filter(Boolean);
+    const [userNameEnglish, surnameEnglish] = personal.givenNameSurnameEnglish
+      .split(" ")
+      .filter(Boolean);
+    const [userNameGeorgian, surnameGeorgian] =
+      personal.givenNameSurnameGeorgian.split(" ").filter(Boolean);
 
     return {
       // User ID from localStorage
+
       userId: this.getUserId(),
 
       // Personal Details
-      userNameEnglish: userNameEnglish || '',
-      surnameEnglish: surnameEnglish || '',
-      userNameGeorgian: userNameGeorgian || '',
-      surnameGeorgian: surnameGeorgian || '',
+      userNameEnglish: userNameEnglish || "",
+      surnameEnglish: surnameEnglish || "",
+      userNameGeorgian: userNameGeorgian || "",
+      surnameGeorgian: surnameGeorgian || "",
       documentType: personal.documentType,
       documentNumber: parseInt(personal.documentNumber) || 0,
       email: personal.emailAddress,
@@ -637,7 +684,7 @@ export class UploadDocumentsComponent {
       gender: personal.gender,
       martialStatus: personal.maritalStatus,
       legalAdress: personal.legalHomeAddress.streetBuildingApartment,
-      position: '', // You might want to add this field to your form
+      position: "", // You might want to add this field to your form
       citizenship: personal.citizenship, // Include citizenship in payload
 
       // Education
@@ -647,7 +694,7 @@ export class UploadDocumentsComponent {
         institution: edu.institution,
         qualification: edu.qualification,
         notes: edu.notes,
-        currentlyStudying: edu.currentlyStudying
+        currentlyStudying: edu.currentlyStudying,
       })),
 
       // Work Experience
@@ -660,13 +707,13 @@ export class UploadDocumentsComponent {
         stillWorking: work.stillWorking,
         grossSalary: work.grossSalary.toString(), // Convert to String
         reasonForLeaving: work.reasonForLeaving,
-        notes: work.additionalNotes
+        notes: work.additionalNotes,
       })),
 
       // Languages
       languages: formValue.languages.map((lang: any) => ({
         language: lang.language,
-        level: lang.proficiency
+        level: lang.proficiency,
       })),
 
       // Skills
@@ -684,12 +731,16 @@ export class UploadDocumentsComponent {
       emergencyFullName: formValue.emergencyContact.fullName,
       emergencyRelationship: formValue.emergencyContact.relationship,
       emergencyAddress: formValue.emergencyContact.address,
-      emergencyContactNumber: formValue.emergencyContact.contactNumber.toString(), // Convert to String
+      emergencyContactNumber:
+        formValue.emergencyContact.contactNumber.toString(), // Convert to String
       emergencyNotes: formValue.emergencyContact.notes,
 
       // Right to Work
-      allowedToWork: formValue.rightToWork.allowedToWork === 'yes',
-      rightToWorkRemarks: formValue.rightToWork.allowedToWork === 'no' ? formValue.rightToWork.explanation : '',
+      allowedToWork: formValue.rightToWork.allowedToWork === "yes",
+      rightToWorkRemarks:
+        formValue.rightToWork.allowedToWork === "no"
+          ? formValue.rightToWork.explanation
+          : "",
 
       // Additional Notes
       additionalNotes: formValue.additionalField,
@@ -697,34 +748,33 @@ export class UploadDocumentsComponent {
       // Documents - Add the missing documents object
       documents: {
         doc1: {
-          url: formValue.passport.dataUrl || '',
-          status: formValue.passport.uploaded ? "pending" : "pending"
+          url: formValue.passport.dataUrl || "",
+          status: formValue.passport.uploaded ? "pending" : "pending",
         },
         doc2: {
-          url: formValue.residenceCard.dataUrl || '',
-          status: formValue.residenceCard.uploaded ? "pending" : "pending"
+          url: formValue.residenceCard.dataUrl || "",
+          status: formValue.residenceCard.uploaded ? "pending" : "pending",
         },
         doc3: {
-          url: formValue.healthCard.dataUrl || '',
-          status: formValue.healthCard.uploaded ? "pending" : "pending"
+          url: formValue.healthCard.dataUrl || "",
+          status: formValue.healthCard.uploaded ? "pending" : "pending",
         },
         doc4: {
-          url: formValue.drivingLicense.dataUrl || '',
-          status: formValue.drivingLicense.uploaded ? "pending" : "pending"
-        }
+          url: formValue.drivingLicense.dataUrl || "",
+          status: formValue.drivingLicense.uploaded ? "pending" : "pending",
+        },
       },
 
-      // Default values for required fields in schema
-      role: 'USER',
-      status: 'active',
+      role: "USER",
+      status: "active",
       isLoggedIn: 0,
-      password: '',
-      currentToken: '',
-      otp: '',
-      otpCreatedAt: null, // Add missing field
-      fcmToken: null,
-      deviceId: null,
-      isDeleted: false
+      password: "",
+      currentToken: "",
+      otp: "",
+      otpCreatedAt: null,
+      isDeleted: false,
+      fcmToken: this.fromApp ? this.fcmToken : null,
+      deviceId: this.fromApp ? this.deviceId : null,
     };
   }
 
@@ -733,8 +783,8 @@ export class UploadDocumentsComponent {
     if (!dataURL) {
       return new Blob();
     }
-    const byteString = atob(dataURL.split(',')[1]);
-    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    const byteString = atob(dataURL.split(",")[1]);
+    const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
     const ab = new ArrayBuffer(byteString.length);
     const ia = new Uint8Array(ab);
     for (let i = 0; i < byteString.length; i++) {
@@ -748,17 +798,17 @@ export class UploadDocumentsComponent {
     const formData = new FormData();
 
     // Add all simple fields directly to FormData
-    Object.keys(transformedData).forEach(key => {
+    Object.keys(transformedData).forEach((key) => {
       const value = transformedData[key];
 
       // Skip documents object for now (will handle separately)
-      if (key === 'documents') return;
+      if (key === "documents") return;
 
       // Handle arrays and objects by stringifying them
-      if (Array.isArray(value) || typeof value === 'object') {
+      if (Array.isArray(value) || typeof value === "object") {
         formData.append(key, JSON.stringify(value));
       } else {
-        formData.append(key, value === null ? '' : String(value));
+        formData.append(key, value === null ? "" : String(value));
       }
     });
 
@@ -768,43 +818,48 @@ export class UploadDocumentsComponent {
     if (documents.doc1?.url) {
       const blob = this.dataURLtoBlob(documents.doc1.url);
       if (blob.size > 0) {
-        formData.append('passport', blob, 'passport.jpg');
-        console.log('Passport image added to FormData');
+        formData.append("passport", blob, "passport.jpg");
+        console.log("Passport image added to FormData");
       }
     }
 
     if (documents.doc2?.url) {
       const blob = this.dataURLtoBlob(documents.doc2.url);
       if (blob.size > 0) {
-        formData.append('residenceCard', blob, 'residenceCard.jpg');
-        console.log('Residence Card image added to FormData');
+        formData.append("residenceCard", blob, "residenceCard.jpg");
+        console.log("Residence Card image added to FormData");
       }
     }
 
     if (documents.doc3?.url) {
       const blob = this.dataURLtoBlob(documents.doc3.url);
       if (blob.size > 0) {
-        formData.append('healthCard', blob, 'healthCard.jpg');
-        console.log('Health Card image added to FormData');
+        formData.append("healthCard", blob, "healthCard.jpg");
+        console.log("Health Card image added to FormData");
       }
     }
 
     if (documents.doc4?.url) {
       const blob = this.dataURLtoBlob(documents.doc4.url);
       if (blob.size > 0) {
-        formData.append('drivingLicense', blob, 'drivingLicense.jpg');
-        console.log('Driving License image added to FormData');
+        formData.append("drivingLicense", blob, "drivingLicense.jpg");
+        console.log("Driving License image added to FormData");
       }
     }
 
     // Log FormData contents for debugging
-    console.log('=== FORM DATA CONTENTS ===');
+    console.log("=== FORM DATA CONTENTS ===");
     for (let pair of (formData as any).entries()) {
       if (pair[1] instanceof Blob) {
-        console.log(pair[0] + ': [BLOB] - Size: ' + pair[1].size + ' bytes');
+        console.log(pair[0] + ": [BLOB] - Size: " + pair[1].size + " bytes");
       } else {
-        console.log(pair[0] + ': ' + (pair[1].toString().length > 100 ?
-          pair[1].toString().substring(0, 100) + '...' : pair[1]));
+        console.log(
+          pair[0] +
+            ": " +
+            (pair[1].toString().length > 100
+              ? pair[1].toString().substring(0, 100) + "..."
+              : pair[1])
+        );
       }
     }
 
@@ -817,7 +872,7 @@ export class UploadDocumentsComponent {
       // Check if userId exists in localStorage
       const userId = this.getUserId();
       if (!userId) {
-        alert('User not authenticated. Please log in again.');
+        alert("User not authenticated. Please log in again.");
         return;
       }
 
@@ -826,8 +881,8 @@ export class UploadDocumentsComponent {
       // Transform form data to match backend schema
       const transformedData = this.transformFormData(formValue);
 
-      console.log('=== TRANSFORMED DATA FOR BACKEND ===');
-      console.log('UserId:', userId);
+      console.log("=== TRANSFORMED DATA FOR BACKEND ===");
+      console.log("UserId:", userId);
       console.log(JSON.stringify(transformedData, null, 2));
 
       // Create FormData with all data as simple fields
@@ -836,34 +891,33 @@ export class UploadDocumentsComponent {
       // Call backend service
       this.backend.uploadDocuments(formData).subscribe({
         next: (res) => {
-          console.log('Document upload response:', res);
-          alert('Form submitted successfully!');
-          this.router.navigate(['/waiting-for-application-submission']);
+          console.log("Document upload response:", res);
+          alert("Form submitted successfully!");
+          this.router.navigate(["/waiting-for-application-submission"]);
         },
         error: (err) => {
-          console.error('Error submitting form:', err);
-          alert('Error submitting form. Please try again.');
-        }
+          console.error("Error submitting form:", err);
+          alert("Error submitting form. Please try again.");
+        },
       });
-
     } else {
-      alert('Please fill all required fields correctly before submitting.');
+      alert("Please fill all required fields correctly before submitting.");
       this.markAllFieldsAsTouched();
     }
   }
 
   // Mark all fields as touched to show validation errors
   private markAllFieldsAsTouched() {
-    Object.keys(this.form.controls).forEach(key => {
+    Object.keys(this.form.controls).forEach((key) => {
       const control = this.form.get(key);
       if (control instanceof FormGroup) {
-        Object.keys(control.controls).forEach(subKey => {
+        Object.keys(control.controls).forEach((subKey) => {
           control.get(subKey)?.markAsTouched();
         });
       } else if (control instanceof FormArray) {
-        control.controls.forEach(arrayControl => {
+        control.controls.forEach((arrayControl) => {
           if (arrayControl instanceof FormGroup) {
-            Object.keys(arrayControl.controls).forEach(subKey => {
+            Object.keys(arrayControl.controls).forEach((subKey) => {
               arrayControl.get(subKey)?.markAsTouched();
             });
           }
@@ -880,28 +934,29 @@ export class UploadDocumentsComponent {
     this.hint = `Align your ${this.labelFor(
       type
     )} inside the frame and tap Capture.`;
-    this.qualityStatus = 'unknown';
+    this.qualityStatus = "unknown";
     this.showCamera = true; // show overlay, hide cards
   }
 
   // Close camera overlay (X button)
   onCloseCamera() {
     this.showCamera = false;
-    this.qualityStatus = 'unknown';
-    this.hint = 'Click a card to capture its document.';
+    this.qualityStatus = "unknown";
+    this.hint = "Click a card to capture its document.";
   }
 
   labelFor(type: DocType): string {
     switch (type) {
-      case 'passport':
-        return 'Passport';
-      case 'residenceCard':
-        return 'Residence Card';
-      case 'healthCard':
-        return 'Health Card';
-      case 'drivingLicense':
-        return 'Driving License';
-      default: return 'Document';
+      case "passport":
+        return "Passport";
+      case "residenceCard":
+        return "Residence Card";
+      case "healthCard":
+        return "Health Card";
+      case "drivingLicense":
+        return "Driving License";
+      default:
+        return "Document";
     }
   }
 
@@ -923,8 +978,8 @@ export class UploadDocumentsComponent {
     this.hint = quality.message;
 
     // If not good, keep camera open so user can try again
-    if (quality.status !== 'good') {
-      console.warn('Quality not good, not saving image', quality);
+    if (quality.status !== "good") {
+      console.warn("Quality not good, not saving image", quality);
       return;
     }
 
@@ -942,16 +997,18 @@ export class UploadDocumentsComponent {
     this.hint = `Captured ${this.labelFor(
       this.activeDocType
     )}. Click another card to capture again.`;
-    this.qualityStatus = 'good';
+    this.qualityStatus = "good";
   }
 
   handleCameraInitError(error: any) {
-    console.error('Camera init error', error);
-    this.hint = 'Cannot access camera. Please allow camera permission.';
+    console.error("Camera init error", error);
+    this.hint = "Cannot access camera. Please allow camera permission.";
   }
 
   isProfessionalSkillSelected(skill: string): boolean {
-    return this.professionalSkillsForms?.controls?.some((c: any) => c.value === skill);
+    return this.professionalSkillsForms?.controls?.some(
+      (c: any) => c.value === skill
+    );
   }
 
   clearDoc(type: DocType, event: MouseEvent) {
@@ -959,7 +1016,7 @@ export class UploadDocumentsComponent {
     const group = this.form.get(type) as FormGroup;
     if (!group) return;
     group.patchValue({
-      dataUrl: '',
+      dataUrl: "",
       uploaded: false,
     });
   }

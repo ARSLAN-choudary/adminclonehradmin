@@ -716,48 +716,43 @@
 
     <div class="container mt-3 body-content">
 
-       <div *ngFor="let section of docData; let i = index" class="mb-1 px-3 py-2 rounded border shadow-sm">
+        <div *ngFor="let section of docData; let i = index" class="mb-1 px-3 py-2 rounded border shadow-sm">
 
-    <div class="d-flex justify-content-between align-items-center">
-        <h5 class="fw-bold text-primary mb-0">
-            {{ section.section }}
-        </h5>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold text-primary mb-0">
+                    {{ section.section }}
+                </h5>
 
-        <i class="ti ti-chevron-down fs-4 cursor-pointer"
-            data-bs-toggle="collapse"
-            [attr.data-bs-target]="'#sectionCollapse' + i"
-            aria-expanded="false"
-            [attr.aria-controls]="'sectionCollapse' + i"
-            style="cursor: pointer;">
-        </i>
-    </div>
+                <i class="ti ti-chevron-down fs-4 cursor-pointer" data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#sectionCollapse' + i" aria-expanded="false"
+                    [attr.aria-controls]="'sectionCollapse' + i" style="cursor: pointer;">
+                </i>
+            </div>
 
-    <div class="collapse mt-3" [id]="'sectionCollapse' + i">
+            <div class="collapse mt-3" [id]="'sectionCollapse' + i">
 
-        <div class="row">
-            <ng-container *ngFor="let field of section.fields; let last = last; let j = index">
+                <div class="row">
+                    <ng-container *ngFor="let field of section.fields; let last = last; let j = index">
 
-                <div 
-                    class="col-md-6 mb-2"
-                    [class.col-12]="last && section.fields.length % 2 !== 0">
+                        <div class="col-md-6 mb-2" [class.col-12]="last && section.fields.length % 2 !== 0">
 
-                    <div class="fw-semibold text-dark">
-                        {{ field.label }}
-                    </div>
+                            <div class="fw-semibold text-dark">
+                                {{ field.label }}
+                            </div>
 
-                    <div class="text-gray">
-                        {{ field.value }}
-                    </div>
+                            <div class="text-gray">
+                                {{ field.value }}
+                            </div>
+                        </div>
+
+                    </ng-container>
                 </div>
 
-            </ng-container>
+            </div>
+
         </div>
 
-    </div>
-
-</div>
-
-     <div class=" mb-1 px-3 py-2 rounded border shadow-sm">
+        <div class=" mb-1 px-3 py-2 rounded border shadow-sm">
 
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="fw-semibold mb-0 text-primary">Documents</h5>
@@ -826,19 +821,17 @@
 
     </div>
 
-    <button 
-    class="btn btn-primary btn-lg fw-bold trainee-btn"
-    [disabled]="!allDocsApproved()"
-    (click)="approveTrainee()">
-    Approved as Trainee
-</button>
+    <button class="btn btn-primary btn-lg fw-bold trainee-btn" 
+        (click)="approveTrainee()">
+        Approved as Trainee
+    </button>
 
 
     <div class="container">
-   
 
 
-       
+
+
 
 
 
@@ -854,7 +847,8 @@
                         <button class="btn-close" (click)="closePreview()"></button>
                     </div>
 
-                    <div class="modal-body bg-light d-flex justify-content-center align-items-center p-2 preview-modal-body">
+                    <div
+                        class="modal-body bg-light d-flex justify-content-center align-items-center p-2 preview-modal-body">
                         <img *ngIf="selectedDoc?.fileType === 'image'" [src]="getSafeUrl(selectedDoc?.previewUrl!)"
                             class="img-fluid"
                             style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;">
@@ -868,8 +862,7 @@
                         </button>
 
                         <button *ngIf="selectedDoc?.status !== 'rejected'"
-                            class="btn btn-danger btn-sm d-flex align-items-center gap-1"
-                            (click)="reject(selectedDoc)">
+                            class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="reject(selectedDoc)">
                             <i class="ti ti-x"></i> Reject
                         </button>
                     </div>
