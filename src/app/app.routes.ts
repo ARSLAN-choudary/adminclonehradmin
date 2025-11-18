@@ -38,8 +38,8 @@ export const routes: Routes = [
       {
         path: "trainee-dashboard",
         loadComponent: () =>
-          import("./Modules/trainee-dashboard/trainee-dashboard.module").then(
-            (m) => m.TraineeDashboardModule
+          import("./Modules/trainee-dashboard/dashboard/dashboard.component").then(
+            (m) => m.DashboardComponent
           ),
       },
       {
