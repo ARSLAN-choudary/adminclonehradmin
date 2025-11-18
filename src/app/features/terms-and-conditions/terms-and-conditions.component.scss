@@ -1,0 +1,28 @@
+:host {
+display: block;
+}
+
+.custom-check .form-check-input {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc !important;  
+  border-radius: 4px !important;
+  cursor: pointer;
+}
+
+.custom-check .form-check-input:checked {
+  background-color: #0d6efd !important;  
+  border-color: #0d6efd !important;
+}
+
+.custom-check .form-check-label {
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+}
+
+.account-page{
+    overflow-y: hidden;
+   -ms-overflow-style: none; 
+    scrollbar-width: none;
+}
