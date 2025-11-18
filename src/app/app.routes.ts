@@ -56,6 +56,13 @@ export const routes: Routes = [
             (m) => m.WaitingApprovalComponent
           ),
       },
+       {
+        path: "waiting-for-application-submission",
+        loadComponent: () =>
+          import("./auth/waiting-submission/waiting-submission.component").then(
+            (m) => m.WaitingSubmissionComponent
+          ),
+      },
 
       {
         path: "two-step-verification",

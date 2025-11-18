@@ -103,3 +103,31 @@
 .text-gray{
   color: gray !important;
 }
+
+#offcanvas_docs::-webkit-scrollbar {
+    display: none;
+}
+
+#offcanvas_docs {
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
+}
+
+.trainee-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 35px;
+    z-index: 9999;
+    padding: 14px 28px;
+    border-radius: 10px;
+    background-color: rgb(69, 69, 220) !important;
+    border: none !important;
+}
+
+.body-content{
+  height: calc(100dvh - 160px) !important;
+  overflow-y:  auto !important;
+      -ms-overflow-style: none; 
+    scrollbar-width: none;
+}
+
