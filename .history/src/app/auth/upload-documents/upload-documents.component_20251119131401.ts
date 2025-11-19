@@ -720,7 +720,7 @@ export class UploadDocumentsComponent implements OnInit {
       gender: personal.gender,
       martialStatus: personal.maritalStatus,
       legalAdress: personal.legalHomeAddress.streetBuildingApartment,
-
+      position: "",
       citizenship: personal.citizenship,
 
       // Education
@@ -800,6 +800,8 @@ export class UploadDocumentsComponent implements OnInit {
         },
       },
 
+      role: "USER",
+      status: "active",
     };
 
     // Add additional documents

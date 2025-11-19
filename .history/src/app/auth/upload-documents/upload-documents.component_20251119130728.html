@@ -22,8 +22,8 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label">Surname </label>
-                        <input type="text" class="form-control" formControlName="surnameEnglish"
-                            placeholder="Enter your full name in Georgian" id="surnameEnglish" name="surnameEnglish">
+                        <input type="text" class="form-control" formControlName="SurnameEnglish"
+                            placeholder="Enter your full name in Georgian" id="SurnameEnglish" name="SurnameEnglish">
                     </div>
                 </div>
             </div>
@@ -800,11 +800,11 @@
                                 </button>
                             </div>
                             <div class="my-2 flex justify-content-center align-items-center flex-wrap">
-                                <button type="button" class="btn btn-outline-primary btn-sm m-1 "
+                                <button type="button" class="btn btn-outline-primary btn-sm m-1"
                                     (click)="selectAdditionalDocType(i)">
                                     Capture Document {{i + 1}}
                                 </button>
-                                <button type="button" class="btn btn-outline-primary btn-sm m-1"
+                                <button type="button" class="btn btn-outline-primary btn-sm "
                                     (click)="removeAdditionalDocument(i)" *ngIf="additionalDocumentsForms.length > 1">
                                     Remove Document
                                 </button>

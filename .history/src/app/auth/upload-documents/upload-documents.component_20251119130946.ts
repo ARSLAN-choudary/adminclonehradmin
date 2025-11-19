@@ -201,7 +201,7 @@ export class UploadDocumentsComponent implements OnInit {
     this.form = this.fb.group({
       personalDetails: this.fb.group({
         userNameEnglish: ["", [Validators.required]],
-        surnameEnglish: ["", [Validators.required]],
+        SurnameEnglish: ["", [Validators.required]],
         citizenship: ["georgian", [Validators.required]],
         documentType: ["georgianId", [Validators.required]],
         documentNumber: ["", [Validators.required]],
@@ -720,7 +720,7 @@ export class UploadDocumentsComponent implements OnInit {
       gender: personal.gender,
       martialStatus: personal.maritalStatus,
       legalAdress: personal.legalHomeAddress.streetBuildingApartment,
-
+      position: "",
       citizenship: personal.citizenship,
 
       // Education
@@ -800,6 +800,8 @@ export class UploadDocumentsComponent implements OnInit {
         },
       },
 
+      role: "USER",
+      status: "active",
     };
 
     // Add additional documents
@@ -849,9 +851,9 @@ export class UploadDocumentsComponent implements OnInit {
 
       // Handle arrays and objects by stringifying them
       if (Array.isArray(value) || typeof value === "object") {
-        formData.append(key, JSON.stringify(value));
+        formData.append("documents", JSON.stringify(value));
       } else {
-        formData.append(key, value === null ? "" : String(value));
+        formData.append("documents", value === null ? "" : String(value));
       }
     });
 
@@ -860,10 +862,10 @@ export class UploadDocumentsComponent implements OnInit {
 
     // Main documents
     const docMappings = [
-      { key: 'doc1', formKey: 'documents', name: 'passport.jpg' },
-      { key: 'doc2', formKey: 'documents', name: 'residenceCard.jpg' },
-      { key: 'doc3', formKey: 'documents', name: 'healthCard.jpg' },
-      { key: 'doc4', formKey: 'documents', name: 'healthCertificate.jpg' }
+      { key: 'doc1', formKey: 'passport', name: 'passport.jpg' },
+      { key: 'doc2', formKey: 'residenceCard', name: 'residenceCard.jpg' },
+      { key: 'doc3', formKey: 'healthCard', name: 'healthCard.jpg' },
+      { key: 'doc4', formKey: 'healthCertificate', name: 'healthCertificate.jpg' }
     ];
 
     docMappings.forEach(mapping => {

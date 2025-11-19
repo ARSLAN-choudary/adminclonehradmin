@@ -200,8 +200,8 @@ export class UploadDocumentsComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       personalDetails: this.fb.group({
-        userNameEnglish: ["", [Validators.required]],
-        surnameEnglish: ["", [Validators.required]],
+        givenName: ["", [Validators.required]],
+        SurnameEnglish: ["", [Validators.required]],
         citizenship: ["georgian", [Validators.required]],
         documentType: ["georgianId", [Validators.required]],
         documentNumber: ["", [Validators.required]],
@@ -657,7 +657,7 @@ export class UploadDocumentsComponent implements OnInit {
   onUseSameNameChange(event: any) {
     if (event.target.checked) {
       const personalName = this.personalDetails.get(
-        "userNameEnglish"
+        "givenNameSurnameEnglish"
       )?.value;
       this.bankDetails.get("accountHolderName")?.setValue(personalName);
     }
@@ -709,8 +709,8 @@ export class UploadDocumentsComponent implements OnInit {
       userId: this.getUserId(),
 
       // Personal Details - only include required fields
-      userNameEnglish: personal.userNameEnglish || "",
-      surnameEnglish: personal.surnameEnglish || "",
+      userNameEnglish: personal given || "",
+      surnameEnglish: surnameEnglish || "",
       documentType: personal.documentType,
       documentNumber: parseInt(personal.documentNumber) || 0,
       email: personal.emailAddress,
@@ -720,7 +720,7 @@ export class UploadDocumentsComponent implements OnInit {
       gender: personal.gender,
       martialStatus: personal.maritalStatus,
       legalAdress: personal.legalHomeAddress.streetBuildingApartment,
-
+      position: "",
       citizenship: personal.citizenship,
 
       // Education
@@ -800,6 +800,8 @@ export class UploadDocumentsComponent implements OnInit {
         },
       },
 
+      role: "USER",
+      status: "active",
     };
 
     // Add additional documents
@@ -860,10 +862,10 @@ export class UploadDocumentsComponent implements OnInit {
 
     // Main documents
     const docMappings = [
-      { key: 'doc1', formKey: 'documents', name: 'passport.jpg' },
-      { key: 'doc2', formKey: 'documents', name: 'residenceCard.jpg' },
-      { key: 'doc3', formKey: 'documents', name: 'healthCard.jpg' },
-      { key: 'doc4', formKey: 'documents', name: 'healthCertificate.jpg' }
+      { key: 'doc1', formKey: 'passport', name: 'passport.jpg' },
+      { key: 'doc2', formKey: 'residenceCard', name: 'residenceCard.jpg' },
+      { key: 'doc3', formKey: 'healthCard', name: 'healthCard.jpg' },
+      { key: 'doc4', formKey: 'healthCertificate', name: 'healthCertificate.jpg' }
     ];
 
     docMappings.forEach(mapping => {
@@ -882,7 +884,7 @@ export class UploadDocumentsComponent implements OnInit {
         if (documents[key]?.url) {
           const blob = this.dataURLtoBlob(documents[key].url);
           if (blob.size > 0) {
-            formData.append('documents', blob, `additionalDocument_${key}.jpg`);
+            formData.append('additionalDocuments', blob, `additionalDocument_${key}.jpg`);
             console.log(`Additional document ${key} added to FormData`);
           }
         }
