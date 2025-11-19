@@ -8,15 +8,15 @@ export class FirebaseStoreService {
   constructor(private firestore: Firestore) {}
 
   // ✅ Save (or update) email + URL by deviceId
-  async saveUrlByDeviceId(deviceId: string, email: string, url: string) {
+  async saveUrlByDeviceId(userId:string, email: string, url: string,status:string,role:string,deviceId:string) {
     try {
-      const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
+      const docRef = doc(this.firestore, `baseUrl/${userId}`);
 
       // Always overwrite with latest email and url
       await setDoc(docRef, { email, url }, { merge: true });
 
       console.log(
-        `✅ Email & URL saved successfully for deviceId: ${deviceId}`
+        `✅ Email & URL saved successfully for deviceId: ${userId}`
       );
     } catch (error) {
       console.error("❌ Error saving email/url:", error);
@@ -44,7 +44,7 @@ export class FirebaseStoreService {
   }
 
   // ✅ Update only the URL (keep email same)
-  async updateUrlByDeviceId(deviceId: string, newUrl: string) {
+  async updateUrlByUserId(deviceId: string, newUrl: string) {
     try {
       const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
       await setDoc(docRef, { url: newUrl }, { merge: true });

@@ -22,6 +22,7 @@ import {
 })
 export class WaitingApprovalComponent implements OnInit, OnDestroy {
   deviceId: any;
+  userId: any;
   private fromApp: boolean = false;
   private fcmToken: string = "";
   public email: string = "";
@@ -35,13 +36,16 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.email = localStorage.getItem("email") || "";
+
     this.route.queryParams.subscribe((params) => {
-      this.email = params["email"] || "";
+      // this.email = params["email"] || "";
       this.fromApp = params["from"] === "app";
       this.deviceId = params["deviceId"] || "";
       this.fcmToken = params["fcmToken"] || "";
       this.deviceId = params["deviceId"] || "";
-      if (this.deviceId) {
+      this.userId = params["userId"] || "";
+      if (this.userId) {
         setTimeout(() => {
           this.updateUrl();
         }, 100);
@@ -65,14 +69,12 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
         switchMap((email: string) => {
           console.log("✅ Passed filter. Using email:", email);
 
-          const payload: any = { email };
+          const payload: any = {
+            email,
+            fcmToken: this.fcmToken,
+            deviceId: this.deviceId,
+          };
 
-          if (this.fromApp) {
-            payload.fcmToken = this.fcmToken;
-            payload.deviceId = this.deviceId;
-          }
-
-          console.log("📡 Calling verifyUser with payload:", payload);
           return this.authService.verifyUser(payload);
         })
       )
@@ -83,16 +85,19 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
           if (res.data.id) {
             localStorage.setItem("userId", res.data.id);
             const currentUrl = window.location.href;
-            this.firebaseStore.updateUrlByDeviceAndUserId(
-              this.deviceId,
+            this.firebaseStore.saveUrlByDeviceId(
+              res.data.id,
+              this.email,
               currentUrl,
-              res.data.id
+              res.data.status,
+              res.data.role,
+              this.deviceId
             );
           }
 
           if (res.data.status === "active") {
             this.router.navigate(["/upload-docs"], {
-              queryParams: { deviceId: this.deviceId, from: "app" },
+              queryParams: { userId: this.userId, from: "app" },
             });
           }
         },
@@ -103,9 +108,9 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
   }
 
   updateUrl() {
-    if (this.deviceId) {
+    if (this.userId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByDeviceId(this.deviceId, currentUrl);
+      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
     }
   }
 }

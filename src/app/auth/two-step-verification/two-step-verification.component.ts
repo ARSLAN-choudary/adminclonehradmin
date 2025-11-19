@@ -165,11 +165,9 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     let payload: any = {
       email: this.email,
       otp: otp,
+      fcmToken: this.fcmToken,
+      deviceId: this.deviceId,
     };
-    if (this.fromApp) {
-      payload.fcmToken = this.fcmToken;
-      payload.deviceId = this.deviceId;
-    }
 
     this.authService.verifyOtp(payload).subscribe({
       next: (res: any) => {
@@ -179,7 +177,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
         this.loading = false;
         if (this.fromApp) {
           this.router.navigate(["/waiting-for-approval"], {
-            queryParams: { deviceId: this.deviceId, from: "app" },
+            queryParams: { userId: res.data?.details?._id, from: "app" },
           });
         } else {
           this.router.navigateByUrl("waiting-for-approval");

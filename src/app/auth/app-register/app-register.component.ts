@@ -64,6 +64,9 @@ export class AppRegisterComponent implements OnInit {
       this.fcmToken = params["fcmToken"] || "";
     });
 
+    console.log("fcm", this.fcmToken);
+    console.log("DID", this.deviceId);
+
     this.detectUserCountry();
   }
 
@@ -124,16 +127,14 @@ export class AppRegisterComponent implements OnInit {
       email: this.email(),
       position: this.position(),
       location: this.country(),
+      fcmToken: this.fcmToken,
+      deviceId: this.deviceId,
     };
-
-    if (this.fromApp) {
-      payload.fcmToken = this.fcmToken;
-      payload.deviceId = this.deviceId;
-    }
 
     this.authService.verifyRegister(payload).subscribe({
       next: async (res: any) => {
         this.loading.set(false);
+        localStorage.setItem("email", this.email());
 
         // ✅ Forward "from=app" param if it exists
         const queryParams: any = { email: this.email() };
@@ -144,14 +145,14 @@ export class AppRegisterComponent implements OnInit {
           queryParams,
         });
 
-        if (this.deviceId) {
-          const currentUrl = window.location.href;
-          await this.fbService.saveUrlByDeviceId(
-            this.deviceId,
-            this.email(),
-            currentUrl
-          );
-        }
+        // if (this.deviceId) {
+        //   const currentUrl = window.location.href;
+        //   await this.fbService.saveUrlByDeviceId(
+        //     this.deviceId,
+        //     this.email(),
+        //     currentUrl
+        //   );
+        // }
         if (!this.fromApp) {
           this.onSignUpSuccess({
             email: this.email(),
