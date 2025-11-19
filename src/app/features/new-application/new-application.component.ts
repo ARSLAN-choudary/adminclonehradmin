@@ -79,7 +79,13 @@ interface DocumentItem {
   previewUrl: string;
   fileType: "pdf" | "image";
 }
-
+interface ContractData {
+  id: string;
+  type: 'trainee' | 'probation' | 'job';
+  generatedDate: Date;
+  fileName: string;
+  data: any;
+}
 @Component({
   selector: "app-new-application",
   standalone: true,
@@ -110,6 +116,8 @@ export class NewApplicationComponent implements OnInit {
   deleteUserCanvas!: ElementRef<HTMLElement>;
   @ViewChild("editCanvas", { static: true })
   editCanvas!: ElementRef<HTMLElement>;
+  @ViewChild("generateContractCanvas", { static: true })
+  generateContractCanvas!: ElementRef<HTMLElement>;
   @ViewChild("addCanvas", { static: true })
   addCanvas!: ElementRef<HTMLElement>;
   private _filterIdCounter = 0;
@@ -125,7 +133,21 @@ export class NewApplicationComponent implements OnInit {
     numeric: true,
     sensitivity: "base",
   });
+  isGenerating = false;
+  traineeContract: ContractData | null = null;
+  probationContract: ContractData | null = null;
+  jobContract: ContractData | null = null;
 
+  // Sample employee data - replace with actual data from your service
+  employeeData = {
+    name: 'John Doe',
+    position: 'Software Developer',
+    department: 'IT',
+    startDate: new Date(),
+    salary: '$50,000',
+    email: 'john.doe@company.com',
+    phone: '+1-555-0123'
+  };
   deleteApplicationId!: any;
   @ViewChild("appSubmittedCanvas", { static: true })
   appSubmittedCanvas!: ElementRef<HTMLElement>;
@@ -160,8 +182,8 @@ export class NewApplicationComponent implements OnInit {
 
   initChecked = false;
   currentUserId: string = "";
-  UserAppId:string=""
-  
+  UserAppId: string = ""
+
   currentUserDocs: any[] = [];
   limit: number = 10;
   openedIndex: number | string | null = null;
@@ -247,6 +269,7 @@ export class NewApplicationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadExistingContracts();
     this.addNewApplicationForm = this.fb.group({
       company: [null, Validators.required],
       applicationType: [null, Validators.required],
@@ -355,6 +378,7 @@ export class NewApplicationComponent implements OnInit {
       status: data.status || "active",
     });
   }
+
   control(name: string) {
     return this.addNewApplicationForm.get(name)!;
   }
@@ -382,6 +406,281 @@ export class NewApplicationComponent implements OnInit {
     const day = ("0" + date.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
   }
+
+
+  get hasTraineeContract(): boolean {
+    return !!this.traineeContract;
+  }
+
+  get hasProbationContract(): boolean {
+    return !!this.probationContract;
+  }
+
+  get hasJobContract(): boolean {
+    return !!this.jobContract;
+  }
+
+  get hasGeneratedContracts(): boolean {
+    return this.hasTraineeContract || this.hasProbationContract || this.hasJobContract;
+  }
+
+  loadExistingContracts() {
+    // Load existing contracts from localStorage or your backend
+    const savedContracts = localStorage.getItem('generatedContracts');
+    if (savedContracts) {
+      const contracts: ContractData[] = JSON.parse(savedContracts);
+      this.traineeContract = contracts.find(c => c.type === 'trainee') || null;
+      this.probationContract = contracts.find(c => c.type === 'probation') || null;
+      this.jobContract = contracts.find(c => c.type === 'job') || null;
+    }
+  }
+
+  saveContracts() {
+    const contracts: ContractData[] = [];
+    if (this.traineeContract) contracts.push(this.traineeContract);
+    if (this.probationContract) contracts.push(this.probationContract);
+    if (this.jobContract) contracts.push(this.jobContract);
+
+    localStorage.setItem('generatedContracts', JSON.stringify(contracts));
+  }
+
+  async generateTraineeContract() {
+    this.isGenerating = true;
+
+    try {
+      const contractData = await this.generateContractForm('trainee');
+      this.traineeContract = {
+        id: this.generateId(),
+        type: 'trainee',
+        generatedDate: new Date(),
+        fileName: `Trainee_Contract_${this.employeeData.name}_${Date.now()}.pdf`,
+        data: contractData
+      };
+
+      this.saveContracts();
+      this.exportContractAsPDF(this.traineeContract);
+
+    } catch (error) {
+      console.error('Error generating trainee contract:', error);
+    } finally {
+      this.isGenerating = false;
+    }
+  }
+
+  async generateProbationContract() {
+    this.isGenerating = true;
+
+    try {
+      const contractData = await this.generateContractForm('probation');
+      this.probationContract = {
+        id: this.generateId(),
+        type: 'probation',
+        generatedDate: new Date(),
+        fileName: `Probation_Contract_${this.employeeData.name}_${Date.now()}.pdf`,
+        data: contractData
+      };
+
+      this.saveContracts();
+      this.exportContractAsPDF(this.probationContract);
+
+    } catch (error) {
+      console.error('Error generating probation contract:', error);
+    } finally {
+      this.isGenerating = false;
+    }
+  }
+
+  async generateJobContract() {
+    this.isGenerating = true;
+
+    try {
+      const contractData = await this.generateContractForm('job');
+      this.jobContract = {
+        id: this.generateId(),
+        type: 'job',
+        generatedDate: new Date(),
+        fileName: `Job_Contract_${this.employeeData.name}_${Date.now()}.pdf`,
+        data: contractData
+      };
+
+      this.saveContracts();
+      this.exportContractAsPDF(this.jobContract);
+
+    } catch (error) {
+      console.error('Error generating job contract:', error);
+    } finally {
+      this.isGenerating = false;
+    }
+  }
+
+  private async generateContractForm(contractType: string): Promise<any> {
+    // Simulate form generation/API call
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const formData = {
+          employee: this.employeeData,
+          contractType: contractType,
+          terms: this.getContractTerms(contractType),
+          duration: this.getContractDuration(contractType),
+          conditions: this.getContractConditions(contractType)
+        };
+        resolve(formData);
+      }, 1000);
+    });
+  }
+
+  private getContractTerms(contractType: string): string[] {
+    switch (contractType) {
+      case 'trainee':
+        return [
+          'Training period: 6 months',
+          'Monthly stipend provided',
+          'Mentorship program included',
+          'Performance evaluation every 2 months'
+        ];
+      case 'probation':
+        return [
+          'Probation period: 3 months',
+          'Full salary during probation',
+          'Performance review at end of period',
+          'Possible conversion to permanent position'
+        ];
+      case 'job':
+        return [
+          'Permanent employment',
+          'Full benefits package',
+          'Annual performance review',
+          'Standard company policies apply'
+        ];
+      default:
+        return [];
+    }
+  }
+
+  private getContractDuration(contractType: string): string {
+    switch (contractType) {
+      case 'trainee': return '6 months';
+      case 'probation': return '3 months';
+      case 'job': return 'Permanent';
+      default: return 'N/A';
+    }
+  }
+
+  private getContractConditions(contractType: string): string[] {
+    switch (contractType) {
+      case 'trainee':
+        return ['Completion certificate upon successful training', 'Possible job offer after training'];
+      case 'probation':
+        return ['Employment subject to successful probation completion', 'Standard notice period applies'];
+      case 'job':
+        return ['Standard notice period: 30 days', 'Confidentiality agreement applies'];
+      default:
+        return [];
+    }
+  }
+
+  downloadContract(contractType: string) {
+    let contract: ContractData | null = null;
+
+    switch (contractType) {
+      case 'trainee':
+        contract = this.traineeContract;
+        break;
+      case 'probation':
+        contract = this.probationContract;
+        break;
+      case 'job':
+        contract = this.jobContract;
+        break;
+    }
+
+    if (contract) {
+      this.exportContractAsPDF(contract);
+    }
+  }
+
+  exportContractAsPDF(contract: ContractData): void {
+    const doc = new jsPDF("p", "pt", "a4");
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 40;
+    let yPosition = 60;
+
+    // Title
+    doc.setFontSize(20);
+    doc.setFont('', 'bold');
+    doc.text(`${this.getContractTitle(contract.type)}`, pageWidth / 2, yPosition, { align: "center" });
+    yPosition += 40;
+
+    // Contract Information
+    doc.setFontSize(12);
+    doc.setFont('', 'normal');
+
+    // Employee Details
+    doc.setFont('', 'bold');
+    doc.text("Employee Details:", margin, yPosition);
+    yPosition += 25;
+
+    doc.setFont('', 'normal');
+    doc.text(`Name: ${this.employeeData.name}`, margin, yPosition);
+    yPosition += 20;
+    doc.text(`Position: ${this.employeeData.position}`, margin, yPosition);
+    yPosition += 20;
+    doc.text(`Department: ${this.employeeData.department}`, margin, yPosition);
+    yPosition += 20;
+    doc.text(`Start Date: ${this.employeeData.startDate.toLocaleDateString()}`, margin, yPosition);
+    yPosition += 20;
+    doc.text(`Email: ${this.employeeData.email}`, margin, yPosition);
+    yPosition += 30;
+
+    // Contract Terms
+    doc.setFont('', 'bold');
+    doc.text("Contract Terms:", margin, yPosition);
+    yPosition += 25;
+
+    doc.setFont('', 'normal');
+    doc.text(`Duration: ${this.getContractDuration(contract.type)}`, margin, yPosition);
+    yPosition += 20;
+    doc.text(`Salary: ${this.employeeData.salary}`, margin, yPosition);
+    yPosition += 30;
+
+    // Terms and Conditions
+    const terms = this.getContractTerms(contract.type);
+    doc.setFont('', 'bold');
+    doc.text("Terms & Conditions:", margin, yPosition);
+    yPosition += 25;
+
+    doc.setFont('', 'normal');
+    terms.forEach(term => {
+      if (yPosition > 700) {
+        doc.addPage();
+        yPosition = 60;
+      }
+      doc.text(`• ${term}`, margin + 10, yPosition);
+      yPosition += 20;
+    });
+
+    // Generated Date
+    yPosition += 20;
+    doc.text(`Generated on: ${contract.generatedDate.toLocaleDateString()}`, margin, yPosition);
+
+    // Save the PDF
+    doc.save(contract.fileName);
+  }
+
+  private getContractTitle(contractType: string): string {
+    switch (contractType) {
+      case 'trainee': return 'TRAINEE EMPLOYMENT CONTRACT';
+      case 'probation': return 'PROBATION EMPLOYMENT CONTRACT';
+      case 'job': return 'EMPLOYMENT CONTRACT';
+      default: return 'CONTRACT';
+    }
+  }
+
+  private generateId(): string {
+    return `contract_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+
   onDateRangeChange(event: { startDate: Date; endDate: Date }) {
     this.startDate = this.formatDate(event.startDate);
     this.endDate = this.formatDate(event.endDate);
@@ -416,7 +715,7 @@ export class NewApplicationComponent implements OnInit {
         this.addNewApplicationForm.reset();
       } else {
         this.toastr.error("User Not Created, Please Try Again Later");
-        setTimeout(() => {}, 7000);
+        setTimeout(() => { }, 7000);
       }
     });
   }
@@ -500,7 +799,64 @@ export class NewApplicationComponent implements OnInit {
       this.renderer.appendChild(document.body, this.backdropEl);
     }
   }
+  openGenerateContractModal() {
+    const el = this.generateContractCanvas.nativeElement;
 
+    this.renderer.addClass(el, "show");
+    this.renderer.setStyle(el, "visibility", "visible");
+    this.renderer.setAttribute(el, "aria-modal", "true");
+    this.renderer.removeAttribute(el, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.backdropEl = this.renderer.createElement("div");
+    this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
+    this.renderer.addClass(this.backdropEl, "fade");
+    this.renderer.addClass(this.backdropEl, "show");
+    if (this.backdropEl) {
+      this.backdropEl.addEventListener("click", () =>
+        this.closeGenerateContractModal()
+      );
+      this.renderer.appendChild(document.body, this.backdropEl);
+    }
+  }
+
+  closeGenerateContractModal() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    const panel = this.generateContractCanvas.nativeElement;
+
+    this.renderer.removeClass(panel, "show");
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+        this.renderer.removeStyle(document.body, "overflow");
+
+        if (this.backdropEl) {
+          this.renderer.removeChild(document.body, this.backdropEl);
+          this.backdropEl = undefined;
+        }
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+        this.renderer.removeStyle(panel, "transform");
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
+
+    if (this.backdropEl) {
+      this.renderer.removeChild(document.body, this.backdropEl);
+      this.backdropEl = undefined;
+    }
+    this.renderer.removeStyle(document.body, "overflow");
+
+
+  }
   closeEditApplication() {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
@@ -1021,8 +1377,8 @@ export class NewApplicationComponent implements OnInit {
     this.tableData = data;
     this.dataSource.data = this.tableData;
   }
-docData: any[] = [];
-   // DOCS OFFCANVAS
+  docData: any[] = [];
+  // DOCS OFFCANVAS
   openDocs(user: any) {
     this.currentUserId = user._id;
 

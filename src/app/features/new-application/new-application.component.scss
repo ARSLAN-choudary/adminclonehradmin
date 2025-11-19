@@ -202,3 +202,59 @@
 
 
 
+.offcanvas-small {
+  width: 400px !important;
+}
+
+.contract-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  &.trainee-contract:hover {
+    border-left-color: var(--bs-primary);
+  }
+
+  &.probation-contract:hover {
+    border-left-color: var(--bs-success);
+  }
+
+  &.job-contract:hover {
+    border-left-color: var(--bs-info);
+  }
+}
+
+.custom-btn-close {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.btn {
+  transition: all 0.3s ease;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.contract-icon {
+  opacity: 0.8;
+}
+
+.contract-action {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.contract-card:hover .contract-action {
+  opacity: 1;
+}

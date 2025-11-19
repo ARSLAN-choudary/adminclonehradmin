@@ -473,11 +473,11 @@
                             </td>
 
                             <td>
-                                 <span class="badge badge-pill cursor-pointer text-white bg-info"
-                                        (click)="openDocs(data)">Details</span>
+                                <span class="badge badge-pill cursor-pointer text-white bg-info"
+                                    (click)="openDocs(data)">Details</span>
                             </td>
 
-                              <td class="d-flex justify-content-center">
+                            <td class="d-flex justify-content-center">
                                 <span class="badge badge-pill" [ngClass]="{
                                  'bg-success': getDocumentsStatus(data) === 'uploaded',
                                  'bg-warning': getDocumentsStatus(data) === 'pending'
@@ -501,6 +501,9 @@
                                             href="javascript:void(0);" (click)="openEditApplication()"><i
                                                 class="ti ti-edit text-blue"></i>
                                             Edit</a>
+                                        <a class="dropdown-item" href="javascript:void(0);"
+                                            (click)="openGenerateContractModal()"><i class="ti ti-edit text-blue"></i>
+                                            Generate Contract</a>
 
                                         <a class="dropdown-item" href="javascript:void(0);"
                                             (click)="openResendModal(data)"> <i class="feather icon-rotate-ccw"
@@ -1109,7 +1112,7 @@
 <!-- resend modal -->
 
 <!-- documents modal -->
- <div #docsCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_docs">
+<div #docsCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_docs">
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold mb-0">Details</h5>
         <button type="button"
@@ -1258,8 +1261,7 @@
     </div>
 
     <button class="btn btn-lg fw-bold trainee-btn" [class.btn-primary]="!isTraineeApproved"
-        [class.btn-approve]="isTraineeApproved"
-        [disabled]="!isTraineeApproved && !allDocsApproved()"
+        [class.btn-approve]="isTraineeApproved" [disabled]="!isTraineeApproved && !allDocsApproved()"
         (click)="approveTrainee()">
 
         {{ isTraineeApproved ? "Trainee Approved ✓" : "Approved as Trainee" }}
@@ -1297,7 +1299,8 @@
                         </button>
 
                         <button *ngIf="selectedDoc?.status !== 'rejected'"
-                            class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="reject(selectedDoc);closePreview()">
+                            class="btn btn-danger btn-sm d-flex align-items-center gap-1"
+                            (click)="reject(selectedDoc);closePreview()">
                             <i class="ti ti-x"></i> Reject
                         </button>
                     </div>
@@ -1360,6 +1363,125 @@
 
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div #generateContractCanvas class="offcanvas offcanvas-end offcanvas-small" tabindex="-1" id="offcanvas_contracts">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="fw-semibold">Generate Contracts</h5>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            aria-label="Close" (click)="closeGenerateContractModal()">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+    
+    <div class="offcanvas-body">
+        <!-- Contract Generation Buttons -->
+        <div class="row g-3 mb-4">
+            <div class="col-12">
+                <button class="btn btn-primary w-100 d-flex align-items-center justify-content-center py-3"
+                    (click)="generateTraineeContract()"
+                    [disabled]="isGenerating">
+                    <i class="ti ti-file-text me-2"></i>
+                    <span>{{ hasTraineeContract ? 'Regenerate Trainee Contract' : 'Generate Trainee Contract' }}</span>
+                    <span *ngIf="isGenerating" class="spinner-border spinner-border-sm ms-2"></span>
+                </button>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-success w-100 d-flex align-items-center justify-content-center py-3"
+                    (click)="generateProbationContract()"
+                    [disabled]="isGenerating">
+                    <i class="ti ti-file-text me-2"></i>
+                    <span>{{ hasProbationContract ? 'Regenerate Probation Contract' : 'Generate Probation Contract' }}</span>
+                    <span *ngIf="isGenerating" class="spinner-border spinner-border-sm ms-2"></span>
+                </button>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-info w-100 d-flex align-items-center justify-content-center py-3"
+                    (click)="generateJobContract()"
+                    [disabled]="isGenerating">
+                    <i class="ti ti-file-text me-2"></i>
+                    <span>{{ hasJobContract ? 'Regenerate Job Contract' : 'Generate Job Contract' }}</span>
+                    <span *ngIf="isGenerating" class="spinner-border spinner-border-sm ms-2"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Generated Contracts Section -->
+        <div class="generated-contracts-section" *ngIf="hasGeneratedContracts">
+            <h6 class="fw-semibold mb-3 text-muted">Generated Contracts</h6>
+            
+            <!-- Trainee Contract Card -->
+            <div class="contract-card card border-0 shadow-sm mb-3" 
+                 *ngIf="hasTraineeContract"
+                 (click)="downloadContract('trainee')">
+                <div class="card-body d-flex align-items-center p-3">
+                    <div class="contract-icon me-3">
+                        <i class="ti ti-file-text text-primary fs-2"></i>
+                    </div>
+                    <div class="contract-details flex-grow-1">
+                        <h6 class="fw-semibold mb-1">Trainee Contract</h6>
+                        <p class="text-muted small mb-0">
+                            Generated on {{ traineeContract?.generatedDate | date:'mediumDate' }}
+                        </p>
+                    </div>
+                    <div class="contract-action">
+                        <i class="ti ti-download text-primary"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Probation Contract Card -->
+            <div class="contract-card card border-0 shadow-sm mb-3" 
+                 *ngIf="hasProbationContract"
+                 (click)="downloadContract('probation')">
+                <div class="card-body d-flex align-items-center p-3">
+                    <div class="contract-icon me-3">
+                        <i class="ti ti-file-text text-success fs-2"></i>
+                    </div>
+                    <div class="contract-details flex-grow-1">
+                        <h6 class="fw-semibold mb-1">Probation Contract</h6>
+                        <p class="text-muted small mb-0">
+                            Generated on {{ probationContract?.generatedDate | date:'mediumDate' }}
+                        </p>
+                    </div>
+                    <div class="contract-action">
+                        <i class="ti ti-download text-success"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Contract Card -->
+            <div class="contract-card card border-0 shadow-sm mb-3" 
+                 *ngIf="hasJobContract"
+                 (click)="downloadContract('job')">
+                <div class="card-body d-flex align-items-center p-3">
+                    <div class="contract-icon me-3">
+                        <i class="ti ti-file-text text-info fs-2"></i>
+                    </div>
+                    <div class="contract-details flex-grow-1">
+                        <h6 class="fw-semibold mb-1">Job Contract</h6>
+                        <p class="text-muted small mb-0">
+                            Generated on {{ jobContract?.generatedDate | date:'mediumDate' }}
+                        </p>
+                    </div>
+                    <div class="contract-action">
+                        <i class="ti ti-download text-info"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="text-center py-5" *ngIf="!hasGeneratedContracts">
+            <i class="ti ti-files-off display-4 text-muted mb-3"></i>
+            <p class="text-muted">No contracts generated yet. Click on the buttons above to generate contracts.</p>
         </div>
     </div>
 </div>
