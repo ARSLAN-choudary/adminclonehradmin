@@ -1212,7 +1212,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody *ngIf="currentUserDocs.length > 0" class="doc-table main">
+                            <tbody class="doc-table main">
                                 <tr *ngFor="let doc of currentUserDocs">
 
                                     <td class="d-flex align-items-center gap-2" (click)="onRowClick(doc)">
@@ -1248,10 +1248,10 @@
 
                                 </tr>
                             </tbody>
+<div *ngIf="currentUserDocs.length === 0" class="alert alert-info text-center mt-2">
+    <i class="ti ti-info-circle"></i> No documents uploaded yet.
+</div>
                         </table>
-                        <div *ngIf="currentUserDocs.length === 0" class="alert alert-info text-center mt-2">
-                            <i class="ti ti-info-circle"></i> No documents uploaded yet.
-                        </div>
                     </div>
                 </div>
 
