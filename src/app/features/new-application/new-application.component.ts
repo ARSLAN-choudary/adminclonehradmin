@@ -81,7 +81,7 @@ interface DocumentItem {
 }
 interface ContractData {
   id: string;
-  type: 'trainee' | 'probation' | 'job';
+  type: "trainee" | "probation" | "job";
   generatedDate: Date;
   fileName: string;
   data: any;
@@ -140,13 +140,13 @@ export class NewApplicationComponent implements OnInit {
 
   // Sample employee data - replace with actual data from your service
   employeeData = {
-    name: 'John Doe',
-    position: 'Software Developer',
-    department: 'IT',
+    name: "John Doe",
+    position: "Software Developer",
+    department: "IT",
     startDate: new Date(),
-    salary: '$50,000',
-    email: 'john.doe@company.com',
-    phone: '+1-555-0123'
+    salary: "$50,000",
+    email: "john.doe@company.com",
+    phone: "+1-555-0123",
   };
   deleteApplicationId!: any;
   @ViewChild("appSubmittedCanvas", { static: true })
@@ -182,12 +182,12 @@ export class NewApplicationComponent implements OnInit {
 
   initChecked = false;
   currentUserId: string = "";
-  UserAppId: string = ""
+
+  UserAppId: string = "";
 
   currentUserDocs: any[] = [];
   limit: number = 10;
   openedIndex: number | string | null = null;
-
 
   private EXCEL_TYPE =
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -407,7 +407,6 @@ export class NewApplicationComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-
   get hasTraineeContract(): boolean {
     return !!this.traineeContract;
   }
@@ -421,17 +420,23 @@ export class NewApplicationComponent implements OnInit {
   }
 
   get hasGeneratedContracts(): boolean {
-    return this.hasTraineeContract || this.hasProbationContract || this.hasJobContract;
+    return (
+      this.hasTraineeContract ||
+      this.hasProbationContract ||
+      this.hasJobContract
+    );
   }
 
   loadExistingContracts() {
     // Load existing contracts from localStorage or your backend
-    const savedContracts = localStorage.getItem('generatedContracts');
+    const savedContracts = localStorage.getItem("generatedContracts");
     if (savedContracts) {
       const contracts: ContractData[] = JSON.parse(savedContracts);
-      this.traineeContract = contracts.find(c => c.type === 'trainee') || null;
-      this.probationContract = contracts.find(c => c.type === 'probation') || null;
-      this.jobContract = contracts.find(c => c.type === 'job') || null;
+      this.traineeContract =
+        contracts.find((c) => c.type === "trainee") || null;
+      this.probationContract =
+        contracts.find((c) => c.type === "probation") || null;
+      this.jobContract = contracts.find((c) => c.type === "job") || null;
     }
   }
 
@@ -441,27 +446,28 @@ export class NewApplicationComponent implements OnInit {
     if (this.probationContract) contracts.push(this.probationContract);
     if (this.jobContract) contracts.push(this.jobContract);
 
-    localStorage.setItem('generatedContracts', JSON.stringify(contracts));
+    localStorage.setItem("generatedContracts", JSON.stringify(contracts));
   }
 
   async generateTraineeContract() {
     this.isGenerating = true;
 
     try {
-      const contractData = await this.generateContractForm('trainee');
+      const contractData = await this.generateContractForm("trainee");
       this.traineeContract = {
         id: this.generateId(),
-        type: 'trainee',
+        type: "trainee",
         generatedDate: new Date(),
-        fileName: `Trainee_Contract_${this.employeeData.name}_${Date.now()}.pdf`,
-        data: contractData
+        fileName: `Trainee_Contract_${
+          this.employeeData.name
+        }_${Date.now()}.pdf`,
+        data: contractData,
       };
 
       this.saveContracts();
       this.exportContractAsPDF(this.traineeContract);
-
     } catch (error) {
-      console.error('Error generating trainee contract:', error);
+      console.error("Error generating trainee contract:", error);
     } finally {
       this.isGenerating = false;
     }
@@ -471,20 +477,21 @@ export class NewApplicationComponent implements OnInit {
     this.isGenerating = true;
 
     try {
-      const contractData = await this.generateContractForm('probation');
+      const contractData = await this.generateContractForm("probation");
       this.probationContract = {
         id: this.generateId(),
-        type: 'probation',
+        type: "probation",
         generatedDate: new Date(),
-        fileName: `Probation_Contract_${this.employeeData.name}_${Date.now()}.pdf`,
-        data: contractData
+        fileName: `Probation_Contract_${
+          this.employeeData.name
+        }_${Date.now()}.pdf`,
+        data: contractData,
       };
 
       this.saveContracts();
       this.exportContractAsPDF(this.probationContract);
-
     } catch (error) {
-      console.error('Error generating probation contract:', error);
+      console.error("Error generating probation contract:", error);
     } finally {
       this.isGenerating = false;
     }
@@ -494,20 +501,19 @@ export class NewApplicationComponent implements OnInit {
     this.isGenerating = true;
 
     try {
-      const contractData = await this.generateContractForm('job');
+      const contractData = await this.generateContractForm("job");
       this.jobContract = {
         id: this.generateId(),
-        type: 'job',
+        type: "job",
         generatedDate: new Date(),
         fileName: `Job_Contract_${this.employeeData.name}_${Date.now()}.pdf`,
-        data: contractData
+        data: contractData,
       };
 
       this.saveContracts();
       this.exportContractAsPDF(this.jobContract);
-
     } catch (error) {
-      console.error('Error generating job contract:', error);
+      console.error("Error generating job contract:", error);
     } finally {
       this.isGenerating = false;
     }
@@ -515,14 +521,14 @@ export class NewApplicationComponent implements OnInit {
 
   private async generateContractForm(contractType: string): Promise<any> {
     // Simulate form generation/API call
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         const formData = {
           employee: this.employeeData,
           contractType: contractType,
           terms: this.getContractTerms(contractType),
           duration: this.getContractDuration(contractType),
-          conditions: this.getContractConditions(contractType)
+          conditions: this.getContractConditions(contractType),
         };
         resolve(formData);
       }, 1000);
@@ -531,26 +537,26 @@ export class NewApplicationComponent implements OnInit {
 
   private getContractTerms(contractType: string): string[] {
     switch (contractType) {
-      case 'trainee':
+      case "trainee":
         return [
-          'Training period: 6 months',
-          'Monthly stipend provided',
-          'Mentorship program included',
-          'Performance evaluation every 2 months'
+          "Training period: 6 months",
+          "Monthly stipend provided",
+          "Mentorship program included",
+          "Performance evaluation every 2 months",
         ];
-      case 'probation':
+      case "probation":
         return [
-          'Probation period: 3 months',
-          'Full salary during probation',
-          'Performance review at end of period',
-          'Possible conversion to permanent position'
+          "Probation period: 3 months",
+          "Full salary during probation",
+          "Performance review at end of period",
+          "Possible conversion to permanent position",
         ];
-      case 'job':
+      case "job":
         return [
-          'Permanent employment',
-          'Full benefits package',
-          'Annual performance review',
-          'Standard company policies apply'
+          "Permanent employment",
+          "Full benefits package",
+          "Annual performance review",
+          "Standard company policies apply",
         ];
       default:
         return [];
@@ -559,21 +565,34 @@ export class NewApplicationComponent implements OnInit {
 
   private getContractDuration(contractType: string): string {
     switch (contractType) {
-      case 'trainee': return '6 months';
-      case 'probation': return '3 months';
-      case 'job': return 'Permanent';
-      default: return 'N/A';
+      case "trainee":
+        return "6 months";
+      case "probation":
+        return "3 months";
+      case "job":
+        return "Permanent";
+      default:
+        return "N/A";
     }
   }
 
   private getContractConditions(contractType: string): string[] {
     switch (contractType) {
-      case 'trainee':
-        return ['Completion certificate upon successful training', 'Possible job offer after training'];
-      case 'probation':
-        return ['Employment subject to successful probation completion', 'Standard notice period applies'];
-      case 'job':
-        return ['Standard notice period: 30 days', 'Confidentiality agreement applies'];
+      case "trainee":
+        return [
+          "Completion certificate upon successful training",
+          "Possible job offer after training",
+        ];
+      case "probation":
+        return [
+          "Employment subject to successful probation completion",
+          "Standard notice period applies",
+        ];
+      case "job":
+        return [
+          "Standard notice period: 30 days",
+          "Confidentiality agreement applies",
+        ];
       default:
         return [];
     }
@@ -583,13 +602,13 @@ export class NewApplicationComponent implements OnInit {
     let contract: ContractData | null = null;
 
     switch (contractType) {
-      case 'trainee':
+      case "trainee":
         contract = this.traineeContract;
         break;
-      case 'probation':
+      case "probation":
         contract = this.probationContract;
         break;
-      case 'job':
+      case "job":
         contract = this.jobContract;
         break;
     }
@@ -607,50 +626,63 @@ export class NewApplicationComponent implements OnInit {
 
     // Title
     doc.setFontSize(20);
-    doc.setFont('', 'bold');
-    doc.text(`${this.getContractTitle(contract.type)}`, pageWidth / 2, yPosition, { align: "center" });
+    doc.setFont("", "bold");
+    doc.text(
+      `${this.getContractTitle(contract.type)}`,
+      pageWidth / 2,
+      yPosition,
+      { align: "center" }
+    );
     yPosition += 40;
 
     // Contract Information
     doc.setFontSize(12);
-    doc.setFont('', 'normal');
+    doc.setFont("", "normal");
 
     // Employee Details
-    doc.setFont('', 'bold');
+    doc.setFont("", "bold");
     doc.text("Employee Details:", margin, yPosition);
     yPosition += 25;
 
-    doc.setFont('', 'normal');
+    doc.setFont("", "normal");
     doc.text(`Name: ${this.employeeData.name}`, margin, yPosition);
     yPosition += 20;
     doc.text(`Position: ${this.employeeData.position}`, margin, yPosition);
     yPosition += 20;
     doc.text(`Department: ${this.employeeData.department}`, margin, yPosition);
     yPosition += 20;
-    doc.text(`Start Date: ${this.employeeData.startDate.toLocaleDateString()}`, margin, yPosition);
+    doc.text(
+      `Start Date: ${this.employeeData.startDate.toLocaleDateString()}`,
+      margin,
+      yPosition
+    );
     yPosition += 20;
     doc.text(`Email: ${this.employeeData.email}`, margin, yPosition);
     yPosition += 30;
 
     // Contract Terms
-    doc.setFont('', 'bold');
+    doc.setFont("", "bold");
     doc.text("Contract Terms:", margin, yPosition);
     yPosition += 25;
 
-    doc.setFont('', 'normal');
-    doc.text(`Duration: ${this.getContractDuration(contract.type)}`, margin, yPosition);
+    doc.setFont("", "normal");
+    doc.text(
+      `Duration: ${this.getContractDuration(contract.type)}`,
+      margin,
+      yPosition
+    );
     yPosition += 20;
     doc.text(`Salary: ${this.employeeData.salary}`, margin, yPosition);
     yPosition += 30;
 
     // Terms and Conditions
     const terms = this.getContractTerms(contract.type);
-    doc.setFont('', 'bold');
+    doc.setFont("", "bold");
     doc.text("Terms & Conditions:", margin, yPosition);
     yPosition += 25;
 
-    doc.setFont('', 'normal');
-    terms.forEach(term => {
+    doc.setFont("", "normal");
+    terms.forEach((term) => {
       if (yPosition > 700) {
         doc.addPage();
         yPosition = 60;
@@ -661,7 +693,11 @@ export class NewApplicationComponent implements OnInit {
 
     // Generated Date
     yPosition += 20;
-    doc.text(`Generated on: ${contract.generatedDate.toLocaleDateString()}`, margin, yPosition);
+    doc.text(
+      `Generated on: ${contract.generatedDate.toLocaleDateString()}`,
+      margin,
+      yPosition
+    );
 
     // Save the PDF
     doc.save(contract.fileName);
@@ -669,17 +705,20 @@ export class NewApplicationComponent implements OnInit {
 
   private getContractTitle(contractType: string): string {
     switch (contractType) {
-      case 'trainee': return 'TRAINEE EMPLOYMENT CONTRACT';
-      case 'probation': return 'PROBATION EMPLOYMENT CONTRACT';
-      case 'job': return 'EMPLOYMENT CONTRACT';
-      default: return 'CONTRACT';
+      case "trainee":
+        return "TRAINEE EMPLOYMENT CONTRACT";
+      case "probation":
+        return "PROBATION EMPLOYMENT CONTRACT";
+      case "job":
+        return "EMPLOYMENT CONTRACT";
+      default:
+        return "CONTRACT";
     }
   }
 
   private generateId(): string {
     return `contract_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-
 
   onDateRangeChange(event: { startDate: Date; endDate: Date }) {
     this.startDate = this.formatDate(event.startDate);
@@ -715,7 +754,7 @@ export class NewApplicationComponent implements OnInit {
         this.addNewApplicationForm.reset();
       } else {
         this.toastr.error("User Not Created, Please Try Again Later");
-        setTimeout(() => { }, 7000);
+        setTimeout(() => {}, 7000);
       }
     });
   }
@@ -854,8 +893,6 @@ export class NewApplicationComponent implements OnInit {
       this.backdropEl = undefined;
     }
     this.renderer.removeStyle(document.body, "overflow");
-
-
   }
   closeEditApplication() {
     if (document.activeElement instanceof HTMLElement) {
@@ -1380,7 +1417,7 @@ export class NewApplicationComponent implements OnInit {
   docData: any[] = [];
   // DOCS OFFCANVAS
   openDocs(user: any) {
-    this.currentUserId = user._id;
+    this.currentUserId = user.userId;
 
     this.backend.getApplicationById(user._id).subscribe({
       next: (apiRes: any) => {
@@ -1388,7 +1425,7 @@ export class NewApplicationComponent implements OnInit {
 
         this.currentUserDocs = Object.entries(userData.documents)
           .filter(([key, value]: any) => {
-            return key !== 'additional' && value.url && value.url.trim() !== '';
+            return key !== "additional" && value.url && value.url.trim() !== "";
           })
           .map(([key, value]: any, index) => ({
             id: index + 1,
@@ -1400,15 +1437,18 @@ export class NewApplicationComponent implements OnInit {
             key: key,
           }));
 
-        if (userData.documents.additional && Array.isArray(userData.documents.additional)) {
+        if (
+          userData.documents.additional &&
+          Array.isArray(userData.documents.additional)
+        ) {
           const additionalDocs = userData.documents.additional
-            .filter((doc: any) => doc.url && doc.url.trim() !== '')
+            .filter((doc: any) => doc.url && doc.url.trim() !== "")
             .map((doc: any, index: number) => ({
               id: this.currentUserDocs.length + index + 1,
               name: doc.name || `ADDITIONAL_DOC_${index + 1}`,
               uploadDate: doc.uploadDate || userData.createdAt,
               previewUrl: doc.url,
-              status: doc.status || 'pending',
+              status: doc.status || "pending",
               fileType: "image",
               key: `additional_${index}`,
             }));
@@ -1419,9 +1459,9 @@ export class NewApplicationComponent implements OnInit {
         this.docData = this.mapApiResponseToDocData(userData);
       },
       error: (err) => {
-        this.toastr.error('Failed to load user details');
-        console.error('Error loading user details:', err);
-      }
+        this.toastr.error("Failed to load user details");
+        console.error("Error loading user details:", err);
+      },
     });
 
     // Rest of your existing modal opening code remains the same
@@ -1449,17 +1489,35 @@ export class NewApplicationComponent implements OnInit {
       {
         section: "Personal Information",
         fields: [
-          { label: "Given Name (English)", value: userData.userNameEnglish || 'N/A' },
-          { label: "Surname (Georgian)", value: userData.surnameGeorgian || 'N/A' },
-          { label: "Citizenship", value: userData.location || 'N/A' },
-          { label: "Document Type", value: this.formatDocumentType(userData.documentType) || 'N/A' },
-          { label: "Document Number", value: userData.documentNumber?.toString() || 'N/A' },
-          { label: "Date of Birth", value: this.formatDateDisplay(userData.dateOfBirth) || 'N/A' },
-          { label: "Gender", value: this.formatGender(userData.gender) || 'N/A' },
-          { label: "Marital Status", value: 'N/A' }, // This field doesn't exist in API
-          { label: "Contact Number", value: userData.phone || 'N/A' },
-          { label: "Email Address", value: userData.email || 'N/A' },
-          { label: "Legal Home Address", value: userData.legalAdress || 'N/A' },
+          {
+            label: "Given Name (English)",
+            value: userData.userNameEnglish || "N/A",
+          },
+          {
+            label: "Surname (Georgian)",
+            value: userData.surnameGeorgian || "N/A",
+          },
+          { label: "Citizenship", value: userData.location || "N/A" },
+          {
+            label: "Document Type",
+            value: this.formatDocumentType(userData.documentType) || "N/A",
+          },
+          {
+            label: "Document Number",
+            value: userData.documentNumber?.toString() || "N/A",
+          },
+          {
+            label: "Date of Birth",
+            value: this.formatDateDisplay(userData.dateOfBirth) || "N/A",
+          },
+          {
+            label: "Gender",
+            value: this.formatGender(userData.gender) || "N/A",
+          },
+          { label: "Marital Status", value: "N/A" }, // This field doesn't exist in API
+          { label: "Contact Number", value: userData.phone || "N/A" },
+          { label: "Email Address", value: userData.email || "N/A" },
+          { label: "Legal Home Address", value: userData.legalAdress || "N/A" },
         ],
       },
       {
@@ -1473,49 +1531,70 @@ export class NewApplicationComponent implements OnInit {
       {
         section: "Bank Information",
         fields: [
-          { label: "Account Holder Name", value: userData.accountHolderName || 'N/A' },
-          { label: "Account Number", value: userData.accountNumber || 'N/A' },
-          { label: "Bank Name", value: userData.bankName || 'N/A' },
+          {
+            label: "Account Holder Name",
+            value: userData.accountHolderName || "N/A",
+          },
+          { label: "Account Number", value: userData.accountNumber || "N/A" },
+          { label: "Bank Name", value: userData.bankName || "N/A" },
         ],
       },
       {
         section: "Emergency Contact",
         fields: [
-          { label: "Full Name", value: userData.emergencyFullName || 'N/A' },
-          { label: "Relationship", value: userData.emergencyRelationship || 'N/A' },
-          { label: "Contact Number", value: userData.emergencyContactNumber || 'N/A' },
-          { label: "Address", value: userData.emergencyAddress || 'N/A' },
+          { label: "Full Name", value: userData.emergencyFullName || "N/A" },
+          {
+            label: "Relationship",
+            value: userData.emergencyRelationship || "N/A",
+          },
+          {
+            label: "Contact Number",
+            value: userData.emergencyContactNumber || "N/A",
+          },
+          { label: "Address", value: userData.emergencyAddress || "N/A" },
         ],
       },
       {
         section: "Skills & Languages",
         fields: [
-          { label: "Skill Rating", value: userData.skillRating || 'N/A' },
-          { label: "Computer Skills", value: this.formatArrayData(userData.computerSkills) || 'N/A' },
-          { label: "Administrative Skills", value: this.formatArrayData(userData.administrativeSkills) || 'N/A' },
-          { label: "Languages", value: this.formatLanguages(userData.languages) || 'N/A' },
-          { label: "Allowed to Work", value: userData.allowedToWork ? 'Yes' : 'No' },
+          { label: "Skill Rating", value: userData.skillRating || "N/A" },
+          {
+            label: "Computer Skills",
+            value: this.formatArrayData(userData.computerSkills) || "N/A",
+          },
+          {
+            label: "Administrative Skills",
+            value: this.formatArrayData(userData.administrativeSkills) || "N/A",
+          },
+          {
+            label: "Languages",
+            value: this.formatLanguages(userData.languages) || "N/A",
+          },
+          {
+            label: "Allowed to Work",
+            value: userData.allowedToWork ? "Yes" : "No",
+          },
         ],
-      }
+      },
     ];
   }
 
   // Helper methods for data formatting
   private formatDocumentType(docType: string): string {
     const types: { [key: string]: string } = {
-      'residencePermit': 'Residence Permit',
-      'passport': 'Passport',
-      'idCard': 'ID Card'
+      residencePermit: "Residence Permit",
+      passport: "Passport",
+      idCard: "ID Card",
     };
     return types[docType] || docType;
   }
 
   private formatGender(gender: string): string {
-    return gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : 'N/A';
+    return gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : "N/A";
   }
 
   private formatDateDisplay(dateString: string): string {
-    if (!dateString) return 'N/A';
+    if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString();
   }
 
@@ -1529,12 +1608,15 @@ export class NewApplicationComponent implements OnInit {
       if (index > 0) fields.push({ label: "", value: "---" }); // Separator for multiple entries
 
       fields.push(
-        { label: "From (MM/YYYY)", value: edu.from || 'N/A' },
-        { label: "To (MM/YYYY)", value: edu.to || 'N/A' },
-        { label: "Institution", value: edu.institution || 'N/A' },
-        { label: "Qualification", value: edu.qualification || 'N/A' },
-        { label: "Notes", value: edu.notes || 'N/A' },
-        { label: "Currently Studying", value: edu.currentlyStudying ? 'Yes' : 'No' }
+        { label: "From (MM/YYYY)", value: edu.from || "N/A" },
+        { label: "To (MM/YYYY)", value: edu.to || "N/A" },
+        { label: "Institution", value: edu.institution || "N/A" },
+        { label: "Qualification", value: edu.qualification || "N/A" },
+        { label: "Notes", value: edu.notes || "N/A" },
+        {
+          label: "Currently Studying",
+          value: edu.currentlyStudying ? "Yes" : "No",
+        }
       );
     });
 
@@ -1551,14 +1633,23 @@ export class NewApplicationComponent implements OnInit {
       if (index > 0) fields.push({ label: "", value: "---" }); // Separator for multiple entries
 
       fields.push(
-        { label: "Company Name", value: work.companyName || 'N/A' },
-        { label: "City, Country", value: work.cityCountry || 'N/A' },
-        { label: "Job Title / Position", value: work.jobTitle || 'N/A' },
-        { label: "Employment Period", value: `${work.from || 'N/A'} → ${work.to || 'N/A'}` },
-        { label: "Gross Salary", value: work.grossSalary ? `$${work.grossSalary} / month` : 'N/A' },
-        { label: "Reason for Leaving", value: work.reasonForLeaving || 'N/A' },
-        { label: "Still Working Here", value: work.stillWorking ? 'Yes' : 'No' },
-        { label: "Additional Notes", value: work.notes || 'N/A' }
+        { label: "Company Name", value: work.companyName || "N/A" },
+        { label: "City, Country", value: work.cityCountry || "N/A" },
+        { label: "Job Title / Position", value: work.jobTitle || "N/A" },
+        {
+          label: "Employment Period",
+          value: `${work.from || "N/A"} → ${work.to || "N/A"}`,
+        },
+        {
+          label: "Gross Salary",
+          value: work.grossSalary ? `$${work.grossSalary} / month` : "N/A",
+        },
+        { label: "Reason for Leaving", value: work.reasonForLeaving || "N/A" },
+        {
+          label: "Still Working Here",
+          value: work.stillWorking ? "Yes" : "No",
+        },
+        { label: "Additional Notes", value: work.notes || "N/A" }
       );
     });
 
@@ -1566,30 +1657,30 @@ export class NewApplicationComponent implements OnInit {
   }
 
   private formatArrayData(arrayData: any[]): string {
-    if (!arrayData || arrayData.length === 0) return 'N/A';
+    if (!arrayData || arrayData.length === 0) return "N/A";
 
     return arrayData
-      .map(item => {
-        if (typeof item === 'string') {
+      .map((item) => {
+        if (typeof item === "string") {
           try {
             const parsed = JSON.parse(item);
-            return Array.isArray(parsed) ? parsed.join(', ') : parsed;
+            return Array.isArray(parsed) ? parsed.join(", ") : parsed;
           } catch {
             return item;
           }
         }
         return item;
       })
-      .filter(item => item && item !== '[]' && item !== '[]')
-      .join(', ');
+      .filter((item) => item && item !== "[]" && item !== "[]")
+      .join(", ");
   }
 
   private formatLanguages(languages: any[]): string {
-    if (!languages || languages.length === 0) return 'N/A';
+    if (!languages || languages.length === 0) return "N/A";
 
     return languages
-      .map(lang => `${lang.language} (${lang.level})`)
-      .join(', ');
+      .map((lang) => `${lang.language} (${lang.level})`)
+      .join(", ");
   }
 
   closeDocs() {
@@ -1678,7 +1769,6 @@ export class NewApplicationComponent implements OnInit {
     });
   }
 
-
   getSafeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
@@ -1710,17 +1800,16 @@ export class NewApplicationComponent implements OnInit {
     return this.currentUserDocs.filter((d) => d.status === "rejected").length;
   }
 
-
   toggleSection(index: number | string) {
     this.openedIndex = this.openedIndex === index ? null : index;
   }
 
   isTraineeApproved: boolean = false;
 
-
   allDocsApproved(): boolean {
-    if (!this.currentUserDocs || this.currentUserDocs.length === 0) return false;
-    return this.currentUserDocs.every(doc => doc.status === 'approved');
+    if (!this.currentUserDocs || this.currentUserDocs.length === 0)
+      return false;
+    return this.currentUserDocs.every((doc) => doc.status === "approved");
   }
 
   approveTrainee() {
@@ -1732,7 +1821,6 @@ export class NewApplicationComponent implements OnInit {
     this.backend.updateUser(payload).subscribe({
       next: (res: any) => {
         if (res?.status === "success" || res?.success === true) {
-
           this.isTraineeApproved = true;
 
           this.toastr.success(res.message || "Status updated");
@@ -1740,48 +1828,53 @@ export class NewApplicationComponent implements OnInit {
         } else {
           this.toastr.error(res?.message || "Failed to Update status");
         }
+        this.closeDocs();
       },
       error: () => {
         this.toastr.error("Failed to toggle status");
+        this.closeDocs();
       },
     });
   }
 
   // Documents status
- getDocumentsStatus(user: any): 'uploaded' | 'pending' {
-  if (!user?.documents) return 'pending';
+  getDocumentsStatus(user: any): "uploaded" | "pending" {
+    if (!user?.documents) return "pending";
 
-  const docs = user.documents;
+    const docs = user.documents;
 
-  const mainDocs = ['doc1', 'doc2', 'doc3', 'doc4'];
-  const hasEmptyMainDoc = mainDocs.some(key => {
-    const doc = docs[key];
-    return !doc?.url || doc.url.trim() === '';
-  });
+    const mainDocs = ["doc1", "doc2", "doc3", "doc4"];
+    const hasEmptyMainDoc = mainDocs.some((key) => {
+      const doc = docs[key];
+      return !doc?.url || doc.url.trim() === "";
+    });
 
-  if (hasEmptyMainDoc) {
-    return 'pending';
-  }
-
-  if (docs.additional && Array.isArray(docs.additional) && docs.additional.length > 0) {
-    const hasEmptyAdditionalDoc = docs.additional.some((doc: any) => 
-      !doc?.url || doc.url.trim() === ''
-    );
-    
-    if (hasEmptyAdditionalDoc) {
-      return 'pending';
+    if (hasEmptyMainDoc) {
+      return "pending";
     }
+
+    if (
+      docs.additional &&
+      Array.isArray(docs.additional) &&
+      docs.additional.length > 0
+    ) {
+      const hasEmptyAdditionalDoc = docs.additional.some(
+        (doc: any) => !doc?.url || doc.url.trim() === ""
+      );
+
+      if (hasEmptyAdditionalDoc) {
+        return "pending";
+      }
+    }
+
+    return "uploaded";
   }
 
-  return 'uploaded';
-}
-
-  // Reject reason modal 
+  // Reject reason modal
   showRejectModal = false;
   selectedReason: string = "";
   customReason: string = "";
   currentRejectDoc: any = null;
-
 
   selectReason(event: any) {
     this.selectedReason = event.target.value;
@@ -1814,14 +1907,13 @@ export class NewApplicationComponent implements OnInit {
       applicationId: this.currentUserId,
       documentKey: this.currentRejectDoc.key,
       status: "rejected",
-      remarks: finalReason
+      remarks: finalReason,
     };
 
     this.backend.updateDocStatus(payload).subscribe({
       next: (res: any) => {
         if (res?.status === "success" || res?.success === true) {
-
-          this.currentRejectDoc.status = 'rejected';
+          this.currentRejectDoc.status = "rejected";
 
           this.toastr.success("Document rejected successfully");
           this.showRejectModal = false;
@@ -1834,16 +1926,15 @@ export class NewApplicationComponent implements OnInit {
       error: (err) => {
         this.showRejectModal = false;
         this.toastr.error(err?.error?.message || "Document not added!");
-      }
+      },
     });
   }
 
   closeRejectModal() {
     this.showRejectModal = false;
-    this.selectedReason = '';
-    this.customReason = '';
+    this.selectedReason = "";
+    this.customReason = "";
   }
-
 
   // docData = [
   //   {
@@ -1964,6 +2055,4 @@ export class NewApplicationComponent implements OnInit {
   //     ]
   //   },
   // ];
-
-
 }
