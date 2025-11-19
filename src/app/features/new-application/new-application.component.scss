@@ -9,8 +9,7 @@
 ::ng-deep .reportrange-picker .reportrange-picker-field {
   width: 150px !important;
 }
-.table-headers {
-}
+
 
 :host ::ng-deep .mat-sort-header-container {
   justify-content: center !important;
@@ -71,3 +70,135 @@
 .cursor-pointer {
   cursor: pointer !important;
 }
+
+
+.doc-table{
+  cursor: pointer;
+}
+
+.approve-btn {
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.approve-btn:hover {
+  border: #157347;
+  background-color: #157347 !important; 
+  opacity: 0.95;
+}
+
+.file-icon {
+  width: 24px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.preview-modal-header{
+  padding:5px 20px !important;
+}
+
+.preview-modal{
+  background: rgba(0,0,0,0.5);
+}
+
+.preview-modal-dialog{
+  max-width: 650px;
+}
+
+.preview-modal-body{
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  height: 70vh; 
+  overflow: hidden;
+}
+
+#offcanvas_docs{
+  overflow-y: auto !important;
+  height: 100vh;
+}
+
+.text-gray{
+  color: gray !important;
+}
+
+#offcanvas_docs::-webkit-scrollbar {
+    display: none;
+}
+
+#offcanvas_docs {
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
+}
+
+.trainee-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 35px;
+    z-index: 9999;
+    padding: 14px 28px;
+    border-radius: 10px;
+    background-color: rgb(69, 69, 220) !important;
+    border: none !important;
+}
+
+.body-content{
+  height: calc(100dvh - 160px) !important;
+  overflow-y:  auto !important;
+      -ms-overflow-style: none; 
+    scrollbar-width: none;
+}
+
+.rotate-icon {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.cursor-pointer {
+  transition: transform 0.3s ease;
+}
+
+.btn-approve{
+  background: #28a745 !important;
+  color: white !important;
+}
+
+.modal-content h5 {
+  color: #444;
+}
+
+.btn-warning {
+  background: linear-gradient(to bottom, #0c8908c7, #229a0aaa);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.form-check-input:checked {
+  background-color: #0c8908;
+  border-color: #2dc80ed8;
+}
+.form-check-input{
+  border-color: #a4a4a4;
+}
+
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reject-close {
+  filter: brightness(0);    
+  width: 15px;               
+  height: 15px;
+  padding: 0;              
+  opacity: 1 !important;    
+}
+
+
+
+
+

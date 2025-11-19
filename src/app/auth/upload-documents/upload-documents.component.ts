@@ -10,14 +10,16 @@ import {
   ValidatorFn,
 } from "@angular/forms";
 import { SelectModule } from "primeng/select";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { WebcamImage, WebcamModule } from "ngx-webcam";
 import { BackendService } from "../../Services/backend.service";
 
 // OpenCV.js
-import cvModule from "@techstark/opencv-js";
+import cvModule, { log } from "@techstark/opencv-js";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FirebaseStoreService } from "../../Services/firebase-store.service";
+import { AuthService } from "../../Services/auth.service";
+import { ToggleService } from "../../Services/toggle.service";
 
 type DocType = "passport" | "residenceCard" | "healthCard" | "healthCertificate" | "additional";
 
@@ -30,7 +32,8 @@ type DocType = "passport" | "residenceCard" | "healthCard" | "healthCertificate"
 })
 export class UploadDocumentsComponent implements OnInit {
   form: FormGroup;
-
+  userId: any;
+  sub!: Subscription;
   activeDocType: DocType | null = null;
   activeAdditionalDocIndex: number | null = null;
   showCamera = false;
@@ -395,9 +398,10 @@ export class UploadDocumentsComponent implements OnInit {
   ];
 
   private fromApp: boolean = false;
-  email = signal<string>("");
+  email: string = "";
   private deviceId: string = "";
   private fcmToken: string = "";
+  userEmail: any;
 
   private _filterIdCounter = 0;
 
@@ -407,6 +411,8 @@ export class UploadDocumentsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private firebaseStore: FirebaseStoreService,
+    private authService: AuthService,
+    private toggle: ToggleService
   ) {
     this.form = this.fb.group({
       personalDetails: this.fb.group({
@@ -501,7 +507,6 @@ export class UploadDocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      this.email = params["email"] || "";
       this.fromApp = params["from"] === "app";
       this.deviceId = params["deviceId"] || "";
       this.fcmToken = params["fcmToken"] || "";
@@ -542,7 +547,7 @@ export class UploadDocumentsComponent implements OnInit {
   updateUrl() {
     if (this.deviceId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByDeviceId(this.deviceId, currentUrl);
+      this.firebaseStore.updateUrlByUserId(this.deviceId, currentUrl);
     }
   }
 

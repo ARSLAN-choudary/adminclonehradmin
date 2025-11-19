@@ -451,6 +451,8 @@
                             <th mat-sort-header="email">email</th>
                             <th mat-sort-header="createdAt">Submission Date</th>
                             <th mat-sort-header="status">Status</th>
+                            <th mat-sort-header="status" class="text-center"></th>
+                            <th class="text-center">Doc Status</th>
                             <th class="text-end no-sort">Action</th>
                         </tr>
                     </thead>
@@ -467,6 +469,20 @@
                                 <span class="badge badge-pill badge-status cursor-pointer" (click)="toggleStatus(data)"
                                     [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">
                                     {{ data.status }}
+                                </span>
+                            </td>
+
+                            <td>
+                                 <span class="badge badge-pill cursor-pointer text-white bg-info"
+                                        (click)="openDocs(data)">Details</span>
+                            </td>
+
+                              <td class="d-flex justify-content-center">
+                                <span class="badge badge-pill" [ngClass]="{
+                                 'bg-success': getDocumentsStatus(data) === 'uploaded',
+                                 'bg-warning': getDocumentsStatus(data) === 'pending'
+                                }">
+                                    {{ getDocumentsStatus(data) }}
                                 </span>
                             </td>
 
@@ -1091,3 +1107,259 @@
     </div>
 </div>
 <!-- resend modal -->
+
+<!-- documents modal -->
+ <div #docsCanvas class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_docs">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="fw-semibold mb-0">Details</h5>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            (click)="closeDocs()" aria-label="Close">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+
+    <div class="container mt-1 body-content" id="detailsAccordion">
+
+        <div *ngFor="let section of docData; let i = index" class="mb-1 px-3 py-2 rounded border shadow-sm">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div class="fw-bold text-primary mb-0">
+                    {{ section.section }}
+                </div>
+
+                <i class="ti ti-chevron-down fs-4 cursor-pointer" [ngClass]="{ 'rotate-icon': openedIndex === i }"
+                    data-bs-toggle="collapse" (click)="toggleSection(i)" [attr.data-bs-target]="'#sectionCollapse' + i"
+                    aria-expanded="false" [attr.aria-controls]="'sectionCollapse' + i"></i>
+            </div>
+
+            <div class="collapse mt-3" [id]="'sectionCollapse' + i" data-bs-parent="#detailsAccordion">
+
+                <ng-container *ngIf="section.entries; else normalSection">
+
+                    <div *ngFor="let group of section.entries" class="mb-1 p-2 rounded bg-light border">
+
+                        <h6 class="fw-bold mb-1 text-secondary">{{ group.title }}</h6>
+
+                        <div class="row">
+                            <ng-container *ngFor="let field of group.fields; let last = last">
+
+                                <div class="col-md-6 mb-2" [class.col-12]="last && group.fields.length % 2 !== 0">
+
+                                    <div class="fw-semibold text-dark">
+                                        {{ field.label }}
+                                    </div>
+
+                                    <div class="text-gray">
+                                        {{ field.value }}
+                                    </div>
+                                </div>
+
+                            </ng-container>
+                        </div>
+
+                    </div>
+
+                </ng-container>
+
+                <ng-template #normalSection>
+                    <div class="row">
+                        <ng-container *ngFor="let field of section.fields">
+
+                            <div class="col-md-6 mb-2">
+                                <div class="fw-semibold text-dark">
+                                    {{ field.label }}
+                                </div>
+                                <div class="text-gray">
+                                    {{ field.value }}
+                                </div>
+                            </div>
+
+                        </ng-container>
+                    </div>
+                </ng-template>
+
+            </div>
+
+        </div>
+
+
+        <div class=" mb-1 px-3 py-2 rounded border shadow-sm">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="fw-bold mb-0 text-primary">Documents</div>
+
+                <i class="ti ti-chevron-down fs-4 cursor-pointer" [ngClass]="{ 'rotate-icon': openedIndex === 'docs' }"
+                    data-bs-toggle="collapse" (click)="toggleSection('docs')" data-bs-target="#docsTableCollapse"
+                    aria-expanded="false" aria-controls="docsTableCollapse">
+                </i>
+            </div>
+
+            <div class="collapse" id="docsTableCollapse" data-bs-parent="#detailsAccordion">
+
+                <div class="card shadow-sm mt-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Document</th>
+                                    <th>Upload Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="doc-table main">
+                                <tr *ngFor="let doc of currentUserDocs">
+
+                                    <td class="d-flex align-items-center gap-2" (click)="onRowClick(doc)">
+                                        <img src="/assets/img/app-register/login-bg.jpg" class="file-icon" />
+                                        <span>{{ doc.name }}</span>
+                                    </td>
+
+                                    <td>{{ doc.uploadDate }}</td>
+
+                                    <td>
+                                        <span [class]="getBadgeClass(doc.status)">
+                                            {{ doc.status | titlecase }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center">
+
+                                            <button *ngIf="doc.status !== 'approved'"
+                                                class="btn btn-success btn-sm me-2 d-flex align-items-center gap-1"
+                                                (click)="approve(doc)">
+                                                <i class="ti ti-check"></i> Approve
+                                            </button>
+
+                                            <button *ngIf="doc.status !== 'rejected'"
+                                                class="btn btn-danger btn-sm d-flex align-items-center gap-1"
+                                                (click)="reject(doc)">
+                                                <i class="ti ti-x"></i> Reject
+                                            </button>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <button class="btn btn-lg fw-bold trainee-btn" [class.btn-primary]="!isTraineeApproved"
+        [class.btn-approve]="isTraineeApproved"
+        [disabled]="!isTraineeApproved && !allDocsApproved()"
+        (click)="approveTrainee()">
+
+        {{ isTraineeApproved ? "Trainee Approved ✓" : "Approved as Trainee" }}
+
+    </button>
+
+
+
+    <div class="container">
+
+        <!-- Preview Modal -->
+        <div class="modal fade show d-block preview-modal" *ngIf="showPreview">
+            <div class="modal-dialog modal-lg modal-dialog-centered preview-modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header preview-modal-header">
+                        <div>
+                            <h5 class="modal-title fw-bold">{{ selectedDoc?.name }}</h5>
+                        </div>
+                        <button class="btn-close" (click)="closePreview()"></button>
+                    </div>
+
+                    <div
+                        class="modal-body bg-light d-flex justify-content-center align-items-center p-2 preview-modal-body">
+                        <img *ngIf="selectedDoc?.fileType === 'image'" [src]="getSafeUrl(selectedDoc?.previewUrl!)"
+                            class="img-fluid"
+                            style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;">
+                    </div>
+
+                    <div class="modal-footer d-flex justify-content-end gap-2">
+                        <button *ngIf="selectedDoc?.status !== 'approved'"
+                            class="btn btn-success btn-sm d-flex align-items-center gap-1"
+                            (click)="approve(selectedDoc);closePreview()">
+                            <i class="ti ti-check"></i> Approve
+                        </button>
+
+                        <button *ngIf="selectedDoc?.status !== 'rejected'"
+                            class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="reject(selectedDoc);closePreview()">
+                            <i class="ti ti-x"></i> Reject
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Reject Modal -->
+        <div class="modal-backdrop-custom modal fade show d-block preview-modal" *ngIf="showRejectModal"
+            (click)="closeRejectModal()">
+
+            <div class="modal-dialog modal-md modal-dialog-centered" (click)="$event.stopPropagation()">
+
+                <div class="modal-content p-3">
+
+                    <button class="btn-close reject-close ms-auto mb-2 " (click)="closeRejectModal()"></button>
+
+                    <h5 class="fw-bold mb-3">Add Reject Reason:</h5>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="rejectReason"
+                            value="Invalid document, needs to re-upload." (change)="selectReason($event)"
+                            [checked]="selectedReason === 'Invalid document, needs to re-upload.'">
+                        <label class="form-check-label">
+                            Invalid document, needs to re-upload.
+                        </label>
+                    </div>
+
+                    <hr>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="rejectReason"
+                            value="Poor quality document, needs to re-upload." (change)="selectReason($event)"
+                            [checked]="selectedReason === 'Poor quality document, needs to re-upload.'">
+                        <label class="form-check-label">
+                            Poor quality document, needs to re-upload.
+                        </label>
+                    </div>
+
+                    <hr>
+
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="rejectReason" value="other"
+                            (change)="selectReason($event)" [checked]="selectedReason === 'other'">
+                        <label class="form-check-label">
+                            Other
+                        </label>
+                    </div>
+
+                    <div *ngIf="selectedReason === 'other'">
+                        <textarea class="form-control border-warning mt-2" rows="4"
+                            placeholder="Type your comment here..." [(ngModel)]="customReason">
+                </textarea>
+                    </div>
+
+                    <button class="btn btn-warning mt-3 w-100 fw-bold" (click)="submitRejectReason()">
+                        Send
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

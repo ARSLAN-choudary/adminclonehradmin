@@ -1,5 +1,15 @@
 import { Injectable } from "@angular/core";
-import { Firestore, doc, getDoc, setDoc } from "@angular/fire/firestore";
+import { Firestore, doc, getDoc, onSnapshot, setDoc } from "@angular/fire/firestore";
+import { Observable } from "rxjs";
+
+export interface UserDoc {
+  email?: string;
+  url?: string;
+  status?: string;
+  role?: string;
+  deviceId?: string;
+  userId?: string;
+}
 
 @Injectable({
   providedIn: "root",
@@ -8,16 +18,25 @@ export class FirebaseStoreService {
   constructor(private firestore: Firestore) {}
 
   // ✅ Save (or update) email + URL by deviceId
-  async saveUrlByDeviceId(deviceId: string, email: string, url: string) {
+  async saveUrlByDeviceId(
+    userId: string,
+    email: string,
+    url: string,
+    status: string,
+    role: string,
+    deviceId: string
+  ) {
     try {
-      const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
+      const docRef = doc(this.firestore, `users/${userId}`);
 
       // Always overwrite with latest email and url
-      await setDoc(docRef, { email, url }, { merge: true });
-
-      console.log(
-        `✅ Email & URL saved successfully for deviceId: ${deviceId}`
+      await setDoc(
+        docRef,
+        { email, url, status, role, deviceId },
+        { merge: true }
       );
+
+      console.log(`✅ Email & URL saved successfully for deviceId: ${userId}`);
     } catch (error) {
       console.error("❌ Error saving email/url:", error);
     }
@@ -25,16 +44,16 @@ export class FirebaseStoreService {
 
   // ✅ Get email + URL by deviceId
   async getDeviceData(
-    deviceId: string
+    userId: string
   ): Promise<{ email?: string; url?: string } | null> {
     try {
-      const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
+      const docRef = doc(this.firestore, `users/${userId}`);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         return docSnap.data() as { email?: string; url?: string };
       } else {
-        console.warn(`⚠️ No data found for deviceId: ${deviceId}`);
+        console.warn(`⚠️ No data found for userId: ${userId}`);
         return null;
       }
     } catch (error) {
@@ -44,9 +63,9 @@ export class FirebaseStoreService {
   }
 
   // ✅ Update only the URL (keep email same)
-  async updateUrlByDeviceId(deviceId: string, newUrl: string) {
+  async updateUrlByUserId(deviceId: string, newUrl: string) {
     try {
-      const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
+      const docRef = doc(this.firestore, `users/${deviceId}`);
       await setDoc(docRef, { url: newUrl }, { merge: true });
       console.log(`🔄 URL updated successfully for deviceId: ${deviceId}`);
     } catch (error) {
@@ -59,7 +78,7 @@ export class FirebaseStoreService {
     userId: string
   ) {
     try {
-      const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
+      const docRef = doc(this.firestore, `users/${deviceId}`);
 
       await setDoc(
         docRef,
@@ -76,5 +95,25 @@ export class FirebaseStoreService {
     } catch (error) {
       console.error("❌ Error updating URL:", error);
     }
+  }
+  watchUserById(userId: string): Observable<UserDoc | null> {
+    return new Observable((sub) => {
+      const ref = doc(this.firestore, "users", userId);
+
+      const unsubscribe = onSnapshot(
+        ref,
+        (snap) => {
+          if (snap.exists()) {
+            sub.next(snap.data() as UserDoc);
+          } else {
+            sub.next(null);
+          }
+        },
+        (err) => sub.error(err)
+      );
+
+      // cleanup on unsubscribe
+      return () => unsubscribe();
+    });
   }
 }
