@@ -9,7 +9,7 @@ import {
   AbstractControl,
 } from "@angular/forms";
 import { SelectModule } from "primeng/select";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { WebcamImage, WebcamModule } from "ngx-webcam";
 import { BackendService } from "../../Services/backend.service";
 
@@ -31,7 +31,8 @@ type DocType = "passport" | "residenceCard" | "healthCard" | "drivingLicense";
 })
 export class UploadDocumentsComponent implements OnInit {
   form: FormGroup;
-
+  userId: any;
+  sub!: Subscription;
   activeDocType: DocType | null = null;
   showCamera = false;
   hint = "Click a card to capture its document.";
@@ -291,44 +292,34 @@ export class UploadDocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      this.email = params["email"] || "";
       this.fromApp = params["from"] === "app";
-      this.deviceId = params["deviceId"] || "";
-      this.fcmToken = params["fcmToken"] || "";
 
-      if (this.deviceId) {
-        setTimeout(() => {
-          this.updateUrl();
-        }, 100);
+      if (this.fromApp) {
+        this.deviceId = params["deviceId"] || "";
+        this.fcmToken = params["fcmToken"] || "";
+        this.userId = params["userId"] || "";
+        this.email = params["email"] || "";
+      } else {
+        this.email = localStorage.getItem("email") || "";
+        this.userId = localStorage.getItem("userId") || "";
       }
-    });
 
-    this.toggle.getOtpData().subscribe((data: any) => {
-      this.userEmail = data;
-    });
-
-    const payload: any = { email: this.userEmail };
-
-    if (this.fromApp) {
-      payload.fcmToken = this.fcmToken;
-      payload.deviceId = this.deviceId;
-    }
-
-    this.authService.verifyRole(payload).subscribe((res: any) => {
-      if (res.data.id) {
-        localStorage.setItem("userId", res.data.id);
-        const currentUrl = window.location.href;
-        this.firebaseStore.updateUrlByDeviceAndUserId(
-          this.deviceId,
-          currentUrl,
-          res.data.id
-        );
+      if (!this.userId) {
+        console.warn("⚠️ userId missing");
+        return;
       }
-      if (res.data.role === "TRAINEE") {
-        this.router.navigate(["/trainee-dashboard"], {
-          queryParams: { deviceId: this.deviceId, from: "app" },
+
+      this.updateUrl();
+
+      this.sub = this.firebaseStore
+        .watchUserById(this.userId)
+        .subscribe((resp) => {
+          if (resp && resp.role === "TRAINEE") {
+            this.router.navigate(["/trainee-dashboard"], {
+              queryParams: { userId: this.userId, from: "app" },
+            });
+          }
         });
-      }
     });
   }
 
