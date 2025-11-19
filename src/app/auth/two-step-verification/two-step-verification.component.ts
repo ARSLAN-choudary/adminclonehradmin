@@ -177,7 +177,6 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
         this.loading = false;
 
         if (res.data.details._id) {
-          localStorage.setItem("userId", res.data.details._id);
           const currentUrl = window.location.href;
           this.firebaseStore.saveUrlByDeviceId(
             res.data.details._id,
