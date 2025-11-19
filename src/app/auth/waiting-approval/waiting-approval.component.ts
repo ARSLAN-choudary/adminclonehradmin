@@ -58,14 +58,17 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
 
       this.updateUrl();
 
-      
       this.sub = this.firebaseStore
         .watchUserById(this.userId)
         .subscribe((resp) => {
-
           if (resp && resp.status === "active") {
+            const queryParams: any = { email: this.email };
+            if (this.fromApp) queryParams.from = "app";
+            if (this.deviceId) queryParams.deviceId = this.deviceId;
+            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+            if (this.userId) queryParams.userId = this.userId;
             this.router.navigate(["/upload-docs"], {
-              queryParams: { userId: this.userId, from: "app" },
+              queryParams,
             });
           }
         });
@@ -75,7 +78,6 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
   }
- 
 
   private updateUrl() {
     if (this.userId) {
