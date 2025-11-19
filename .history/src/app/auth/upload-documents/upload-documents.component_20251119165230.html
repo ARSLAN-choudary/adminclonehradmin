@@ -64,9 +64,22 @@
                             *ngIf="personalDetails.get('citizenship')?.invalid && personalDetails.get('citizenship')?.touched">
                             This field is required
                         </div>
+
                     </div>
                 </div>
+                <!-- Country Dropdown - Show when NOT Georgian -->
+                <div *ngIf="personalDetails.get('citizenship')?.value !== 'georgian'" class="mt-2">
+                    <p-select appSelectFilterId [options]="countries" optionLabel="label" optionValue="value"
+                        placeholder="Select your country" [filter]="true" class="form-control"
+                        formControlName="citizenship" id="citizenship" name="citizenship"
+                        (onShow)="labelFilterInput('citizenship-filter')">
+                    </p-select>
+                </div>
 
+                <div class="text-danger mt-1"
+                    *ngIf="personalDetails.get('citizenship')?.invalid && personalDetails.get('citizenship')?.touched">
+                    This field is required
+                </div>
                 <!-- Document Type column remains the same -->
             </div>
 

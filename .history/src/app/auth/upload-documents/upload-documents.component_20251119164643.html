@@ -33,24 +33,29 @@
                     <div class="mb-3">
                         <span class="form-label">Citizenship *</span>
 
-                        <!-- Radio buttons for Georgian/Other -->
+                    <div class="col-md-6">
                         <div class="radio-wrap mb-2">
-                            <div class="d-flex flex-wrap">
-                                <div class="me-2">
-                                    <input type="radio" class="status-radio" id="georgian" value="georgian"
-                                        [checked]="personalDetails.get('citizenship')?.value === 'georgian'"
-                                        (change)="setGeorgianCitizenship()" name="citizenshipRadio" />
-                                    <label for="georgian">Georgian</label>
-                                </div>
-                                <div>
-                                    <input type="radio" class="status-radio" id="other" value="other"
-                                        [checked]="personalDetails.get('citizenship')?.value !== 'georgian'"
-                                        (change)="setOtherCitizenship()" name="citizenshipRadio" />
-                                    <label for="other">Other</label>
-                                </div>
+                        <div class="d-flex flex-wrap">
+                            <div class="me-2">
+                                <input type="radio" class="status-radio" id="georgian" value="georgian"
+                                    [checked]="personalDetails.get('citizenship')?.value === 'georgian'" (change)="setGeorgianCitizenship()"
+                                    name="citizenshipRadio" />
+                                <label for="georgian">Georgian</label>
+                            </div>
+                            <div>
+                                <input type="radio" class="status-radio" id="other" value="other"
+                                    [checked]="personalDetails.get('citizenship')?.value !== 'georgian'" (change)="setOtherCitizenship()"
+                                    name="citizenshipRadio" />
+                                <label for="other">Other</label>
                             </div>
                         </div>
-
+                    </div>
+                </div>
+                        <!-- Radio buttons for Georgian/Other -->
+                       
+<div class="col-md-6">
+    
+</div>
                         <!-- Country Dropdown - Show when NOT Georgian -->
                         <div *ngIf="personalDetails.get('citizenship')?.value !== 'georgian'" class="mt-2">
                             <p-select appSelectFilterId [options]="countries" optionLabel="label" optionValue="value"

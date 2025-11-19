@@ -345,15 +345,7 @@ export class UploadDocumentsComponent implements OnInit {
     { label: "Ziraat Bank", value: "Ziraat Bank" },
     { label: "Silk Road Bank", value: "Silk Road Bank" },
   ];
-  // Add these methods to your component class
-  setGeorgianCitizenship() {
-    this.personalDetails.get('citizenship')?.setValue('georgian');
-  }
 
-  setOtherCitizenship() {
-    // When switching to Other, clear the value so dropdown appears
-    this.personalDetails.get('citizenship')?.setValue('');
-  }
   languages = [
     { label: "Georgian", value: "Georgian" },
     { label: "English", value: "English" },

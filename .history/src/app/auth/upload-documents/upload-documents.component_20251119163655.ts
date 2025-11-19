@@ -126,7 +126,7 @@ export class UploadDocumentsComponent implements OnInit {
       value: "Racha-Lechkhumi and Kvemo Svaneti",
     },
   ];
-
+  // Add this to your component class, near other dropdown data
   countries = [
     { label: "Afghanistan", value: "Afghanistan" },
     { label: "Albania", value: "Albania" },
@@ -325,7 +325,7 @@ export class UploadDocumentsComponent implements OnInit {
     { label: "Zimbabwe", value: "Zimbabwe" }
   ];
 
-
+  
   get showCountryDropdown(): boolean {
     return this.personalDetails.get('citizenship')?.value === 'other';
   }
@@ -345,15 +345,7 @@ export class UploadDocumentsComponent implements OnInit {
     { label: "Ziraat Bank", value: "Ziraat Bank" },
     { label: "Silk Road Bank", value: "Silk Road Bank" },
   ];
-  // Add these methods to your component class
-  setGeorgianCitizenship() {
-    this.personalDetails.get('citizenship')?.setValue('georgian');
-  }
 
-  setOtherCitizenship() {
-    // When switching to Other, clear the value so dropdown appears
-    this.personalDetails.get('citizenship')?.setValue('');
-  }
   languages = [
     { label: "Georgian", value: "Georgian" },
     { label: "English", value: "English" },
