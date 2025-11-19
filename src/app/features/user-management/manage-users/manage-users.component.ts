@@ -758,7 +758,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   }
 
   // DOCS OFFCANVAS
-  // Replace the current openDocs method with this updated version
   openDocs(user: any) {
     this.currentUserId = user._id;
 

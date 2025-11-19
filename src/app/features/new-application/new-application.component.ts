@@ -39,7 +39,7 @@ import {
   tablePageSize,
 } from "../../shared/custom-pagination/pagination.service";
 import { DataService } from "../../shared/data/data.service";
-import { DomSanitizer } from "@angular/platform-browser";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { DateRangePickerComponent } from "../common/date-range-picker/date-range-picker.component";
 
 import {
@@ -69,6 +69,15 @@ interface PhoneInputValue {
   e164Number: string;
   countryCode: string;
   dialCode: string;
+}
+
+interface DocumentItem {
+  id: number;
+  name: string;
+  uploadDate: string;
+  status: "pending" | "approved" | "rejected";
+  previewUrl: string;
+  fileType: "pdf" | "image";
 }
 
 @Component({
@@ -122,6 +131,9 @@ export class NewApplicationComponent implements OnInit {
   appSubmittedCanvas!: ElementRef<HTMLElement>;
   applicationDetails!: any;
 
+  @ViewChild("docsCanvas") docsCanvas!: ElementRef;
+  docsBackdrop: any;
+
   startDate: string = "";
   endDate: string = "";
   public routes = routes;
@@ -147,6 +159,13 @@ export class NewApplicationComponent implements OnInit {
   public actualData: any[] = [];
 
   initChecked = false;
+  currentUserId: string = "";
+  UserAppId:string=""
+  
+  currentUserDocs: any[] = [];
+  limit: number = 10;
+  openedIndex: number | string | null = null;
+
 
   private EXCEL_TYPE =
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -1002,4 +1021,560 @@ export class NewApplicationComponent implements OnInit {
     this.tableData = data;
     this.dataSource.data = this.tableData;
   }
+docData: any[] = [];
+   // DOCS OFFCANVAS
+  openDocs(user: any) {
+    this.currentUserId = user._id;
+
+    // Call the API to get user details
+    this.backend.getApplicationById(user._id).subscribe({
+      next: (apiRes: any) => {
+        const userData = apiRes.data;
+
+        // Update documents from API response
+        this.currentUserDocs = Object.entries(userData.documents).map(
+          ([key, value]: any, index) => ({
+            id: index + 1,
+            name: key.toUpperCase(),
+            uploadDate: userData.createdAt,
+            previewUrl: value.url,
+            status: value.status,
+            fileType: value.url ? "image" : "unknown",
+            key: key,
+          })
+        );
+
+        // Map API response to docData structure
+        this.docData = this.mapApiResponseToDocData(userData);
+      },
+      error: (err) => {
+        this.toastr.error('Failed to load user details');
+        console.error('Error loading user details:', err);
+      }
+    });
+
+    // Rest of your existing modal opening code remains the same
+    const panel = this.docsCanvas.nativeElement;
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.docsBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.docsBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.docsBackdrop, "fade");
+    this.renderer.addClass(this.docsBackdrop, "show");
+
+    if (this.docsBackdrop) {
+      this.docsBackdrop.addEventListener("click", () => this.closeDocs());
+    }
+
+    this.renderer.appendChild(document.body, this.docsBackdrop);
+  }
+
+  // Add this new method to map API response to your docData structure
+  private mapApiResponseToDocData(userData: any): any[] {
+    return [
+      {
+        section: "Personal Information",
+        fields: [
+          { label: "Given Name (English)", value: userData.userNameEnglish || 'N/A' },
+          { label: "Surname (Georgian)", value: userData.surnameGeorgian || 'N/A' },
+          { label: "Citizenship", value: userData.location || 'N/A' },
+          { label: "Document Type", value: this.formatDocumentType(userData.documentType) || 'N/A' },
+          { label: "Document Number", value: userData.documentNumber?.toString() || 'N/A' },
+          { label: "Date of Birth", value: this.formatDateDisplay(userData.dateOfBirth) || 'N/A' },
+          { label: "Gender", value: this.formatGender(userData.gender) || 'N/A' },
+          { label: "Marital Status", value: 'N/A' }, // This field doesn't exist in API
+          { label: "Contact Number", value: userData.phone || 'N/A' },
+          { label: "Email Address", value: userData.email || 'N/A' },
+          { label: "Legal Home Address", value: userData.legalAdress || 'N/A' },
+        ],
+      },
+      {
+        section: "Education",
+        fields: this.mapEducationData(userData.education),
+      },
+      {
+        section: "Work Experience",
+        fields: this.mapWorkExperienceData(userData.workExperience),
+      },
+      {
+        section: "Bank Information",
+        fields: [
+          { label: "Account Holder Name", value: userData.accountHolderName || 'N/A' },
+          { label: "Account Number", value: userData.accountNumber || 'N/A' },
+          { label: "Bank Name", value: userData.bankName || 'N/A' },
+        ],
+      },
+      {
+        section: "Emergency Contact",
+        fields: [
+          { label: "Full Name", value: userData.emergencyFullName || 'N/A' },
+          { label: "Relationship", value: userData.emergencyRelationship || 'N/A' },
+          { label: "Contact Number", value: userData.emergencyContactNumber || 'N/A' },
+          { label: "Address", value: userData.emergencyAddress || 'N/A' },
+        ],
+      },
+      {
+        section: "Skills & Languages",
+        fields: [
+          { label: "Skill Rating", value: userData.skillRating || 'N/A' },
+          { label: "Computer Skills", value: this.formatArrayData(userData.computerSkills) || 'N/A' },
+          { label: "Administrative Skills", value: this.formatArrayData(userData.administrativeSkills) || 'N/A' },
+          { label: "Languages", value: this.formatLanguages(userData.languages) || 'N/A' },
+          { label: "Allowed to Work", value: userData.allowedToWork ? 'Yes' : 'No' },
+        ],
+      }
+    ];
+  }
+
+  // Helper methods for data formatting
+  private formatDocumentType(docType: string): string {
+    const types: { [key: string]: string } = {
+      'residencePermit': 'Residence Permit',
+      'passport': 'Passport',
+      'idCard': 'ID Card'
+    };
+    return types[docType] || docType;
+  }
+
+  private formatGender(gender: string): string {
+    return gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : 'N/A';
+  }
+
+  private formatDateDisplay(dateString: string): string {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString();
+  }
+
+  private mapEducationData(education: any[]): any[] {
+    if (!education || education.length === 0) {
+      return [{ label: "No education data available", value: "" }];
+    }
+
+    const fields: any = [];
+    education.forEach((edu, index) => {
+      if (index > 0) fields.push({ label: "", value: "---" }); // Separator for multiple entries
+
+      fields.push(
+        { label: "From (MM/YYYY)", value: edu.from || 'N/A' },
+        { label: "To (MM/YYYY)", value: edu.to || 'N/A' },
+        { label: "Institution", value: edu.institution || 'N/A' },
+        { label: "Qualification", value: edu.qualification || 'N/A' },
+        { label: "Notes", value: edu.notes || 'N/A' },
+        { label: "Currently Studying", value: edu.currentlyStudying ? 'Yes' : 'No' }
+      );
+    });
+
+    return fields;
+  }
+
+  private mapWorkExperienceData(workExperience: any[]): any[] {
+    if (!workExperience || workExperience.length === 0) {
+      return [{ label: "No work experience data available", value: "" }];
+    }
+
+    const fields: any = [];
+    workExperience.forEach((work, index) => {
+      if (index > 0) fields.push({ label: "", value: "---" }); // Separator for multiple entries
+
+      fields.push(
+        { label: "Company Name", value: work.companyName || 'N/A' },
+        { label: "City, Country", value: work.cityCountry || 'N/A' },
+        { label: "Job Title / Position", value: work.jobTitle || 'N/A' },
+        { label: "Employment Period", value: `${work.from || 'N/A'} → ${work.to || 'N/A'}` },
+        { label: "Gross Salary", value: work.grossSalary ? `$${work.grossSalary} / month` : 'N/A' },
+        { label: "Reason for Leaving", value: work.reasonForLeaving || 'N/A' },
+        { label: "Still Working Here", value: work.stillWorking ? 'Yes' : 'No' },
+        { label: "Additional Notes", value: work.notes || 'N/A' }
+      );
+    });
+
+    return fields;
+  }
+
+  private formatArrayData(arrayData: any[]): string {
+    if (!arrayData || arrayData.length === 0) return 'N/A';
+
+    return arrayData
+      .map(item => {
+        if (typeof item === 'string') {
+          try {
+            const parsed = JSON.parse(item);
+            return Array.isArray(parsed) ? parsed.join(', ') : parsed;
+          } catch {
+            return item;
+          }
+        }
+        return item;
+      })
+      .filter(item => item && item !== '[]' && item !== '[]')
+      .join(', ');
+  }
+
+  private formatLanguages(languages: any[]): string {
+    if (!languages || languages.length === 0) return 'N/A';
+
+    return languages
+      .map(lang => `${lang.language} (${lang.level})`)
+      .join(', ');
+  }
+
+  closeDocs() {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
+    const panel = this.docsCanvas.nativeElement;
+
+    this.renderer.removeClass(panel, "show");
+
+    const onTransition = (e: TransitionEvent) => {
+      if (e.target === panel && e.propertyName.includes("transform")) {
+        // hide offcanvas
+        this.renderer.setStyle(panel, "visibility", "hidden");
+        this.renderer.removeAttribute(panel, "aria-modal");
+        this.renderer.setAttribute(panel, "aria-hidden", "true");
+
+        this.renderer.removeStyle(document.body, "overflow");
+
+        if (this.docsBackdrop) {
+          this.renderer.removeChild(document.body, this.docsBackdrop);
+          this.docsBackdrop = undefined;
+        }
+
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+
+        this.renderer.removeStyle(panel, "transform");
+
+        panel.removeEventListener("transitionend", onTransition);
+      }
+    };
+
+    panel.addEventListener("transitionend", onTransition);
+
+    if (this.docsBackdrop) {
+      this.renderer.removeChild(document.body, this.docsBackdrop);
+      this.docsBackdrop = undefined;
+    }
+
+    this.renderer.removeStyle(document.body, "overflow");
+  }
+
+  selectedDoc: DocumentItem | null = null;
+  showPreview: boolean = false;
+
+  closePreview() {
+    this.showPreview = false;
+    this.selectedDoc = null;
+  }
+  approve(doc: any) {
+    const payload = {
+      userId: this.currentUserId,
+      documentKey: doc.key,
+      status: "approved",
+    };
+
+    this.backend.updateDocStatus(payload).subscribe({
+      next: (res: any) => {
+        const msg =
+          res?.meta?.message ||
+          res?.message ||
+          res?.data?.message ||
+          "Document approved successfully";
+
+        this.toastr.success(msg, "Success");
+
+        this.currentUserDocs = this.currentUserDocs.map((d) =>
+          d.key === doc.key ? { ...d, status: "approved" } : d
+        );
+
+        this.getTableData(this.skip, this.pageSize);
+        this.closePreview();
+      },
+      error: (err) => {
+        const errorMsg =
+          err?.error?.meta?.message ||
+          err?.error?.message ||
+          "Something went wrong";
+        this.toastr.error(errorMsg, "Error");
+      },
+    });
+  }
+
+
+  getSafeUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  getBadgeClass(status: string) {
+    return {
+      pending: "badge bg-warning text-dark",
+      approved: "badge bg-success",
+      rejected: "badge bg-danger",
+    }[status];
+  }
+
+  openPreview(doc: DocumentItem) {
+    this.selectedDoc = doc;
+    this.showPreview = true;
+  }
+
+  onRowClick(doc: DocumentItem) {
+    this.openPreview(doc);
+  }
+
+  pendingCount() {
+    return this.currentUserDocs.filter((d) => d.status === "pending").length;
+  }
+  approvedCount() {
+    return this.currentUserDocs.filter((d) => d.status === "approved").length;
+  }
+  rejectedCount() {
+    return this.currentUserDocs.filter((d) => d.status === "rejected").length;
+  }
+
+
+  toggleSection(index: number | string) {
+    this.openedIndex = this.openedIndex === index ? null : index;
+  }
+
+  isTraineeApproved: boolean = false;
+
+
+  allDocsApproved(): boolean {
+    if (!this.currentUserDocs || this.currentUserDocs.length === 0) return false;
+    return this.currentUserDocs.every(doc => doc.status === 'approved');
+  }
+
+  approveTrainee() {
+    const payload = {
+      id: this.currentUserId,
+      role: "TRAINEE",
+    };
+
+    this.backend.updateUser(payload).subscribe({
+      next: (res: any) => {
+        if (res?.status === "success" || res?.success === true) {
+
+          this.isTraineeApproved = true;
+
+          this.toastr.success(res.message || "Status updated");
+          this.getTableData(this.skip, this.pageSize);
+        } else {
+          this.toastr.error(res?.message || "Failed to Update status");
+        }
+      },
+      error: () => {
+        this.toastr.error("Failed to toggle status");
+      },
+    });
+  }
+
+  // Documents status
+  getDocumentsStatus(user: any): 'uploaded' | 'pending' {
+    if (!user?.documents) return 'pending';
+
+    const docs = Object.values(user.documents);
+
+    const allUploaded = docs.every((d: any) => d.url && d.url.trim() !== '');
+    return allUploaded ? 'uploaded' : 'pending';
+  }
+
+  // Reject reason modal 
+  showRejectModal = false;
+  selectedReason: string = "";
+  customReason: string = "";
+  currentRejectDoc: any = null;
+
+
+  selectReason(event: any) {
+    this.selectedReason = event.target.value;
+  }
+
+  reject(doc: any) {
+    this.currentRejectDoc = doc;
+    this.selectedReason = "";
+    this.customReason = "";
+    this.showRejectModal = true;
+  }
+
+  submitRejectReason() {
+    let finalReason = this.selectedReason;
+
+    if (!finalReason) {
+      this.toastr.error("Please select a reason.");
+      return;
+    }
+
+    if (finalReason === "other") {
+      if (!this.customReason.trim()) {
+        this.toastr.error("Please type a comment.");
+        return;
+      }
+      finalReason = this.customReason;
+    }
+
+    const payload = {
+      userId: this.currentUserId,
+      documentKey: this.currentRejectDoc.key,
+      status: "rejected",
+      reason: finalReason
+    };
+
+    this.backend.updateDocStatus(payload).subscribe({
+      next: (res: any) => {
+        if (res?.status === "success" || res?.success === true) {
+
+          this.currentRejectDoc.status = 'rejected';
+
+          this.toastr.success("Document rejected successfully");
+          this.showRejectModal = false;
+          this.getTableData(this.skip, this.pageSize);
+        } else {
+          this.toastr.error(res?.message || "Document not added!");
+          this.showRejectModal = false;
+        }
+      },
+      error: (err) => {
+        this.showRejectModal = false;
+        this.toastr.error(err?.error?.message || "Document not added!");
+      }
+    });
+  }
+
+  closeRejectModal() {
+    this.showRejectModal = false;
+    this.selectedReason = '';
+    this.customReason = '';
+  }
+
+
+  // docData = [
+  //   {
+  //     section: 'Personal Information',
+  //     fields: [
+  //       { label: 'Given Name (English)', value: 'Areesh' },
+  //       { label: 'Surname (Georgian)', value: 'ქართული' },
+  //       { label: 'Citizenship', value: 'Georgia' },
+  //       { label: 'Document Type ', value: 'Georgian ID Card' },
+  //       { label: 'Document Number', value: '1997865' },
+  //       { label: 'Date of Birth', value: '1998-06-15' },
+  //       { label: 'Gender', value: 'Male' },
+  //       { label: 'Marital Status ', value: 'Single' },
+  //       { label: 'Contact Number', value: '+99556830' },
+  //       { label: 'Email Address', value: 'areesh@gmail.com' },
+  //       { label: 'Legal Home Address', value: '12 Rustaveli Avenue,Apartment 34,Tbilisi 0108,Georgia' },
+  //     ]
+  //   },
+
+  //   {
+  //     section: 'Education',
+  //     entries: [
+  //       {
+  //         title: 'Education 1',
+  //         fields: [
+  //           { label: 'From (MM/YYYY)', value: '09/2018' },
+  //           { label: 'To (MM/YYYY)', value: '06/2022' },
+  //           { label: 'Institution', value: 'Tbilisi State University' },
+  //           { label: 'Qualification', value: 'Bachelors in CS' },
+  //           { label: 'Notes', value: 'Graduated with strong academic performance' },
+  //           { label: 'Currently Studying', value: 'No' },
+  //         ]
+  //       },
+  //       {
+  //         title: 'Education 2',
+  //         fields: [
+  //           { label: 'From (MM/YYYY)', value: '09/2023' },
+  //           { label: 'To (MM/YYYY)', value: 'Present' },
+  //           { label: 'Institution', value: 'Ilia State University' },
+  //           { label: 'Qualification', value: 'Masters in AI' },
+  //           { label: 'Notes', value: 'Research on Machine Learning' },
+  //           { label: 'Currently Studying', value: 'Yes' },
+  //         ]
+  //       }
+  //     ]
+  //   },
+
+  //   {
+  //     section: 'Work Experience',
+  //     entries: [
+  //       {
+  //         title: 'Work Experience 1',
+  //         fields: [
+  //           { label: 'Company Name', value: 'TechSolutions LLC' },
+  //           { label: 'City, Country', value: 'Tbilisi, Georgia' },
+  //           { label: 'Job Title / Position', value: 'Frontend Developer' },
+  //           { label: 'Employment Period', value: '08/2020 → 12/2023' },
+  //           { label: 'Gross Salary', value: '$1200/month' },
+  //           { label: 'Reason for Leaving', value: 'Career growth opportunity' },
+  //           { label: 'Still Working Here', value: 'No' },
+  //           { label: 'Additional Notes', value: 'Angular-based enterprise apps' },
+  //         ]
+  //       },
+  //       {
+  //         title: 'Work Experience 2',
+  //         fields: [
+  //           { label: 'Company Name', value: 'GlobalTech' },
+  //           { label: 'City, Country', value: 'Batumi, Georgia' },
+  //           { label: 'Job Title / Position', value: 'Senior Frontend Engineer' },
+  //           { label: 'Employment Period', value: '01/2024 → Present' },
+  //           { label: 'Gross Salary', value: '$1800/month' },
+  //           { label: 'Reason for Leaving', value: '-' },
+  //           { label: 'Still Working Here', value: 'Yes' },
+  //           { label: 'Additional Notes', value: 'Leading Angular migration project' },
+  //         ]
+  //       }
+  //     ]
+  //   },
+
+  //   {
+  //     section: "Skills",
+  //     entries: [
+  //       {
+  //         title: 'Computer Skills',
+  //         fields: [
+  //           { label: 'Microsoft Word', value: "Advance" },
+  //           { label: 'Microsoft Excel', value: "Intermediate" },
+  //         ]
+  //       },
+  //       {
+  //         title: 'Administrative Skills',
+  //         fields: [
+  //           { label: 'Record Keeping', value: 'Advance' },
+  //           { label: 'Office Management', value: 'Expert' },
+
+  //         ]
+  //       }
+  //     ]
+  //   },
+
+  //   {
+  //     section: "Bank Details",
+  //     fields: [
+  //       { label: 'Bank Name', value: 'TCB Bank' },
+  //       { label: 'Account Number (IBAN)', value: 'GE08BG0000000586711374' },
+  //       { label: 'Account Holder Name', value: 'Areesh' },
+  //     ]
+  //   },
+
+  //   {
+  //     section: "Emergency Contact",
+  //     fields: [
+  //       { label: 'Full Name', value: 'John Doe' },
+  //       { label: 'Relationship', value: 'Brother' },
+  //       { label: 'Address', value: 'Tbilisi, Georgia' },
+  //       { label: 'Contact Number', value: '+995 555 123456' },
+  //       { label: 'Notes (optional)', value: 'N/A' }
+  //     ]
+  //   },
+  // ];
+
+
 }

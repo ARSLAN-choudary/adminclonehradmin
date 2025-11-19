@@ -230,4 +230,9 @@ export class BackendService {
    return this.http.post(`${CONFIG.userDetail}/${userId}`, {}); 
   }
 
+  getApplicationById(id: string) {
+  return this.http.get(`${CONFIG.applicationDetail}/${id}`);
+}
+
+
 }
