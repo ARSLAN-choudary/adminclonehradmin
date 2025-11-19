@@ -1276,7 +1276,7 @@ docData: any[] = [];
   }
   approve(doc: any) {
     const payload = {
-      userId: this.currentUserId,
+      applicationId: this.currentUserId,
       documentKey: doc.key,
       status: "approved",
     };
@@ -1422,10 +1422,10 @@ docData: any[] = [];
     }
 
     const payload = {
-      userId: this.currentUserId,
+      applicationId: this.currentUserId,
       documentKey: this.currentRejectDoc.key,
       status: "rejected",
-      reason: finalReason
+      remarks: finalReason
     };
 
     this.backend.updateDocStatus(payload).subscribe({
