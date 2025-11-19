@@ -21,7 +21,12 @@ import { FirebaseStoreService } from "../../Services/firebase-store.service";
 import { AuthService } from "../../Services/auth.service";
 import { ToggleService } from "../../Services/toggle.service";
 
-type DocType = "passport" | "residenceCard" | "healthCard" | "healthCertificate" | "additional";
+type DocType =
+  | "passport"
+  | "residenceCard"
+  | "healthCard"
+  | "healthCertificate"
+  | "additional";
 
 @Component({
   selector: "app-upload-documents",
@@ -277,7 +282,10 @@ export class UploadDocumentsComponent implements OnInit {
     { label: "Rwanda", value: "Rwanda" },
     { label: "Saint Kitts and Nevis", value: "Saint Kitts and Nevis" },
     { label: "Saint Lucia", value: "Saint Lucia" },
-    { label: "Saint Vincent and the Grenadines", value: "Saint Vincent and the Grenadines" },
+    {
+      label: "Saint Vincent and the Grenadines",
+      value: "Saint Vincent and the Grenadines",
+    },
     { label: "Samoa", value: "Samoa" },
     { label: "San Marino", value: "San Marino" },
     { label: "Sao Tome and Principe", value: "Sao Tome and Principe" },
@@ -325,12 +333,11 @@ export class UploadDocumentsComponent implements OnInit {
     { label: "Vietnam", value: "Vietnam" },
     { label: "Yemen", value: "Yemen" },
     { label: "Zambia", value: "Zambia" },
-    { label: "Zimbabwe", value: "Zimbabwe" }
+    { label: "Zimbabwe", value: "Zimbabwe" },
   ];
 
-
   get showCountryDropdown(): boolean {
-    return this.personalDetails.get('citizenship')?.value === 'other';
+    return this.personalDetails.get("citizenship")?.value === "other";
   }
   banks = [
     { label: "TBC Bank", value: "TBC Bank" },
@@ -350,12 +357,12 @@ export class UploadDocumentsComponent implements OnInit {
   ];
   // Add these methods to your component class
   setGeorgianCitizenship() {
-    this.personalDetails.get('citizenship')?.setValue('georgian');
+    this.personalDetails.get("citizenship")?.setValue("georgian");
   }
 
   setOtherCitizenship() {
     // When switching to Other, clear the value so dropdown appears
-    this.personalDetails.get('citizenship')?.setValue('');
+    this.personalDetails.get("citizenship")?.setValue("");
   }
   languages = [
     { label: "Georgian", value: "Georgian" },
@@ -424,7 +431,10 @@ export class UploadDocumentsComponent implements OnInit {
         dateOfBirth: ["", [Validators.required]],
         gender: ["male", [Validators.required]],
         maritalStatus: ["single", [Validators.required]],
-        contactNumber: ["", [Validators.required, Validators.pattern(/^\+995\s?\d{9}$/)]],
+        contactNumber: [
+          "",
+          [Validators.required, Validators.pattern(/^\+995\s?\d{9}$/)],
+        ],
         emailAddress: ["", [Validators.required, Validators.email]],
         legalHomeAddress: this.fb.group({
           streetBuildingApartment: ["", [Validators.required]],
@@ -453,7 +463,15 @@ export class UploadDocumentsComponent implements OnInit {
       // SECTION 6: BANK DETAILS
       bankDetails: this.fb.group({
         bank: ["TBC Bank", [Validators.required]],
-        accountNumber: ["", [Validators.required, Validators.pattern(/^GE\d{2}\s?[A-Z]{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/)]],
+        accountNumber: [
+          "",
+          [
+            Validators.required,
+            Validators.pattern(
+              /^GE\d{2}\s?[A-Z]{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/
+            ),
+          ],
+        ],
         accountHolderName: ["", [Validators.required]],
         useSameName: [false],
       }),
@@ -463,7 +481,10 @@ export class UploadDocumentsComponent implements OnInit {
         fullName: ["", [Validators.required]],
         relationship: ["", [Validators.required]],
         address: ["", [Validators.required]],
-        contactNumber: ["", [Validators.required, Validators.pattern(/^\+995\s?\d{9}$/)]],
+        contactNumber: [
+          "",
+          [Validators.required, Validators.pattern(/^\+995\s?\d{9}$/)],
+        ],
         notes: [""],
       }),
 
@@ -506,7 +527,6 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
- 
     this.route.queryParams.subscribe((params) => {
       this.fromApp = params["from"] === "app";
 
@@ -548,8 +568,8 @@ export class UploadDocumentsComponent implements OnInit {
   // Custom validators
   private dateRangeValidator(): ValidatorFn {
     return (group: AbstractControl) => {
-      const from = group.get('from')?.value;
-      const to = group.get('to')?.value;
+      const from = group.get("from")?.value;
+      const to = group.get("to")?.value;
 
       if (from && to && new Date(from) > new Date(to)) {
         return { dateRangeInvalid: true };
@@ -560,8 +580,8 @@ export class UploadDocumentsComponent implements OnInit {
 
   private employmentPeriodValidator(): ValidatorFn {
     return (group: AbstractControl) => {
-      const from = group.get('employmentPeriodFrom')?.value;
-      const to = group.get('employmentPeriodTo')?.value;
+      const from = group.get("employmentPeriodFrom")?.value;
+      const to = group.get("employmentPeriodTo")?.value;
 
       if (from && to && new Date(from) > new Date(to)) {
         return { employmentPeriodInvalid: true };
@@ -782,14 +802,17 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   addEducation() {
-    const educationGroup = this.fb.group({
-      from: ["", [Validators.required]],
-      to: ["", [Validators.required]],
-      institution: ["", [Validators.required]],
-      qualification: ["", [Validators.required]],
-      notes: [""],
-      currentlyStudying: [false],
-    }, { validators: this.dateRangeValidator() });
+    const educationGroup = this.fb.group(
+      {
+        from: ["", [Validators.required]],
+        to: ["", [Validators.required]],
+        institution: ["", [Validators.required]],
+        qualification: ["", [Validators.required]],
+        notes: [""],
+        currentlyStudying: [false],
+      },
+      { validators: this.dateRangeValidator() }
+    );
     this.educationForms.push(educationGroup);
   }
 
@@ -803,17 +826,20 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   addWorkExperience() {
-    const workGroup = this.fb.group({
-      companyName: ["", [Validators.required]],
-      cityCountry: ["", [Validators.required]],
-      jobTitle: ["", [Validators.required]],
-      employmentPeriodFrom: ["", [Validators.required]],
-      employmentPeriodTo: ["", [Validators.required]],
-      grossSalary: [""],
-      reasonForLeaving: [""],
-      stillWorking: [false],
-      additionalNotes: [""],
-    }, { validators: this.employmentPeriodValidator() });
+    const workGroup = this.fb.group(
+      {
+        companyName: ["", [Validators.required]],
+        cityCountry: ["", [Validators.required]],
+        jobTitle: ["", [Validators.required]],
+        employmentPeriodFrom: ["", [Validators.required]],
+        employmentPeriodTo: ["", [Validators.required]],
+        grossSalary: [""],
+        reasonForLeaving: [""],
+        stillWorking: [false],
+        additionalNotes: [""],
+      },
+      { validators: this.employmentPeriodValidator() }
+    );
     this.workExperienceForms.push(workGroup);
   }
 
@@ -897,9 +923,7 @@ export class UploadDocumentsComponent implements OnInit {
   // Use same name for bank account
   onUseSameNameChange(event: any) {
     if (event.target.checked) {
-      const personalName = this.personalDetails.get(
-        "userNameEnglish"
-      )?.value;
+      const personalName = this.personalDetails.get("userNameEnglish")?.value;
       this.bankDetails.get("accountHolderName")?.setValue(personalName);
     }
   }
@@ -943,7 +967,6 @@ export class UploadDocumentsComponent implements OnInit {
   // Convert form data to match backend schema
   private transformFormData(formValue: any): any {
     const personal = formValue.personalDetails;
-
 
     // Remove unwanted fields from the transformed data
     const transformedData: any = {
@@ -1008,7 +1031,8 @@ export class UploadDocumentsComponent implements OnInit {
       emergencyFullName: formValue.emergencyContact.fullName,
       emergencyRelationship: formValue.emergencyContact.relationship,
       emergencyAddress: formValue.emergencyContact.address,
-      emergencyContactNumber: formValue.emergencyContact.contactNumber.toString(),
+      emergencyContactNumber:
+        formValue.emergencyContact.contactNumber.toString(),
       emergencyNotes: formValue.emergencyContact.notes,
 
       // Right to Work
@@ -1040,7 +1064,6 @@ export class UploadDocumentsComponent implements OnInit {
           status: formValue.healthCertificate.uploaded ? "pending" : "pending",
         },
       },
-
     };
 
     // Add additional documents
@@ -1101,13 +1124,13 @@ export class UploadDocumentsComponent implements OnInit {
 
     // Main documents
     const docMappings = [
-      { key: 'doc1', formKey: 'documents', name: 'passport.jpg' },
-      { key: 'doc2', formKey: 'documents', name: 'residenceCard.jpg' },
-      { key: 'doc3', formKey: 'documents', name: 'healthCard.jpg' },
-      { key: 'doc4', formKey: 'documents', name: 'healthCertificate.jpg' }
+      { key: "doc1", formKey: "documents", name: "passport.jpg" },
+      { key: "doc2", formKey: "documents", name: "residenceCard.jpg" },
+      { key: "doc3", formKey: "documents", name: "healthCard.jpg" },
+      { key: "doc4", formKey: "documents", name: "healthCertificate.jpg" },
     ];
 
-    docMappings.forEach(mapping => {
+    docMappings.forEach((mapping) => {
       if (documents[mapping.key]?.url) {
         const blob = this.dataURLtoBlob(documents[mapping.key].url);
         if (blob.size > 0) {
@@ -1118,12 +1141,12 @@ export class UploadDocumentsComponent implements OnInit {
     });
 
     // Additional documents
-    Object.keys(documents).forEach(key => {
-      if (key.startsWith('doc') && parseInt(key.replace('doc', '')) >= 5) {
+    Object.keys(documents).forEach((key) => {
+      if (key.startsWith("doc") && parseInt(key.replace("doc", "")) >= 5) {
         if (documents[key]?.url) {
           const blob = this.dataURLtoBlob(documents[key].url);
           if (blob.size > 0) {
-            formData.append('documents', blob, `additionalDocument_${key}.jpg`);
+            formData.append("documents", blob, `additionalDocument_${key}.jpg`);
             console.log(`Additional document ${key} added to FormData`);
           }
         }
@@ -1138,10 +1161,10 @@ export class UploadDocumentsComponent implements OnInit {
       } else {
         console.log(
           pair[0] +
-          ": " +
-          (pair[1].toString().length > 100
-            ? pair[1].toString().substring(0, 100) + "..."
-            : pair[1])
+            ": " +
+            (pair[1].toString().length > 100
+              ? pair[1].toString().substring(0, 100) + "..."
+              : pair[1])
         );
       }
     }
@@ -1174,17 +1197,19 @@ export class UploadDocumentsComponent implements OnInit {
       // Call backend service
       this.backend.uploadDocuments(formData).subscribe({
         next: (res) => {
-          console.log("Document upload response:", res);
-          alert("Form submitted successfully!"); 
-          const queryParams: any = { email: this.email };
-          if (this.fromApp) queryParams.from = "app";
-          if (this.deviceId) queryParams.deviceId = this.deviceId;
-          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-          if (this.userId) queryParams.userId = this.userId;
-          this.router.navigate(["/waiting-for-application-submission"], {
-            queryParams,
-          });
-           },
+          // console.log("Document upload response:", res);
+          if (res) {
+            alert("Form submitted successfully!");
+            const queryParams: any = { email: this.email };
+            if (this.fromApp) queryParams.from = "app";
+            if (this.deviceId) queryParams.deviceId = this.deviceId;
+            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+            if (this.userId) queryParams.userId = this.userId;
+            this.router.navigate(["/waiting-for-application-submission"], {
+              queryParams,
+            });
+          }
+        },
         error: (err) => {
           console.error("Error submitting form:", err);
           alert("Error submitting form. Please try again.");
@@ -1232,7 +1257,9 @@ export class UploadDocumentsComponent implements OnInit {
   selectAdditionalDocType(index: number) {
     this.activeDocType = "additional";
     this.activeAdditionalDocIndex = index;
-    const docName = this.additionalDocumentsForms.at(index).get('documentName')?.value || `Document ${index + 1}`;
+    const docName =
+      this.additionalDocumentsForms.at(index).get("documentName")?.value ||
+      `Document ${index + 1}`;
     this.hint = `Align your ${docName} inside the frame and tap Capture.`;
     this.qualityStatus = "unknown";
     this.showCamera = true;
@@ -1264,11 +1291,18 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   getCameraTitle(): string {
-    if (this.activeDocType === "additional" && this.activeAdditionalDocIndex !== null) {
-      const docName = this.additionalDocumentsForms.at(this.activeAdditionalDocIndex).get('documentName')?.value;
-      return docName || `Additional Document ${this.activeAdditionalDocIndex + 1}`;
+    if (
+      this.activeDocType === "additional" &&
+      this.activeAdditionalDocIndex !== null
+    ) {
+      const docName = this.additionalDocumentsForms
+        .at(this.activeAdditionalDocIndex)
+        .get("documentName")?.value;
+      return (
+        docName || `Additional Document ${this.activeAdditionalDocIndex + 1}`
+      );
     }
-    return this.activeDocType ? this.labelFor(this.activeDocType) : 'Document';
+    return this.activeDocType ? this.labelFor(this.activeDocType) : "Document";
   }
 
   // ========== Capture via ngx-webcam ==========
@@ -1295,8 +1329,13 @@ export class UploadDocumentsComponent implements OnInit {
     }
 
     // 2) Save to form (good quality)
-    if (this.activeDocType === "additional" && this.activeAdditionalDocIndex !== null) {
-      const docGroup = this.additionalDocumentsForms.at(this.activeAdditionalDocIndex) as FormGroup;
+    if (
+      this.activeDocType === "additional" &&
+      this.activeAdditionalDocIndex !== null
+    ) {
+      const docGroup = this.additionalDocumentsForms.at(
+        this.activeAdditionalDocIndex
+      ) as FormGroup;
       docGroup.patchValue({
         dataUrl,
         uploaded: true,
