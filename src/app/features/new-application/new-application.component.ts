@@ -289,12 +289,14 @@ export class NewApplicationComponent implements OnInit {
 
     this.getTableData(this.skip, this.pageSize);
 
+   
+
     this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-      if (this.router.url === this.routes.dataTable) {
-        this.pageSize = res.pageSize;
-        this.skip = res.skip;
-        this.getTableData(res.skip, res.pageSize);
-      }
+      // if (this.router.url === this.routes.dataTable) {
+      this.pageSize = res.pageSize;
+      this.skip = res.skip;
+      this.getTableData(res.skip, res.pageSize);
+      // }
     });
   }
 

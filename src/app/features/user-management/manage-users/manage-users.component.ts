@@ -106,7 +106,8 @@ interface PhoneInputValue {
     MatInputModule,
     NgxIntlTelInputModule,
     Select,
-    SelectFilterIdDirective, NgClass
+    SelectFilterIdDirective,
+    NgClass,
   ],
   templateUrl: "./manage-users.component.html",
   styleUrl: "./manage-users.component.scss",
@@ -124,7 +125,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   currentUserDocs: any[] = [];
   limit: number = 10;
   openedIndex: number | string | null = null;
-
 
   inActiveUsers: WritableSignal<number> = signal(0);
   activeUsers: WritableSignal<number> = signal(0);
@@ -236,11 +236,11 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     //
     // When pagination emits new page info
     this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-      if (this.router.url === this.routes.dataTable) {
-        this.pageSize = res.pageSize;
-        this.skip = res.skip;
-        this.getTableData(res.skip, res.pageSize);
-      }
+      // if (this.router.url === this.routes.dataTable) {
+      this.pageSize = res.pageSize;
+      this.skip = res.skip;
+      this.getTableData(res.skip, res.pageSize);
+      // }
     });
   }
 
@@ -758,69 +758,72 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   }
 
   // DOCS OFFCANVAS
-openDocs(user: any) {
-  this.currentUserId = user._id;
+  openDocs(user: any) {
+    this.currentUserId = user._id;
 
-  this.backend.getApplicationById(user._id).subscribe({
-    next: (apiRes: any) => {
-      const userData = apiRes.data;
+    this.backend.getApplicationById(user._id).subscribe({
+      next: (apiRes: any) => {
+        const userData = apiRes.data;
 
-      this.currentUserDocs = Object.entries(userData.documents)
-        .filter(([key, value]: any) => {
-          return key !== 'additional' && value.url && value.url.trim() !== '';
-        })
-        .map(([key, value]: any, index) => ({
-          id: index + 1,
-          name: key.toUpperCase(),
-          uploadDate: userData.createdAt,
-          previewUrl: value.url,
-          status: value.status,
-          fileType: value.url ? "image" : "unknown",
-          key: key,
-        }));
-
-      if (userData.documents.additional && Array.isArray(userData.documents.additional)) {
-        const additionalDocs = userData.documents.additional
-          .filter((doc: any) => doc.url && doc.url.trim() !== '')
-          .map((doc: any, index: number) => ({
-            id: this.currentUserDocs.length + index + 1,
-            name: doc.name || `ADDITIONAL_DOC_${index + 1}`,
-            uploadDate: doc.uploadDate || userData.createdAt,
-            previewUrl: doc.url,
-            status: doc.status || 'pending',
-            fileType: "image",
-            key: `additional_${index}`,
+        this.currentUserDocs = Object.entries(userData.documents)
+          .filter(([key, value]: any) => {
+            return key !== "additional" && value.url && value.url.trim() !== "";
+          })
+          .map(([key, value]: any, index) => ({
+            id: index + 1,
+            name: key.toUpperCase(),
+            uploadDate: userData.createdAt,
+            previewUrl: value.url,
+            status: value.status,
+            fileType: value.url ? "image" : "unknown",
+            key: key,
           }));
 
-        this.currentUserDocs = [...this.currentUserDocs, ...additionalDocs];
-      }
+        if (
+          userData.documents.additional &&
+          Array.isArray(userData.documents.additional)
+        ) {
+          const additionalDocs = userData.documents.additional
+            .filter((doc: any) => doc.url && doc.url.trim() !== "")
+            .map((doc: any, index: number) => ({
+              id: this.currentUserDocs.length + index + 1,
+              name: doc.name || `ADDITIONAL_DOC_${index + 1}`,
+              uploadDate: doc.uploadDate || userData.createdAt,
+              previewUrl: doc.url,
+              status: doc.status || "pending",
+              fileType: "image",
+              key: `additional_${index}`,
+            }));
 
-      this.docData = this.mapApiResponseToDocData(userData);
-    },
-    error: (err) => {
-      this.toastr.error('Failed to load user details');
-      console.error('Error loading user details:', err);
+          this.currentUserDocs = [...this.currentUserDocs, ...additionalDocs];
+        }
+
+        this.docData = this.mapApiResponseToDocData(userData);
+      },
+      error: (err) => {
+        this.toastr.error("Failed to load user details");
+        console.error("Error loading user details:", err);
+      },
+    });
+
+    const panel = this.docsCanvas.nativeElement;
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
+
+    this.docsBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.docsBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.docsBackdrop, "fade");
+    this.renderer.addClass(this.docsBackdrop, "show");
+
+    if (this.docsBackdrop) {
+      this.docsBackdrop.addEventListener("click", () => this.closeDocs());
     }
-  });
 
-  const panel = this.docsCanvas.nativeElement;
-  this.renderer.addClass(panel, "show");
-  this.renderer.setStyle(panel, "visibility", "visible");
-  this.renderer.setAttribute(panel, "aria-modal", "true");
-  this.renderer.removeAttribute(panel, "aria-hidden");
-  this.renderer.setStyle(document.body, "overflow", "hidden");
-
-  this.docsBackdrop = this.renderer.createElement("div");
-  this.renderer.addClass(this.docsBackdrop, "offcanvas-backdrop");
-  this.renderer.addClass(this.docsBackdrop, "fade");
-  this.renderer.addClass(this.docsBackdrop, "show");
-
-  if (this.docsBackdrop) {
-    this.docsBackdrop.addEventListener("click", () => this.closeDocs());
+    this.renderer.appendChild(document.body, this.docsBackdrop);
   }
-
-  this.renderer.appendChild(document.body, this.docsBackdrop);
-}
 
   //  map API response to your docData structure
   private mapApiResponseToDocData(userData: any): any[] {
@@ -828,17 +831,35 @@ openDocs(user: any) {
       {
         section: "Personal Information",
         fields: [
-          { label: "Given Name (English)", value: userData.userNameEnglish || 'N/A' },
-          { label: "Surname (Georgian)", value: userData.surnameGeorgian || 'N/A' },
-          { label: "Citizenship", value: userData.location || 'N/A' },
-          { label: "Document Type", value: this.formatDocumentType(userData.documentType) || 'N/A' },
-          { label: "Document Number", value: userData.documentNumber?.toString() || 'N/A' },
-          { label: "Date of Birth", value: this.formatDateDisplay(userData.dateOfBirth) || 'N/A' },
-          { label: "Gender", value: this.formatGender(userData.gender) || 'N/A' },
-          { label: "Marital Status", value: 'N/A' }, // This field doesn't exist in API
-          { label: "Contact Number", value: userData.phone || 'N/A' },
-          { label: "Email Address", value: userData.email || 'N/A' },
-          { label: "Legal Home Address", value: userData.legalAdress || 'N/A' },
+          {
+            label: "Given Name (English)",
+            value: userData.userNameEnglish || "N/A",
+          },
+          {
+            label: "Surname (Georgian)",
+            value: userData.surnameGeorgian || "N/A",
+          },
+          { label: "Citizenship", value: userData.location || "N/A" },
+          {
+            label: "Document Type",
+            value: this.formatDocumentType(userData.documentType) || "N/A",
+          },
+          {
+            label: "Document Number",
+            value: userData.documentNumber?.toString() || "N/A",
+          },
+          {
+            label: "Date of Birth",
+            value: this.formatDateDisplay(userData.dateOfBirth) || "N/A",
+          },
+          {
+            label: "Gender",
+            value: this.formatGender(userData.gender) || "N/A",
+          },
+          { label: "Marital Status", value: "N/A" }, // This field doesn't exist in API
+          { label: "Contact Number", value: userData.phone || "N/A" },
+          { label: "Email Address", value: userData.email || "N/A" },
+          { label: "Legal Home Address", value: userData.legalAdress || "N/A" },
         ],
       },
       {
@@ -852,49 +873,70 @@ openDocs(user: any) {
       {
         section: "Bank Information",
         fields: [
-          { label: "Account Holder Name", value: userData.accountHolderName || 'N/A' },
-          { label: "Account Number", value: userData.accountNumber || 'N/A' },
-          { label: "Bank Name", value: userData.bankName || 'N/A' },
+          {
+            label: "Account Holder Name",
+            value: userData.accountHolderName || "N/A",
+          },
+          { label: "Account Number", value: userData.accountNumber || "N/A" },
+          { label: "Bank Name", value: userData.bankName || "N/A" },
         ],
       },
       {
         section: "Emergency Contact",
         fields: [
-          { label: "Full Name", value: userData.emergencyFullName || 'N/A' },
-          { label: "Relationship", value: userData.emergencyRelationship || 'N/A' },
-          { label: "Contact Number", value: userData.emergencyContactNumber || 'N/A' },
-          { label: "Address", value: userData.emergencyAddress || 'N/A' },
+          { label: "Full Name", value: userData.emergencyFullName || "N/A" },
+          {
+            label: "Relationship",
+            value: userData.emergencyRelationship || "N/A",
+          },
+          {
+            label: "Contact Number",
+            value: userData.emergencyContactNumber || "N/A",
+          },
+          { label: "Address", value: userData.emergencyAddress || "N/A" },
         ],
       },
       {
         section: "Skills & Languages",
         fields: [
-          { label: "Skill Rating", value: userData.skillRating || 'N/A' },
-          { label: "Computer Skills", value: this.formatArrayData(userData.computerSkills) || 'N/A' },
-          { label: "Administrative Skills", value: this.formatArrayData(userData.administrativeSkills) || 'N/A' },
-          { label: "Languages", value: this.formatLanguages(userData.languages) || 'N/A' },
-          { label: "Allowed to Work", value: userData.allowedToWork ? 'Yes' : 'No' },
+          { label: "Skill Rating", value: userData.skillRating || "N/A" },
+          {
+            label: "Computer Skills",
+            value: this.formatArrayData(userData.computerSkills) || "N/A",
+          },
+          {
+            label: "Administrative Skills",
+            value: this.formatArrayData(userData.administrativeSkills) || "N/A",
+          },
+          {
+            label: "Languages",
+            value: this.formatLanguages(userData.languages) || "N/A",
+          },
+          {
+            label: "Allowed to Work",
+            value: userData.allowedToWork ? "Yes" : "No",
+          },
         ],
-      }
+      },
     ];
   }
 
   // Helper methods for data formatting
   private formatDocumentType(docType: string): string {
     const types: { [key: string]: string } = {
-      'residencePermit': 'Residence Permit',
-      'passport': 'Passport',
-      'idCard': 'ID Card'
+      residencePermit: "Residence Permit",
+      passport: "Passport",
+      idCard: "ID Card",
     };
     return types[docType] || docType;
   }
 
   private formatGender(gender: string): string {
-    return gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : 'N/A';
+    return gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : "N/A";
   }
 
   private formatDateDisplay(dateString: string): string {
-    if (!dateString) return 'N/A';
+    if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString();
   }
 
@@ -908,12 +950,15 @@ openDocs(user: any) {
       if (index > 0) fields.push({ label: "", value: "---" }); // Separator for multiple entries
 
       fields.push(
-        { label: "From (MM/YYYY)", value: edu.from || 'N/A' },
-        { label: "To (MM/YYYY)", value: edu.to || 'N/A' },
-        { label: "Institution", value: edu.institution || 'N/A' },
-        { label: "Qualification", value: edu.qualification || 'N/A' },
-        { label: "Notes", value: edu.notes || 'N/A' },
-        { label: "Currently Studying", value: edu.currentlyStudying ? 'Yes' : 'No' }
+        { label: "From (MM/YYYY)", value: edu.from || "N/A" },
+        { label: "To (MM/YYYY)", value: edu.to || "N/A" },
+        { label: "Institution", value: edu.institution || "N/A" },
+        { label: "Qualification", value: edu.qualification || "N/A" },
+        { label: "Notes", value: edu.notes || "N/A" },
+        {
+          label: "Currently Studying",
+          value: edu.currentlyStudying ? "Yes" : "No",
+        }
       );
     });
 
@@ -930,14 +975,23 @@ openDocs(user: any) {
       if (index > 0) fields.push({ label: "", value: "---" }); // Separator for multiple entries
 
       fields.push(
-        { label: "Company Name", value: work.companyName || 'N/A' },
-        { label: "City, Country", value: work.cityCountry || 'N/A' },
-        { label: "Job Title / Position", value: work.jobTitle || 'N/A' },
-        { label: "Employment Period", value: `${work.from || 'N/A'} → ${work.to || 'N/A'}` },
-        { label: "Gross Salary", value: work.grossSalary ? `$${work.grossSalary} / month` : 'N/A' },
-        { label: "Reason for Leaving", value: work.reasonForLeaving || 'N/A' },
-        { label: "Still Working Here", value: work.stillWorking ? 'Yes' : 'No' },
-        { label: "Additional Notes", value: work.notes || 'N/A' }
+        { label: "Company Name", value: work.companyName || "N/A" },
+        { label: "City, Country", value: work.cityCountry || "N/A" },
+        { label: "Job Title / Position", value: work.jobTitle || "N/A" },
+        {
+          label: "Employment Period",
+          value: `${work.from || "N/A"} → ${work.to || "N/A"}`,
+        },
+        {
+          label: "Gross Salary",
+          value: work.grossSalary ? `$${work.grossSalary} / month` : "N/A",
+        },
+        { label: "Reason for Leaving", value: work.reasonForLeaving || "N/A" },
+        {
+          label: "Still Working Here",
+          value: work.stillWorking ? "Yes" : "No",
+        },
+        { label: "Additional Notes", value: work.notes || "N/A" }
       );
     });
 
@@ -945,30 +999,30 @@ openDocs(user: any) {
   }
 
   private formatArrayData(arrayData: any[]): string {
-    if (!arrayData || arrayData.length === 0) return 'N/A';
+    if (!arrayData || arrayData.length === 0) return "N/A";
 
     return arrayData
-      .map(item => {
-        if (typeof item === 'string') {
+      .map((item) => {
+        if (typeof item === "string") {
           try {
             const parsed = JSON.parse(item);
-            return Array.isArray(parsed) ? parsed.join(', ') : parsed;
+            return Array.isArray(parsed) ? parsed.join(", ") : parsed;
           } catch {
             return item;
           }
         }
         return item;
       })
-      .filter(item => item && item !== '[]' && item !== '[]')
-      .join(', ');
+      .filter((item) => item && item !== "[]" && item !== "[]")
+      .join(", ");
   }
 
   private formatLanguages(languages: any[]): string {
-    if (!languages || languages.length === 0) return 'N/A';
+    if (!languages || languages.length === 0) return "N/A";
 
     return languages
-      .map(lang => `${lang.language} (${lang.level})`)
-      .join(', ');
+      .map((lang) => `${lang.language} (${lang.level})`)
+      .join(", ");
   }
 
   closeDocs() {
@@ -1057,7 +1111,6 @@ openDocs(user: any) {
     });
   }
 
-
   getSafeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
@@ -1089,17 +1142,16 @@ openDocs(user: any) {
     return this.currentUserDocs.filter((d) => d.status === "rejected").length;
   }
 
-
   toggleSection(index: number | string) {
     this.openedIndex = this.openedIndex === index ? null : index;
   }
 
   isTraineeApproved: boolean = false;
 
-
   allDocsApproved(): boolean {
-    if (!this.currentUserDocs || this.currentUserDocs.length === 0) return false;
-    return this.currentUserDocs.every(doc => doc.status === 'approved');
+    if (!this.currentUserDocs || this.currentUserDocs.length === 0)
+      return false;
+    return this.currentUserDocs.every((doc) => doc.status === "approved");
   }
 
   approveTrainee() {
@@ -1111,7 +1163,6 @@ openDocs(user: any) {
     this.backend.updateUser(payload).subscribe({
       next: (res: any) => {
         if (res?.status === "success" || res?.success === true) {
-
           this.isTraineeApproved = true;
 
           this.toastr.success(res.message || "Status updated");
@@ -1127,21 +1178,20 @@ openDocs(user: any) {
   }
 
   // Documents status
-  getDocumentsStatus(user: any): 'uploaded' | 'pending' {
-    if (!user?.documents) return 'pending';
+  getDocumentsStatus(user: any): "uploaded" | "pending" {
+    if (!user?.documents) return "pending";
 
     const docs = Object.values(user.documents);
 
-    const allUploaded = docs.every((d: any) => d.url && d.url.trim() !== '');
-    return allUploaded ? 'uploaded' : 'pending';
+    const allUploaded = docs.every((d: any) => d.url && d.url.trim() !== "");
+    return allUploaded ? "uploaded" : "pending";
   }
 
-  // Reject reason modal 
+  // Reject reason modal
   showRejectModal = false;
   selectedReason: string = "";
   customReason: string = "";
   currentRejectDoc: any = null;
-
 
   selectReason(event: any) {
     this.selectedReason = event.target.value;
@@ -1174,14 +1224,13 @@ openDocs(user: any) {
       userId: this.currentUserId,
       documentKey: this.currentRejectDoc.key,
       status: "rejected",
-      reason: finalReason
+      reason: finalReason,
     };
 
     this.backend.updateDocStatus(payload).subscribe({
       next: (res: any) => {
         if (res?.status === "success" || res?.success === true) {
-
-          this.currentRejectDoc.status = 'rejected';
+          this.currentRejectDoc.status = "rejected";
 
           this.toastr.success("Document rejected successfully");
           this.showRejectModal = false;
@@ -1194,140 +1243,147 @@ openDocs(user: any) {
       error: (err) => {
         this.showRejectModal = false;
         this.toastr.error(err?.error?.message || "Document not added!");
-      }
+      },
     });
   }
 
   closeRejectModal() {
     this.showRejectModal = false;
-    this.selectedReason = '';
-    this.customReason = '';
+    this.selectedReason = "";
+    this.customReason = "";
   }
-
 
   docData = [
     {
-      section: 'Personal Information',
+      section: "Personal Information",
       fields: [
-        { label: 'Given Name (English)', value: 'Areesh' },
-        { label: 'Surname (Georgian)', value: 'ქართული' },
-        { label: 'Citizenship', value: 'Georgia' },
-        { label: 'Document Type ', value: 'Georgian ID Card' },
-        { label: 'Document Number', value: '1997865' },
-        { label: 'Date of Birth', value: '1998-06-15' },
-        { label: 'Gender', value: 'Male' },
-        { label: 'Marital Status ', value: 'Single' },
-        { label: 'Contact Number', value: '+99556830' },
-        { label: 'Email Address', value: 'areesh@gmail.com' },
-        { label: 'Legal Home Address', value: '12 Rustaveli Avenue,Apartment 34,Tbilisi 0108,Georgia' },
-      ]
+        { label: "Given Name (English)", value: "Areesh" },
+        { label: "Surname (Georgian)", value: "ქართული" },
+        { label: "Citizenship", value: "Georgia" },
+        { label: "Document Type ", value: "Georgian ID Card" },
+        { label: "Document Number", value: "1997865" },
+        { label: "Date of Birth", value: "1998-06-15" },
+        { label: "Gender", value: "Male" },
+        { label: "Marital Status ", value: "Single" },
+        { label: "Contact Number", value: "+99556830" },
+        { label: "Email Address", value: "areesh@gmail.com" },
+        {
+          label: "Legal Home Address",
+          value: "12 Rustaveli Avenue,Apartment 34,Tbilisi 0108,Georgia",
+        },
+      ],
     },
 
     {
-      section: 'Education',
+      section: "Education",
       entries: [
         {
-          title: 'Education 1',
+          title: "Education 1",
           fields: [
-            { label: 'From (MM/YYYY)', value: '09/2018' },
-            { label: 'To (MM/YYYY)', value: '06/2022' },
-            { label: 'Institution', value: 'Tbilisi State University' },
-            { label: 'Qualification', value: 'Bachelors in CS' },
-            { label: 'Notes', value: 'Graduated with strong academic performance' },
-            { label: 'Currently Studying', value: 'No' },
-          ]
+            { label: "From (MM/YYYY)", value: "09/2018" },
+            { label: "To (MM/YYYY)", value: "06/2022" },
+            { label: "Institution", value: "Tbilisi State University" },
+            { label: "Qualification", value: "Bachelors in CS" },
+            {
+              label: "Notes",
+              value: "Graduated with strong academic performance",
+            },
+            { label: "Currently Studying", value: "No" },
+          ],
         },
         {
-          title: 'Education 2',
+          title: "Education 2",
           fields: [
-            { label: 'From (MM/YYYY)', value: '09/2023' },
-            { label: 'To (MM/YYYY)', value: 'Present' },
-            { label: 'Institution', value: 'Ilia State University' },
-            { label: 'Qualification', value: 'Masters in AI' },
-            { label: 'Notes', value: 'Research on Machine Learning' },
-            { label: 'Currently Studying', value: 'Yes' },
-          ]
-        }
-      ]
+            { label: "From (MM/YYYY)", value: "09/2023" },
+            { label: "To (MM/YYYY)", value: "Present" },
+            { label: "Institution", value: "Ilia State University" },
+            { label: "Qualification", value: "Masters in AI" },
+            { label: "Notes", value: "Research on Machine Learning" },
+            { label: "Currently Studying", value: "Yes" },
+          ],
+        },
+      ],
     },
 
     {
-      section: 'Work Experience',
+      section: "Work Experience",
       entries: [
         {
-          title: 'Work Experience 1',
+          title: "Work Experience 1",
           fields: [
-            { label: 'Company Name', value: 'TechSolutions LLC' },
-            { label: 'City, Country', value: 'Tbilisi, Georgia' },
-            { label: 'Job Title / Position', value: 'Frontend Developer' },
-            { label: 'Employment Period', value: '08/2020 → 12/2023' },
-            { label: 'Gross Salary', value: '$1200/month' },
-            { label: 'Reason for Leaving', value: 'Career growth opportunity' },
-            { label: 'Still Working Here', value: 'No' },
-            { label: 'Additional Notes', value: 'Angular-based enterprise apps' },
-          ]
+            { label: "Company Name", value: "TechSolutions LLC" },
+            { label: "City, Country", value: "Tbilisi, Georgia" },
+            { label: "Job Title / Position", value: "Frontend Developer" },
+            { label: "Employment Period", value: "08/2020 → 12/2023" },
+            { label: "Gross Salary", value: "$1200/month" },
+            { label: "Reason for Leaving", value: "Career growth opportunity" },
+            { label: "Still Working Here", value: "No" },
+            {
+              label: "Additional Notes",
+              value: "Angular-based enterprise apps",
+            },
+          ],
         },
         {
-          title: 'Work Experience 2',
+          title: "Work Experience 2",
           fields: [
-            { label: 'Company Name', value: 'GlobalTech' },
-            { label: 'City, Country', value: 'Batumi, Georgia' },
-            { label: 'Job Title / Position', value: 'Senior Frontend Engineer' },
-            { label: 'Employment Period', value: '01/2024 → Present' },
-            { label: 'Gross Salary', value: '$1800/month' },
-            { label: 'Reason for Leaving', value: '-' },
-            { label: 'Still Working Here', value: 'Yes' },
-            { label: 'Additional Notes', value: 'Leading Angular migration project' },
-          ]
-        }
-      ]
+            { label: "Company Name", value: "GlobalTech" },
+            { label: "City, Country", value: "Batumi, Georgia" },
+            {
+              label: "Job Title / Position",
+              value: "Senior Frontend Engineer",
+            },
+            { label: "Employment Period", value: "01/2024 → Present" },
+            { label: "Gross Salary", value: "$1800/month" },
+            { label: "Reason for Leaving", value: "-" },
+            { label: "Still Working Here", value: "Yes" },
+            {
+              label: "Additional Notes",
+              value: "Leading Angular migration project",
+            },
+          ],
+        },
+      ],
     },
 
     {
       section: "Skills",
       entries: [
         {
-          title: 'Computer Skills',
+          title: "Computer Skills",
           fields: [
-            { label: 'Microsoft Word', value: "Advance" },
-            { label: 'Microsoft Excel', value: "Intermediate" },
-          ]
+            { label: "Microsoft Word", value: "Advance" },
+            { label: "Microsoft Excel", value: "Intermediate" },
+          ],
         },
         {
-          title: 'Administrative Skills',
+          title: "Administrative Skills",
           fields: [
-            { label: 'Record Keeping', value: 'Advance' },
-            { label: 'Office Management', value: 'Expert' },
-
-          ]
-        }
-      ]
+            { label: "Record Keeping", value: "Advance" },
+            { label: "Office Management", value: "Expert" },
+          ],
+        },
+      ],
     },
 
     {
       section: "Bank Details",
       fields: [
-        { label: 'Bank Name', value: 'TCB Bank' },
-        { label: 'Account Number (IBAN)', value: 'GE08BG0000000586711374' },
-        { label: 'Account Holder Name', value: 'Areesh' },
-      ]
+        { label: "Bank Name", value: "TCB Bank" },
+        { label: "Account Number (IBAN)", value: "GE08BG0000000586711374" },
+        { label: "Account Holder Name", value: "Areesh" },
+      ],
     },
 
     {
       section: "Emergency Contact",
       fields: [
-        { label: 'Full Name', value: 'John Doe' },
-        { label: 'Relationship', value: 'Brother' },
-        { label: 'Address', value: 'Tbilisi, Georgia' },
-        { label: 'Contact Number', value: '+995 555 123456' },
-        { label: 'Notes (optional)', value: 'N/A' }
-      ]
+        { label: "Full Name", value: "John Doe" },
+        { label: "Relationship", value: "Brother" },
+        { label: "Address", value: "Tbilisi, Georgia" },
+        { label: "Contact Number", value: "+995 555 123456" },
+        { label: "Notes (optional)", value: "N/A" },
+      ],
     },
-
-
-
-
   ];
-
-
 }
