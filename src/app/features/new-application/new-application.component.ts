@@ -1748,14 +1748,33 @@ export class NewApplicationComponent implements OnInit {
   }
 
   // Documents status
-  getDocumentsStatus(user: any): 'uploaded' | 'pending' {
-    if (!user?.documents) return 'pending';
+ getDocumentsStatus(user: any): 'uploaded' | 'pending' {
+  if (!user?.documents) return 'pending';
 
-    const docs = Object.values(user.documents);
+  const docs = user.documents;
 
-    const allUploaded = docs.every((d: any) => d.url && d.url.trim() !== '');
-    return allUploaded ? 'uploaded' : 'pending';
+  const mainDocs = ['doc1', 'doc2', 'doc3', 'doc4'];
+  const hasEmptyMainDoc = mainDocs.some(key => {
+    const doc = docs[key];
+    return !doc?.url || doc.url.trim() === '';
+  });
+
+  if (hasEmptyMainDoc) {
+    return 'pending';
   }
+
+  if (docs.additional && Array.isArray(docs.additional) && docs.additional.length > 0) {
+    const hasEmptyAdditionalDoc = docs.additional.some((doc: any) => 
+      !doc?.url || doc.url.trim() === ''
+    );
+    
+    if (hasEmptyAdditionalDoc) {
+      return 'pending';
+    }
+  }
+
+  return 'uploaded';
+}
 
   // Reject reason modal 
   showRejectModal = false;
