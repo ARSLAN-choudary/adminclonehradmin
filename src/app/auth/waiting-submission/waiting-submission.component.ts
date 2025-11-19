@@ -51,6 +51,7 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
         this.userId = localStorage.getItem("userId") || "";
       }
 
+      
       if (!this.userId) {
         console.warn("⚠️ userId missing");
         return;
