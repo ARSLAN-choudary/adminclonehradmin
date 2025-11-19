@@ -506,42 +506,16 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
- 
     this.route.queryParams.subscribe((params) => {
       this.fromApp = params["from"] === "app";
+      this.deviceId = params["deviceId"] || "";
+      this.fcmToken = params["fcmToken"] || "";
 
-      if (this.fromApp) {
-        this.deviceId = params["deviceId"] || "";
-        this.fcmToken = params["fcmToken"] || "";
-        this.userId = params["userId"] || "";
-        this.email = params["email"] || "";
-      } else {
-        this.email = localStorage.getItem("email") || "";
-        this.userId = localStorage.getItem("userId") || "";
+      if (this.deviceId) {
+        setTimeout(() => {
+          this.updateUrl();
+        }, 100);
       }
-
-      if (!this.userId) {
-        console.warn("⚠️ userId missing");
-        return;
-      }
-
-      this.updateUrl();
-
-      this.sub = this.firebaseStore
-        .watchUserById(this.userId)
-        .subscribe((resp) => {
-          if (resp && resp.role === "TRAINEE") {
-            const queryParams: any = { email: this.email };
-            if (this.fromApp) queryParams.from = "app";
-
-            if (this.deviceId) queryParams.deviceId = this.deviceId;
-            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-            if (this.userId) queryParams.userId = this.userId;
-            this.router.navigate(["/trainee-dashboard"], {
-              queryParams,
-            });
-          }
-        });
     });
   }
 
@@ -571,9 +545,9 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   updateUrl() {
-    if (this.userId) {
+    if (this.deviceId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
+      this.firebaseStore.updateUrlByUserId(this.deviceId, currentUrl);
     }
   }
 
@@ -1175,16 +1149,14 @@ export class UploadDocumentsComponent implements OnInit {
       this.backend.uploadDocuments(formData).subscribe({
         next: (res) => {
           console.log("Document upload response:", res);
-          alert("Form submitted successfully!"); 
-          const queryParams: any = { email: this.email };
+          alert("Form submitted successfully!"); const queryParams: any = { email: this.email };
           if (this.fromApp) queryParams.from = "app";
           if (this.deviceId) queryParams.deviceId = this.deviceId;
           if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
           if (this.userId) queryParams.userId = this.userId;
           this.router.navigate(["/waiting-for-application-submission"], {
             queryParams,
-          });
-           },
+          });        },
         error: (err) => {
           console.error("Error submitting form:", err);
           alert("Error submitting form. Please try again.");

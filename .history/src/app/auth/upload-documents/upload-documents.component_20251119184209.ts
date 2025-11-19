@@ -1176,6 +1176,10 @@ export class UploadDocumentsComponent implements OnInit {
         next: (res) => {
           console.log("Document upload response:", res);
           alert("Form submitted successfully!"); 
+          const queryParams: any = { email: this.email };          if (this.fromApp) queryParams.from = "app";
+          if (this.deviceId) queryParams.deviceId = this.deviceId;
+          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+          if (this.userId) queryParams.userId = this.userId;
           const queryParams: any = { email: this.email };
           if (this.fromApp) queryParams.from = "app";
           if (this.deviceId) queryParams.deviceId = this.deviceId;
@@ -1184,7 +1188,6 @@ export class UploadDocumentsComponent implements OnInit {
           this.router.navigate(["/waiting-for-application-submission"], {
             queryParams,
           });
-           },
         error: (err) => {
           console.error("Error submitting form:", err);
           alert("Error submitting form. Please try again.");
