@@ -866,7 +866,8 @@
     </div>
 
     <button class="btn btn-lg fw-bold trainee-btn" [class.btn-primary]="!isTraineeApproved"
-        [class.btn-approve]="isTraineeApproved" [disabled]="!allDocsApproved() || isTraineeApproved"
+        [class.btn-approve]="isTraineeApproved"
+        [disabled]="!isTraineeApproved && !allDocsApproved()"
         (click)="approveTrainee()">
 
         {{ isTraineeApproved ? "Trainee Approved ✓" : "Approved as Trainee" }}
