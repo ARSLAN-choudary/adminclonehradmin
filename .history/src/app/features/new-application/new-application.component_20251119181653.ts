@@ -1382,15 +1382,14 @@ export class NewApplicationComponent implements OnInit {
   openDocs(user: any) {
     this.currentUserId = user._id;
 
+    // Call the API to get user details
     this.backend.getApplicationById(user._id).subscribe({
       next: (apiRes: any) => {
         const userData = apiRes.data;
 
-        this.currentUserDocs = Object.entries(userData.documents)
-          .filter(([key, value]: any) => {
-            return key !== 'additional' && value.url && value.url.trim() !== '';
-          })
-          .map(([key, value]: any, index) => ({
+        // Update documents from API response
+        this.currentUserDocs = Object.entries(userData.documents).map(
+          ([key, value]: any, index) => ({
             id: index + 1,
             name: key.toUpperCase(),
             uploadDate: userData.createdAt,
@@ -1398,24 +1397,10 @@ export class NewApplicationComponent implements OnInit {
             status: value.status,
             fileType: value.url ? "image" : "unknown",
             key: key,
-          }));
+          })
+        );
 
-        if (userData.documents.additional && Array.isArray(userData.documents.additional)) {
-          const additionalDocs = userData.documents.additional
-            .filter((doc: any) => doc.url && doc.url.trim() !== '')
-            .map((doc: any, index: number) => ({
-              id: this.currentUserDocs.length + index + 1,
-              name: doc.name || `ADDITIONAL_DOC_${index + 1}`,
-              uploadDate: doc.uploadDate || userData.createdAt,
-              previewUrl: doc.url,
-              status: doc.status || 'pending',
-              fileType: "image",
-              key: `additional_${index}`,
-            }));
-
-          this.currentUserDocs = [...this.currentUserDocs, ...additionalDocs];
-        }
-
+        // Map API response to docData structure
         this.docData = this.mapApiResponseToDocData(userData);
       },
       error: (err) => {
@@ -1443,6 +1428,7 @@ export class NewApplicationComponent implements OnInit {
 
     this.renderer.appendChild(document.body, this.docsBackdrop);
   }
+
   // Add this new method to map API response to your docData structure
   private mapApiResponseToDocData(userData: any): any[] {
     return [

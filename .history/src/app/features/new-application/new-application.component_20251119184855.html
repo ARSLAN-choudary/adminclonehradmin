@@ -1248,10 +1248,10 @@
 
                                 </tr>
                             </tbody>
+<div *ngIf="currentUserDocs.length === 0" class="alert alert-info text-center mt-2">
+    <i class="ti ti-info-circle"></i> No documents uploaded yet.
+</div>
                         </table>
-                        <div *ngIf="currentUserDocs.length === 0" class="alert alert-info text-center mt-2">
-                            <i class="ti ti-info-circle"></i> No documents uploaded yet.
-                        </div>
                     </div>
                 </div>
 
