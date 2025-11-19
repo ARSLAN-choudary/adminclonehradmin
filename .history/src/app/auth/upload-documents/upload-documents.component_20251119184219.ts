@@ -1183,8 +1183,7 @@ export class UploadDocumentsComponent implements OnInit {
           if (this.userId) queryParams.userId = this.userId;
           this.router.navigate(["/waiting-for-application-submission"], {
             queryParams,
-          });
-           },
+          });   },
         error: (err) => {
           console.error("Error submitting form:", err);
           alert("Error submitting form. Please try again.");
