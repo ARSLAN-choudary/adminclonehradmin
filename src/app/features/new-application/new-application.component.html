@@ -479,10 +479,10 @@
 
                             <td class="d-flex justify-content-center">
                                 <span class="badge badge-pill" [ngClass]="{
-                                 'bg-success': getDocumentsStatus(data) === 'uploaded',
-                                 'bg-warning': getDocumentsStatus(data) === 'pending'
-                                }">
-                                    {{ getDocumentsStatus(data) }}
+                'bg-upload text-white': getDocumentsStatus(data) === 'uploaded',
+                'bg-warning text-white': getDocumentsStatus(data) === 'pending'
+            }">
+                                    {{ getDocumentsStatus(data) | uppercase }}
                                 </span>
                             </td>
 
@@ -1382,35 +1382,33 @@
             <i class="ti ti-x"></i>
         </button>
     </div>
-    
+
     <div class="offcanvas-body">
         <!-- Contract Generation Buttons -->
         <div class="row g-3 mb-4">
             <div class="col-12">
                 <button class="btn btn-primary w-100 d-flex align-items-center justify-content-center py-3"
-                    (click)="generateTraineeContract()"
-                    [disabled]="isGenerating">
+                    (click)="generateTraineeContract()" [disabled]="isGenerating">
                     <i class="ti ti-file-text me-2"></i>
                     <span>{{ hasTraineeContract ? 'Regenerate Trainee Contract' : 'Generate Trainee Contract' }}</span>
-                 
+
                 </button>
             </div>
             <div class="col-12">
                 <button class="btn btn-success w-100 d-flex align-items-center justify-content-center py-3"
-                    (click)="generateProbationContract()"
-                    [disabled]="isGenerating">
+                    (click)="generateProbationContract()" [disabled]="isGenerating">
                     <i class="ti ti-file-text me-2"></i>
-                    <span>{{ hasProbationContract ? 'Regenerate Probation Contract' : 'Generate Probation Contract' }}</span>
-                 
+                    <span>{{ hasProbationContract ? 'Regenerate Probation Contract' : 'Generate Probation Contract'
+                        }}</span>
+
                 </button>
             </div>
             <div class="col-12">
                 <button class="btn btn-info w-100 d-flex align-items-center justify-content-center py-3"
-                    (click)="generateJobContract()"
-                    [disabled]="isGenerating">
+                    (click)="generateJobContract()" [disabled]="isGenerating">
                     <i class="ti ti-file-text me-2"></i>
                     <span>{{ hasJobContract ? 'Regenerate Job Contract' : 'Generate Job Contract' }}</span>
-                 
+
                 </button>
             </div>
         </div>
@@ -1418,11 +1416,10 @@
         <!-- Generated Contracts Section -->
         <div class="generated-contracts-section" *ngIf="hasGeneratedContracts">
             <h6 class="fw-semibold mb-3 text-muted">Generated Contracts</h6>
-            
+
             <!-- Trainee Contract Card -->
-            <div class="contract-card card border-0 shadow-sm mb-3" 
-                 *ngIf="hasTraineeContract"
-                 (click)="downloadContract('trainee')">
+            <div class="contract-card card border-0 shadow-sm mb-3" *ngIf="hasTraineeContract"
+                (click)="downloadContract('trainee')">
                 <div class="card-body d-flex align-items-center p-3">
                     <div class="contract-icon me-3">
                         <i class="ti ti-file-text text-primary fs-2"></i>
@@ -1440,9 +1437,8 @@
             </div>
 
             <!-- Probation Contract Card -->
-            <div class="contract-card card border-0 shadow-sm mb-3" 
-                 *ngIf="hasProbationContract"
-                 (click)="downloadContract('probation')">
+            <div class="contract-card card border-0 shadow-sm mb-3" *ngIf="hasProbationContract"
+                (click)="downloadContract('probation')">
                 <div class="card-body d-flex align-items-center p-3">
                     <div class="contract-icon me-3">
                         <i class="ti ti-file-text text-success fs-2"></i>
@@ -1460,9 +1456,7 @@
             </div>
 
             <!-- Job Contract Card -->
-            <div class="contract-card card border-0 shadow-sm mb-3" 
-                 *ngIf="hasJobContract"
-                 (click)="downloadContract('job')">
+            <div class="contract-card card border-0 shadow-sm mb-3" *ngIf="hasJobContract"                (click)="downloadContract('job')">
                 <div class="card-body d-flex align-items-center p-3">
                     <div class="contract-icon me-3">
                         <i class="ti ti-file-text text-info fs-2"></i>

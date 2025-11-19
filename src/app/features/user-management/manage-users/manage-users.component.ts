@@ -758,57 +758,71 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   }
 
   // DOCS OFFCANVAS
-  openDocs(user: any) {
-    this.currentUserId = user._id;
+openDocs(user: any) {
+  this.currentUserId = user._id;
 
-    // Call the API to get user details
-    this.backend.userDetail(user._id).subscribe({
-      next: (apiRes: any) => {
-        const userData = apiRes.data;
+  this.backend.getApplicationById(user._id).subscribe({
+    next: (apiRes: any) => {
+      const userData = apiRes.data;
 
-        // Update documents from API response
-        this.currentUserDocs = Object.entries(userData.documents).map(
-          ([key, value]: any, index) => ({
-            id: index + 1,
-            name: key.toUpperCase(),
-            uploadDate: userData.createdAt,
-            previewUrl: value.url,
-            status: value.status,
-            fileType: value.url ? "image" : "unknown",
-            key: key,
-          })
-        );
+      this.currentUserDocs = Object.entries(userData.documents)
+        .filter(([key, value]: any) => {
+          return key !== 'additional' && value.url && value.url.trim() !== '';
+        })
+        .map(([key, value]: any, index) => ({
+          id: index + 1,
+          name: key.toUpperCase(),
+          uploadDate: userData.createdAt,
+          previewUrl: value.url,
+          status: value.status,
+          fileType: value.url ? "image" : "unknown",
+          key: key,
+        }));
 
-        // Map API response to docData structure
-        this.docData = this.mapApiResponseToDocData(userData);
-      },
-      error: (err) => {
-        this.toastr.error('Failed to load user details');
-        console.error('Error loading user details:', err);
+      if (userData.documents.additional && Array.isArray(userData.documents.additional)) {
+        const additionalDocs = userData.documents.additional
+          .filter((doc: any) => doc.url && doc.url.trim() !== '')
+          .map((doc: any, index: number) => ({
+            id: this.currentUserDocs.length + index + 1,
+            name: doc.name || `ADDITIONAL_DOC_${index + 1}`,
+            uploadDate: doc.uploadDate || userData.createdAt,
+            previewUrl: doc.url,
+            status: doc.status || 'pending',
+            fileType: "image",
+            key: `additional_${index}`,
+          }));
+
+        this.currentUserDocs = [...this.currentUserDocs, ...additionalDocs];
       }
-    });
 
-    // Rest of your existing modal opening code remains the same
-    const panel = this.docsCanvas.nativeElement;
-    this.renderer.addClass(panel, "show");
-    this.renderer.setStyle(panel, "visibility", "visible");
-    this.renderer.setAttribute(panel, "aria-modal", "true");
-    this.renderer.removeAttribute(panel, "aria-hidden");
-    this.renderer.setStyle(document.body, "overflow", "hidden");
-
-    this.docsBackdrop = this.renderer.createElement("div");
-    this.renderer.addClass(this.docsBackdrop, "offcanvas-backdrop");
-    this.renderer.addClass(this.docsBackdrop, "fade");
-    this.renderer.addClass(this.docsBackdrop, "show");
-
-    if (this.docsBackdrop) {
-      this.docsBackdrop.addEventListener("click", () => this.closeDocs());
+      this.docData = this.mapApiResponseToDocData(userData);
+    },
+    error: (err) => {
+      this.toastr.error('Failed to load user details');
+      console.error('Error loading user details:', err);
     }
+  });
 
-    this.renderer.appendChild(document.body, this.docsBackdrop);
+  const panel = this.docsCanvas.nativeElement;
+  this.renderer.addClass(panel, "show");
+  this.renderer.setStyle(panel, "visibility", "visible");
+  this.renderer.setAttribute(panel, "aria-modal", "true");
+  this.renderer.removeAttribute(panel, "aria-hidden");
+  this.renderer.setStyle(document.body, "overflow", "hidden");
+
+  this.docsBackdrop = this.renderer.createElement("div");
+  this.renderer.addClass(this.docsBackdrop, "offcanvas-backdrop");
+  this.renderer.addClass(this.docsBackdrop, "fade");
+  this.renderer.addClass(this.docsBackdrop, "show");
+
+  if (this.docsBackdrop) {
+    this.docsBackdrop.addEventListener("click", () => this.closeDocs());
   }
 
-  // Add this new method to map API response to your docData structure
+  this.renderer.appendChild(document.body, this.docsBackdrop);
+}
+
+  //  map API response to your docData structure
   private mapApiResponseToDocData(userData: any): any[] {
     return [
       {
