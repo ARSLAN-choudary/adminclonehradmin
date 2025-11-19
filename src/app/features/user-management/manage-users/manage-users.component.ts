@@ -123,6 +123,8 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   currentUserId: string = "";
   currentUserDocs: any[] = [];
   limit: number = 10;
+  openedIndex: number | string | null = null;
+
 
   inActiveUsers: WritableSignal<number> = signal(0);
   activeUsers: WritableSignal<number> = signal(0);
@@ -888,7 +890,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       return [{ label: "No education data available", value: "" }];
     }
 
-    const fields:any = [];
+    const fields: any = [];
     education.forEach((edu, index) => {
       if (index > 0) fields.push({ label: "", value: "---" }); // Separator for multiple entries
 
@@ -910,7 +912,7 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
       return [{ label: "No work experience data available", value: "" }];
     }
 
-    const fields :any= [];
+    const fields: any = [];
     workExperience.forEach((work, index) => {
       if (index > 0) fields.push({ label: "", value: "---" }); // Separator for multiple entries
 
@@ -1042,39 +1044,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     });
   }
 
-  reject(doc: any) {
-    const payload = {
-      userId: this.currentUserId,
-      documentKey: doc.key,
-      status: "rejected",
-    };
-
-    this.backend.updateDocStatus(payload).subscribe({
-      next: (res: any) => {
-        const msg =
-          res?.meta?.message ||
-          res?.message ||
-          res?.data?.message ||
-          "Document rejected successfully";
-
-        this.toastr.info(msg, "Updated");
-
-        this.currentUserDocs = this.currentUserDocs.map((d) =>
-          d.key === doc.key ? { ...d, status: "rejected" } : d
-        );
-
-        this.getTableData(this.skip, this.limit);
-        this.closePreview();
-      },
-      error: (err) => {
-        const errorMsg =
-          err?.error?.meta?.message ||
-          err?.error?.message ||
-          "Something went wrong";
-        this.toastr.error(errorMsg, "Error");
-      },
-    });
-  }
 
   getSafeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -1106,6 +1075,122 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
   rejectedCount() {
     return this.currentUserDocs.filter((d) => d.status === "rejected").length;
   }
+
+
+  toggleSection(index: number | string) {
+    this.openedIndex = this.openedIndex === index ? null : index;
+  }
+
+  isTraineeApproved: boolean = false;
+
+
+  allDocsApproved(): boolean {
+    if (!this.currentUserDocs || this.currentUserDocs.length === 0) return false;
+    return this.currentUserDocs.every(doc => doc.status === 'approved');
+  }
+
+  approveTrainee() {
+    const payload = {
+      id: this.currentUserId,
+      role: "TRAINEE",
+    };
+
+    this.backend.updateUser(payload).subscribe({
+      next: (res: any) => {
+        if (res?.status === "success" || res?.success === true) {
+
+          this.isTraineeApproved = true;
+
+          this.toastr.success(res.message || "Status updated");
+          this.getTableData(this.skip, this.pageSize);
+        } else {
+          this.toastr.error(res?.message || "Failed to Update status");
+        }
+      },
+      error: () => {
+        this.toastr.error("Failed to toggle status");
+      },
+    });
+  }
+
+  // Documents status
+  getDocumentsStatus(user: any): 'uploaded' | 'pending' {
+    if (!user?.documents) return 'pending';
+
+    const docs = Object.values(user.documents);
+
+    const allUploaded = docs.every((d: any) => d.url && d.url.trim() !== '');
+    return allUploaded ? 'uploaded' : 'pending';
+  }
+
+  // Reject reason modal 
+  showRejectModal = false;
+  selectedReason: string = "";
+  customReason: string = "";
+  currentRejectDoc: any = null;
+
+
+  selectReason(event: any) {
+    this.selectedReason = event.target.value;
+  }
+
+  reject(doc: any) {
+    this.currentRejectDoc = doc;
+    this.selectedReason = "";
+    this.customReason = "";
+    this.showRejectModal = true;
+  }
+
+  submitRejectReason() {
+    let finalReason = this.selectedReason;
+
+    if (!finalReason) {
+      this.toastr.error("Please select a reason.");
+      return;
+    }
+
+    if (finalReason === "other") {
+      if (!this.customReason.trim()) {
+        this.toastr.error("Please type a comment.");
+        return;
+      }
+      finalReason = this.customReason;
+    }
+
+    const payload = {
+      userId: this.currentUserId,
+      documentKey: this.currentRejectDoc.key,
+      status: "rejected",
+      reason: finalReason
+    };
+
+    this.backend.updateDocStatus(payload).subscribe({
+      next: (res: any) => {
+        if (res?.status === "success" || res?.success === true) {
+
+          this.currentRejectDoc.status = 'rejected';
+
+          this.toastr.success("Document rejected successfully");
+          this.showRejectModal = false;
+          this.getTableData(this.skip, this.limit);
+        } else {
+          this.toastr.error(res?.message || "Document not added!");
+          this.showRejectModal = false;
+        }
+      },
+      error: (err) => {
+        this.showRejectModal = false;
+        this.toastr.error(err?.error?.message || "Document not added!");
+      }
+    });
+  }
+
+  closeRejectModal() {
+    this.showRejectModal = false;
+    this.selectedReason = '';
+    this.customReason = '';
+  }
+
 
   docData = [
     {
@@ -1186,24 +1271,6 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
     },
 
     {
-      section: "Language Known",
-      entries: [
-        {
-          title: 'English',
-          fields: [
-            { label: 'Proficiency Level', value: 'Advance' },
-          ]
-        },
-        {
-          title: 'Urdu',
-          fields: [
-            { label: 'Proficiency Level', value: 'Advance' },
-          ]
-        }
-      ]
-    },
-
-    {
       section: "Skills",
       entries: [
         {
@@ -1243,46 +1310,11 @@ export class ManageUsersComponent implements OnInit, OnDestroy {
         { label: 'Notes (optional)', value: 'N/A' }
       ]
     },
-    {
-      section: "Right to work in Georgia",
-      fields: [
-        { label: 'Legally Allowed', value: 'Yes' },
-      ]
-    }
+
 
 
 
   ];
 
-  openedIndex: number | string | null = null;
 
-  toggleSection(index: number | string) {
-    this.openedIndex = this.openedIndex === index ? null : index;
-  }
-
-  allDocsApproved(): boolean {
-    if (!this.currentUserDocs || this.currentUserDocs.length === 0)
-      return false;
-    return this.currentUserDocs.every((doc) => doc.status === "approved");
-  }
-  approveTrainee() {
-    const payload = {
-      id: this.currentUserId,
-      role: "TRAINEE",
-    };
-
-    this.backend.updateUser(payload).subscribe({
-      next: (res: any) => {
-        if (res?.status === "success" || res?.success === true) {
-          this.toastr.success(res.message || "Status updated");
-          this.getTableData(this.skip, this.pageSize);
-        } else {
-          this.toastr.error(res?.message || "Failed to Update status");
-        }
-      },
-      error: (err: any) => {
-        this.toastr.error("Failed to toggle status");
-      },
-    });
-  }
 }
