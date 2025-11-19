@@ -315,8 +315,14 @@ export class UploadDocumentsComponent implements OnInit {
         .watchUserById(this.userId)
         .subscribe((resp) => {
           if (resp && resp.role === "TRAINEE") {
+            const queryParams: any = { email: this.email };
+            if (this.fromApp) queryParams.from = "app";
+
+            if (this.deviceId) queryParams.deviceId = this.deviceId;
+            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+            if (this.userId) queryParams.userId = this.userId;
             this.router.navigate(["/trainee-dashboard"], {
-              queryParams: { userId: this.userId, from: "app" },
+              queryParams,
             });
           }
         });
@@ -915,7 +921,14 @@ export class UploadDocumentsComponent implements OnInit {
         next: (res) => {
           console.log("Document upload response:", res);
           alert("Form submitted successfully!");
-          this.router.navigate(["/waiting-for-application-submission"]);
+          const queryParams: any = { email: this.email };
+          if (this.fromApp) queryParams.from = "app";
+          if (this.deviceId) queryParams.deviceId = this.deviceId;
+          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+          if (this.userId) queryParams.userId = this.userId;
+          this.router.navigate(["/waiting-for-application-submission"], {
+            queryParams,
+          });
         },
         error: (err) => {
           console.error("Error submitting form:", err);

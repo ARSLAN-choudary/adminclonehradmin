@@ -51,7 +51,6 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
         this.userId = localStorage.getItem("userId") || "";
       }
 
-
       if (!this.userId) {
         console.warn("⚠️ userId missing");
         return;
@@ -63,8 +62,14 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
         .watchUserById(this.userId)
         .subscribe((resp) => {
           if (resp && resp.role === "TRAINEE") {
+            const queryParams: any = { email: this.email };
+            if (this.fromApp) queryParams.from = "app";
+
+            if (this.deviceId) queryParams.deviceId = this.deviceId;
+            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+            if (this.userId) queryParams.userId = this.userId;
             this.router.navigate(["/trainee-dashboard"], {
-              queryParams: { userId: this.userId, from: "app" },
+              queryParams,
             });
           }
         });
@@ -75,7 +80,6 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
     this.sub?.unsubscribe();
   }
 
- 
   private updateUrl() {
     if (this.userId) {
       const currentUrl = window.location.href;
