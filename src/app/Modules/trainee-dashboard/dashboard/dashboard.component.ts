@@ -9,13 +9,16 @@ import {
   NgApexchartsModule,
   ApexGrid,
 } from "ng-apexcharts";
-import { RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { routes } from "../../../shared/routes/routes";
 import { CollapseHeaderComponent } from "../../../features/common/collapse-header/collapse-header.component";
 import { DateRangePickerComponent } from "../../../features/common/date-range-picker/date-range-picker.component";
+import { FirebaseStoreService } from "../../../Services/firebase-store.service";
+import { ToggleService } from "../../../Services/toggle.service";
+import { AuthService } from "../../../Services/auth.service";
 export interface ChartOptions {
   series: ApexAxisChartSeries | any;
   chart: ApexChart | any;
@@ -40,6 +43,11 @@ export interface ChartOptions {
   styleUrl: "./dashboard.component.scss",
 })
 export class DashboardComponent {
+  deviceId: any;
+  userId: any;
+  email: any;
+  fromApp: any;
+  fcmToken: any;
   public routes = routes;
   bsValue = new Date();
   bsRangeValue: Date[];
@@ -50,7 +58,14 @@ export class DashboardComponent {
   public chartOptions3: Partial<ChartOptions> | any;
   public chartOptions4: Partial<ChartOptions> | any;
 
-  constructor(private renderer: Renderer2) {
+  constructor(
+    private renderer: Renderer2,
+    private firebaseStore: FirebaseStoreService,
+    private route: ActivatedRoute,
+    private toggle: ToggleService,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.chartOptions = {
       series: [
         {
@@ -218,8 +233,35 @@ export class DashboardComponent {
 
   ngOnInit(): void {
     this.renderer.addClass(document.body, "date-picker");
+    this.route.queryParams.subscribe((params) => {
+      this.fromApp = params["from"] === "app";
+
+      if (this.fromApp) {
+        this.deviceId = params["deviceId"] || "";
+        this.fcmToken = params["fcmToken"] || "";
+        this.userId = params["userId"] || "";
+        this.email = params["email"] || "";
+      } else {
+        this.email = localStorage.getItem("email") || "";
+        this.userId = localStorage.getItem("userId") || "";
+      }
+
+      if (!this.userId) {
+        console.warn("⚠️ userId missing");
+        return;
+      }
+
+      this.updateUrl();
+    });
   }
   ngOnDestroy(): void {
     this.renderer.removeClass(document.body, "date-picker");
+  }
+
+  private updateUrl() {
+    if (this.userId) {
+      const currentUrl = window.location.href;
+      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
+    }
   }
 }
