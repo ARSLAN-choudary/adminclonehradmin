@@ -51,7 +51,7 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
         this.userId = localStorage.getItem("userId") || "";
       }
 
-      
+
       if (!this.userId) {
         console.warn("⚠️ userId missing");
         return;
@@ -75,10 +75,11 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
     this.sub?.unsubscribe();
   }
 
-  updateUrl() {
-    if (this.deviceId) {
+ 
+  private updateUrl() {
+    if (this.userId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByUserId(this.deviceId, currentUrl);
+      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
     }
   }
 }

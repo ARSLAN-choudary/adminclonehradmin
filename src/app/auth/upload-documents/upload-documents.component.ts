@@ -323,10 +323,10 @@ export class UploadDocumentsComponent implements OnInit {
     });
   }
 
-  updateUrl() {
-    if (this.deviceId) {
+  private updateUrl() {
+    if (this.userId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByUserId(this.deviceId, currentUrl);
+      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
     }
   }
   // --------- OpenCV init ----------
