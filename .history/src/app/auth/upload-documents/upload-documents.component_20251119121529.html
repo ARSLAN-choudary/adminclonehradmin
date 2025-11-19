@@ -8,12 +8,13 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">User Name*</label>
-                        <input type="text" class="form-control" formControlName="userNameEnglish"
-                            placeholder="Enter your full name in English" id="userNameEnglish" name="userNameEnglish">
+                        <label class="form-label">Given Name, Surname (English) *</label>
+                        <input type="text" class="form-control" formControlName="givenNameSurnameEnglish"
+                            placeholder="Enter your full name in English" id="givenNameSurnameEnglish"
+                            name="givenNameSurnameEnglish">
                         <div class="text-danger mt-1"
-                            *ngIf="personalDetails.get('userNameEnglish')?.invalid && personalDetails.get('userNameEnglish')?.touched">
-                            <span *ngIf="personalDetails.get('userNameEnglish')?.errors?.['required']">This
+                            *ngIf="personalDetails.get('givenNameSurnameEnglish')?.invalid && personalDetails.get('givenNameSurnameEnglish')?.touched">
+                            <span *ngIf="personalDetails.get('givenNameSurnameEnglish')?.errors?.['required']">This
                                 field is required</span>
                         </div>
                     </div>
@@ -21,9 +22,10 @@
 
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">Surname </label>
-                        <input type="text" class="form-control" formControlName="surnameEnglish"
-                            placeholder="Enter your full name in Georgian" id="surnameEnglish" name="surnameEnglish">
+                        <label class="form-label">Given Name, Surname (Georgian)</label>
+                        <input type="text" class="form-control" formControlName="givenNameSurnameGeorgian"
+                            placeholder="Enter your full name in Georgian" id="givenNameSurnameGeorgian"
+                            name="givenNameSurnameGeorgian">
                     </div>
                 </div>
             </div>
@@ -32,34 +34,20 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <span class="form-label">Citizenship *</span>
-
-                        <!-- Radio buttons for Georgian/Other -->
-                        <div class="radio-wrap mb-2">
+                        <div class="radio-wrap">
                             <div class="d-flex flex-wrap">
                                 <div class="me-2">
                                     <input type="radio" class="status-radio" id="georgian" value="georgian"
-                                        [checked]="personalDetails.get('citizenship')?.value === 'georgian'"
-                                        (change)="setGeorgianCitizenship()" name="citizenshipRadio" />
+                                        formControlName="citizenship" name="citizenship" />
                                     <label for="georgian">Georgian</label>
                                 </div>
                                 <div>
                                     <input type="radio" class="status-radio" id="other" value="other"
-                                        [checked]="personalDetails.get('citizenship')?.value !== 'georgian'"
-                                        (change)="setOtherCitizenship()" name="citizenshipRadio" />
+                                        formControlName="citizenship" name="citizenship" />
                                     <label for="other">Other</label>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Country Dropdown - Show when NOT Georgian -->
-                        <div *ngIf="personalDetails.get('citizenship')?.value !== 'georgian'" class="mt-2">
-                            <p-select appSelectFilterId [options]="countries" optionLabel="label" optionValue="value"
-                                placeholder="Select your country" [filter]="true" class="form-control"
-                                formControlName="citizenship" id="citizenship" name="citizenship"
-                                (onShow)="labelFilterInput('citizenship-filter')">
-                            </p-select>
-                        </div>
-
                         <div class="text-danger mt-1"
                             *ngIf="personalDetails.get('citizenship')?.invalid && personalDetails.get('citizenship')?.touched">
                             This field is required
@@ -67,7 +55,22 @@
                     </div>
                 </div>
 
-                <!-- Document Type column remains the same -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <span class="form-label">Document Type *</span>
+                        <p-select appSelectFilterId [options]="[
+                            {label: 'Georgian ID Card', value: 'georgianId'},
+                            {label: 'Residence Permit', value: 'residencePermit'},
+                            {label: 'Passport', value: 'passport'}
+                        ]" optionLabel="label" optionValue="value" placeholder="Select" [filter]="true"
+                            class="form-control" formControlName="documentType" id="documentType" name="documentType"
+                            (onShow)="labelFilterInput('documentType-filter')"></p-select>
+                        <div class="text-danger mt-1"
+                            *ngIf="personalDetails.get('documentType')?.invalid && personalDetails.get('documentType')?.touched">
+                            This field is required
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -167,7 +170,7 @@
                             <span *ngIf="personalDetails.get('contactNumber')?.errors?.['required']">This field is
                                 required</span>
                             <span *ngIf="personalDetails.get('contactNumber')?.errors?.['pattern']">Contact number must
-                                start with +995 and number must be like +995583916300</span>
+                                start with +995 and number must like +995583916300</span>
                         </div>
                     </div>
                 </div>
@@ -614,7 +617,7 @@
                         <span *ngIf="emergencyContact.get('contactNumber')?.errors?.['required']">This field is
                             required</span>
                         <span *ngIf="emergencyContact.get('contactNumber')?.errors?.['pattern']">Contact number must
-                            start with +995 and number must be like +995583916300</span>
+                            start with +995 and number must have formate +995583916300</span>
                     </div>
                 </div>
 
@@ -798,12 +801,12 @@
                                     ✕
                                 </button>
                             </div>
-                            <div class="my-2 flex justify-content-center align-items-center flex-wrap">
-                                <button type="button" class="btn btn-outline-primary btn-sm m-1 "
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-outline-primary btn-sm"
                                     (click)="selectAdditionalDocType(i)">
                                     Capture Document {{i + 1}}
                                 </button>
-                                <button type="button" class="btn btn-outline-primary btn-sm m-1"
+                                <button type="button" class="btn btn-outline-danger btn-sm ms-2"
                                     (click)="removeAdditionalDocument(i)" *ngIf="additionalDocumentsForms.length > 1">
                                     Remove Document
                                 </button>

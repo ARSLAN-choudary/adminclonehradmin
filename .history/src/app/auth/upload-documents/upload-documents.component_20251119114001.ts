@@ -7,21 +7,57 @@ import {
   Validators,
   FormArray,
   AbstractControl,
+  ValidationErrors,
   ValidatorFn,
 } from "@angular/forms";
 import { SelectModule } from "primeng/select";
-import { Subject, Subscription } from "rxjs";
+import { Subject } from "rxjs";
 import { WebcamImage, WebcamModule } from "ngx-webcam";
 import { BackendService } from "../../Services/backend.service";
 
 // OpenCV.js
-import cvModule, { log } from "@techstark/opencv-js";
+import cvModule from "@techstark/opencv-js";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FirebaseStoreService } from "../../Services/firebase-store.service";
-import { AuthService } from "../../Services/auth.service";
-import { ToggleService } from "../../Services/toggle.service";
 
-type DocType = "passport" | "residenceCard" | "healthCard" | "healthCertificate" | "additional";
+type DocType = "passport" | "residenceCard" | "healthCertificate" | "additionalDoc";
+
+// Custom Validators
+export class CustomValidators {
+  static dateRangeValidator(fromField: string, toField: string): ValidatorFn {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const from = formGroup.get(fromField)?.value;
+      const to = formGroup.get(toField)?.value;
+      
+      if (from && to && from > to) {
+        return { dateRange: true };
+      }
+      return null;
+    };
+  }
+
+  static ibanValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+      
+      const ibanPattern = /^GE\d{2}\s?[A-Z]{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/;
+      return ibanPattern.test(control.value.replace(/\s/g, '')) ? null : { ibanFormat: true };
+    };
+  }
+
+  static georgianPhoneValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+      
+      const phonePattern = /^\+995\s?\d{9}$/;
+      return phonePattern.test(control.value.replace(/\s/g, '')) ? null : { georgianPhone: true };
+    };
+  }
+}
 
 @Component({
   selector: "app-upload-documents",
@@ -32,9 +68,8 @@ type DocType = "passport" | "residenceCard" | "healthCard" | "healthCertificate"
 })
 export class UploadDocumentsComponent implements OnInit {
   form: FormGroup;
-  userId: any;
-  sub!: Subscription;
-  activeDocType: DocType | null = null;
+
+  activeDocType: DocType | string | null = null;
   activeAdditionalDocIndex: number | null = null;
   showCamera = false;
   hint = "Click a card to capture its document.";
@@ -130,208 +165,6 @@ export class UploadDocumentsComponent implements OnInit {
     },
   ];
 
-  countries = [
-    { label: "Afghanistan", value: "Afghanistan" },
-    { label: "Albania", value: "Albania" },
-    { label: "Algeria", value: "Algeria" },
-    { label: "Andorra", value: "Andorra" },
-    { label: "Angola", value: "Angola" },
-    { label: "Antigua and Barbuda", value: "Antigua and Barbuda" },
-    { label: "Argentina", value: "Argentina" },
-    { label: "Armenia", value: "Armenia" },
-    { label: "Australia", value: "Australia" },
-    { label: "Austria", value: "Austria" },
-    { label: "Azerbaijan", value: "Azerbaijan" },
-    { label: "Bahamas", value: "Bahamas" },
-    { label: "Bahrain", value: "Bahrain" },
-    { label: "Bangladesh", value: "Bangladesh" },
-    { label: "Barbados", value: "Barbados" },
-    { label: "Belarus", value: "Belarus" },
-    { label: "Belgium", value: "Belgium" },
-    { label: "Belize", value: "Belize" },
-    { label: "Benin", value: "Benin" },
-    { label: "Bhutan", value: "Bhutan" },
-    { label: "Bolivia", value: "Bolivia" },
-    { label: "Bosnia and Herzegovina", value: "Bosnia and Herzegovina" },
-    { label: "Botswana", value: "Botswana" },
-    { label: "Brazil", value: "Brazil" },
-    { label: "Brunei", value: "Brunei" },
-    { label: "Bulgaria", value: "Bulgaria" },
-    { label: "Burkina Faso", value: "Burkina Faso" },
-    { label: "Burundi", value: "Burundi" },
-    { label: "Cabo Verde", value: "Cabo Verde" },
-    { label: "Cambodia", value: "Cambodia" },
-    { label: "Cameroon", value: "Cameroon" },
-    { label: "Canada", value: "Canada" },
-    { label: "Central African Republic", value: "Central African Republic" },
-    { label: "Chad", value: "Chad" },
-    { label: "Chile", value: "Chile" },
-    { label: "China", value: "China" },
-    { label: "Colombia", value: "Colombia" },
-    { label: "Comoros", value: "Comoros" },
-    { label: "Congo", value: "Congo" },
-    { label: "Costa Rica", value: "Costa Rica" },
-    { label: "Croatia", value: "Croatia" },
-    { label: "Cuba", value: "Cuba" },
-    { label: "Cyprus", value: "Cyprus" },
-    { label: "Czech Republic", value: "Czech Republic" },
-    { label: "Denmark", value: "Denmark" },
-    { label: "Djibouti", value: "Djibouti" },
-    { label: "Dominica", value: "Dominica" },
-    { label: "Dominican Republic", value: "Dominican Republic" },
-    { label: "Ecuador", value: "Ecuador" },
-    { label: "Egypt", value: "Egypt" },
-    { label: "El Salvador", value: "El Salvador" },
-    { label: "Equatorial Guinea", value: "Equatorial Guinea" },
-    { label: "Eritrea", value: "Eritrea" },
-    { label: "Estonia", value: "Estonia" },
-    { label: "Eswatini", value: "Eswatini" },
-    { label: "Ethiopia", value: "Ethiopia" },
-    { label: "Fiji", value: "Fiji" },
-    { label: "Finland", value: "Finland" },
-    { label: "France", value: "France" },
-    { label: "Gabon", value: "Gabon" },
-    { label: "Gambia", value: "Gambia" },
-    { label: "Georgia", value: "Georgia" },
-    { label: "Germany", value: "Germany" },
-    { label: "Ghana", value: "Ghana" },
-    { label: "Greece", value: "Greece" },
-    { label: "Grenada", value: "Grenada" },
-    { label: "Guatemala", value: "Guatemala" },
-    { label: "Guinea", value: "Guinea" },
-    { label: "Guinea-Bissau", value: "Guinea-Bissau" },
-    { label: "Guyana", value: "Guyana" },
-    { label: "Haiti", value: "Haiti" },
-    { label: "Honduras", value: "Honduras" },
-    { label: "Hungary", value: "Hungary" },
-    { label: "Iceland", value: "Iceland" },
-    { label: "India", value: "India" },
-    { label: "Indonesia", value: "Indonesia" },
-    { label: "Iran", value: "Iran" },
-    { label: "Iraq", value: "Iraq" },
-    { label: "Ireland", value: "Ireland" },
-    { label: "Israel", value: "Israel" },
-    { label: "Italy", value: "Italy" },
-    { label: "Jamaica", value: "Jamaica" },
-    { label: "Japan", value: "Japan" },
-    { label: "Jordan", value: "Jordan" },
-    { label: "Kazakhstan", value: "Kazakhstan" },
-    { label: "Kenya", value: "Kenya" },
-    { label: "Kiribati", value: "Kiribati" },
-    { label: "Korea, North", value: "Korea, North" },
-    { label: "Korea, South", value: "Korea, South" },
-    { label: "Kosovo", value: "Kosovo" },
-    { label: "Kuwait", value: "Kuwait" },
-    { label: "Kyrgyzstan", value: "Kyrgyzstan" },
-    { label: "Laos", value: "Laos" },
-    { label: "Latvia", value: "Latvia" },
-    { label: "Lebanon", value: "Lebanon" },
-    { label: "Lesotho", value: "Lesotho" },
-    { label: "Liberia", value: "Liberia" },
-    { label: "Libya", value: "Libya" },
-    { label: "Liechtenstein", value: "Liechtenstein" },
-    { label: "Lithuania", value: "Lithuania" },
-    { label: "Luxembourg", value: "Luxembourg" },
-    { label: "Madagascar", value: "Madagascar" },
-    { label: "Malawi", value: "Malawi" },
-    { label: "Malaysia", value: "Malaysia" },
-    { label: "Maldives", value: "Maldives" },
-    { label: "Mali", value: "Mali" },
-    { label: "Malta", value: "Malta" },
-    { label: "Marshall Islands", value: "Marshall Islands" },
-    { label: "Mauritania", value: "Mauritania" },
-    { label: "Mauritius", value: "Mauritius" },
-    { label: "Mexico", value: "Mexico" },
-    { label: "Micronesia", value: "Micronesia" },
-    { label: "Moldova", value: "Moldova" },
-    { label: "Monaco", value: "Monaco" },
-    { label: "Mongolia", value: "Mongolia" },
-    { label: "Montenegro", value: "Montenegro" },
-    { label: "Morocco", value: "Morocco" },
-    { label: "Mozambique", value: "Mozambique" },
-    { label: "Myanmar", value: "Myanmar" },
-    { label: "Namibia", value: "Namibia" },
-    { label: "Nauru", value: "Nauru" },
-    { label: "Nepal", value: "Nepal" },
-    { label: "Netherlands", value: "Netherlands" },
-    { label: "New Zealand", value: "New Zealand" },
-    { label: "Nicaragua", value: "Nicaragua" },
-    { label: "Niger", value: "Niger" },
-    { label: "Nigeria", value: "Nigeria" },
-    { label: "North Macedonia", value: "North Macedonia" },
-    { label: "Norway", value: "Norway" },
-    { label: "Oman", value: "Oman" },
-    { label: "Pakistan", value: "Pakistan" },
-    { label: "Palau", value: "Palau" },
-    { label: "Palestine", value: "Palestine" },
-    { label: "Panama", value: "Panama" },
-    { label: "Papua New Guinea", value: "Papua New Guinea" },
-    { label: "Paraguay", value: "Paraguay" },
-    { label: "Peru", value: "Peru" },
-    { label: "Philippines", value: "Philippines" },
-    { label: "Poland", value: "Poland" },
-    { label: "Portugal", value: "Portugal" },
-    { label: "Qatar", value: "Qatar" },
-    { label: "Romania", value: "Romania" },
-    { label: "Russia", value: "Russia" },
-    { label: "Rwanda", value: "Rwanda" },
-    { label: "Saint Kitts and Nevis", value: "Saint Kitts and Nevis" },
-    { label: "Saint Lucia", value: "Saint Lucia" },
-    { label: "Saint Vincent and the Grenadines", value: "Saint Vincent and the Grenadines" },
-    { label: "Samoa", value: "Samoa" },
-    { label: "San Marino", value: "San Marino" },
-    { label: "Sao Tome and Principe", value: "Sao Tome and Principe" },
-    { label: "Saudi Arabia", value: "Saudi Arabia" },
-    { label: "Senegal", value: "Senegal" },
-    { label: "Serbia", value: "Serbia" },
-    { label: "Seychelles", value: "Seychelles" },
-    { label: "Sierra Leone", value: "Sierra Leone" },
-    { label: "Singapore", value: "Singapore" },
-    { label: "Slovakia", value: "Slovakia" },
-    { label: "Slovenia", value: "Slovenia" },
-    { label: "Solomon Islands", value: "Solomon Islands" },
-    { label: "Somalia", value: "Somalia" },
-    { label: "South Africa", value: "South Africa" },
-    { label: "South Sudan", value: "South Sudan" },
-    { label: "Spain", value: "Spain" },
-    { label: "Sri Lanka", value: "Sri Lanka" },
-    { label: "Sudan", value: "Sudan" },
-    { label: "Suriname", value: "Suriname" },
-    { label: "Sweden", value: "Sweden" },
-    { label: "Switzerland", value: "Switzerland" },
-    { label: "Syria", value: "Syria" },
-    { label: "Taiwan", value: "Taiwan" },
-    { label: "Tajikistan", value: "Tajikistan" },
-    { label: "Tanzania", value: "Tanzania" },
-    { label: "Thailand", value: "Thailand" },
-    { label: "Timor-Leste", value: "Timor-Leste" },
-    { label: "Togo", value: "Togo" },
-    { label: "Tonga", value: "Tonga" },
-    { label: "Trinidad and Tobago", value: "Trinidad and Tobago" },
-    { label: "Tunisia", value: "Tunisia" },
-    { label: "Turkey", value: "Turkey" },
-    { label: "Turkmenistan", value: "Turkmenistan" },
-    { label: "Tuvalu", value: "Tuvalu" },
-    { label: "Uganda", value: "Uganda" },
-    { label: "Ukraine", value: "Ukraine" },
-    { label: "United Arab Emirates", value: "United Arab Emirates" },
-    { label: "United Kingdom", value: "United Kingdom" },
-    { label: "United States", value: "United States" },
-    { label: "Uruguay", value: "Uruguay" },
-    { label: "Uzbekistan", value: "Uzbekistan" },
-    { label: "Vanuatu", value: "Vanuatu" },
-    { label: "Vatican City", value: "Vatican City" },
-    { label: "Venezuela", value: "Venezuela" },
-    { label: "Vietnam", value: "Vietnam" },
-    { label: "Yemen", value: "Yemen" },
-    { label: "Zambia", value: "Zambia" },
-    { label: "Zimbabwe", value: "Zimbabwe" }
-  ];
-
-
-  get showCountryDropdown(): boolean {
-    return this.personalDetails.get('citizenship')?.value === 'other';
-  }
   banks = [
     { label: "TBC Bank", value: "TBC Bank" },
     { label: "Bank of Georgia", value: "Bank of Georgia" },
@@ -348,15 +181,7 @@ export class UploadDocumentsComponent implements OnInit {
     { label: "Ziraat Bank", value: "Ziraat Bank" },
     { label: "Silk Road Bank", value: "Silk Road Bank" },
   ];
-  // Add these methods to your component class
-  setGeorgianCitizenship() {
-    this.personalDetails.get('citizenship')?.setValue('georgian');
-  }
 
-  setOtherCitizenship() {
-    // When switching to Other, clear the value so dropdown appears
-    this.personalDetails.get('citizenship')?.setValue('');
-  }
   languages = [
     { label: "Georgian", value: "Georgian" },
     { label: "English", value: "English" },
@@ -396,35 +221,32 @@ export class UploadDocumentsComponent implements OnInit {
     { label: "Advanced", value: "Advanced" },
     { label: "Expert", value: "Expert" },
   ];
-
+  
   private fromApp: boolean = false;
-  email: string = "";
+  email = signal<string>("");
   private deviceId: string = "";
   private fcmToken: string = "";
-  userEmail: any;
 
   private _filterIdCounter = 0;
-
+  
   constructor(
     private fb: FormBuilder,
     private backend: BackendService,
     private router: Router,
     private route: ActivatedRoute,
     private firebaseStore: FirebaseStoreService,
-    private authService: AuthService,
-    private toggle: ToggleService
   ) {
     this.form = this.fb.group({
       personalDetails: this.fb.group({
-        userNameEnglish: ["", [Validators.required]],
-        surnameEnglish: ["", [Validators.required]],
+        givenNameSurnameEnglish: ["", [Validators.required]],
+        givenNameSurnameGeorgian: [""],
         citizenship: ["georgian", [Validators.required]],
         documentType: ["georgianId", [Validators.required]],
         documentNumber: ["", [Validators.required]],
         dateOfBirth: ["", [Validators.required]],
         gender: ["male", [Validators.required]],
         maritalStatus: ["single", [Validators.required]],
-        contactNumber: ["", [Validators.required, Validators.pattern(/^\+995\s?\d{9}$/)]],
+        contactNumber: ["", [Validators.required, CustomValidators.georgianPhoneValidator()]],
         emailAddress: ["", [Validators.required, Validators.email]],
         legalHomeAddress: this.fb.group({
           streetBuildingApartment: ["", [Validators.required]],
@@ -453,7 +275,7 @@ export class UploadDocumentsComponent implements OnInit {
       // SECTION 6: BANK DETAILS
       bankDetails: this.fb.group({
         bank: ["TBC Bank", [Validators.required]],
-        accountNumber: ["", [Validators.required, Validators.pattern(/^GE\d{2}\s?[A-Z]{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/)]],
+        accountNumber: ["", [Validators.required, CustomValidators.ibanValidator()]],
         accountHolderName: ["", [Validators.required]],
         useSameName: [false],
       }),
@@ -463,7 +285,7 @@ export class UploadDocumentsComponent implements OnInit {
         fullName: ["", [Validators.required]],
         relationship: ["", [Validators.required]],
         address: ["", [Validators.required]],
-        contactNumber: ["", [Validators.required, Validators.pattern(/^\+995\s?\d{9}$/)]],
+        contactNumber: ["", [Validators.required, CustomValidators.georgianPhoneValidator()]],
         notes: [""],
       }),
 
@@ -482,10 +304,6 @@ export class UploadDocumentsComponent implements OnInit {
         dataUrl: [""],
         uploaded: [false],
       }),
-      healthCard: this.fb.group({
-        dataUrl: [""],
-        uploaded: [false],
-      }),
       healthCertificate: this.fb.group({
         dataUrl: [""],
         uploaded: [false],
@@ -500,6 +318,7 @@ export class UploadDocumentsComponent implements OnInit {
     this.addEducation();
     this.addWorkExperience();
     this.addLanguage();
+    this.addAdditionalDocument();
 
     // Initialize OpenCV
     this.initOpenCv();
@@ -507,6 +326,7 @@ export class UploadDocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
+      this.email = params["email"] || "";
       this.fromApp = params["from"] === "app";
       this.deviceId = params["deviceId"] || "";
       this.fcmToken = params["fcmToken"] || "";
@@ -519,54 +339,10 @@ export class UploadDocumentsComponent implements OnInit {
     });
   }
 
-  // Custom validators
-  private dateRangeValidator(): ValidatorFn {
-    return (group: AbstractControl) => {
-      const from = group.get('from')?.value;
-      const to = group.get('to')?.value;
-
-      if (from && to && new Date(from) > new Date(to)) {
-        return { dateRangeInvalid: true };
-      }
-      return null;
-    };
-  }
-
-  private employmentPeriodValidator(): ValidatorFn {
-    return (group: AbstractControl) => {
-      const from = group.get('employmentPeriodFrom')?.value;
-      const to = group.get('employmentPeriodTo')?.value;
-
-
-      if (from && to && new Date(from) > new Date(to)) {
-        return { employmentPeriodInvalid: true };
-      }
-      return null;
-    };
-
-      this.sub = this.firebaseStore
-        .watchUserById(this.userId)
-        .subscribe((resp) => {
-          if (resp && resp.role === "TRAINEE") {
-            const queryParams: any = { email: this.email };
-            if (this.fromApp) queryParams.from = "app";
-
-            if (this.deviceId) queryParams.deviceId = this.deviceId;
-            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-            if (this.userId) queryParams.userId = this.userId;
-            this.router.navigate(["/trainee-dashboard"], {
-              queryParams,
-            });
-          }
-        });
-    });
-
-  }
-
-  private updateUrl() {
-    if (this.userId) {
+  updateUrl() {
+    if (this.deviceId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
+      this.firebaseStore.updateUrlByDeviceId(this.deviceId, currentUrl);
     }
   }
 
@@ -693,35 +469,35 @@ export class UploadDocumentsComponent implements OnInit {
     );
 
     // 3) Map to messages
-    // if (blurScore < this.BLUR_THRESHOLD) {
-    //   return {
-    //     status: "blurry",
-    //     message: "Image is blurry. Hold still and try again.",
-    //   };
-    // }
+    if (blurScore < this.BLUR_THRESHOLD) {
+      return {
+        status: "blurry",
+        message: "Image is blurry. Hold still and try again.",
+      };
+    }
 
-    // if (areaRatio === 0) {
-    //   return {
-    //     status: "good",
-    //     message: "Looks good! Image captured successfully.",
-    //   };
-    // }
+    if (areaRatio === 0) {
+      return {
+        status: "good",
+        message: "Looks good! Image captured successfully.",
+      };
+    }
 
-    // if (areaRatio < this.AREA_TOO_FAR_MAX) {
-    //   return {
-    //     status: "too_far",
-    //     message:
-    //       "Document is too far. Move it closer so it fills more of the frame.",
-    //   };
-    // }
+    if (areaRatio < this.AREA_TOO_FAR_MAX) {
+      return {
+        status: "too_far",
+        message:
+          "Document is too far. Move it closer so it fills more of the frame.",
+      };
+    }
 
-    // if (areaRatio > this.AREA_TOO_CLOSE_MIN) {
-    //   return {
-    //     status: "too_close",
-    //     message:
-    //       "Document is too close. Move it a bit away so edges are visible.",
-    //   };
-    // }
+    if (areaRatio > this.AREA_TOO_CLOSE_MIN) {
+      return {
+        status: "too_close",
+        message:
+          "Document is too close. Move it a bit away so edges are visible.",
+      };
+    }
 
     return {
       status: "good",
@@ -769,6 +545,11 @@ export class UploadDocumentsComponent implements OnInit {
     return this.form.get("rightToWork") as FormGroup;
   }
 
+  // Getter for additional documents form array
+  get additionalDocumentForms() {
+    return this.form.get("additionalDocuments") as FormArray;
+  }
+
   // Education FormArray methods
   get educationForms() {
     return this.form.get("education") as FormArray;
@@ -782,7 +563,7 @@ export class UploadDocumentsComponent implements OnInit {
       qualification: ["", [Validators.required]],
       notes: [""],
       currentlyStudying: [false],
-    }, { validators: this.dateRangeValidator() });
+    });
     this.educationForms.push(educationGroup);
   }
 
@@ -806,7 +587,7 @@ export class UploadDocumentsComponent implements OnInit {
       reasonForLeaving: [""],
       stillWorking: [false],
       additionalNotes: [""],
-    }, { validators: this.employmentPeriodValidator() });
+    });
     this.workExperienceForms.push(workGroup);
   }
 
@@ -832,21 +613,16 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   // Additional Documents FormArray methods
-  get additionalDocumentsForms() {
-    return this.form.get("additionalDocuments") as FormArray;
-  }
-
   addAdditionalDocument() {
-    const additionalDocGroup = this.fb.group({
-      documentName: [""],
+    const docGroup = this.fb.group({
       dataUrl: [""],
       uploaded: [false],
     });
-    this.additionalDocumentsForms.push(additionalDocGroup);
+    this.additionalDocumentForms.push(docGroup);
   }
 
   removeAdditionalDocument(index: number) {
-    this.additionalDocumentsForms.removeAt(index);
+    this.additionalDocumentForms.removeAt(index);
   }
 
   // Professional Skills FormArray methods
@@ -891,7 +667,7 @@ export class UploadDocumentsComponent implements OnInit {
   onUseSameNameChange(event: any) {
     if (event.target.checked) {
       const personalName = this.personalDetails.get(
-        "userNameEnglish"
+        "givenNameSurnameEnglish"
       )?.value;
       this.bankDetails.get("accountHolderName")?.setValue(personalName);
     }
@@ -936,15 +712,40 @@ export class UploadDocumentsComponent implements OnInit {
   // Convert form data to match backend schema
   private transformFormData(formValue: any): any {
     const personal = formValue.personalDetails;
+    const [userNameEnglish, surnameEnglish] = personal.givenNameSurnameEnglish
+      .split(" ")
+      .filter(Boolean);
 
+    // Prepare documents object
+    const documents: any = {
+      doc1: {
+        url: formValue.passport.dataUrl || "",
+        status: formValue.passport.uploaded ? "pending" : "pending",
+      },
+      doc2: {
+        url: formValue.residenceCard.dataUrl || "",
+        status: formValue.residenceCard.uploaded ? "pending" : "pending",
+      },
+      doc3: {
+        url: formValue.healthCertificate.dataUrl || "",
+        status: formValue.healthCertificate.uploaded ? "pending" : "pending",
+      }
+    };
 
-    // Remove unwanted fields from the transformed data
-    const transformedData: any = {
+    // Add additional documents
+    formValue.additionalDocuments.forEach((doc: any, index: number) => {
+      documents[`doc${index + 4}`] = {
+        url: doc.dataUrl || "",
+        status: doc.uploaded ? "pending" : "pending",
+      };
+    });
+
+    return {
       userId: this.getUserId(),
 
-      // Personal Details - only include required fields
-      userNameEnglish: personal.userNameEnglish || "",
-      surnameEnglish: personal.surnameEnglish || "",
+      // Personal Details - removed unwanted fields
+      userNameEnglish: userNameEnglish || "",
+      surnameEnglish: surnameEnglish || "",
       documentType: personal.documentType,
       documentNumber: parseInt(personal.documentNumber) || 0,
       email: personal.emailAddress,
@@ -954,7 +755,7 @@ export class UploadDocumentsComponent implements OnInit {
       gender: personal.gender,
       martialStatus: personal.maritalStatus,
       legalAdress: personal.legalHomeAddress.streetBuildingApartment,
-
+      position: "",
       citizenship: personal.citizenship,
 
       // Education
@@ -975,7 +776,7 @@ export class UploadDocumentsComponent implements OnInit {
         from: work.employmentPeriodFrom,
         to: work.employmentPeriodTo,
         stillWorking: work.stillWorking,
-        grossSalary: work.grossSalary.toString(),
+        grossSalary: work.grossSalary ? work.grossSalary.toString() : "",
         reasonForLeaving: work.reasonForLeaving,
         notes: work.additionalNotes,
       })),
@@ -1015,44 +816,16 @@ export class UploadDocumentsComponent implements OnInit {
       additionalNotes: formValue.additionalField,
 
       // Documents
-      documents: {
-        doc1: {
-          url: formValue.passport.dataUrl || "",
-          status: formValue.passport.uploaded ? "pending" : "pending",
-        },
-        doc2: {
-          url: formValue.residenceCard.dataUrl || "",
-          status: formValue.residenceCard.uploaded ? "pending" : "pending",
-        },
-        doc3: {
-          url: formValue.healthCard.dataUrl || "",
-          status: formValue.healthCard.uploaded ? "pending" : "pending",
-        },
-        doc4: {
-          url: formValue.healthCertificate.dataUrl || "",
-          status: formValue.healthCertificate.uploaded ? "pending" : "pending",
-        },
-      },
+      documents,
 
+      // Only include necessary fields
+      role: "USER",
+      status: "active",
+      isLoggedIn: 0,
+      isDeleted: false,
+      fcmToken: this.fromApp ? this.fcmToken : null,
+      deviceId: this.fromApp ? this.deviceId : null,
     };
-
-    // Add additional documents
-    formValue.additionalDocuments.forEach((doc: any, index: number) => {
-      if (doc.dataUrl) {
-        transformedData.documents[`doc${index + 5}`] = {
-          url: doc.dataUrl,
-          status: doc.uploaded ? "pending" : "pending",
-        };
-      }
-    });
-
-    // Add FCM token and device ID only if from app
-    if (this.fromApp) {
-      transformedData.fcmToken = this.fcmToken;
-      transformedData.deviceId = this.deviceId;
-    }
-
-    return transformedData;
   }
 
   // Convert base64 to blob for file upload
@@ -1078,10 +851,8 @@ export class UploadDocumentsComponent implements OnInit {
     Object.keys(transformedData).forEach((key) => {
       const value = transformedData[key];
 
-      // Skip documents object for now (will handle separately)
       if (key === "documents") return;
 
-      // Handle arrays and objects by stringifying them
       if (Array.isArray(value) || typeof value === "object") {
         formData.append(key, JSON.stringify(value));
       } else {
@@ -1092,52 +863,39 @@ export class UploadDocumentsComponent implements OnInit {
     // Add document files if they exist and have data
     const documents = transformedData.documents || {};
 
-    // Main documents
-    const docMappings = [
-      { key: 'doc1', formKey: 'documents', name: 'passport.jpg' },
-      { key: 'doc2', formKey: 'documents', name: 'residenceCard.jpg' },
-      { key: 'doc3', formKey: 'documents', name: 'healthCard.jpg' },
-      { key: 'doc4', formKey: 'documents', name: 'healthCertificate.jpg' }
-    ];
-
-    docMappings.forEach(mapping => {
-      if (documents[mapping.key]?.url) {
-        const blob = this.dataURLtoBlob(documents[mapping.key].url);
-        if (blob.size > 0) {
-          formData.append(mapping.formKey, blob, mapping.name);
-          console.log(`${mapping.formKey} image added to FormData`);
-        }
-      }
-    });
-
-    // Additional documents
-    Object.keys(documents).forEach(key => {
-      if (key.startsWith('doc') && parseInt(key.replace('doc', '')) >= 5) {
-        if (documents[key]?.url) {
-          const blob = this.dataURLtoBlob(documents[key].url);
-          if (blob.size > 0) {
-            formData.append('documents', blob, `additionalDocument_${key}.jpg`);
-            console.log(`Additional document ${key} added to FormData`);
-          }
-        }
-      }
-    });
-
-    // Log FormData contents for debugging
-    console.log("=== FORM DATA CONTENTS ===");
-    for (let pair of (formData as any).entries()) {
-      if (pair[1] instanceof Blob) {
-        console.log(pair[0] + ": [BLOB] - Size: " + pair[1].size + " bytes");
-      } else {
-        console.log(
-          pair[0] +
-          ": " +
-          (pair[1].toString().length > 100
-            ? pair[1].toString().substring(0, 100) + "..."
-            : pair[1])
-        );
+    // Passport
+    if (documents.doc1?.url) {
+      const blob = this.dataURLtoBlob(documents.doc1.url);
+      if (blob.size > 0) {
+        formData.append("passport", blob, "passport.jpg");
       }
     }
+
+    // Residence Card
+    if (documents.doc2?.url) {
+      const blob = this.dataURLtoBlob(documents.doc2.url);
+      if (blob.size > 0) {
+        formData.append("residenceCard", blob, "residenceCard.jpg");
+      }
+    }
+
+    // Health Certificate
+    if (documents.doc3?.url) {
+      const blob = this.dataURLtoBlob(documents.doc3.url);
+      if (blob.size > 0) {
+        formData.append("healthCertificate", blob, "healthCertificate.jpg");
+      }
+    }
+
+    // Additional Documents
+    Object.keys(documents).forEach((key, index) => {
+      if (index >= 3 && documents[key]?.url) { // Start from doc4 onwards
+        const blob = this.dataURLtoBlob(documents[key].url);
+        if (blob.size > 0) {
+          formData.append(`additionalDoc${index - 2}`, blob, `additionalDoc${index - 2}.jpg`);
+        }
+      }
+    });
 
     return formData;
   }
@@ -1145,7 +903,6 @@ export class UploadDocumentsComponent implements OnInit {
   // Convert to FormData and submit
   onSubmit() {
     if (this.form.valid) {
-      // Check if userId exists in localStorage
       const userId = this.getUserId();
       if (!userId) {
         alert("User not authenticated. Please log in again.");
@@ -1153,30 +910,14 @@ export class UploadDocumentsComponent implements OnInit {
       }
 
       const formValue = this.form.value;
-
-      // Transform form data to match backend schema
       const transformedData = this.transformFormData(formValue);
-
-      console.log("=== TRANSFORMED DATA FOR BACKEND ===");
-      console.log("UserId:", userId);
-      console.log(JSON.stringify(transformedData, null, 2));
-
-      // Create FormData with all data as simple fields
       const formData = this.createFormData(transformedData);
 
-      // Call backend service
       this.backend.uploadDocuments(formData).subscribe({
         next: (res) => {
           console.log("Document upload response:", res);
           alert("Form submitted successfully!");
-          const queryParams: any = { email: this.email };
-          if (this.fromApp) queryParams.from = "app";
-          if (this.deviceId) queryParams.deviceId = this.deviceId;
-          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-          if (this.userId) queryParams.userId = this.userId;
-          this.router.navigate(["/waiting-for-application-submission"], {
-            queryParams,
-          });
+          this.router.navigate(["/waiting-for-application-submission"]);
         },
         error: (err) => {
           console.error("Error submitting form:", err);
@@ -1223,10 +964,9 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   selectAdditionalDocType(index: number) {
-    this.activeDocType = "additional";
+    this.activeDocType = `additionalDoc${index}`;
     this.activeAdditionalDocIndex = index;
-    const docName = this.additionalDocumentsForms.at(index).get('documentName')?.value || `Document ${index + 1}`;
-    this.hint = `Align your ${docName} inside the frame and tap Capture.`;
+    this.hint = `Align your additional document ${index + 1} inside the frame and tap Capture.`;
     this.qualityStatus = "unknown";
     this.showCamera = true;
   }
@@ -1239,29 +979,21 @@ export class UploadDocumentsComponent implements OnInit {
     this.activeAdditionalDocIndex = null;
   }
 
-  labelFor(type: DocType): string {
+  labelFor(type: DocType | string): string {
     switch (type) {
       case "passport":
         return "Passport";
       case "residenceCard":
         return "Residence Card";
-      case "healthCard":
-        return "Health Card";
       case "healthCertificate":
         return "Health Certificate";
-      case "additional":
-        return "Additional Document";
       default:
+        if (typeof type === 'string' && type.startsWith('additionalDoc')) {
+          const index = this.activeAdditionalDocIndex !== null ? this.activeAdditionalDocIndex + 1 : 1;
+          return `Additional Document ${index}`;
+        }
         return "Document";
     }
-  }
-
-  getCameraTitle(): string {
-    if (this.activeDocType === "additional" && this.activeAdditionalDocIndex !== null) {
-      const docName = this.additionalDocumentsForms.at(this.activeAdditionalDocIndex).get('documentName')?.value;
-      return docName || `Additional Document ${this.activeAdditionalDocIndex + 1}`;
-    }
-    return this.activeDocType ? this.labelFor(this.activeDocType) : 'Document';
   }
 
   // ========== Capture via ngx-webcam ==========
@@ -1275,38 +1007,41 @@ export class UploadDocumentsComponent implements OnInit {
     if (!this.activeDocType) return;
 
     const dataUrl = webcamImage.imageAsDataUrl;
-
-    // 1) analyze blur / too far / too close
     const quality = await this.analyzeQuality(dataUrl);
     this.qualityStatus = quality.status;
     this.hint = quality.message;
 
-    // If not good, keep camera open so user can try again
     if (quality.status !== "good") {
       console.warn("Quality not good, not saving image", quality);
       return;
     }
 
-    // 2) Save to form (good quality)
-    if (this.activeDocType === "additional" && this.activeAdditionalDocIndex !== null) {
-      const docGroup = this.additionalDocumentsForms.at(this.activeAdditionalDocIndex) as FormGroup;
+    // Save to appropriate form group
+    if (this.activeAdditionalDocIndex !== null) {
+      // Additional document
+      const docGroup = this.additionalDocumentForms.at(this.activeAdditionalDocIndex) as FormGroup;
       docGroup.patchValue({
         dataUrl,
         uploaded: true,
       });
     } else {
-      const group = this.form.get(this.activeDocType) as FormGroup;
-      group.patchValue({
-        dataUrl,
-        uploaded: true,
-      });
+      // Main document
+      const group = this.form.get(this.activeDocType as DocType) as FormGroup;
+      if (group) {
+        group.patchValue({
+          dataUrl,
+          uploaded: true,
+        });
+      }
     }
 
     console.log(`Captured for ${this.activeDocType}:`, dataUrl);
 
-    // 3) Close camera & go back to cards
+    // Close camera
     this.showCamera = false;
-    this.hint = `Captured ${this.getCameraTitle()}. Click another card to capture again.`;
+    this.hint = `Captured ${this.labelFor(
+      this.activeDocType
+    )}. Click another card to capture again.`;
     this.qualityStatus = "good";
     this.activeAdditionalDocIndex = null;
   }
@@ -1334,7 +1069,7 @@ export class UploadDocumentsComponent implements OnInit {
 
   clearAdditionalDoc(index: number, event: MouseEvent) {
     event.stopPropagation();
-    const docGroup = this.additionalDocumentsForms.at(index) as FormGroup;
+    const docGroup = this.additionalDocumentForms.at(index) as FormGroup;
     if (!docGroup) return;
     docGroup.patchValue({
       dataUrl: "",

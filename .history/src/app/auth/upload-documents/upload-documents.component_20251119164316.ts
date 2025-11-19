@@ -10,16 +10,14 @@ import {
   ValidatorFn,
 } from "@angular/forms";
 import { SelectModule } from "primeng/select";
-import { Subject, Subscription } from "rxjs";
+import { Subject } from "rxjs";
 import { WebcamImage, WebcamModule } from "ngx-webcam";
 import { BackendService } from "../../Services/backend.service";
 
 // OpenCV.js
-import cvModule, { log } from "@techstark/opencv-js";
+import cvModule from "@techstark/opencv-js";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FirebaseStoreService } from "../../Services/firebase-store.service";
-import { AuthService } from "../../Services/auth.service";
-import { ToggleService } from "../../Services/toggle.service";
 
 type DocType = "passport" | "residenceCard" | "healthCard" | "healthCertificate" | "additional";
 
@@ -32,8 +30,7 @@ type DocType = "passport" | "residenceCard" | "healthCard" | "healthCertificate"
 })
 export class UploadDocumentsComponent implements OnInit {
   form: FormGroup;
-  userId: any;
-  sub!: Subscription;
+
   activeDocType: DocType | null = null;
   activeAdditionalDocIndex: number | null = null;
   showCamera = false;
@@ -398,10 +395,9 @@ export class UploadDocumentsComponent implements OnInit {
   ];
 
   private fromApp: boolean = false;
-  email: string = "";
+  email = signal<string>("");
   private deviceId: string = "";
   private fcmToken: string = "";
-  userEmail: any;
 
   private _filterIdCounter = 0;
 
@@ -411,8 +407,6 @@ export class UploadDocumentsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private firebaseStore: FirebaseStoreService,
-    private authService: AuthService,
-    private toggle: ToggleService
   ) {
     this.form = this.fb.group({
       personalDetails: this.fb.group({
@@ -507,6 +501,7 @@ export class UploadDocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
+      this.email = params["email"] || "";
       this.fromApp = params["from"] === "app";
       this.deviceId = params["deviceId"] || "";
       this.fcmToken = params["fcmToken"] || "";
@@ -537,36 +532,17 @@ export class UploadDocumentsComponent implements OnInit {
       const from = group.get('employmentPeriodFrom')?.value;
       const to = group.get('employmentPeriodTo')?.value;
 
-
       if (from && to && new Date(from) > new Date(to)) {
         return { employmentPeriodInvalid: true };
       }
       return null;
     };
-
-      this.sub = this.firebaseStore
-        .watchUserById(this.userId)
-        .subscribe((resp) => {
-          if (resp && resp.role === "TRAINEE") {
-            const queryParams: any = { email: this.email };
-            if (this.fromApp) queryParams.from = "app";
-
-            if (this.deviceId) queryParams.deviceId = this.deviceId;
-            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-            if (this.userId) queryParams.userId = this.userId;
-            this.router.navigate(["/trainee-dashboard"], {
-              queryParams,
-            });
-          }
-        });
-    });
-
   }
 
-  private updateUrl() {
-    if (this.userId) {
+  updateUrl() {
+    if (this.deviceId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
+      this.firebaseStore.updateUrlByDeviceId(this.deviceId, currentUrl);
     }
   }
 
@@ -1169,14 +1145,7 @@ export class UploadDocumentsComponent implements OnInit {
         next: (res) => {
           console.log("Document upload response:", res);
           alert("Form submitted successfully!");
-          const queryParams: any = { email: this.email };
-          if (this.fromApp) queryParams.from = "app";
-          if (this.deviceId) queryParams.deviceId = this.deviceId;
-          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-          if (this.userId) queryParams.userId = this.userId;
-          this.router.navigate(["/waiting-for-application-submission"], {
-            queryParams,
-          });
+          this.router.navigate(["/waiting-for-application-submission"]);
         },
         error: (err) => {
           console.error("Error submitting form:", err);

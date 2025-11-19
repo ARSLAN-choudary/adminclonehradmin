@@ -8,22 +8,21 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">User Name*</label>
-                        <input type="text" class="form-control" formControlName="userNameEnglish"
-                            placeholder="Enter your full name in English" id="userNameEnglish" name="userNameEnglish">
+                        <label class="form-label">Given Name, Surname (English) *</label>
+                        <input type="text" class="form-control" formControlName="givenNameSurnameEnglish"
+                            placeholder="Enter your full name in English" name="givenNameSurnameEnglish" id="givenNameSurnameEnglish">
                         <div class="text-danger mt-1"
-                            *ngIf="personalDetails.get('userNameEnglish')?.invalid && personalDetails.get('userNameEnglish')?.touched">
-                            <span *ngIf="personalDetails.get('userNameEnglish')?.errors?.['required']">This
-                                field is required</span>
+                            *ngIf="personalDetails.get('givenNameSurnameEnglish')?.invalid && personalDetails.get('givenNameSurnameEnglish')?.touched">
+                            This field is required
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">Surname </label>
-                        <input type="text" class="form-control" formControlName="surnameEnglish"
-                            placeholder="Enter your full name in Georgian" id="surnameEnglish" name="surnameEnglish">
+                        <label class="form-label">Given Name, Surname (Georgian)</label>
+                        <input type="text" class="form-control" formControlName="givenNameSurnameGeorgian"
+                            placeholder="Enter your full name in Georgian" name="givenNameSurnameGeorgian" id="givenNameSurnameGeorgian">
                     </div>
                 </div>
             </div>
@@ -32,34 +31,20 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <span class="form-label">Citizenship *</span>
-
-                        <!-- Radio buttons for Georgian/Other -->
-                        <div class="radio-wrap mb-2">
+                        <div class="radio-wrap">
                             <div class="d-flex flex-wrap">
                                 <div class="me-2">
                                     <input type="radio" class="status-radio" id="georgian" value="georgian"
-                                        [checked]="personalDetails.get('citizenship')?.value === 'georgian'"
-                                        (change)="setGeorgianCitizenship()" name="citizenshipRadio" />
+                                        formControlName="citizenship" name="citizenship" />
                                     <label for="georgian">Georgian</label>
                                 </div>
                                 <div>
                                     <input type="radio" class="status-radio" id="other" value="other"
-                                        [checked]="personalDetails.get('citizenship')?.value !== 'georgian'"
-                                        (change)="setOtherCitizenship()" name="citizenshipRadio" />
+                                        formControlName="citizenship" name="citizenship" />
                                     <label for="other">Other</label>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Country Dropdown - Show when NOT Georgian -->
-                        <div *ngIf="personalDetails.get('citizenship')?.value !== 'georgian'" class="mt-2">
-                            <p-select appSelectFilterId [options]="countries" optionLabel="label" optionValue="value"
-                                placeholder="Select your country" [filter]="true" class="form-control"
-                                formControlName="citizenship" id="citizenship" name="citizenship"
-                                (onShow)="labelFilterInput('citizenship-filter')">
-                            </p-select>
-                        </div>
-
                         <div class="text-danger mt-1"
                             *ngIf="personalDetails.get('citizenship')?.invalid && personalDetails.get('citizenship')?.touched">
                             This field is required
@@ -67,7 +52,22 @@
                     </div>
                 </div>
 
-                <!-- Document Type column remains the same -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <span class="form-label">Document Type *</span>
+                        <p-select appSelectFilterId [options]="[
+                            {label: 'Georgian ID Card', value: 'georgianId'},
+                            {label: 'Residence Permit', value: 'residencePermit'},
+                            {label: 'Passport', value: 'passport'}
+                        ]" optionLabel="label" optionValue="value" placeholder="Select" [filter]="true"
+                            class="form-control" formControlName="documentType" id="documentType" name="documentType"
+                            (onShow)="labelFilterInput('documentType-filter')"></p-select>
+                        <div class="text-danger mt-1"
+                            *ngIf="personalDetails.get('documentType')?.invalid && personalDetails.get('documentType')?.touched">
+                            This field is required
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -75,7 +75,7 @@
                     <div class="mb-3">
                         <label class="form-label">Document Number *</label>
                         <input type="text" class="form-control" formControlName="documentNumber"
-                            placeholder="Enter document number" id="documentNumber" name="documentNumber">
+                            placeholder="Enter document number" name="documentNumber" id="documentNumber">
                         <div class="text-danger mt-1"
                             *ngIf="personalDetails.get('documentNumber')?.invalid && personalDetails.get('documentNumber')?.touched">
                             This field is required
@@ -86,8 +86,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label">Date of Birth *</label>
-                        <input type="date" class="form-control" formControlName="dateOfBirth" id="dateOfBirth"
-                            name="dateOfBirth">
+                        <input type="date" class="form-control" formControlName="dateOfBirth" name="dateOfBirth" id="dateOfBirth">
                         <div class="text-danger mt-1"
                             *ngIf="personalDetails.get('dateOfBirth')?.invalid && personalDetails.get('dateOfBirth')?.touched">
                             This field is required
@@ -161,13 +160,11 @@
                     <div class="mb-3">
                         <label class="form-label">Contact Number *</label>
                         <input type="tel" class="form-control" formControlName="contactNumber"
-                            placeholder="+995583916300" id="contactNumber" name="contactNumber">
+                            placeholder="+995 555 12 34 56" name="contactNumber" id="contactNumber">
                         <div class="text-danger mt-1"
                             *ngIf="personalDetails.get('contactNumber')?.invalid && personalDetails.get('contactNumber')?.touched">
-                            <span *ngIf="personalDetails.get('contactNumber')?.errors?.['required']">This field is
-                                required</span>
-                            <span *ngIf="personalDetails.get('contactNumber')?.errors?.['pattern']">Contact number must
-                                start with +995 and number must be like +995583916300</span>
+                            <span *ngIf="personalDetails.get('contactNumber')?.errors?.['required']">This field is required</span>
+                            <span *ngIf="personalDetails.get('contactNumber')?.errors?.['pattern']">Contact number must start with +995</span>
                         </div>
                     </div>
                 </div>
@@ -176,13 +173,11 @@
                     <div class="mb-3">
                         <label class="form-label">Email Address *</label>
                         <input type="email" class="form-control" formControlName="emailAddress"
-                            placeholder="your.email@example.com" id="emailAddress" name="emailAddress">
+                            placeholder="your.email@example.com" name="emailAddress" id="emailAddress">
                         <div class="text-danger mt-1"
                             *ngIf="personalDetails.get('emailAddress')?.invalid && personalDetails.get('emailAddress')?.touched">
-                            <span *ngIf="personalDetails.get('emailAddress')?.errors?.['required']">This field is
-                                required</span>
-                            <span *ngIf="personalDetails.get('emailAddress')?.errors?.['email']">Please enter a valid
-                                email</span>
+                            <span *ngIf="personalDetails.get('emailAddress')?.errors?.['required']">This field is required</span>
+                            <span *ngIf="personalDetails.get('emailAddress')?.errors?.['email']">Please enter a valid email</span>
                         </div>
                     </div>
                 </div>
@@ -194,8 +189,7 @@
                 <div class="mb-3">
                     <label class="form-label">Street / Building / Apartment *</label>
                     <input type="text" class="form-control" formControlName="streetBuildingApartment"
-                        placeholder="Enter your street address" id="streetBuildingApartment"
-                        name="streetBuildingApartment">
+                        placeholder="Enter your street address" name="streetBuildingApartment" id="streetBuildingApartment">
                     <div class="text-danger mt-1"
                         *ngIf="legalHomeAddress.get('streetBuildingApartment')?.invalid && legalHomeAddress.get('streetBuildingApartment')?.touched">
                         This field is required
@@ -205,7 +199,7 @@
                 <div class="mb-3">
                     <label class="form-label">Village (Optional)</label>
                     <input type="text" class="form-control" formControlName="village"
-                        placeholder="Enter village name if applicable" id="village" name="village">
+                        placeholder="Enter village name if applicable" name="village" id="village">
                 </div>
 
                 <div class="row">
@@ -250,8 +244,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">From (MM/YYYY) *</label>
-                                <input type="month" class="form-control" formControlName="from"
-                                    [id]="'educationFrom' + i" [name]="'educationFrom' + i">
+                                <input type="month" class="form-control" formControlName="from" [name]="'educationFrom' + i" [id]="'educationFrom' + i">
                                 <div class="text-danger mt-1"
                                     *ngIf="education.get('from')?.invalid && education.get('from')?.touched">
                                     This field is required
@@ -262,24 +255,23 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">To (MM/YYYY) *</label>
-                                <input type="month" class="form-control" formControlName="to" [id]="'educationTo' + i"
-                                    [name]="'educationTo' + i">
+                                <input type="month" class="form-control" formControlName="to" [name]="'educationTo' + i" [id]="'educationTo' + i">
                                 <div class="text-danger mt-1"
                                     *ngIf="education.get('to')?.invalid && education.get('to')?.touched">
                                     This field is required
                                 </div>
+                                <div class="text-danger mt-1"
+                                    *ngIf="education.get('to')?.valid && education.get('from')?.valid && education.get('from')?.value > education.get('to')?.value">
+                                    To date must be after From date
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="text-danger mt-1" *ngIf="education.hasError('dateRangeInvalid')">
-                        To date must be after From date
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Institution *</label>
                         <input type="text" class="form-control" formControlName="institution"
-                            placeholder="School / College / University" [id]="'institution' + i"
-                            [name]="'institution' + i">
+                            placeholder="School / College / University" [name]="'institution' + i" [id]="'institution' + i">
                         <div class="text-danger mt-1"
                             *ngIf="education.get('institution')?.invalid && education.get('institution')?.touched">
                             This field is required
@@ -289,8 +281,7 @@
                     <div class="mb-3">
                         <label class="form-label">Qualification / Degree *</label>
                         <input type="text" class="form-control" formControlName="qualification"
-                            placeholder="Degree or qualification earned" [id]="'qualification' + i"
-                            [name]="'qualification' + i">
+                            placeholder="Degree or qualification earned" [name]="'qualification' + i" [id]="'qualification' + i">
                         <div class="text-danger mt-1"
                             *ngIf="education.get('qualification')?.invalid && education.get('qualification')?.touched">
                             This field is required
@@ -299,8 +290,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Notes (Optional)</label>
-                        <input type="text" class="form-control" formControlName="notes" placeholder="Additional notes"
-                            [id]="'educationNotes' + i" [name]="'educationNotes' + i">
+                        <input type="text" class="form-control" formControlName="notes" placeholder="Additional notes" [name]="'educationNotes' + i" [id]="'educationNotes' + i">
                     </div>
 
                     <div class="mb-3">
@@ -336,7 +326,7 @@
                     <div class="mb-3">
                         <label class="form-label">Company Name *</label>
                         <input type="text" class="form-control" formControlName="companyName"
-                            placeholder="Enter company name" [id]="'companyName' + i" [name]="'companyName' + i">
+                            placeholder="Enter company name" [name]="'companyName' + i" [id]="'companyName' + i">
                         <div class="text-danger mt-1"
                             *ngIf="work.get('companyName')?.invalid && work.get('companyName')?.touched">
                             This field is required
@@ -346,7 +336,7 @@
                     <div class="mb-3">
                         <label class="form-label">City, Country *</label>
                         <input type="text" class="form-control" formControlName="cityCountry"
-                            placeholder="e.g., Tbilisi, Georgia" [id]="'cityCountry' + i" [name]="'cityCountry' + i">
+                            placeholder="e.g., Tbilisi, Georgia" [name]="'cityCountry' + i" [id]="'cityCountry' + i">
                         <div class="text-danger mt-1"
                             *ngIf="work.get('cityCountry')?.invalid && work.get('cityCountry')?.touched">
                             This field is required
@@ -355,8 +345,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Job Title / Position *</label>
-                        <input type="text" class="form-control" formControlName="jobTitle" placeholder="Your job title"
-                            [id]="'jobTitle' + i" [name]="'jobTitle' + i">
+                        <input type="text" class="form-control" formControlName="jobTitle" placeholder="Your job title" [name]="'jobTitle' + i" [id]="'jobTitle' + i">
                         <div class="text-danger mt-1"
                             *ngIf="work.get('jobTitle')?.invalid && work.get('jobTitle')?.touched">
                             This field is required
@@ -367,8 +356,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Employment Period From *</label>
-                                <input type="month" class="form-control" formControlName="employmentPeriodFrom"
-                                    [id]="'employmentPeriodFrom' + i" [name]="'employmentPeriodFrom' + i">
+                                <input type="month" class="form-control" formControlName="employmentPeriodFrom" [name]="'employmentFrom' + i" [id]="'employmentFrom' + i">
                                 <div class="text-danger mt-1"
                                     *ngIf="work.get('employmentPeriodFrom')?.invalid && work.get('employmentPeriodFrom')?.touched">
                                     This field is required
@@ -379,30 +367,29 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Employment Period To *</label>
-                                <input type="month" class="form-control" formControlName="employmentPeriodTo"
-                                    [id]="'employmentPeriodTo' + i" [name]="'employmentPeriodTo' + i">
+                                <input type="month" class="form-control" formControlName="employmentPeriodTo" [name]="'employmentTo' + i" [id]="'employmentTo' + i">
                                 <div class="text-danger mt-1"
                                     *ngIf="work.get('employmentPeriodTo')?.invalid && work.get('employmentPeriodTo')?.touched">
                                     This field is required
                                 </div>
+                                <div class="text-danger mt-1"
+                                    *ngIf="work.get('employmentPeriodTo')?.valid && work.get('employmentPeriodFrom')?.valid && work.get('employmentPeriodFrom')?.value > work.get('employmentPeriodTo')?.value && !work.get('stillWorking')?.value">
+                                    To date must be after From date
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="text-danger mt-1" *ngIf="work.hasError('employmentPeriodInvalid')">
-                        Employment Period To must be after Employment Period From
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Gross Salary (Optional)</label>
                         <input type="number" class="form-control" formControlName="grossSalary"
-                            placeholder="Monthly gross salary" [id]="'grossSalary' + i" [name]="'grossSalary' + i">
+                            placeholder="Monthly gross salary" [name]="'grossSalary' + i" [id]="'grossSalary' + i">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Reason for Leaving</label>
                         <input type="text" class="form-control" formControlName="reasonForLeaving"
-                            placeholder="Reason for leaving this position" [id]="'reasonForLeaving' + i"
-                            [name]="'reasonForLeaving' + i">
+                            placeholder="Reason for leaving this position" [name]="'reasonForLeaving' + i" [id]="'reasonForLeaving' + i">
                     </div>
 
                     <div class="mb-3">
@@ -418,8 +405,7 @@
                     <div class="mb-3">
                         <label class="form-label">Additional Notes</label>
                         <textarea class="form-control" formControlName="additionalNotes"
-                            placeholder="Any additional information about this role" rows="3"
-                            [id]="'additionalNotes' + i" [name]="'additionalNotes' + i"></textarea>
+                            placeholder="Any additional information about this role" rows="3" [name]="'additionalNotes' + i" [id]="'additionalNotes' + i"></textarea>
                     </div>
 
                     <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeWorkExperience(i)"
@@ -495,10 +481,9 @@
                 <div class="row">
                     <div *ngFor="let skillOption of professionalSkills" class="col-md-6 mb-2">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" [id]="'skill-' + skillOption.value"
+                            <input class="form-check-input" type="checkbox" [id]="'skill-' + skillOption.value" [name]="'skill-' + skillOption.value"
                                 (change)="toggleProfessionalSkill(skillOption.value)"
-                                [checked]="isProfessionalSkillSelected(skillOption.value)"
-                                [name]="'skill-' + skillOption.value">
+                                [checked]="isProfessionalSkillSelected(skillOption.value)">
                             <label class="form-check-label"
                                 [for]="'skill-' + skillOption.value">{{skillOption.label}}</label>
                         </div>
@@ -509,8 +494,7 @@
                 <div class="mb-3">
                     <label class="form-label">Your skills:</label>
                     <textarea class="form-control" formControlName="otherSkills"
-                        placeholder="List any additional skills you have..." rows="3" id="otherSkills"
-                        name="otherSkills"></textarea>
+                        placeholder="List any additional skills you have..." rows="3" name="otherSkills" id="otherSkills"></textarea>
                 </div>
             </div>
         </div>
@@ -523,8 +507,8 @@
                 <div class="mb-3">
                     <span class="form-label">Select Your Bank *</span>
                     <p-select appSelectFilterId [options]="banks" optionLabel="label" optionValue="value"
-                        placeholder="Select" [filter]="true" class="form-control" formControlName="bank" id="bank"
-                        name="bank" (onShow)="labelFilterInput('bank-filter')"></p-select>
+                        placeholder="Select" [filter]="true" class="form-control" formControlName="bank" id="bank" name="bank"
+                        (onShow)="labelFilterInput('bank-filter')"></p-select>
                     <div class="text-danger mt-1"
                         *ngIf="bankDetails.get('bank')?.invalid && bankDetails.get('bank')?.touched">
                         This field is required
@@ -534,22 +518,19 @@
                 <div class="mb-3">
                     <label class="form-label">Account Number (IBAN) *</label>
                     <input type="text" class="form-control" formControlName="accountNumber"
-                        placeholder="GE00 TBBC 0000 0000 0000 0000" id="accountNumber" name="accountNumber">
+                        placeholder="GE00 TBBC 0000 0000 0000 0000" name="accountNumber" id="accountNumber">
                     <small class="form-text text-muted">Format: GE00 TBBC 0000 0000 0000 0000</small>
                     <div class="text-danger mt-1"
                         *ngIf="bankDetails.get('accountNumber')?.invalid && bankDetails.get('accountNumber')?.touched">
-                        <span *ngIf="bankDetails.get('accountNumber')?.errors?.['required']">This field is
-                            required</span>
-                        <span *ngIf="bankDetails.get('accountNumber')?.errors?.['pattern']">IBAN must be in format: GE00
-                            TBBC 0000 0000 0000 0000</span>
+                        <span *ngIf="bankDetails.get('accountNumber')?.errors?.['required']">This field is required</span>
+                        <span *ngIf="bankDetails.get('accountNumber')?.errors?.['pattern']">IBAN must be in format: GE00 TBBC 0000 0000 0000 0000</span>
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Account Holder Name *</label>
                     <input type="text" class="form-control" formControlName="accountHolderName"
-                        placeholder="Name as it appears on bank account" id="accountHolderName"
-                        name="accountHolderName">
+                        placeholder="Name as it appears on bank account" name="accountHolderName" id="accountHolderName">
                     <div class="text-danger mt-1"
                         *ngIf="bankDetails.get('accountHolderName')?.invalid && bankDetails.get('accountHolderName')?.touched">
                         This field is required
@@ -576,7 +557,7 @@
                 <div class="mb-3">
                     <label class="form-label">Full Name *</label>
                     <input type="text" class="form-control" formControlName="fullName"
-                        placeholder="Emergency contact full name" id="emergencyFullName" name="emergencyFullName">
+                        placeholder="Emergency contact full name" name="emergencyFullName" id="emergencyFullName">
                     <div class="text-danger mt-1"
                         *ngIf="emergencyContact.get('fullName')?.invalid && emergencyContact.get('fullName')?.touched">
                         This field is required
@@ -586,8 +567,7 @@
                 <div class="mb-3">
                     <label class="form-label">Relationship *</label>
                     <input type="text" class="form-control" formControlName="relationship"
-                        placeholder="e.g., Spouse, Parent, Sibling, Friend" id="emergencyRelationship"
-                        name="emergencyRelationship">
+                        placeholder="e.g., Spouse, Parent, Sibling, Friend" name="emergencyRelationship" id="emergencyRelationship">
                     <div class="text-danger mt-1"
                         *ngIf="emergencyContact.get('relationship')?.invalid && emergencyContact.get('relationship')?.touched">
                         This field is required
@@ -597,7 +577,7 @@
                 <div class="mb-3">
                     <label class="form-label">Address *</label>
                     <input type="text" class="form-control" formControlName="address"
-                        placeholder="Emergency contact address" id="emergencyAddress" name="emergencyAddress">
+                        placeholder="Emergency contact address" name="emergencyAddress" id="emergencyAddress">
                     <div class="text-danger mt-1"
                         *ngIf="emergencyContact.get('address')?.invalid && emergencyContact.get('address')?.touched">
                         This field is required
@@ -607,21 +587,18 @@
                 <div class="mb-3">
                     <label class="form-label">Contact Number *</label>
                     <input type="tel" class="form-control" formControlName="contactNumber"
-                        placeholder="Emergency contact phone number" id="emergencyContactNumber"
-                        name="emergencyContactNumber">
+                        placeholder="Emergency contact phone number" name="emergencyContactNumber" id="emergencyContactNumber">
                     <div class="text-danger mt-1"
                         *ngIf="emergencyContact.get('contactNumber')?.invalid && emergencyContact.get('contactNumber')?.touched">
-                        <span *ngIf="emergencyContact.get('contactNumber')?.errors?.['required']">This field is
-                            required</span>
-                        <span *ngIf="emergencyContact.get('contactNumber')?.errors?.['pattern']">Contact number must
-                            start with +995 and number must be like +995583916300</span>
+                        <span *ngIf="emergencyContact.get('contactNumber')?.errors?.['required']">This field is required</span>
+                        <span *ngIf="emergencyContact.get('contactNumber')?.errors?.['pattern']">Contact number must start with +995</span>
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Notes (Optional)</label>
                     <input type="text" class="form-control" formControlName="notes"
-                        placeholder="Any additional information" id="emergencyNotes" name="emergencyNotes">
+                        placeholder="Any additional information" name="emergencyNotes" id="emergencyNotes">
                 </div>
             </div>
         </div>
@@ -658,7 +635,7 @@
                     <div class="mb-3">
                         <label class="form-label">If No, please explain:</label>
                         <input type="text" class="form-control" formControlName="explanation"
-                            placeholder="Please provide explanation..." id="workExplanation" name="workExplanation">
+                            placeholder="Please provide explanation..." name="rightToWorkExplanation" id="rightToWorkExplanation">
                     </div>
                 </div>
             </div>
@@ -719,30 +696,6 @@
                         </div>
                     </div>
 
-                    <!-- Health Card -->
-                    <div class="col-md-6 mb-3">
-                        <div class="doc-card card" [class.active]="activeDocType === 'healthCard'"
-                            (click)="selectDocType('healthCard')">
-                            <div class="card-body">
-                                <h3>Health Card</h3>
-                                <p>
-                                    Status:
-                                    <span [class.text-success]="form.get('healthCard.uploaded')?.value"
-                                        [class.text-warning]="!form.get('healthCard.uploaded')?.value">
-                                        {{ form.get('healthCard.uploaded')?.value ? 'Captured' : 'Not captured' }}
-                                    </span>
-                                </p>
-                                <div class="doc-image-wrapper" *ngIf="form.get('healthCard.dataUrl')?.value as img">
-                                    <img [src]="img" alt="Health card preview" class="doc-image img-fluid rounded" />
-                                    <button type="button" class="doc-image-remove btn btn-danger btn-sm"
-                                        (click)="clearDoc('healthCard', $event)">
-                                        ✕
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Health Certificate -->
                     <div class="col-md-6 mb-3">
                         <div class="doc-card card" [class.active]="activeDocType === 'healthCertificate'"
@@ -753,14 +706,11 @@
                                     Status:
                                     <span [class.text-success]="form.get('healthCertificate.uploaded')?.value"
                                         [class.text-warning]="!form.get('healthCertificate.uploaded')?.value">
-                                        {{ form.get('healthCertificate.uploaded')?.value ? 'Captured' : 'Not captured'
-                                        }}
+                                        {{ form.get('healthCertificate.uploaded')?.value ? 'Captured' : 'Not captured' }}
                                     </span>
                                 </p>
-                                <div class="doc-image-wrapper"
-                                    *ngIf="form.get('healthCertificate.dataUrl')?.value as img">
-                                    <img [src]="img" alt="Health certificate preview"
-                                        class="doc-image img-fluid rounded" />
+                                <div class="doc-image-wrapper" *ngIf="form.get('healthCertificate.dataUrl')?.value as img">
+                                    <img [src]="img" alt="Health certificate preview" class="doc-image img-fluid rounded" />
                                     <button type="button" class="doc-image-remove btn btn-danger btn-sm"
                                         (click)="clearDoc('healthCertificate', $event)">
                                         ✕
@@ -769,50 +719,39 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Additional Documents -->
-                <div formArrayName="additionalDocuments"
-                    *ngFor="let doc of additionalDocumentsForms.controls; let i = index">
-                    <div [formGroupName]="i" class="doc-card card mb-3">
-                        <div class="card-body">
-                            <h3>Additional Document {{i + 1}}</h3>
-                            <div class="mb-3">
-                                <label class="form-label">Document Name</label>
-                                <input type="text" class="form-control" formControlName="documentName"
-                                    [placeholder]="'Document ' + (i + 1)" [id]="'additionalDocName' + i"
-                                    [name]="'additionalDocName' + i">
-                            </div>
-                            <p>
-                                Status:
-                                <span [class.text-success]="doc.get('uploaded')?.value"
-                                    [class.text-warning]="!doc.get('uploaded')?.value">
-                                    {{ doc.get('uploaded')?.value ? 'Captured' : 'Not captured' }}
-                                </span>
-                            </p>
-                            <div class="doc-image-wrapper" *ngIf="doc.get('dataUrl')?.value as img">
-                                <img [src]="img" [alt]="'Additional document ' + (i + 1) + ' preview'"
-                                    class="doc-image img-fluid rounded" />
-                                <button type="button" class="doc-image-remove btn btn-danger btn-sm"
-                                    (click)="clearAdditionalDoc(i, $event)">
-                                    ✕
-                                </button>
-                            </div>
-                            <div class="my-2 flex justify-content-center align-items-center flex-wrap">
-                                <button type="button" class="btn btn-outline-primary btn-sm m-1 "
-                                    (click)="selectAdditionalDocType(i)">
-                                    Capture Document {{i + 1}}
-                                </button>
-                                <button type="button" class="btn btn-outline-primary btn-sm m-1"
-                                    (click)="removeAdditionalDocument(i)" *ngIf="additionalDocumentsForms.length > 1">
-                                    Remove Document
-                                </button>
+                    <!-- Additional Documents -->
+                    <div class="col-12 mb-3" formArrayName="additionalDocuments">
+                        <div *ngFor="let doc of additionalDocumentForms.controls; let i = index">
+                            <div [formGroupName]="i" class="doc-card card mb-3" [class.active]="activeDocType === 'additionalDoc' + i"
+                                (click)="selectAdditionalDocType(i)">
+                                <div class="card-body">
+                                    <h3>Additional Document {{i + 1}}</h3>
+                                    <p>
+                                        Status:
+                                        <span [class.text-success]="doc.get('uploaded')?.value"
+                                            [class.text-warning]="!doc.get('uploaded')?.value">
+                                            {{ doc.get('uploaded')?.value ? 'Captured' : 'Not captured' }}
+                                        </span>
+                                    </p>
+                                    <div class="doc-image-wrapper" *ngIf="doc.get('dataUrl')?.value as img">
+                                        <img [src]="img" alt="Additional document preview" class="doc-image img-fluid rounded" />
+                                        <button type="button" class="doc-image-remove btn btn-danger btn-sm"
+                                            (click)="clearAdditionalDoc(i, $event)">
+                                            ✕
+                                        </button>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-danger btn-sm mt-2" 
+                                        (click)="removeAdditionalDocument(i)" *ngIf="additionalDocumentForms.length > 1">
+                                        Remove Document
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-outline-primary" (click)="addAdditionalDocument()">
+                <button type="button" class="btn btn-outline-primary" (click)="addAdditionalDocument()"> 
                     + Add Another Document
                 </button>
 
@@ -825,7 +764,7 @@
             <div class="camera-overlay" *ngIf="showCamera">
                 <div class="camera-header">
                     <div class="camera-title">
-                        {{ getCameraTitle() }}
+                        {{ activeDocType ? labelFor(activeDocType) : 'Document' }}
                     </div>
                     <button type="button" class="camera-close btn-close" (click)="onCloseCamera()"></button>
                 </div>
@@ -845,7 +784,7 @@
                             Cancel
                         </button>
                         <button type="button" class="btn btn-primary" (click)="triggerSnapshot()">
-                            Capture {{ getCameraTitle() }}
+                            Capture {{ activeDocType ? '(' + labelFor(activeDocType) + ')' : '' }}
                         </button>
                     </div>
                 </div>
@@ -859,8 +798,7 @@
 
             <div class="mb-3">
                 <textarea class="form-control" formControlName="additionalField" rows="4"
-                    placeholder="Write anything additional you want to share about your experience, skills, or anything else relevant to your application..."
-                    id="additionalField" name="additionalField"></textarea>
+                    placeholder="Write anything additional you want to share about your experience, skills, or anything else relevant to your application..." name="additionalField" id="additionalField"></textarea>
             </div>
         </div>
 

@@ -537,36 +537,17 @@ export class UploadDocumentsComponent implements OnInit {
       const from = group.get('employmentPeriodFrom')?.value;
       const to = group.get('employmentPeriodTo')?.value;
 
-
       if (from && to && new Date(from) > new Date(to)) {
         return { employmentPeriodInvalid: true };
       }
       return null;
     };
-
-      this.sub = this.firebaseStore
-        .watchUserById(this.userId)
-        .subscribe((resp) => {
-          if (resp && resp.role === "TRAINEE") {
-            const queryParams: any = { email: this.email };
-            if (this.fromApp) queryParams.from = "app";
-
-            if (this.deviceId) queryParams.deviceId = this.deviceId;
-            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-            if (this.userId) queryParams.userId = this.userId;
-            this.router.navigate(["/trainee-dashboard"], {
-              queryParams,
-            });
-          }
-        });
-    });
-
   }
 
-  private updateUrl() {
-    if (this.userId) {
+  updateUrl() {
+    if (this.deviceId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
+      this.firebaseStore.updateUrlByUserId(this.deviceId, currentUrl);
     }
   }
 
@@ -1169,14 +1150,7 @@ export class UploadDocumentsComponent implements OnInit {
         next: (res) => {
           console.log("Document upload response:", res);
           alert("Form submitted successfully!");
-          const queryParams: any = { email: this.email };
-          if (this.fromApp) queryParams.from = "app";
-          if (this.deviceId) queryParams.deviceId = this.deviceId;
-          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-          if (this.userId) queryParams.userId = this.userId;
-          this.router.navigate(["/waiting-for-application-submission"], {
-            queryParams,
-          });
+          this.router.navigate(["/waiting-for-application-submission"]);
         },
         error: (err) => {
           console.error("Error submitting form:", err);
