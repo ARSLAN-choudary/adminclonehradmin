@@ -1,6 +1,5 @@
-import { CommonModule, NgClass } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   OnDestroy,
@@ -107,7 +106,6 @@ interface PhoneInputValue {
     NgxIntlTelInputModule,
     Select,
     SelectFilterIdDirective,
-    NgClass,
   ],
   templateUrl: "./manage-users.component.html",
   styleUrl: "./manage-users.component.scss",
