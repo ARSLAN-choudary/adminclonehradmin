@@ -182,6 +182,7 @@ export class NewApplicationComponent implements OnInit {
 
   initChecked = false;
   currentUserId: string = "";
+  currentAppId: string = "";
 
   UserAppId: string = "";
 
@@ -288,8 +289,6 @@ export class NewApplicationComponent implements OnInit {
     });
 
     this.getTableData(this.skip, this.pageSize);
-
-   
 
     this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
       // if (this.router.url === this.routes.dataTable) {
@@ -1420,6 +1419,7 @@ export class NewApplicationComponent implements OnInit {
   // DOCS OFFCANVAS
   openDocs(user: any) {
     this.currentUserId = user.userId;
+    this.currentAppId = user._id;
 
     this.backend.getApplicationById(user._id).subscribe({
       next: (apiRes: any) => {
@@ -1739,7 +1739,7 @@ export class NewApplicationComponent implements OnInit {
   }
   approve(doc: any) {
     const payload = {
-      applicationId: this.currentUserId,
+      applicationId: this.currentAppId,
       documentKey: doc.key,
       status: "approved",
     };
@@ -1906,7 +1906,7 @@ export class NewApplicationComponent implements OnInit {
     }
 
     const payload = {
-      applicationId: this.currentUserId,
+      applicationId: this.currentAppId,
       documentKey: this.currentRejectDoc.key,
       status: "rejected",
       remarks: finalReason,
