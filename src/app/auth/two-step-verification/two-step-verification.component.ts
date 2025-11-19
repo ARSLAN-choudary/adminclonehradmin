@@ -175,6 +175,19 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
         localStorage.setItem("userId", res.data?.details?._id);
         this.toggle.setOtpData(this.email);
         this.loading = false;
+
+        if (res.data.details._id) {
+          localStorage.setItem("userId", res.data.details._id);
+          const currentUrl = window.location.href;
+          this.firebaseStore.saveUrlByDeviceId(
+            res.data.details._id,
+            this.email,
+            currentUrl,
+            res.data.details.status,
+            res.data.details.role,
+            this.deviceId
+          );
+        }
         if (this.fromApp) {
           this.router.navigate(["/waiting-for-approval"], {
             queryParams: { userId: res.data?.details?._id, from: "app" },

@@ -17,7 +17,8 @@ export class FirebaseStoreService {
     deviceId: string
   ) {
     try {
-      const docRef = doc(this.firestore, `baseUrl/${userId}`);
+
+      const docRef = doc(this.firestore, `users/${userId}`);
 
       // Always overwrite with latest email and url
       await setDoc(
@@ -37,7 +38,7 @@ export class FirebaseStoreService {
     deviceId: string
   ): Promise<{ email?: string; url?: string } | null> {
     try {
-      const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
+      const docRef = doc(this.firestore, `users/${deviceId}`);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
@@ -55,7 +56,7 @@ export class FirebaseStoreService {
   // ✅ Update only the URL (keep email same)
   async updateUrlByUserId(deviceId: string, newUrl: string) {
     try {
-      const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
+      const docRef = doc(this.firestore, `users/${deviceId}`);
       await setDoc(docRef, { url: newUrl }, { merge: true });
       console.log(`🔄 URL updated successfully for deviceId: ${deviceId}`);
     } catch (error) {
@@ -68,7 +69,8 @@ export class FirebaseStoreService {
     userId: string
   ) {
     try {
-      const docRef = doc(this.firestore, `baseUrl/${deviceId}`);
+
+      const docRef = doc(this.firestore, `users/${deviceId}`);
 
       await setDoc(
         docRef,

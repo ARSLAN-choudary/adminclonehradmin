@@ -36,15 +36,18 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.email = localStorage.getItem("email") || "";
-
     this.route.queryParams.subscribe((params) => {
-      // this.email = params["email"] || "";
       this.fromApp = params["from"] === "app";
-      this.deviceId = params["deviceId"] || "";
-      this.fcmToken = params["fcmToken"] || "";
-      this.deviceId = params["deviceId"] || "";
-      this.userId = params["userId"] || "";
+      if (this.fromApp) {
+        this.deviceId = params["deviceId"] || "";
+        this.fcmToken = params["fcmToken"] || "";
+        this.userId = params["userId"] || "";
+        this.email = params["email"] || "";
+      } else {
+        this.email = localStorage.getItem("email") || "";
+        this.userId = localStorage.getItem("userId") || "";
+      }
+
       if (this.userId) {
         setTimeout(() => {
           this.updateUrl();
@@ -81,19 +84,20 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
           console.log("✅ verifyUser response:", res);
+          this.updateUrl();
 
-          if (res.data.id) {
-            localStorage.setItem("userId", res.data.id);
-            const currentUrl = window.location.href;
-            this.firebaseStore.saveUrlByDeviceId(
-              res.data.id,
-              this.email,
-              currentUrl,
-              res.data.status,
-              res.data.role,
-              this.deviceId
-            );
-          }
+          // if (res.data.details._id) {
+          //   localStorage.setItem("userId", res.data.details._id);
+          //   const currentUrl = window.location.href;
+          //   this.firebaseStore.saveUrlByDeviceId(
+          //     res.data.details._id,
+          //     this.email,
+          //     currentUrl,
+          //     res.data.details.status,
+          //     res.data.details.role,
+          //     this.deviceId
+          //   );
+          // }
 
           if (res.data.status === "active") {
             this.router.navigate(["/upload-docs"], {
