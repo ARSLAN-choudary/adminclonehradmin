@@ -335,7 +335,7 @@ export class UploadDocumentsComponent implements OnInit {
   updateUrl() {
     if (this.deviceId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByDeviceId(this.deviceId, currentUrl);
+      this.firebaseStore.updateUrlByUserId(this.deviceId, currentUrl);
     }
   }
   // --------- OpenCV init ----------
