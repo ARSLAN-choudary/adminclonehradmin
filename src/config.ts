@@ -38,4 +38,6 @@ export const CONFIG = {
   updateDocStatus: BASE_URL_API + "/api/users/updatedocuments",
   uploadDocuments: BASE_URL_API + "/api/users/uploaddocuments",
   userDetail: BASE_URL_API + "/api/users/userbyId",
+  applicationDetail : BASE_URL_API + "/api/application/get",
+
 };

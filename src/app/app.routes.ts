@@ -78,6 +78,13 @@ export const routes: Routes = [
             "./features/terms-and-conditions/terms-and-conditions.component"
           ).then((m) => m.TermsAndConditionsComponent),
       },
+       {
+        path: "nda-agreement",
+        loadComponent: () =>
+          import(
+            "./features/nda-agreement/nda-agreement.component"
+          ).then((m) => m.NdaAgreementComponent),
+      },
 
       {
         path: "two-step-verification",
