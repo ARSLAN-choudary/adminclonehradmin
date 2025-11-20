@@ -608,7 +608,7 @@
                     <label class="form-label required">Contact Number</label>
                     <input type="tel" class="form-control" formControlName="contactNumber"
                         placeholder="Emergency contact phone number" id="emergencyContactNumber"
-                        name="emergencyContactNumber">
+                        name="emergencyContactNumber" maxlength="13">
                     <div class="text-danger mt-1"
                         *ngIf="emergencyContact.get('contactNumber')?.invalid && emergencyContact.get('contactNumber')?.touched">
                         <span *ngIf="emergencyContact.get('contactNumber')?.errors?.['required']">This field is
