@@ -36,6 +36,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: "resubmit-docs",
+        loadComponent: () =>
+          import("./auth/resubmition-docs/resubmition-docs.component").then(
+            (m) => m.ResubmitionDocsComponent
+          ),
+      },
+      {
         path: "trainee-dashboard",
         loadComponent: () =>
           import("./Modules/trainee-dashboard/dashboard/dashboard.component").then(
@@ -78,7 +85,7 @@ export const routes: Routes = [
             "./features/terms-and-conditions/terms-and-conditions.component"
           ).then((m) => m.TermsAndConditionsComponent),
       },
-       {
+      {
         path: "nda-agreement",
         loadComponent: () =>
           import(

@@ -1,0 +1,217 @@
+// document-upload.component.scss
+.document-upload-container {
+  .form-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+
+    h2 {
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .section-description {
+      color: #6c757d;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .doc-card {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    height: 100%;
+
+    &:hover {
+      border-color: #007bff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+    }
+
+    &.active {
+      border-color: #007bff;
+      background-color: #f8f9fa;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+
+      h3 {
+        color: #2c3e50;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      p {
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .doc-image-wrapper {
+    position: relative;
+    margin-top: 1rem;
+
+    .doc-image {
+      max-height: 120px;
+      object-fit: cover;
+      border: 1px solid #dee2e6;
+    }
+
+    .doc-image-remove {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      padding: 0;
+    }
+  }
+
+  .status-summary {
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+
+    .ti {
+      font-size: 1.2rem;
+    }
+  }
+
+  .camera-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+
+    .camera-header {
+      background: #fff;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      border-bottom: 1px solid #dee2e6;
+
+      .camera-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #2c3e50;
+      }
+
+      .camera-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+    }
+
+    .camera-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+      align-items: center;
+      justify-content: center;
+
+      .camera-box {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 1.5rem;
+
+        webcam {
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      .camera-hint-pill {
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        border-radius: 20px;
+        margin-bottom: 1.5rem;
+      }
+
+      .camera-actions {
+        display: flex;
+        gap: 1rem;
+        max-width: 600px;
+        width: 100%;
+        justify-content: center;
+
+        .btn {
+          min-width: 120px;
+        }
+      }
+    }
+  }
+
+  .hint {
+    font-size: 0.875rem;
+    font-style: italic;
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .form-section {
+      padding: 1rem;
+    }
+
+    .camera-content {
+      padding: 1rem !important;
+
+      .camera-actions {
+        flex-direction: column;
+
+        .btn {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// Utility classes
+.text-success {
+  color: #28a745 !important;
+}
+
+.text-warning {
+  color: #ffc107 !important;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  border-color: #ffeaa7;
+  color: #856404;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+  color: #0c5460;
+}

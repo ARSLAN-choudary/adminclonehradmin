@@ -1,0 +1,224 @@
+<!-- document-upload.component.html -->
+<div class="document-upload-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading your documents...</p>
+    </div>
+
+    <!-- SECTION: DOCUMENT UPLOAD -->
+    <div class="form-section" *ngIf="!isLoading && hasRejectedDocuments">
+        <h2>UPDATE REJECTED DOCUMENTS</h2>
+
+        <!-- Info Alert -->
+        <div class="alert alert-info">
+            <p>The following documents have been rejected and need to be re-uploaded. Please capture clear images of
+                these documents.</p>
+        </div>
+
+        <div *ngIf="!showCamera">
+            <!-- Rejected Documents Grid -->
+            <div class="documents-grid">
+                <!-- Passport -->
+                <div class="document-item" *ngIf="isDocumentRejected('passport')">
+                    <div class="doc-card" (click)="selectDocType('passport')">
+                        <div class="card-content">
+                            <h3>Passport</h3>
+                            <p class="status rejected">REJECTED - Needs Update</p>
+
+                            <div class="rejection-remarks">
+                                <strong>Remarks:</strong> {{ getRejectedDocumentRemarks('passport') }}
+                            </div>
+
+                            <div class="doc-image-wrapper" *ngIf="form.get('passport.dataUrl')?.value as img">
+                                <img [src]="img" alt="Passport preview" class="doc-image" />
+                                <button type="button" class="doc-image-remove" (click)="clearDoc('passport', $event)">
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div *ngIf="form.get('passport.uploaded')?.value" class="update-status">
+                                ✓ Ready for update
+                            </div>
+
+                            <button type="button" class="capture-btn">
+                                Capture Passport
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Residence Card -->
+                <div class="document-item" *ngIf="isDocumentRejected('residenceCard')">
+                    <div class="doc-card" (click)="selectDocType('residenceCard')">
+                        <div class="card-content">
+                            <h3>Residence Card</h3>
+                            <p class="status rejected">REJECTED - Needs Update</p>
+
+                            <div class="rejection-remarks">
+                                <strong>Remarks:</strong> {{ getRejectedDocumentRemarks('residenceCard') }}
+                            </div>
+
+                            <div class="doc-image-wrapper" *ngIf="form.get('residenceCard.dataUrl')?.value as img">
+                                <img [src]="img" alt="Residence card preview" class="doc-image" />
+                                <button type="button" class="doc-image-remove"
+                                    (click)="clearDoc('residenceCard', $event)">
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div *ngIf="form.get('residenceCard.uploaded')?.value" class="update-status">
+                                ✓ Ready for update
+                            </div>
+
+                            <button type="button" class="capture-btn">
+                                Capture Residence Card
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Card -->
+                <div class="document-item" *ngIf="isDocumentRejected('healthCard')">
+                    <div class="doc-card" (click)="selectDocType('healthCard')">
+                        <div class="card-content">
+                            <h3>Health Card</h3>
+                            <p class="status rejected">REJECTED - Needs Update</p>
+
+                            <div class="rejection-remarks">
+                                <strong>Remarks:</strong> {{ getRejectedDocumentRemarks('healthCard') }}
+                            </div>
+
+                            <div class="doc-image-wrapper" *ngIf="form.get('healthCard.dataUrl')?.value as img">
+                                <img [src]="img" alt="Health card preview" class="doc-image" />
+                                <button type="button" class="doc-image-remove" (click)="clearDoc('healthCard', $event)">
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div *ngIf="form.get('healthCard.uploaded')?.value" class="update-status">
+                                ✓ Ready for update
+                            </div>
+
+                            <button type="button" class="capture-btn">
+                                Capture Health Card
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Certificate -->
+                <div class="document-item" *ngIf="isDocumentRejected('healthCertificate')">
+                    <div class="doc-card" (click)="selectDocType('healthCertificate')">
+                        <div class="card-content">
+                            <h3>Health Certificate</h3>
+                            <p class="status rejected">REJECTED - Needs Update</p>
+
+                            <div class="rejection-remarks">
+                                <strong>Remarks:</strong> {{ getRejectedDocumentRemarks('healthCertificate') }}
+                            </div>
+
+                            <div class="doc-image-wrapper" *ngIf="form.get('healthCertificate.dataUrl')?.value as img">
+                                <img [src]="img" alt="Health certificate preview" class="doc-image" />
+                                <button type="button" class="doc-image-remove"
+                                    (click)="clearDoc('healthCertificate', $event)">
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div *ngIf="form.get('healthCertificate.uploaded')?.value" class="update-status">
+                                ✓ Ready for update
+                            </div>
+
+                            <button type="button" class="capture-btn">
+                                Capture Health Certificate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Rejected Documents -->
+            <div formArrayName="additionalDocuments"
+                *ngFor="let doc of additionalDocumentsForms.controls; let i = index">
+                <div [formGroupName]="i" class="document-item" *ngIf="isAdditionalDocumentRejected(i)">
+                    <div class="doc-card">
+                        <div class="card-content">
+                            <h3>Additional Document {{i + 1}}</h3>
+
+                            <div class="document-name">
+                                <label>Document Name</label>
+                                <input type="text" formControlName="documentName" [placeholder]="'Document ' + (i + 1)">
+                            </div>
+
+                            <p class="status rejected">REJECTED - Needs Update</p>
+
+                            <div class="rejection-remarks">
+                                <strong>Remarks:</strong> {{ getAdditionalDocumentRemarks(i) }}
+                            </div>
+
+                            <div class="doc-image-wrapper" *ngIf="doc.get('dataUrl')?.value as img">
+                                <img [src]="img" [alt]="'Additional document ' + (i + 1) + ' preview'"
+                                    class="doc-image" />
+                                <button type="button" class="doc-image-remove" (click)="clearAdditionalDoc(i, $event)">
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div class="additional-doc-actions">
+                                <button type="button" class="capture-btn" (click)="selectAdditionalDocType(i)">
+                                    Capture Document {{i + 1}}
+                                </button>
+                                <button type="button" class="remove-btn" (click)="removeAdditionalDocument(i)"
+                                    *ngIf="additionalDocumentsForms.length > 1">
+                                    Remove
+                                </button>
+                            </div>
+
+                            <div *ngIf="doc.get('uploaded')?.value" class="update-status">
+                                ✓ Ready for update
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Another Document Button -->
+            <button type="button" class="add-document-btn" (click)="addAdditionalDocument()">
+                + Add Another Document
+            </button>
+
+            <!-- Submit Button -->
+            <div class="actions">
+                <button type="button" class="submit-btn" (click)="onSubmit()" [disabled]="!hasUpdatedDocuments">
+                    Update Rejected Documents
+                </button>
+            </div>
+        </div>
+
+        <!-- Camera Overlay -->
+        <div class="camera-overlay" *ngIf="showCamera">
+            <div class="camera-header">
+                <div class="camera-title">{{ getCameraTitle() }}</div>
+                <button type="button" class="camera-close" (click)="onCloseCamera()">×</button>
+            </div>
+
+            <div class="camera-content">
+                <div class="camera-box">
+                    <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
+                        (initError)="handleCameraInitError($event)"></webcam>
+                </div>
+
+                <div class="camera-hint">{{ hint }}</div>
+
+                <div class="camera-actions">
+                    <button type="button" class="cancel-btn" (click)="onCloseCamera()">Cancel</button>
+                    <button type="button" class="capture-btn" (click)="triggerSnapshot()">Capture {{ getCameraTitle()
+                        }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
