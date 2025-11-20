@@ -83,6 +83,9 @@ export class UploadDocumentsComponent implements OnInit {
 
   private _filterIdCounter = 0;
 
+  today: string = '';
+  todayMonth: string = '';
+
   constructor(
     private fb: FormBuilder,
     private backend: BackendService,
@@ -235,6 +238,15 @@ export class UploadDocumentsComponent implements OnInit {
           }
         });
     });
+      const t = new Date();
+      const month = ('0' + (t.getMonth() + 1)).slice(-2);
+      const day = ('0' + t.getDate()).slice(-2);
+      this.today = `${t.getFullYear()}-${month}-${day}`;
+      this.todayMonth = `${t.getFullYear()}-${month}`;
+
+        this.personalDetails.patchValue({
+          emailAddress: this.email
+        });
   }
 
   // Custom validators
@@ -1392,4 +1404,21 @@ export class UploadDocumentsComponent implements OnInit {
     { label: "Ziraat Bank", value: "Ziraat Bank" },
     { label: "Silk Road Bank", value: "Silk Road Bank" },
   ];
+
+formatIBAN(event: any) {
+  let value = event.target.value.toUpperCase();
+  value = value.replace(/\s+/g, '');
+  value = value.replace(/[^A-Z0-9]/g, '');
+
+  let formatted = '';
+  for (let i = 0; i < value.length; i += 4) {
+    formatted += value.substring(i, i + 4) + ' ';
+  }
+
+  formatted = formatted.trim();
+
+  event.target.value = formatted;
+
+  this.bankDetails.get('accountNumber')?.setValue(formatted, { emitEvent: false });
+  }
 }

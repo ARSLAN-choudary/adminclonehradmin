@@ -681,3 +681,9 @@ h2 {
     --crms-btn-active-bg: var(--crms-secondary);
     --crms-btn-active-border-color: var(--crms-secondary);
 }
+
+.form-label.required::after {
+  content: " *";
+  color: #dc3545; 
+  font-weight: bold;
+}
