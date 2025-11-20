@@ -137,9 +137,13 @@ export class NewApplicationComponent implements OnInit {
 
   isGenerating = false;
   currentApplicationId: string = '';
+  contracts: any[] = []; // Store contracts from backend
 
-  // Store contracts from backend
-  contracts: any[] = [];
+  // Existing contracts from backend
+  traineeContract: ContractData | null = null;
+  probationContract: ContractData | null = null;
+  jobContract: ContractData | null = null;
+
   // Sample employee data - replace with actual data from your service
   employeeData = {
     name: "John Doe",
@@ -1755,19 +1759,6 @@ export class NewApplicationComponent implements OnInit {
   // contract  
 
 
-  // Helper methods to get specific contracts
-  get traineeContract(): any {
-    return this.contracts.find(contract => contract.name === 'trainee');
-  }
-
-  get probationContract(): any {
-    return this.contracts.find(contract => contract.name === 'probation');
-  }
-
-  get jobContract(): any {
-    return this.contracts.find(contract => contract.name === 'job');
-  }
-
   get hasTraineeContract(): boolean {
     return !!this.traineeContract;
   }
@@ -1788,19 +1779,22 @@ export class NewApplicationComponent implements OnInit {
   loadContracts(applicationId: string) {
     this.backendService.getUploadContract(applicationId).subscribe({
       next: (res: any) => {
-        if (res.status === 'success') {
-          this.contracts = res.data || [];
-          console.log('Loaded contracts:', this.contracts);
-        } else {
-          this.contracts = [];
-          console.error('Failed to load contracts:', res.message);
-        }
+        this.contracts = res.data || [];
+        this.updateLocalContracts();
       },
       error: (error) => {
         console.error('Error loading contracts:', error);
         this.contracts = [];
+        this.updateLocalContracts();
       }
     });
+  }
+
+  // Update local contract references
+  private updateLocalContracts() {
+    this.traineeContract = this.contracts.find(c => c.type === 'trainee') || null;
+    this.probationContract = this.contracts.find(c => c.type === 'probation') || null;
+    this.jobContract = this.contracts.find(c => c.type === 'job') || null;
   }
 
   // Generate Trainee Contract
@@ -1832,14 +1826,12 @@ export class NewApplicationComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error uploading trainee contract:', error);
-        },
-        complete: () => {
-          this.isGenerating = false;
         }
       });
 
     } catch (error) {
       console.error("Error generating trainee contract:", error);
+    } finally {
       this.isGenerating = false;
     }
   }
@@ -1869,14 +1861,12 @@ export class NewApplicationComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error uploading probation contract:', error);
-        },
-        complete: () => {
-          this.isGenerating = false;
         }
       });
 
     } catch (error) {
       console.error("Error generating probation contract:", error);
+    } finally {
       this.isGenerating = false;
     }
   }
@@ -1906,14 +1896,12 @@ export class NewApplicationComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error uploading job contract:', error);
-        },
-        complete: () => {
-          this.isGenerating = false;
         }
       });
 
     } catch (error) {
       console.error("Error generating job contract:", error);
+    } finally {
       this.isGenerating = false;
     }
   }
@@ -2020,17 +2008,13 @@ export class NewApplicationComponent implements OnInit {
         break;
     }
 
-    if (contract && contract.url) {
+    if (contract && contract.fileUrl) {
       // Download from backend URL
-      window.open(contract.url, '_blank');
-    } else {
-      console.warn('Contract not found or no URL available');
+      window.open(contract.fileUrl, '_blank');
+    } else if (contract) {
+      // Generate and download locally
+      // this.exportContractAsPDF(contract);
     }
-  }
-
-  // Format date for display
-  formatContractDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString();
   }
 
   // Existing helper methods (keep as is)
@@ -2050,6 +2034,7 @@ export class NewApplicationComponent implements OnInit {
   }
 
   private getContractTerms(contractType: string): string[] {
+    // Your existing implementation
     switch (contractType) {
       case "trainee":
         return ["Training period: 6 months", "Monthly stipend provided", "Mentorship program included", "Performance evaluation every 2 months"];
@@ -2063,6 +2048,7 @@ export class NewApplicationComponent implements OnInit {
   }
 
   private getContractDuration(contractType: string): string {
+    // Your existing implementation
     switch (contractType) {
       case "trainee": return "6 months";
       case "probation": return "3 months";
@@ -2072,6 +2058,7 @@ export class NewApplicationComponent implements OnInit {
   }
 
   private getContractConditions(contractType: string): string[] {
+    // Your existing implementation
     switch (contractType) {
       case "trainee":
         return ["Completion certificate upon successful training", "Possible job offer after training"];
@@ -2085,6 +2072,7 @@ export class NewApplicationComponent implements OnInit {
   }
 
   private getContractTitle(contractType: string): string {
+    // Your existing implementation
     switch (contractType) {
       case "trainee": return "TRAINEE EMPLOYMENT CONTRACT";
       case "probation": return "PROBATION EMPLOYMENT CONTRACT";
@@ -2095,8 +2083,6 @@ export class NewApplicationComponent implements OnInit {
 
   // Open modal with application ID
   openGenerateContractModal(applicationId: string) {
-    // Load contracts for this application
-    this.loadContracts(applicationId);
     this.currentApplicationId = applicationId;
 
     const el = this.generateContractCanvas.nativeElement;
@@ -2116,7 +2102,8 @@ export class NewApplicationComponent implements OnInit {
       this.renderer.appendChild(document.body, this.backdropEl);
     }
 
-
+    // Load contracts for this application
+    this.loadContracts(applicationId);
   }
 
   closeGenerateContractModal() {

@@ -452,7 +452,7 @@
                             <th mat-sort-header="createdAt">Submission Date</th>
                             <th mat-sort-header="role">Role</th>
                             <th mat-sort-header="status">Status</th>
-                            <th mat-sort-header="empty" class="text-center"></th>
+                            <th mat-sort-header="" class="text-center"></th>
                             <th class="text-center">Doc Status</th>
                             <th class="text-end no-sort">Action</th>
                         </tr>
@@ -505,8 +505,7 @@
                                                 class="ti ti-edit text-blue"></i>
                                             Edit</a>
                                         <a class="dropdown-item" href="javascript:void(0);"
-                                            (click)="openGenerateContractModal(data._id)"><i
-                                                class="ti ti-edit text-blue"></i>
+                                            (click)="openGenerateContractModal(data._id)"><i class="ti ti-edit text-blue"></i>
                                             Generate Contract</a>
 
                                         <a class="dropdown-item" href="javascript:void(0);"
@@ -1126,7 +1125,7 @@
         </button>
     </div>
 
-    <div class="container mt-1 body-content" id="detailsAccordion">
+<div class="container mt-1 body-content" id="detailsAccordion">
 
         <div *ngFor="let section of docData; let i = index" class="mb-1 px-3 py-2 rounded border shadow-sm">
 
@@ -1385,6 +1384,7 @@
 
 
 
+
 <div #generateContractCanvas class="offcanvas offcanvas-end offcanvas-small" tabindex="-1" id="offcanvas_contracts">
     <div class="offcanvas-header border-bottom">
         <h5 class="fw-semibold">Generate Contracts</h5>
@@ -1396,21 +1396,14 @@
     </div>
 
     <div class="offcanvas-body">
-        <!-- Loading State for Generation -->
-        <div class="text-center py-3" *ngIf="isGenerating">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Generating...</span>
-            </div>
-            <p class="text-muted mt-2">Generating contract...</p>
-        </div>
-
         <!-- Contract Generation Buttons -->
-        <div class="row g-3 mb-4" *ngIf="!isGenerating">
+        <div class="row g-3 mb-4">
             <div class="col-12">
                 <button class="btn btn-primary w-100 d-flex align-items-center justify-content-center py-3"
                     (click)="generateTraineeContract()" [disabled]="isGenerating">
                     <i class="ti ti-file-text me-2"></i>
                     <span>{{ hasTraineeContract ? 'Regenerate Trainee Contract' : 'Generate Trainee Contract' }}</span>
+
                 </button>
             </div>
             <div class="col-12">
@@ -1419,6 +1412,7 @@
                     <i class="ti ti-file-text me-2"></i>
                     <span>{{ hasProbationContract ? 'Regenerate Probation Contract' : 'Generate Probation Contract'
                         }}</span>
+
                 </button>
             </div>
             <div class="col-12">
@@ -1426,17 +1420,18 @@
                     (click)="generateJobContract()" [disabled]="isGenerating">
                     <i class="ti ti-file-text me-2"></i>
                     <span>{{ hasJobContract ? 'Regenerate Job Contract' : 'Generate Job Contract' }}</span>
+
                 </button>
             </div>
         </div>
 
         <!-- Generated Contracts Section -->
-        <div class="generated-contracts-section" *ngIf="hasGeneratedContracts && !isGenerating">
+        <div class="generated-contracts-section" *ngIf="hasGeneratedContracts">
             <h6 class="fw-semibold mb-3 text-muted">Generated Contracts</h6>
 
             <!-- Trainee Contract Card -->
             <div class="contract-card card border-0 shadow-sm mb-3" *ngIf="hasTraineeContract"
-                (click)="downloadContract('trainee')" style="cursor: pointer;">
+                (click)="downloadContract('trainee')">
                 <div class="card-body d-flex align-items-center p-3">
                     <div class="contract-icon me-3">
                         <i class="ti ti-file-text text-primary fs-2"></i>
@@ -1444,7 +1439,7 @@
                     <div class="contract-details flex-grow-1">
                         <h6 class="fw-semibold mb-1">Trainee Contract</h6>
                         <p class="text-muted small mb-0">
-                            Uploaded on {{ formatContractDate(traineeContract.uploadedAt) }}
+                            Generated on {{ traineeContract?.generatedDate | date:'mediumDate' }}
                         </p>
                     </div>
                     <div class="contract-action">
@@ -1455,7 +1450,7 @@
 
             <!-- Probation Contract Card -->
             <div class="contract-card card border-0 shadow-sm mb-3" *ngIf="hasProbationContract"
-                (click)="downloadContract('probation')" style="cursor: pointer;">
+                (click)="downloadContract('probation')">
                 <div class="card-body d-flex align-items-center p-3">
                     <div class="contract-icon me-3">
                         <i class="ti ti-file-text text-success fs-2"></i>
@@ -1463,7 +1458,7 @@
                     <div class="contract-details flex-grow-1">
                         <h6 class="fw-semibold mb-1">Probation Contract</h6>
                         <p class="text-muted small mb-0">
-                            Uploaded on {{ formatContractDate(probationContract.uploadedAt) }}
+                            Generated on {{ probationContract?.generatedDate | date:'mediumDate' }}
                         </p>
                     </div>
                     <div class="contract-action">
@@ -1474,7 +1469,7 @@
 
             <!-- Job Contract Card -->
             <div class="contract-card card border-0 shadow-sm mb-3" *ngIf="hasJobContract"
-                (click)="downloadContract('job')" style="cursor: pointer;">
+                (click)="downloadContract('job')">
                 <div class="card-body d-flex align-items-center p-3">
                     <div class="contract-icon me-3">
                         <i class="ti ti-file-text text-info fs-2"></i>
@@ -1482,7 +1477,7 @@
                     <div class="contract-details flex-grow-1">
                         <h6 class="fw-semibold mb-1">Job Contract</h6>
                         <p class="text-muted small mb-0">
-                            Uploaded on {{ formatContractDate(jobContract.uploadedAt) }}
+                            Generated on {{ jobContract?.generatedDate | date:'mediumDate' }}
                         </p>
                     </div>
                     <div class="contract-action">
@@ -1493,7 +1488,7 @@
         </div>
 
         <!-- Empty State -->
-        <div class="text-center py-5" *ngIf="!hasGeneratedContracts && !isGenerating">
+        <div class="text-center py-5" *ngIf="!hasGeneratedContracts">
             <i class="ti ti-files-off display-4 text-muted mb-3"></i>
             <p class="text-muted">No contracts generated yet. Click on the buttons above to generate contracts.</p>
         </div>

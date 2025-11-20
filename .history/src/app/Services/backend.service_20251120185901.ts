@@ -256,8 +256,11 @@ export class BackendService {
 
   getUploadContract(id: any): Observable<any> {
     const url = `${CONFIG.getUploadContract}/${id}`;
-    return this.http.get(url, {});
+    return this.http.post(url, {});
   }
-
+  updateUploadContract(id: any, payload: any): Observable<any> {
+    const url = `${CONFIG.updateUploadContract}/${id}`;
+    return this.http.post(url, payload);
+  }
 
 }

@@ -137,9 +137,13 @@ export class NewApplicationComponent implements OnInit {
 
   isGenerating = false;
   currentApplicationId: string = '';
+  contracts: any[] = []; // Store contracts from backend
 
-  // Store contracts from backend
-  contracts: any[] = [];
+  // Existing contracts from backend
+  traineeContract: ContractData | null = null;
+  probationContract: ContractData | null = null;
+  jobContract: ContractData | null = null;
+
   // Sample employee data - replace with actual data from your service
   employeeData = {
     name: "John Doe",
@@ -1786,7 +1790,7 @@ export class NewApplicationComponent implements OnInit {
 
   // Load contracts from backend
   loadContracts(applicationId: string) {
-    this.backendService.getUploadContract(applicationId).subscribe({
+    this.contractService.getUploadContract(applicationId).subscribe({
       next: (res: any) => {
         if (res.status === 'success') {
           this.contracts = res.data || [];
@@ -1824,7 +1828,7 @@ export class NewApplicationComponent implements OnInit {
       formData.append('trainee', pdfBlob, fileName);
 
       // Upload to backend
-      this.backendService.uploadContract(formData).subscribe({
+      this.contractService.uploadContract(formData).subscribe({
         next: (res: any) => {
           console.log('Trainee contract uploaded successfully:', res);
           // Reload contracts to get updated list
@@ -1862,7 +1866,7 @@ export class NewApplicationComponent implements OnInit {
       const pdfBlob = await this.generateContractPDF(contractData, fileName, 'probation');
       formData.append('probation', pdfBlob, fileName);
 
-      this.backendService.uploadContract(formData).subscribe({
+      this.contractService.uploadContract(formData).subscribe({
         next: (res: any) => {
           console.log('Probation contract uploaded successfully:', res);
           this.loadContracts(this.currentApplicationId);
@@ -1899,7 +1903,7 @@ export class NewApplicationComponent implements OnInit {
       const pdfBlob = await this.generateContractPDF(contractData, fileName, 'job');
       formData.append('job', pdfBlob, fileName);
 
-      this.backendService.uploadContract(formData).subscribe({
+      this.contractService.uploadContract(formData).subscribe({
         next: (res: any) => {
           console.log('Job contract uploaded successfully:', res);
           this.loadContracts(this.currentApplicationId);
@@ -2095,8 +2099,6 @@ export class NewApplicationComponent implements OnInit {
 
   // Open modal with application ID
   openGenerateContractModal(applicationId: string) {
-    // Load contracts for this application
-    this.loadContracts(applicationId);
     this.currentApplicationId = applicationId;
 
     const el = this.generateContractCanvas.nativeElement;
@@ -2116,7 +2118,8 @@ export class NewApplicationComponent implements OnInit {
       this.renderer.appendChild(document.body, this.backdropEl);
     }
 
-
+    // Load contracts for this application
+    this.loadContracts(applicationId);
   }
 
   closeGenerateContractModal() {

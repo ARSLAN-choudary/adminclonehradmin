@@ -2,18 +2,6 @@ import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { CONFIG } from "../../config";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-interface UploadContractPayload {
-  applicationId: string;
-  trainee?: File;
-  probation?: File;
-  job?: File;
-}
-
-interface ContractResponse {
-  success: boolean;
-  data: any;
-  message?: string;
-}
 
 @Injectable({
   providedIn: "root",
@@ -185,7 +173,20 @@ export class BackendService {
   }
 
 
- 
+  uploadContract(payload: any): Observable<any> {
+    return this.http.post(CONFIG.uploadContract, payload);
+  }
+
+
+  getUploadContract(id: any): Observable<any> {
+    const url = `${CONFIG.getUploadContract}/${id}`;
+    return this.http.post(url, {});
+  }
+  updateUploadContract(id: any, payload: any): Observable<any> {
+    const url = `${CONFIG.updateUploadContract}/${id}`;
+    return this.http.post(url, payload);
+  }
+
   deleteUser(id: any): Observable<any> {
     const url = `${CONFIG.deleteUser}/${id}`;
     return this.http.delete(url);
@@ -246,17 +247,6 @@ export class BackendService {
 
   getApplicationById(id: string) {
     return this.http.get(`${CONFIG.applicationDetail}/${id}`);
-  }
-
-// contract  
-  uploadContract(payload: any): Observable<any> {
-    return this.http.post(CONFIG.uploadContract, payload);
-  }
-
-
-  getUploadContract(id: any): Observable<any> {
-    const url = `${CONFIG.getUploadContract}/${id}`;
-    return this.http.get(url, {});
   }
 
 

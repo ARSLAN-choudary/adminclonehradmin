@@ -185,7 +185,20 @@ export class BackendService {
   }
 
 
- 
+  uploadContract(payload: any): Observable<any> {
+    return this.http.post(CONFIG.uploadContract, payload);
+  }
+
+
+  getUploadContract(id: any): Observable<any> {
+    const url = `${CONFIG.getUploadContract}/${id}`;
+    return this.http.post(url, {});
+  }
+  updateUploadContract(id: any, payload: any): Observable<any> {
+    const url = `${CONFIG.updateUploadContract}/${id}`;
+    return this.http.post(url, payload);
+  }
+
   deleteUser(id: any): Observable<any> {
     const url = `${CONFIG.deleteUser}/${id}`;
     return this.http.delete(url);
@@ -246,17 +259,6 @@ export class BackendService {
 
   getApplicationById(id: string) {
     return this.http.get(`${CONFIG.applicationDetail}/${id}`);
-  }
-
-// contract  
-  uploadContract(payload: any): Observable<any> {
-    return this.http.post(CONFIG.uploadContract, payload);
-  }
-
-
-  getUploadContract(id: any): Observable<any> {
-    const url = `${CONFIG.getUploadContract}/${id}`;
-    return this.http.get(url, {});
   }
 
 

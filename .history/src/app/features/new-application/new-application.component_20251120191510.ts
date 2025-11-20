@@ -2095,8 +2095,6 @@ export class NewApplicationComponent implements OnInit {
 
   // Open modal with application ID
   openGenerateContractModal(applicationId: string) {
-    // Load contracts for this application
-    this.loadContracts(applicationId);
     this.currentApplicationId = applicationId;
 
     const el = this.generateContractCanvas.nativeElement;
