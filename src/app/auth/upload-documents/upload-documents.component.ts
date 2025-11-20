@@ -227,14 +227,39 @@ export class UploadDocumentsComponent implements OnInit {
       this.sub = this.firebaseStore
         .watchUserById(this.appId)
         .subscribe((resp) => {
-          if (resp && resp.role === "TRAINEE") {
-            const queryParams: any = { email: this.email };
-            if (this.fromApp) queryParams.from = "app";
+          const queryParams: any = { email: this.email };
+          if (this.fromApp) queryParams.from = "app";
 
-            if (this.deviceId) queryParams.deviceId = this.deviceId;
-            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-            if (this.appId) queryParams.appId = this.appId;
+          if (this.deviceId) queryParams.deviceId = this.deviceId;
+          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+          if (this.appId) queryParams.appId = this.appId;
+          if (
+            resp &&
+            resp.role === "TRAINEE" &&
+            resp.termsAndCondition === true &&
+            resp.nda === true &&
+            resp.documentsRejected === false
+          ) {
             this.router.navigate(["/trainee-dashboard"], {
+              queryParams,
+            });
+          } else if (
+            resp &&
+            resp.role === "TRAINEE" &&
+            resp.termsAndCondition === true &&
+            resp.nda === true &&
+            resp.documentsRejected === true
+          ) {
+            this.router.navigate(["/resubmit-docs"], {
+              queryParams,
+            });
+          } else if (
+            resp &&
+            resp.role === "TRAINEE" &&
+            resp.termsAndCondition === false &&
+            resp.nda === false
+          ) {
+            this.router.navigate(["/terms-and-conditions"], {
               queryParams,
             });
           }
@@ -529,9 +554,8 @@ export class UploadDocumentsComponent implements OnInit {
   get educationForms() {
     return this.form.get("education") as FormArray;
   }
-futureDateValidator(control: AbstractControl) {
+  futureDateValidator(control: AbstractControl) {
     if (!control.value) return null;
-    
 
     const selected = new Date(control.value + "-01");
     const today = new Date();
@@ -544,8 +568,8 @@ futureDateValidator(control: AbstractControl) {
   addEducation() {
     const educationGroup = this.fb.group(
       {
-        from: ["", [Validators.required,this.futureDateValidator]],
-        to: ["", [Validators.required,this.futureDateValidator]],
+        from: ["", [Validators.required, this.futureDateValidator]],
+        to: ["", [Validators.required, this.futureDateValidator]],
         institution: ["", [Validators.required]],
         qualification: ["", [Validators.required]],
         notes: [""],
@@ -565,15 +589,20 @@ futureDateValidator(control: AbstractControl) {
     return this.form.get("workExperience") as FormArray;
   }
 
-  
   addWorkExperience() {
     const workGroup = this.fb.group(
       {
         companyName: ["", [Validators.required]],
         cityCountry: ["", [Validators.required]],
         jobTitle: ["", [Validators.required]],
-        employmentPeriodFrom: ["", [Validators.required,this.futureDateValidator]],
-        employmentPeriodTo: ["", [Validators.required,this.futureDateValidator]],
+        employmentPeriodFrom: [
+          "",
+          [Validators.required, this.futureDateValidator],
+        ],
+        employmentPeriodTo: [
+          "",
+          [Validators.required, this.futureDateValidator],
+        ],
         grossSalary: [""],
         reasonForLeaving: [""],
         stillWorking: [false],
@@ -944,7 +973,7 @@ futureDateValidator(control: AbstractControl) {
             if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
             if (this.appId) queryParams.appId = this.appId;
             this.ngZone.run(() => {
-              this.router.navigate(["/waiting-for-application-submission"], {
+              this.router.navigate(["/terms-and-conditions"], {
                 queryParams,
               });
             });

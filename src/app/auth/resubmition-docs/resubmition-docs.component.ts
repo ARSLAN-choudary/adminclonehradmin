@@ -8,9 +8,11 @@ import {
   FormArray,
   AbstractControl,
 } from "@angular/forms";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { WebcamImage, WebcamModule } from "ngx-webcam";
 import { BackendService } from "../../Services/backend.service"; // Adjust path as needed
+import { ActivatedRoute, Router } from "@angular/router";
+import { FirebaseStoreService } from "../../Services/firebase-store.service";
 
 type DocType =
   | "passport"
@@ -21,7 +23,7 @@ type DocType =
 
 interface DocumentStatus {
   url: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
   remarks: string;
 }
 
@@ -37,71 +39,101 @@ interface UserApplication {
   [key: string]: any;
 }
 @Component({
-  selector: 'app-resubmition-docs',
+  selector: "app-resubmition-docs",
   imports: [CommonModule, ReactiveFormsModule, WebcamModule],
-  templateUrl: './resubmition-docs.component.html',
-  styleUrl: './resubmition-docs.component.scss'
+  templateUrl: "./resubmition-docs.component.html",
+  styleUrl: "./resubmition-docs.component.scss",
 })
-export class ResubmitionDocsComponent {
+export class ResubmitionDocsComponent implements OnInit {
+  appId: any;
+  sub!: Subscription;
+  private fromApp: boolean = false;
+  email: string = "";
+  private deviceId: string = "";
+  private fcmToken: string = "";
+
   form: FormGroup;
 
   activeDocType: DocType | null = null;
   activeAdditionalDocIndex: number | null = null;
   showCamera = false;
   hint = "Click a card to capture its document.";
-  qualityStatus: "unknown" | "good" | "blurry" | "too_far" | "too_close" = "unknown";
+  qualityStatus: "unknown" | "good" | "blurry" | "too_far" | "too_close" =
+    "unknown";
 
   // User data
   userApplication: UserApplication | null = null;
   rejectedDocuments: any[] = [];
   isLoading = true;
-  staticUserId = "691f1eb4238c5fb7c1d8039d";
 
   // ngx-webcam trigger
   private snapshotTrigger: Subject<void> = new Subject<void>();
   triggerObservable = this.snapshotTrigger.asObservable();
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
+    private firebaseStore: FirebaseStoreService,
     private backend: BackendService
   ) {
     this.form = this.fb.group({
       passport: this.fb.group({
-        dataUrl: [''],
+        dataUrl: [""],
         uploaded: [false],
-        originalStatus: [''],
-        remarks: ['']
+        originalStatus: [""],
+        remarks: [""],
       }),
       residenceCard: this.fb.group({
-        dataUrl: [''],
+        dataUrl: [""],
         uploaded: [false],
-        originalStatus: [''],
-        remarks: ['']
+        originalStatus: [""],
+        remarks: [""],
       }),
       healthCard: this.fb.group({
-        dataUrl: [''],
+        dataUrl: [""],
         uploaded: [false],
-        originalStatus: [''],
-        remarks: ['']
+        originalStatus: [""],
+        remarks: [""],
       }),
       healthCertificate: this.fb.group({
-        dataUrl: [''],
+        dataUrl: [""],
         uploaded: [false],
-        originalStatus: [''],
-        remarks: ['']
+        originalStatus: [""],
+        remarks: [""],
       }),
       additionalDocuments: this.fb.array([]),
     });
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.fromApp = params["from"] === "app";
+
+      if (this.fromApp) {
+        this.deviceId = params["deviceId"] || "";
+        this.fcmToken = params["fcmToken"] || "";
+        this.appId = params["appId"] || "";
+        this.email = params["email"] || "";
+      } else {
+        this.email = localStorage.getItem("email") || "";
+        this.appId = localStorage.getItem("appId") || "";
+      }
+
+      if (!this.appId) {
+        console.warn("⚠️ appId missing");
+        return;
+      }
+
+      this.updateUrl();
+    });
     this.loadUserApplication();
   }
 
   // ========== LOAD USER APPLICATION ==========
   loadUserApplication() {
     this.isLoading = true;
-    this.backend.getApplicationById(this.staticUserId).subscribe({
+    this.backend.getApplicationById(this.appId).subscribe({
       next: (apiRes: any) => {
         this.userApplication = apiRes.data;
         this.processUserDocuments();
@@ -112,7 +144,7 @@ export class ResubmitionDocsComponent {
         this.isLoading = false;
         // Initialize with one additional document even if API fails
         this.addAdditionalDocument();
-      }
+      },
     });
   }
 
@@ -123,29 +155,31 @@ export class ResubmitionDocsComponent {
 
     // Map main documents (doc1, doc2, doc3, doc4)
     const mainDocs = [
-      { key: 'doc1', formKey: 'passport', name: 'Passport' },
-      { key: 'doc2', formKey: 'residenceCard', name: 'Residence Card' },
-      { key: 'doc3', formKey: 'healthCard', name: 'Health Card' },
-      { key: 'doc4', formKey: 'healthCertificate', name: 'Health Certificate' }
+      { key: "doc1", formKey: "passport", name: "Passport" },
+      { key: "doc2", formKey: "residenceCard", name: "Residence Card" },
+      { key: "doc3", formKey: "healthCard", name: "Health Card" },
+      { key: "doc4", formKey: "healthCertificate", name: "Health Certificate" },
     ];
 
-    mainDocs.forEach(doc => {
-      const documentData = documents[doc.key as keyof typeof documents] as DocumentStatus;
+    mainDocs.forEach((doc) => {
+      const documentData = documents[
+        doc.key as keyof typeof documents
+      ] as DocumentStatus;
       if (documentData) {
         const formGroup = this.form.get(doc.formKey) as FormGroup;
         formGroup.patchValue({
           originalStatus: documentData.status,
-          remarks: documentData.remarks || ''
+          remarks: documentData.remarks || "",
         });
 
         // Only add to rejected documents if status is rejected
-        if (documentData.status === 'rejected') {
+        if (documentData.status === "rejected") {
           this.rejectedDocuments.push({
             key: doc.formKey,
             name: doc.name,
             status: documentData.status,
             remarks: documentData.remarks,
-            originalUrl: documentData.url
+            originalUrl: documentData.url,
           });
         }
       }
@@ -154,7 +188,7 @@ export class ResubmitionDocsComponent {
     // Process additional documents
     if (documents.additional && Array.isArray(documents.additional)) {
       documents.additional.forEach((doc: any, index: number) => {
-        if (doc.status === 'rejected') {
+        if (doc.status === "rejected") {
           this.rejectedDocuments.push({
             key: `additional_${index}`,
             name: doc.name || `Additional Document ${index + 1}`,
@@ -162,7 +196,7 @@ export class ResubmitionDocsComponent {
             remarks: doc.remarks,
             originalUrl: doc.url,
             isAdditional: true,
-            index: index
+            index: index,
           });
 
           // Add to form array
@@ -176,13 +210,13 @@ export class ResubmitionDocsComponent {
       this.addAdditionalDocument();
     }
 
-    console.log('Rejected documents:', this.rejectedDocuments);
+    console.log("Rejected documents:", this.rejectedDocuments);
   }
 
   // ========== DOCUMENT TYPE SELECTION ==========
   selectDocType(type: DocType) {
     // Check if this document is rejected and can be updated
-    const isRejected = this.rejectedDocuments.some(doc => doc.key === type);
+    const isRejected = this.rejectedDocuments.some((doc) => doc.key === type);
     if (!isRejected) {
       this.hint = "This document is already approved and cannot be updated.";
       return;
@@ -190,14 +224,16 @@ export class ResubmitionDocsComponent {
 
     this.activeDocType = type;
     this.activeAdditionalDocIndex = null;
-    this.hint = `Align your ${this.labelFor(type)} inside the frame and tap Capture.`;
+    this.hint = `Align your ${this.labelFor(
+      type
+    )} inside the frame and tap Capture.`;
     this.qualityStatus = "unknown";
     this.showCamera = true;
   }
 
   selectAdditionalDocType(index: number) {
     const docKey = `additional_${index}`;
-    const isRejected = this.rejectedDocuments.some(doc => doc.key === docKey);
+    const isRejected = this.rejectedDocuments.some((doc) => doc.key === docKey);
     if (!isRejected) {
       this.hint = "This document is already approved and cannot be updated.";
       return;
@@ -205,7 +241,9 @@ export class ResubmitionDocsComponent {
 
     this.activeDocType = "additional";
     this.activeAdditionalDocIndex = index;
-    const docName = this.additionalDocumentsForms.at(index).get('documentName')?.value || `Additional Document ${index + 1}`;
+    const docName =
+      this.additionalDocumentsForms.at(index).get("documentName")?.value ||
+      `Additional Document ${index + 1}`;
     this.hint = `Align your ${docName} inside the frame and tap Capture.`;
     this.qualityStatus = "unknown";
     this.showCamera = true;
@@ -213,19 +251,32 @@ export class ResubmitionDocsComponent {
 
   labelFor(type: DocType): string {
     switch (type) {
-      case "passport": return "Passport";
-      case "residenceCard": return "Residence Card";
-      case "healthCard": return "Health Card";
-      case "healthCertificate": return "Health Certificate";
-      case "additional": return "Additional Document";
-      default: return "Document";
+      case "passport":
+        return "Passport";
+      case "residenceCard":
+        return "Residence Card";
+      case "healthCard":
+        return "Health Card";
+      case "healthCertificate":
+        return "Health Certificate";
+      case "additional":
+        return "Additional Document";
+      default:
+        return "Document";
     }
   }
 
   getCameraTitle(): string {
-    if (this.activeDocType === "additional" && this.activeAdditionalDocIndex !== null) {
-      const docName = this.additionalDocumentsForms.at(this.activeAdditionalDocIndex).get('documentName')?.value;
-      return docName || `Additional Document ${this.activeAdditionalDocIndex + 1}`;
+    if (
+      this.activeDocType === "additional" &&
+      this.activeAdditionalDocIndex !== null
+    ) {
+      const docName = this.additionalDocumentsForms
+        .at(this.activeAdditionalDocIndex)
+        .get("documentName")?.value;
+      return (
+        docName || `Additional Document ${this.activeAdditionalDocIndex + 1}`
+      );
     }
     return this.activeDocType ? this.labelFor(this.activeDocType) : "Document";
   }
@@ -259,8 +310,13 @@ export class ResubmitionDocsComponent {
     }
 
     // Save to form
-    if (this.activeDocType === "additional" && this.activeAdditionalDocIndex !== null) {
-      const docGroup = this.additionalDocumentsForms.at(this.activeAdditionalDocIndex) as FormGroup;
+    if (
+      this.activeDocType === "additional" &&
+      this.activeAdditionalDocIndex !== null
+    ) {
+      const docGroup = this.additionalDocumentsForms.at(
+        this.activeAdditionalDocIndex
+      ) as FormGroup;
       docGroup.patchValue({
         dataUrl,
         uploaded: true,
@@ -298,12 +354,13 @@ export class ResubmitionDocsComponent {
         if (img.width < 300 || img.height < 300) {
           resolve({
             status: "too_far",
-            message: "Document is too far. Move it closer so it fills more of the frame."
+            message:
+              "Document is too far. Move it closer so it fills more of the frame.",
           });
         } else {
           resolve({
             status: "good",
-            message: "Looks good! Image captured successfully."
+            message: "Looks good! Image captured successfully.",
           });
         }
       };
@@ -317,7 +374,7 @@ export class ResubmitionDocsComponent {
     const group = this.form.get(type) as FormGroup;
     if (!group) return;
     group.patchValue({
-      dataUrl: '',
+      dataUrl: "",
       uploaded: false,
     });
   }
@@ -327,23 +384,23 @@ export class ResubmitionDocsComponent {
     const docGroup = this.additionalDocumentsForms.at(index) as FormGroup;
     if (!docGroup) return;
     docGroup.patchValue({
-      dataUrl: '',
+      dataUrl: "",
       uploaded: false,
     });
   }
 
   // ========== ADDITIONAL DOCUMENTS ==========
   get additionalDocumentsForms() {
-    return this.form.get('additionalDocuments') as FormArray;
+    return this.form.get("additionalDocuments") as FormArray;
   }
 
   addAdditionalDocument() {
     const additionalDocGroup = this.fb.group({
-      documentName: [''],
-      dataUrl: [''],
+      documentName: [""],
+      dataUrl: [""],
       uploaded: [false],
-      originalStatus: [''],
-      remarks: ['']
+      originalStatus: [""],
+      remarks: [""],
     });
     this.additionalDocumentsForms.push(additionalDocGroup);
   }
@@ -351,10 +408,10 @@ export class ResubmitionDocsComponent {
   addAdditionalDocumentWithData(docData: any, index: number) {
     const additionalDocGroup = this.fb.group({
       documentName: [docData.name || `Additional Document ${index + 1}`],
-      dataUrl: [''],
+      dataUrl: [""],
       uploaded: [false],
       originalStatus: [docData.status],
-      remarks: [docData.remarks || '']
+      remarks: [docData.remarks || ""],
     });
     this.additionalDocumentsForms.push(additionalDocGroup);
   }
@@ -365,23 +422,23 @@ export class ResubmitionDocsComponent {
 
   // ========== HELPER METHODS ==========
   isDocumentRejected(docType: DocType): boolean {
-    return this.rejectedDocuments.some(doc => doc.key === docType);
+    return this.rejectedDocuments.some((doc) => doc.key === docType);
   }
 
   isAdditionalDocumentRejected(index: number): boolean {
     const docKey = `additional_${index}`;
-    return this.rejectedDocuments.some(doc => doc.key === docKey);
+    return this.rejectedDocuments.some((doc) => doc.key === docKey);
   }
 
   getRejectedDocumentRemarks(docType: DocType): string {
-    const doc = this.rejectedDocuments.find(d => d.key === docType);
-    return doc?.remarks || '';
+    const doc = this.rejectedDocuments.find((d) => d.key === docType);
+    return doc?.remarks || "";
   }
 
   getAdditionalDocumentRemarks(index: number): string {
     const docKey = `additional_${index}`;
-    const doc = this.rejectedDocuments.find(d => d.key === docKey);
-    return doc?.remarks || '';
+    const doc = this.rejectedDocuments.find((d) => d.key === docKey);
+    return doc?.remarks || "";
   }
 
   // ========== FORM VALIDATION & SUBMISSION ==========
@@ -390,15 +447,21 @@ export class ResubmitionDocsComponent {
   }
 
   get hasUpdatedDocuments(): boolean {
-    const mainDocs = ['passport', 'residenceCard', 'healthCard', 'healthCertificate'];
-    const mainDocsUpdated = mainDocs.some(doc =>
-      this.form.get(doc)?.get('uploaded')?.value &&
-      this.isDocumentRejected(doc as DocType)
+    const mainDocs = [
+      "passport",
+      "residenceCard",
+      "healthCard",
+      "healthCertificate",
+    ];
+    const mainDocsUpdated = mainDocs.some(
+      (doc) =>
+        this.form.get(doc)?.get("uploaded")?.value &&
+        this.isDocumentRejected(doc as DocType)
     );
 
-    const additionalDocsUpdated = this.additionalDocumentsForms.controls.some((doc, index) =>
-      doc.get('uploaded')?.value &&
-      this.isAdditionalDocumentRejected(index)
+    const additionalDocsUpdated = this.additionalDocumentsForms.controls.some(
+      (doc, index) =>
+        doc.get("uploaded")?.value && this.isAdditionalDocumentRejected(index)
     );
 
     return mainDocsUpdated || additionalDocsUpdated;
@@ -409,29 +472,39 @@ export class ResubmitionDocsComponent {
 
     // Main documents
     const mainDocs = [
-      { key: 'passport', apiKey: 'doc1' },
-      { key: 'residenceCard', apiKey: 'doc2' },
-      { key: 'healthCard', apiKey: 'doc3' },
-      { key: 'healthCertificate', apiKey: 'doc4' }
+      { key: "passport", apiKey: "doc1" },
+      { key: "residenceCard", apiKey: "doc2" },
+      { key: "healthCard", apiKey: "doc3" },
+      { key: "healthCertificate", apiKey: "doc4" },
     ];
 
-    mainDocs.forEach(doc => {
+    mainDocs.forEach((doc) => {
       const docGroup = this.form.get(doc.key) as FormGroup;
-      if (docGroup.get('uploaded')?.value && docGroup.get('dataUrl')?.value && this.isDocumentRejected(doc.key as DocType)) {
+      if (
+        docGroup.get("uploaded")?.value &&
+        docGroup.get("dataUrl")?.value &&
+        this.isDocumentRejected(doc.key as DocType)
+      ) {
         updatedDocs[doc.apiKey] = {
-          dataUrl: docGroup.get('dataUrl')?.value,
-          name: this.labelFor(doc.key as DocType)
+          dataUrl: docGroup.get("dataUrl")?.value,
+          name: this.labelFor(doc.key as DocType),
         };
       }
     });
 
     // Additional documents
     this.additionalDocumentsForms.controls.forEach((docGroup, index) => {
-      if (docGroup.get('uploaded')?.value && docGroup.get('dataUrl')?.value && this.isAdditionalDocumentRejected(index)) {
-        const docName = docGroup.get('documentName')?.value || `Additional Document ${index + 1}`;
+      if (
+        docGroup.get("uploaded")?.value &&
+        docGroup.get("dataUrl")?.value &&
+        this.isAdditionalDocumentRejected(index)
+      ) {
+        const docName =
+          docGroup.get("documentName")?.value ||
+          `Additional Document ${index + 1}`;
         updatedDocs[`additional_${index}`] = {
-          dataUrl: docGroup.get('dataUrl')?.value,
-          name: docName
+          dataUrl: docGroup.get("dataUrl")?.value,
+          name: docName,
         };
       }
     });
@@ -442,48 +515,63 @@ export class ResubmitionDocsComponent {
   onSubmit() {
     if (this.hasUpdatedDocuments) {
       const updatedDocuments = this.getUpdatedDocuments();
-      console.log('Documents to be updated:', updatedDocuments);
+      console.log("Documents to be updated:", updatedDocuments);
 
       // Prepare FormData for backend upload
       const formData = new FormData();
-      formData.append('applicationId', this.staticUserId);
+      formData.append("applicationId", this.appId);
 
-      Object.keys(updatedDocuments).forEach(key => {
+      Object.keys(updatedDocuments).forEach((key) => {
         const doc = updatedDocuments[key];
         if (doc.dataUrl) {
           const blob = this.dataURLtoBlob(doc.dataUrl);
-          formData.append('file', blob, `${doc.name}.jpg`);
-          formData.append('documentKey', key); // Send which documents are being updated
+          formData.append("file", blob, `${doc.name}.jpg`);
+          formData.append("documentKey", key); // Send which documents are being updated
         }
       });
 
       // Call your backend API to update documents
       this.backend.updateApplicationDocuments(formData).subscribe({
         next: (response: any) => {
-          console.log('Documents updated successfully:', response);
-          alert('Documents updated successfully!');
+          if (response.status === "success") {
+            const queryParams: any = { email: this.email };
+            if (this.fromApp) queryParams.from = "app";
+
+            if (this.deviceId) queryParams.deviceId = this.deviceId;
+            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+            if (this.appId) queryParams.appId = this.appId;
+            this.router.navigate(["/trainee-dashboard"], {
+              queryParams,
+            });
+          }
+
           // Reload the application to get updated status
-          this.loadUserApplication();
+          // this.loadUserApplication();
         },
         error: (error: any) => {
-          console.error('Error updating documents:', error);
-          alert('Error updating documents. Please try again.');
-        }
+          console.error("Error updating documents:", error);
+          alert("Error updating documents. Please try again.");
+        },
       });
-
     } else {
-      alert('Please capture at least one rejected document before submitting.');
+      alert("Please capture at least one rejected document before submitting.");
     }
   }
 
   private dataURLtoBlob(dataURL: string): Blob {
-    const byteString = atob(dataURL.split(',')[1]);
-    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    const byteString = atob(dataURL.split(",")[1]);
+    const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
     const ab = new ArrayBuffer(byteString.length);
     const ia = new Uint8Array(ab);
     for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
     return new Blob([ab], { type: mimeString });
+  }
+  updateUrl() {
+    if (this.appId) {
+      const currentUrl = window.location.href;
+      this.firebaseStore.updateUrlByAppId(this.appId, currentUrl);
+    }
   }
 }

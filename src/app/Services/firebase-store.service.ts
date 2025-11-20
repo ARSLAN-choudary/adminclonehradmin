@@ -9,6 +9,9 @@ export interface UserDoc {
   role?: string;
   deviceId?: string;
   appId?: string;
+  termsAndCondition:boolean;
+  nda:boolean;
+  documentsRejected:boolean
 }
 
 @Injectable({

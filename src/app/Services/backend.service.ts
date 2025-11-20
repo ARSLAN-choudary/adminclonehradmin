@@ -240,6 +240,9 @@ export class BackendService {
   uploadDocuments(payload: any) {
     return this.http.post(CONFIG.uploadDocuments, payload);
   }
+  setTermCondition(payload: any) {
+    return this.http.post(CONFIG.termCondition, payload);
+  }
   userDetail(userId: any) {
     return this.http.post(`${CONFIG.userDetail}/${userId}`, {});
   }

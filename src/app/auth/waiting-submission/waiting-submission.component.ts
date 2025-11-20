@@ -61,20 +61,46 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
       this.sub = this.firebaseStore
         .watchUserById(this.appId)
         .subscribe((resp) => {
-          if (resp && resp.role === "TRAINEE") {
-            const queryParams: any = { email: this.email };
-            if (this.fromApp) queryParams.from = "app";
+          const queryParams: any = { email: this.email };
+          if (this.fromApp) queryParams.from = "app";
 
-            if (this.deviceId) queryParams.deviceId = this.deviceId;
-            if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-            if (this.appId) queryParams.appId = this.appId;
+          if (this.deviceId) queryParams.deviceId = this.deviceId;
+          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+          if (this.appId) queryParams.appId = this.appId;
+          if (
+            resp &&
+            resp.role === "TRAINEE" &&
+            resp.termsAndCondition === true &&
+            resp.nda === true &&
+            resp.documentsRejected === false
+          ) {
             this.router.navigate(["/trainee-dashboard"], {
+              queryParams,
+            });
+          } else if (
+            resp &&
+            resp.role === "TRAINEE" &&
+            resp.termsAndCondition === true &&
+            resp.nda === true &&
+            resp.documentsRejected === true
+          ) {
+            this.router.navigate(["/resubmit-docs"], {
+              queryParams,
+            });
+          } else if (
+            resp &&
+            resp.role === "USER" &&
+            resp.termsAndCondition === false &&
+            resp.nda === false
+          ) {
+            this.router.navigate(["/upload-docs"], {
               queryParams,
             });
           }
         });
     });
   }
+
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
