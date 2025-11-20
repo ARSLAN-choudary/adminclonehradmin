@@ -188,11 +188,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
             this.deviceId
           );
         }
-        if (this.fromApp) {
-          this.router.navigate(["/waiting-for-approval"], {
-            queryParams: { appId: res.data?.details?._id, from: "app" },
-          });
-        } else {
+       
           const queryParams: any = { email: this.email };
           if (this.fromApp) queryParams.from = "app";
           if (this.deviceId) queryParams.deviceId = this.deviceId;
@@ -202,7 +198,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
           this.router.navigate(["/waiting-for-approval"], {
             queryParams,
           });
-        }
+        
 
         if (!this.fromApp) {
           this.otpSucces();
