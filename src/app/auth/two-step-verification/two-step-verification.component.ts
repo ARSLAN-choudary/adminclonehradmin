@@ -172,12 +172,12 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
     this.authService.verifyOtp(payload).subscribe({
       next: (res: any) => {
         console.log("✅ OTP Verified Successfully:", res);
-        localStorage.setItem("userId", res.data?.details?._id);
+        localStorage.setItem("appId", res.data?.details?._id);
         this.toggle.setOtpData(this.email);
         this.loading = false;
 
         if (res.data.details._id) {
-          localStorage.setItem("userId", res.data.details._id);
+          localStorage.setItem("appId", res.data.details._id);
           const currentUrl = window.location.href;
           this.firebaseStore.saveUrlByDeviceId(
             res.data.details._id,
@@ -190,7 +190,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
         }
         if (this.fromApp) {
           this.router.navigate(["/waiting-for-approval"], {
-            queryParams: { userId: res.data?.details?._id, from: "app" },
+            queryParams: { appId: res.data?.details?._id, from: "app" },
           });
         } else {
           const queryParams: any = { email: this.email };

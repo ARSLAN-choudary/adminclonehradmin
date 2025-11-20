@@ -181,7 +181,6 @@ export class NewApplicationComponent implements OnInit {
   public actualData: any[] = [];
 
   initChecked = false;
-  currentUserId: string = "";
   currentAppId: string = "";
 
   UserAppId: string = "";
@@ -1311,14 +1310,36 @@ export class NewApplicationComponent implements OnInit {
       },
     });
   }
+  // toggleStatus(data: any) {
+  //   const newStatus = data.status === "active" ? "inactive" : "active";
+  //   const payload = {
+  //     _id: data._id ?? data.id,
+  //     status: newStatus,
+  //   };
+
+  //   this.backend.updateUser(payload).subscribe({
+  //     next: (res: any) => {
+  //       if (res?.status === "success" || res?.success === true) {
+  //         data.status = newStatus;
+  //         this.toastr.success(res.message || "Status updated");
+  //         this.getTableData(this.skip, this.pageSize);
+  //       } else {
+  //         this.toastr.error(res?.message || "Failed to toggle status");
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       this.toastr.error("Failed to toggle status");
+  //     },
+  //   });
+  // }
   toggleStatus(data: any) {
     const newStatus = data.status === "active" ? "inactive" : "active";
     const payload = {
-      _id: data._id ?? data.id,
+      applicationId: data._id ?? data.id,
       status: newStatus,
     };
 
-    this.backend.updateApplication(payload).subscribe({
+    this.backend.updateUser(payload).subscribe({
       next: (res: any) => {
         if (res?.status === "success" || res?.success === true) {
           data.status = newStatus;
@@ -1418,7 +1439,6 @@ export class NewApplicationComponent implements OnInit {
   docData: any[] = [];
   // DOCS OFFCANVAS
   openDocs(user: any) {
-    this.currentUserId = user.userId;
     this.currentAppId = user._id;
 
     this.backend.getApplicationById(user._id).subscribe({
@@ -1816,7 +1836,7 @@ export class NewApplicationComponent implements OnInit {
 
   approveTrainee() {
     const payload = {
-      id: this.currentUserId,
+      applicationId: this.currentAppId,
       role: "TRAINEE",
     };
 

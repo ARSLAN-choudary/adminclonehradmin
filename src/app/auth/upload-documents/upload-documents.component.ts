@@ -37,7 +37,7 @@ type DocType =
 })
 export class UploadDocumentsComponent implements OnInit {
   form: FormGroup;
-  userId: any;
+  appId: any;
   sub!: Subscription;
   activeDocType: DocType | null = null;
   activeAdditionalDocIndex: number | null = null;
@@ -83,8 +83,8 @@ export class UploadDocumentsComponent implements OnInit {
 
   private _filterIdCounter = 0;
 
-  today: string = '';
-  todayMonth: string = '';
+  today: string = "";
+  todayMonth: string = "";
 
   constructor(
     private fb: FormBuilder,
@@ -208,22 +208,22 @@ export class UploadDocumentsComponent implements OnInit {
       if (this.fromApp) {
         this.deviceId = params["deviceId"] || "";
         this.fcmToken = params["fcmToken"] || "";
-        this.userId = params["userId"] || "";
+        this.appId = params["appId"] || "";
         this.email = params["email"] || "";
       } else {
         this.email = localStorage.getItem("email") || "";
-        this.userId = localStorage.getItem("userId") || "";
+        this.appId = localStorage.getItem("appId") || "";
       }
 
-      if (!this.userId) {
-        console.warn("⚠️ userId missing");
+      if (!this.appId) {
+        console.warn("⚠️ appId missing");
         return;
       }
 
       this.updateUrl();
 
       this.sub = this.firebaseStore
-        .watchUserById(this.userId)
+        .watchUserById(this.appId)
         .subscribe((resp) => {
           if (resp && resp.role === "TRAINEE") {
             const queryParams: any = { email: this.email };
@@ -231,22 +231,22 @@ export class UploadDocumentsComponent implements OnInit {
 
             if (this.deviceId) queryParams.deviceId = this.deviceId;
             if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-            if (this.userId) queryParams.userId = this.userId;
+            if (this.appId) queryParams.appId = this.appId;
             this.router.navigate(["/trainee-dashboard"], {
               queryParams,
             });
           }
         });
     });
-      const t = new Date();
-      const month = ('0' + (t.getMonth() + 1)).slice(-2);
-      const day = ('0' + t.getDate()).slice(-2);
-      this.today = `${t.getFullYear()}-${month}-${day}`;
-      this.todayMonth = `${t.getFullYear()}-${month}`;
+    const t = new Date();
+    const month = ("0" + (t.getMonth() + 1)).slice(-2);
+    const day = ("0" + t.getDate()).slice(-2);
+    this.today = `${t.getFullYear()}-${month}-${day}`;
+    this.todayMonth = `${t.getFullYear()}-${month}`;
 
-        this.personalDetails.patchValue({
-          emailAddress: this.email
-        });
+    this.personalDetails.patchValue({
+      emailAddress: this.email,
+    });
   }
 
   // Custom validators
@@ -275,9 +275,9 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   updateUrl() {
-    if (this.userId) {
+    if (this.appId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
+      this.firebaseStore.updateUrlByAppId(this.appId, currentUrl);
     }
   }
 
@@ -623,21 +623,17 @@ export class UploadDocumentsComponent implements OnInit {
     return !!(control && control.invalid && (control.dirty || control.touched));
   }
 
-  // Get userId from localStorage
-  private getUserId(): string {
+  // Get appId from localStorage
+  private getappId(): string {
     try {
-      const userId =
-        localStorage.getItem("userId") ||
-        localStorage.getItem("user_id") ||
-        localStorage.getItem("id") ||
-        localStorage.getItem("_id");
+      const appId = localStorage.getItem("appId");
 
-      if (userId) {
-        console.log("Found userId in localStorage:", userId);
-        return userId;
+      if (appId) {
+        console.log("Found appId in localStorage:", appId);
+        return appId;
       } else {
         console.warn(
-          "No userId found in localStorage. Available keys:",
+          "No appId found in localStorage. Available keys:",
           Object.keys(localStorage)
         );
         return "";
@@ -654,7 +650,7 @@ export class UploadDocumentsComponent implements OnInit {
 
     // Remove unwanted fields from the transformed data
     const transformedData: any = {
-      userId: this.getUserId(),
+      applicationId: this.getappId(),
 
       // Personal Details - only include required fields
       userNameEnglish: personal.userNameEnglish || "",
@@ -859,9 +855,9 @@ export class UploadDocumentsComponent implements OnInit {
   // Convert to FormData and submit
   onSubmit() {
     if (this.form.valid) {
-      // Check if userId exists in localStorage
-      const userId = this.getUserId();
-      if (!userId) {
+      // Check if appId exists in localStorage
+      const appId = this.getappId();
+      if (!appId) {
         alert("User not authenticated. Please log in again.");
         return;
       }
@@ -872,7 +868,7 @@ export class UploadDocumentsComponent implements OnInit {
       const transformedData = this.transformFormData(formValue);
 
       // console.log("=== TRANSFORMED DATA FOR BACKEND ===");
-      // console.log("UserId:", userId);
+      // console.log("appId:", appId);
       // console.log(JSON.stringify(transformedData, null, 2));
 
       // Create FormData with all data as simple fields
@@ -887,7 +883,7 @@ export class UploadDocumentsComponent implements OnInit {
             if (this.fromApp) queryParams.from = "app";
             if (this.deviceId) queryParams.deviceId = this.deviceId;
             if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-            if (this.userId) queryParams.userId = this.userId;
+            if (this.appId) queryParams.appId = this.appId;
             this.ngZone.run(() => {
               this.router.navigate(["/waiting-for-application-submission"], {
                 queryParams,
@@ -1405,20 +1401,22 @@ export class UploadDocumentsComponent implements OnInit {
     { label: "Silk Road Bank", value: "Silk Road Bank" },
   ];
 
-formatIBAN(event: any) {
-  let value = event.target.value.toUpperCase();
-  value = value.replace(/\s+/g, '');
-  value = value.replace(/[^A-Z0-9]/g, '');
+  formatIBAN(event: any) {
+    let value = event.target.value.toUpperCase();
+    value = value.replace(/\s+/g, "");
+    value = value.replace(/[^A-Z0-9]/g, "");
 
-  let formatted = '';
-  for (let i = 0; i < value.length; i += 4) {
-    formatted += value.substring(i, i + 4) + ' ';
-  }
+    let formatted = "";
+    for (let i = 0; i < value.length; i += 4) {
+      formatted += value.substring(i, i + 4) + " ";
+    }
 
-  formatted = formatted.trim();
+    formatted = formatted.trim();
 
-  event.target.value = formatted;
+    event.target.value = formatted;
 
-  this.bankDetails.get('accountNumber')?.setValue(formatted, { emitEvent: false });
+    this.bankDetails
+      .get("accountNumber")
+      ?.setValue(formatted, { emitEvent: false });
   }
 }

@@ -44,7 +44,7 @@ export interface ChartOptions {
 })
 export class DashboardComponent {
   deviceId: any;
-  userId: any;
+  appId: any;
   email: any;
   fromApp: any;
   fcmToken: any;
@@ -239,15 +239,15 @@ export class DashboardComponent {
       if (this.fromApp) {
         this.deviceId = params["deviceId"] || "";
         this.fcmToken = params["fcmToken"] || "";
-        this.userId = params["userId"] || "";
+        this.appId = params["appId"] || "";
         this.email = params["email"] || "";
       } else {
         this.email = localStorage.getItem("email") || "";
-        this.userId = localStorage.getItem("userId") || "";
+        this.appId = localStorage.getItem("appId") || "";
       }
 
-      if (!this.userId) {
-        console.warn("⚠️ userId missing");
+      if (!this.appId) {
+        console.warn("⚠️ appId missing");
         return;
       }
 
@@ -259,9 +259,9 @@ export class DashboardComponent {
   }
 
   private updateUrl() {
-    if (this.userId) {
+    if (this.appId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
+      this.firebaseStore.updateUrlByAppId(this.appId, currentUrl);
     }
   }
 }

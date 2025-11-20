@@ -23,7 +23,7 @@ import {
 })
 export class WaitingApprovalComponent implements OnInit, OnDestroy {
   deviceId: any;
-  userId: any;
+  appId: any;
   // userData: UserDoc | undefined;
   sub!: Subscription;
   private fromApp: boolean = false;
@@ -44,29 +44,29 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
       if (this.fromApp) {
         this.deviceId = params["deviceId"] || "";
         this.fcmToken = params["fcmToken"] || "";
-        this.userId = params["userId"] || "";
+        this.appId = params["appId"] || "";
         this.email = params["email"] || "";
       } else {
         this.email = localStorage.getItem("email") || "";
-        this.userId = localStorage.getItem("userId") || "";
+        this.appId = localStorage.getItem("appId") || "";
       }
 
-      if (!this.userId) {
-        console.warn("⚠️ userId missing");
+      if (!this.appId) {
+        console.warn("⚠️ appId missing");
         return;
       }
 
       this.updateUrl();
 
       this.sub = this.firebaseStore
-        .watchUserById(this.userId)
+        .watchUserById(this.appId)
         .subscribe((resp) => {
           if (resp && resp.status === "active") {
             const queryParams: any = { email: this.email };
             if (this.fromApp) queryParams.from = "app";
             if (this.deviceId) queryParams.deviceId = this.deviceId;
             if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-            if (this.userId) queryParams.userId = this.userId;
+            if (this.appId) queryParams.appId = this.appId;
             this.router.navigate(["/upload-docs"], {
               queryParams,
             });
@@ -80,9 +80,9 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
   }
 
   private updateUrl() {
-    if (this.userId) {
+    if (this.appId) {
       const currentUrl = window.location.href;
-      this.firebaseStore.updateUrlByUserId(this.userId, currentUrl);
+      this.firebaseStore.updateUrlByAppId(this.appId, currentUrl);
     }
   }
 }

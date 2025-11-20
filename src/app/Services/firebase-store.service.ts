@@ -8,7 +8,7 @@ export interface UserDoc {
   status?: string;
   role?: string;
   deviceId?: string;
-  userId?: string;
+  appId?: string;
 }
 
 @Injectable({
@@ -19,7 +19,7 @@ export class FirebaseStoreService {
 
   // ✅ Save (or update) email + URL by deviceId
   async saveUrlByDeviceId(
-    userId: string,
+    appId: string,
     email: string,
     url: string,
     status: string,
@@ -27,7 +27,7 @@ export class FirebaseStoreService {
     deviceId: string
   ) {
     try {
-      const docRef = doc(this.firestore, `users/${userId}`);
+      const docRef = doc(this.firestore, `application/${appId}`);
 
       // Always overwrite with latest email and url
       await setDoc(
@@ -36,7 +36,7 @@ export class FirebaseStoreService {
         { merge: true }
       );
 
-      console.log(`✅ Email & URL saved successfully for deviceId: ${userId}`);
+      console.log(`✅ Email & URL saved successfully for deviceId: ${appId}`);
     } catch (error) {
       console.error("❌ Error saving email/url:", error);
     }
@@ -44,16 +44,16 @@ export class FirebaseStoreService {
 
   // ✅ Get email + URL by deviceId
   async getDeviceData(
-    userId: string
+    appId: string
   ): Promise<{ email?: string; url?: string } | null> {
     try {
-      const docRef = doc(this.firestore, `users/${userId}`);
+      const docRef = doc(this.firestore, `application/${appId}`);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         return docSnap.data() as { email?: string; url?: string };
       } else {
-        console.warn(`⚠️ No data found for userId: ${userId}`);
+        console.warn(`⚠️ No data found for appId: ${appId}`);
         return null;
       }
     } catch (error) {
@@ -63,42 +63,42 @@ export class FirebaseStoreService {
   }
 
   // ✅ Update only the URL (keep email same)
-  async updateUrlByUserId(deviceId: string, newUrl: string) {
+  async updateUrlByAppId(deviceId: string, newUrl: string) {
     try {
-      const docRef = doc(this.firestore, `users/${deviceId}`);
+      const docRef = doc(this.firestore, `application/${deviceId}`);
       await setDoc(docRef, { url: newUrl }, { merge: true });
       console.log(`🔄 URL updated successfully for deviceId: ${deviceId}`);
     } catch (error) {
       console.error("❌ Error updating URL:", error);
     }
   }
-  async updateUrlByDeviceAndUserId(
+  async updateUrlByDeviceAndAppId(
     deviceId: string,
     newUrl: string,
-    userId: string
+    appId: string
   ) {
     try {
-      const docRef = doc(this.firestore, `users/${deviceId}`);
+      const docRef = doc(this.firestore, `application/${deviceId}`);
 
       await setDoc(
         docRef,
         {
           url: newUrl,
-          userId: userId,
+          appId: appId,
         },
         { merge: true }
       );
 
       console.log(
-        `🔄 URL & userId updated successfully for deviceId: ${deviceId}`
+        `🔄 URL & appId updated successfully for deviceId: ${deviceId}`
       );
     } catch (error) {
       console.error("❌ Error updating URL:", error);
     }
   }
-  watchUserById(userId: string): Observable<UserDoc | null> {
+  watchUserById(appId: string): Observable<UserDoc | null> {
     return new Observable((sub) => {
-      const ref = doc(this.firestore, "users", userId);
+      const ref = doc(this.firestore, "application", appId);
 
       const unsubscribe = onSnapshot(
         ref,
