@@ -1125,7 +1125,7 @@
         </button>
     </div>
 
-    <div class="container mt-1 body-content" id="detailsAccordion">
+<div class="container mt-1 body-content" id="detailsAccordion">
 
         <div *ngFor="let section of docData; let i = index" class="mb-1 px-3 py-2 rounded border shadow-sm">
 
@@ -1136,11 +1136,14 @@
                 </div>
 
                 <i class="ti ti-chevron-down fs-4 cursor-pointer" [ngClass]="{ 'rotate-icon': openedIndex === i }"
-                    data-bs-toggle="collapse" (click)="toggleSection(i)" [attr.data-bs-target]="'#sectionCollapse' + i"
-                    aria-expanded="false" [attr.aria-controls]="'sectionCollapse' + i"></i>
+                    (click)="toggleSection(i)" [attr.data-bs-target]="'#sectionCollapse' + i"
+                    [attr.aria-expanded]="openedIndex === i" [attr.aria-controls]="'sectionCollapse' + i">
+                </i>
+
             </div>
 
-            <div class="collapse mt-3" [id]="'sectionCollapse' + i" data-bs-parent="#detailsAccordion">
+            <div class="collapse mt-3" [id]="'sectionCollapse' + i" data-bs-parent="#detailsAccordion"
+                [ngClass]="{ 'show': openedIndex === i }">
 
                 <ng-container *ngIf="section.entries; else normalSection">
 
@@ -1198,13 +1201,16 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="fw-bold mb-0 text-primary">Documents</div>
 
-                <i class="ti ti-chevron-down fs-4 cursor-pointer" [ngClass]="{ 'rotate-icon': openedIndex === 'docs' }"
-                    data-bs-toggle="collapse" (click)="toggleSection('docs')" data-bs-target="#docsTableCollapse"
-                    aria-expanded="false" aria-controls="docsTableCollapse">
+                <i class="ti ti-chevron-down fs-4 cursor-pointer" (click)="toggleDocs()"
+                    [ngClass]="{ 'rotate-icon': docsOpen }" [attr.data-bs-target]="'#docsTableCollapse'"
+                    [attr.aria-expanded]="docsOpen" aria-controls="docsTableCollapse">
                 </i>
+
+
             </div>
 
-            <div class="collapse" id="docsTableCollapse" data-bs-parent="#detailsAccordion">
+            <div class="collapse" id="docsTableCollapse" data-bs-parent="#detailsAccordion"
+                [ngClass]="{ 'show': docsOpen }">
 
                 <div class="card shadow-sm mt-3">
                     <div class="table-responsive">
