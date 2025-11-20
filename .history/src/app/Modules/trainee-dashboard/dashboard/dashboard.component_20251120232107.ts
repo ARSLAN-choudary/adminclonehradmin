@@ -53,7 +53,7 @@ interface TrainingTask {
   selector: "app-dashboard",
   imports: [
     NgApexchartsModule,
-
+    
     CollapseHeaderComponent,
     FormsModule,
     CommonModule,
@@ -78,8 +78,8 @@ export class DashboardComponent {
   public chartOptions2: Partial<ChartOptions> | any;
   public chartOptions3: Partial<ChartOptions> | any;
   public chartOptions4: Partial<ChartOptions> | any;
-
-  // contract 
+  
+// contract 
   private backdropEl?: HTMLElement;
   @ViewChild("getContractCanvas", { static: true })
   getContractCanvas!: ElementRef<HTMLElement>;
@@ -96,7 +96,7 @@ export class DashboardComponent {
     phone: "+1-555-0123",
   };
   deleteappId!: any;
-  sub!: Subscription;
+  sub!: Subscription ;
 
   constructor(
     private renderer: Renderer2,
@@ -287,10 +287,7 @@ export class DashboardComponent {
         this.appId = localStorage.getItem("appId") || "";
       }
 
-      if (!this.appId || !this.email) {
-       this.router.navigate(["/app-register"], {})
-      
-        
+      if (!this.appId) {
         console.warn("⚠️ appId missing");
         return;
       }
@@ -299,7 +296,7 @@ export class DashboardComponent {
       this.sub = this.firebaseStore
         .watchUserById(this.appId)
         .subscribe((resp) => {
-          console.log("1", resp);
+          console.log(resp);
 
           const queryParams: any = { email: this.email };
           if (this.fromApp) queryParams.from = "app";
@@ -307,7 +304,10 @@ export class DashboardComponent {
           if (this.deviceId) queryParams.deviceId = this.deviceId;
           if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
           if (this.appId) queryParams.appId = this.appId;
-         if (
+          if(!resp&& !resp.appId){
+            this.router.navigate(["/app-register"], {})
+          }
+          else if (
             resp &&
             resp.role === "USER" &&
             resp.termsAndCondition === true &&
@@ -330,8 +330,8 @@ export class DashboardComponent {
           } else if (
             resp &&
             resp.role === "USER" &&
-            resp.status === "inactive"
-
+            resp.status==="inactive"
+      
           ) {
             this.router.navigate(["/waiting-for-approval"], {
               queryParams,
@@ -341,7 +341,7 @@ export class DashboardComponent {
             resp.role === "USER" &&
             resp.termsAndCondition === false &&
             resp.nda === false &&
-            resp.status === "active"
+            resp.status==="active"
           ) {
             this.router.navigate(["/upload-docs"], {
               queryParams,
@@ -474,150 +474,150 @@ export class DashboardComponent {
   get completedTasks(): number {
     return this.trainingTasks.filter((t) => t.status === "Completed").length;
   }
-
-  // contract  
-
-
-  // Helper methods to get specific contracts
-  get traineeContract(): any {
-    return this.contracts.find(contract => contract.name === 'trainee');
-  }
-
-  get probationContract(): any {
-    return this.contracts.find(contract => contract.name === 'probation');
-  }
-
-  get jobContract(): any {
-    return this.contracts.find(contract => contract.name === 'job');
-  }
-
-  get hasTraineeContract(): boolean {
-    return !!this.traineeContract;
-  }
-
-  get hasProbationContract(): boolean {
-    return !!this.probationContract;
-  }
-
-  get hasJobContract(): boolean {
-    return !!this.jobContract;
-  }
-
-  get hasgetContracts(): boolean {
-    return this.contracts.length > 0;
-  }
-
-  // Load contracts from backend
-  loadContracts(appId: string) {
-    this.backendService.getUploadContract(appId).subscribe({
-      next: (res: any) => {
-        if (res.status === 'success') {
-          this.contracts = res.data || [];
-          console.log('Loaded contracts:', this.contracts);
-        } else {
+  
+    // contract  
+  
+  
+    // Helper methods to get specific contracts
+    get traineeContract(): any {
+      return this.contracts.find(contract => contract.name === 'trainee');
+    }
+  
+    get probationContract(): any {
+      return this.contracts.find(contract => contract.name === 'probation');
+    }
+  
+    get jobContract(): any {
+      return this.contracts.find(contract => contract.name === 'job');
+    }
+  
+    get hasTraineeContract(): boolean {
+      return !!this.traineeContract;
+    }
+  
+    get hasProbationContract(): boolean {
+      return !!this.probationContract;
+    }
+  
+    get hasJobContract(): boolean {
+      return !!this.jobContract;
+    }
+  
+    get hasgetContracts(): boolean {
+      return this.contracts.length > 0;
+    }
+  
+    // Load contracts from backend
+    loadContracts(appId: string) {
+      this.backendService.getUploadContract(appId).subscribe({
+        next: (res: any) => {
+          if (res.status === 'success') {
+            this.contracts = res.data || [];
+            console.log('Loaded contracts:', this.contracts);
+          } else {
+            this.contracts = [];
+            console.error('Failed to load contracts:', res.message);
+          }
+        },
+        error: (error) => {
+          console.error('Error loading contracts:', error);
           this.contracts = [];
-          console.error('Failed to load contracts:', res.message);
         }
-      },
-      error: (error) => {
-        console.error('Error loading contracts:', error);
-        this.contracts = [];
+      });
+    }
+  
+ 
+  
+   
+    // Download existing contract
+    downloadContract(contractType: string) {
+      let contract: any = null;
+  
+      switch (contractType) {
+        case "trainee":
+          contract = this.traineeContract;
+          break;
+        case "probation":
+          contract = this.probationContract;
+          break;
+        case "job":
+          contract = this.jobContract;
+          break;
       }
-    });
-  }
-
-
-
-
-  // Download existing contract
-  downloadContract(contractType: string) {
-    let contract: any = null;
-
-    switch (contractType) {
-      case "trainee":
-        contract = this.traineeContract;
-        break;
-      case "probation":
-        contract = this.probationContract;
-        break;
-      case "job":
-        contract = this.jobContract;
-        break;
+  
+      if (contract && contract.url) {
+        // Download from backend URL
+        window.open(contract.url, '_blank');
+      } else {
+        console.warn('Contract not found or no URL available');
+      }
     }
-
-    if (contract && contract.url) {
-      // Download from backend URL
-      window.open(contract.url, '_blank');
-    } else {
-      console.warn('Contract not found or no URL available');
+  
+    // Format date for display
+    formatContractDate(dateString: string): string {
+      return new Date(dateString).toLocaleDateString();
     }
-  }
+  
+ 
 
-  // Format date for display
-  formatContractDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString();
-  }
-
-
-
-  // Open modal with application ID
-  openGenerateContractModal() {
-    // Load contracts for this application
-    this.loadContracts(this.appId);
-
-
-    const el = this.getContractCanvas.nativeElement;
-    this.renderer.addClass(el, "show");
-    this.renderer.setStyle(el, "visibility", "visible");
-    this.renderer.setAttribute(el, "aria-modal", "true");
-    this.renderer.removeAttribute(el, "aria-hidden");
-    this.renderer.setStyle(document.body, "overflow", "hidden");
-
-    this.backdropEl = this.renderer.createElement("div");
-    this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
-    this.renderer.addClass(this.backdropEl, "fade");
-    this.renderer.addClass(this.backdropEl, "show");
-
-    if (this.backdropEl) {
-      this.backdropEl.addEventListener("click", () => this.closeGenerateContractModal());
-      this.renderer.appendChild(document.body, this.backdropEl);
+    // Open modal with application ID
+    openGenerateContractModal() {
+      // Load contracts for this application
+      this.loadContracts(this.appId);
+  
+  
+      const el = this.getContractCanvas.nativeElement;
+      this.renderer.addClass(el, "show");
+      this.renderer.setStyle(el, "visibility", "visible");
+      this.renderer.setAttribute(el, "aria-modal", "true");
+      this.renderer.removeAttribute(el, "aria-hidden");
+      this.renderer.setStyle(document.body, "overflow", "hidden");
+  
+      this.backdropEl = this.renderer.createElement("div");
+      this.renderer.addClass(this.backdropEl, "offcanvas-backdrop");
+      this.renderer.addClass(this.backdropEl, "fade");
+      this.renderer.addClass(this.backdropEl, "show");
+  
+      if (this.backdropEl) {
+        this.backdropEl.addEventListener("click", () => this.closeGenerateContractModal());
+        this.renderer.appendChild(document.body, this.backdropEl);
+      }
+  
+  
     }
-
-
-  }
-
-  closeGenerateContractModal() {
-    // Your existing implementation
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
-    const panel = this.getContractCanvas.nativeElement;
-
-    this.renderer.removeClass(panel, "show");
-    const onTransition = (e: TransitionEvent) => {
-      if (e.target === panel && e.propertyName.includes("transform")) {
-        this.renderer.setStyle(panel, "visibility", "hidden");
-        this.renderer.removeAttribute(panel, "aria-modal");
-        this.renderer.setAttribute(panel, "aria-hidden", "true");
-        this.renderer.removeStyle(document.body, "overflow");
-
-        if (this.backdropEl) {
-          this.renderer.removeChild(document.body, this.backdropEl);
-          this.backdropEl = undefined;
+  
+    closeGenerateContractModal() {
+      // Your existing implementation
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+      const panel = this.getContractCanvas.nativeElement;
+  
+      this.renderer.removeClass(panel, "show");
+      const onTransition = (e: TransitionEvent) => {
+        if (e.target === panel && e.propertyName.includes("transform")) {
+          this.renderer.setStyle(panel, "visibility", "hidden");
+          this.renderer.removeAttribute(panel, "aria-modal");
+          this.renderer.setAttribute(panel, "aria-hidden", "true");
+          this.renderer.removeStyle(document.body, "overflow");
+  
+          if (this.backdropEl) {
+            this.renderer.removeChild(document.body, this.backdropEl);
+            this.backdropEl = undefined;
+          }
+          document.querySelectorAll(".offcanvas-backdrop.fade.show").forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
+          this.renderer.removeStyle(panel, "transform");
+  
+          panel.removeEventListener("transitionend", onTransition);
         }
-        document.querySelectorAll(".offcanvas-backdrop.fade.show").forEach((backdrop) =>
-          this.renderer.removeChild(document.body, backdrop)
-        );
-        this.renderer.removeStyle(panel, "transform");
-
-        panel.removeEventListener("transitionend", onTransition);
+      };
+  
+      if (this.backdropEl) {
+        this.renderer.removeChild(document.body, this.backdropEl);
+        this.backdropEl = undefined;
       }
-    };
-
-    if (this.backdropEl) {
-      this.renderer.removeChild(document.body, this.backdropEl);
-      this.backdropEl = undefined;
+      this.renderer.removeStyle(document.body, "overflow");
     }
-    this.renderer.removeStyle(document.body, "overflow");
   }
-}

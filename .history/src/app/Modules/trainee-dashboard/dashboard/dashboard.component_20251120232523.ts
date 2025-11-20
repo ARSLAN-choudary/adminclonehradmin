@@ -287,7 +287,7 @@ export class DashboardComponent {
         this.appId = localStorage.getItem("appId") || "";
       }
 
-      if (!this.appId || !this.email) {
+      if (!this.appId ) {
        this.router.navigate(["/app-register"], {})
       
         
