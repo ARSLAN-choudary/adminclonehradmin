@@ -79,7 +79,13 @@ interface DocumentItem {
   previewUrl: string;
   fileType: "pdf" | "image";
 }
-
+interface ContractData {
+  id: string;
+  type: "trainee" | "probation" | "job";
+  generatedDate: Date;
+  fileName: string;
+  data: any;
+}
 @Component({
   selector: "app-new-application",
   standalone: true,

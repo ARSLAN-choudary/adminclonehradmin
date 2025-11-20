@@ -79,11 +79,11 @@ export class DashboardComponent {
   public chartOptions4: Partial<ChartOptions> | any;
   
 // contract 
-  private backdropEl?: HTMLElement;
-  @ViewChild("getContractCanvas", { static: true })
-  getContractCanvas!: ElementRef<HTMLElement>;
+  @ViewChild("generateContractCanvas", { static: true })
+  generateContractCanvas!: ElementRef<HTMLElement>;
 
   isGenerating = false;
+  currentApplicationId: string = '';
   contracts: any[] = [];
   employeeData = {
     name: "John Doe",
@@ -94,7 +94,7 @@ export class DashboardComponent {
     email: "john.doe@company.com",
     phone: "+1-555-0123",
   };
-  deleteappId!: any;
+  deleteApplicationId!: any;
 
   constructor(
     private renderer: Renderer2,
@@ -446,13 +446,13 @@ export class DashboardComponent {
       return !!this.jobContract;
     }
   
-    get hasgetContracts(): boolean {
+    get hasGeneratedContracts(): boolean {
       return this.contracts.length > 0;
     }
   
     // Load contracts from backend
-    loadContracts(appId: string) {
-      this.backendService.getUploadContract(appId).subscribe({
+    loadContracts(applicationId: string) {
+      this.backendService.getUploadContract(applicationId).subscribe({
         next: (res: any) => {
           if (res.status === 'success') {
             this.contracts = res.data || [];
@@ -469,9 +469,207 @@ export class DashboardComponent {
       });
     }
   
- 
+    // Generate Trainee Contract
+    async generateTraineeContract() {
+      if (!this.currentApplicationId) {
+        console.error('No application ID selected');
+        return;
+      }
   
-   
+      this.isGenerating = true;
+      try {
+        const contractData = await this.generateContractForm("trainee");
+        const fileName = `Trainee_Contract_${this.employeeData.name}_${Date.now()}.pdf`;
+  
+        // Create form data for file upload
+        const formData = new FormData();
+        formData.append('applicationId', this.currentApplicationId);
+  
+        // Generate PDF and convert to blob
+        const pdfBlob = await this.generateContractPDF(contractData, fileName, 'trainee');
+        formData.append('trainee', pdfBlob, fileName);
+  
+        // Upload to backend
+        this.backendService.uploadContract(formData).subscribe({
+          next: (res: any) => {
+            console.log('Trainee contract uploaded successfully:', res);
+            // Reload contracts to get updated list
+            this.loadContracts(this.currentApplicationId);
+          },
+          error: (error) => {
+            console.error('Error uploading trainee contract:', error);
+          },
+          complete: () => {
+            this.isGenerating = false;
+          }
+        });
+  
+      } catch (error) {
+        console.error("Error generating trainee contract:", error);
+        this.isGenerating = false;
+      }
+    }
+  
+    // Generate Probation Contract
+    async generateProbationContract() {
+      if (!this.currentApplicationId) {
+        console.error('No application ID selected');
+        return;
+      }
+  
+      this.isGenerating = true;
+      try {
+        const contractData = await this.generateContractForm("probation");
+        const fileName = `Probation_Contract_${this.employeeData.name}_${Date.now()}.pdf`;
+  
+        const formData = new FormData();
+        formData.append('applicationId', this.currentApplicationId);
+  
+        const pdfBlob = await this.generateContractPDF(contractData, fileName, 'probation');
+        formData.append('probation', pdfBlob, fileName);
+  
+        this.backendService.uploadContract(formData).subscribe({
+          next: (res: any) => {
+            console.log('Probation contract uploaded successfully:', res);
+            this.loadContracts(this.currentApplicationId);
+          },
+          error: (error) => {
+            console.error('Error uploading probation contract:', error);
+          },
+          complete: () => {
+            this.isGenerating = false;
+          }
+        });
+  
+      } catch (error) {
+        console.error("Error generating probation contract:", error);
+        this.isGenerating = false;
+      }
+    }
+  
+    // Generate Job Contract
+    async generateJobContract() {
+      if (!this.currentApplicationId) {
+        console.error('No application ID selected');
+        return;
+      }
+  
+      this.isGenerating = true;
+      try {
+        const contractData = await this.generateContractForm("job");
+        const fileName = `Job_Contract_${this.employeeData.name}_${Date.now()}.pdf`;
+  
+        const formData = new FormData();
+        formData.append('applicationId', this.currentApplicationId);
+  
+        const pdfBlob = await this.generateContractPDF(contractData, fileName, 'job');
+        formData.append('job', pdfBlob, fileName);
+  
+        this.backendService.uploadContract(formData).subscribe({
+          next: (res: any) => {
+            console.log('Job contract uploaded successfully:', res);
+            this.loadContracts(this.currentApplicationId);
+          },
+          error: (error) => {
+            console.error('Error uploading job contract:', error);
+          },
+          complete: () => {
+            this.isGenerating = false;
+          }
+        });
+  
+      } catch (error) {
+        console.error("Error generating job contract:", error);
+        this.isGenerating = false;
+      }
+    }
+  
+    // Generate PDF and return as Blob
+    private generateContractPDF(contractData: any, fileName: string, contractType: string): Promise<Blob> {
+      return new Promise((resolve) => {
+        const doc = new jsPDF("p", "pt", "a4");
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const margin = 40;
+        let yPosition = 60;
+  
+        // Title
+        doc.setFontSize(20);
+        doc.setFont("", "bold");
+        doc.text(
+          `${this.getContractTitle(contractType)}`,
+          pageWidth / 2,
+          yPosition,
+          { align: "center" }
+        );
+        yPosition += 40;
+  
+        // Employee Details
+        doc.setFontSize(12);
+        doc.setFont("", "bold");
+        doc.text("Employee Details:", margin, yPosition);
+        yPosition += 25;
+  
+        doc.setFont("", "normal");
+        doc.text(`Name: ${this.employeeData.name}`, margin, yPosition);
+        yPosition += 20;
+        doc.text(`Position: ${this.employeeData.position}`, margin, yPosition);
+        yPosition += 20;
+        doc.text(`Department: ${this.employeeData.department}`, margin, yPosition);
+        yPosition += 20;
+        doc.text(
+          `Start Date: ${this.employeeData.startDate.toLocaleDateString()}`,
+          margin,
+          yPosition
+        );
+        yPosition += 20;
+        doc.text(`Email: ${this.employeeData.email}`, margin, yPosition);
+        yPosition += 30;
+  
+        // Contract Terms
+        doc.setFont("", "bold");
+        doc.text("Contract Terms:", margin, yPosition);
+        yPosition += 25;
+  
+        doc.setFont("", "normal");
+        doc.text(
+          `Duration: ${this.getContractDuration(contractType)}`,
+          margin,
+          yPosition
+        );
+        yPosition += 20;
+        doc.text(`Salary: ${this.employeeData.salary}`, margin, yPosition);
+        yPosition += 30;
+  
+        // Terms and Conditions
+        const terms = this.getContractTerms(contractType);
+        doc.setFont("", "bold");
+        doc.text("Terms & Conditions:", margin, yPosition);
+        yPosition += 25;
+  
+        doc.setFont("", "normal");
+        terms.forEach((term) => {
+          if (yPosition > 700) {
+            doc.addPage();
+            yPosition = 60;
+          }
+          doc.text(`• ${term}`, margin + 10, yPosition);
+          yPosition += 20;
+        });
+  
+        // Generated Date
+        yPosition += 20;
+        doc.text(
+          `Generated on: ${new Date().toLocaleDateString()}`,
+          margin,
+          yPosition
+        );
+  
+        // Convert to Blob
+        const pdfBlob = doc.output('blob');
+        resolve(pdfBlob);
+      });
+    }
+  
     // Download existing contract
     downloadContract(contractType: string) {
       let contract: any = null;
@@ -501,15 +699,73 @@ export class DashboardComponent {
       return new Date(dateString).toLocaleDateString();
     }
   
- 
-
+    // Existing helper methods (keep as is)
+    private async generateContractForm(contractType: string): Promise<any> {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const formData = {
+            employee: this.employeeData,
+            contractType: contractType,
+            terms: this.getContractTerms(contractType),
+            duration: this.getContractDuration(contractType),
+            conditions: this.getContractConditions(contractType),
+          };
+          resolve(formData);
+        }, 1000);
+      });
+    }
+  
+    private getContractTerms(contractType: string): string[] {
+      switch (contractType) {
+        case "trainee":
+          return ["Training period: 6 months", "Monthly stipend provided", "Mentorship program included", "Performance evaluation every 2 months"];
+        case "probation":
+          return ["Probation period: 3 months", "Full salary during probation", "Performance review at end of period", "Possible conversion to permanent position"];
+        case "job":
+          return ["Permanent employment", "Full benefits package", "Annual performance review", "Standard company policies apply"];
+        default:
+          return [];
+      }
+    }
+  
+    private getContractDuration(contractType: string): string {
+      switch (contractType) {
+        case "trainee": return "6 months";
+        case "probation": return "3 months";
+        case "job": return "Permanent";
+        default: return "N/A";
+      }
+    }
+  
+    private getContractConditions(contractType: string): string[] {
+      switch (contractType) {
+        case "trainee":
+          return ["Completion certificate upon successful training", "Possible job offer after training"];
+        case "probation":
+          return ["Employment subject to successful probation completion", "Standard notice period applies"];
+        case "job":
+          return ["Standard notice period: 30 days", "Confidentiality agreement applies"];
+        default:
+          return [];
+      }
+    }
+  
+    private getContractTitle(contractType: string): string {
+      switch (contractType) {
+        case "trainee": return "TRAINEE EMPLOYMENT CONTRACT";
+        case "probation": return "PROBATION EMPLOYMENT CONTRACT";
+        case "job": return "EMPLOYMENT CONTRACT";
+        default: return "CONTRACT";
+      }
+    }
+  
     // Open modal with application ID
-    openGenerateContractModal() {
+    openGenerateContractModal(applicationId: string) {
       // Load contracts for this application
-      this.loadContracts(this.appId);
+      this.loadContracts(applicationId);
+      this.currentApplicationId = applicationId;
   
-  
-      const el = this.getContractCanvas.nativeElement;
+      const el = this.generateContractCanvas.nativeElement;
       this.renderer.addClass(el, "show");
       this.renderer.setStyle(el, "visibility", "visible");
       this.renderer.setAttribute(el, "aria-modal", "true");
@@ -534,7 +790,7 @@ export class DashboardComponent {
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
       }
-      const panel = this.getContractCanvas.nativeElement;
+      const panel = this.generateContractCanvas.nativeElement;
   
       this.renderer.removeClass(panel, "show");
       const onTransition = (e: TransitionEvent) => {

@@ -10,9 +10,8 @@
             <div class="daterangepick form-control w-auto d-flex align-items-center">
                 <app-date-range-picker></app-date-range-picker>
             </div>
-            <button (click)="openGenerateContractModal()" type="button"
-                class="btn btn-primary btn-label d-flex justify-content-center gap-1"><i data-bs-toggle="tooltip"
-                    title="ion-filing" class="ion-filing"></i> My Contracts </button>
+            <button (click)="openGenerateContractModal()" type="button" class="btn btn-primary btn-label d-flex justify-content-center gap-1"><i
+                    data-bs-toggle="tooltip" title="ion-filing" class="ion-filing"></i> My Contracts </button>
 
             <a href="javascript:void(0);" class="btn btn-icon btn-outline-light shadow" data-bs-toggle="tooltip"
                 data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
@@ -346,8 +345,8 @@
     </div>
 
     <div class="offcanvas-body">
-
-
+     
+          
         <!-- get Contracts Section -->
         <div class="get-contracts-section" *ngIf="hasgetContracts && !isGenerating">
             <h6 class="fw-semibold mb-3 text-muted">get Contracts</h6>
@@ -413,7 +412,7 @@
         <!-- Empty State -->
         <div class="text-center py-5" *ngIf="!hasgetContracts && !isGenerating">
             <i class="ti ti-files-off display-4 text-muted mb-3"></i>
-            <p class="text-muted">No contracts get yet.</p>
+            <p class="text-muted">No contracts get yet. Click on the buttons above to generate contracts.</p>
         </div>
     </div>
 </div>

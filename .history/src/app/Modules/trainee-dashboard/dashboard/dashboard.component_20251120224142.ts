@@ -502,7 +502,15 @@ export class DashboardComponent {
     }
   
  
-
+    private getContractTitle(contractType: string): string {
+      switch (contractType) {
+        case "trainee": return "TRAINEE EMPLOYMENT CONTRACT";
+        case "probation": return "PROBATION EMPLOYMENT CONTRACT";
+        case "job": return "EMPLOYMENT CONTRACT";
+        default: return "CONTRACT";
+      }
+    }
+  
     // Open modal with application ID
     openGenerateContractModal() {
       // Load contracts for this application

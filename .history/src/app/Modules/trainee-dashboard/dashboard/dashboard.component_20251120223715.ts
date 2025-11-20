@@ -469,9 +469,6 @@ export class DashboardComponent {
       });
     }
   
- 
-  
-   
     // Download existing contract
     downloadContract(contractType: string) {
       let contract: any = null;
@@ -501,8 +498,66 @@ export class DashboardComponent {
       return new Date(dateString).toLocaleDateString();
     }
   
- 
-
+    // Existing helper methods (keep as is)
+    private async generateContractForm(contractType: string): Promise<any> {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const formData = {
+            employee: this.employeeData,
+            contractType: contractType,
+            terms: this.getContractTerms(contractType),
+            duration: this.getContractDuration(contractType),
+            conditions: this.getContractConditions(contractType),
+          };
+          resolve(formData);
+        }, 1000);
+      });
+    }
+  
+    private getContractTerms(contractType: string): string[] {
+      switch (contractType) {
+        case "trainee":
+          return ["Training period: 6 months", "Monthly stipend provided", "Mentorship program included", "Performance evaluation every 2 months"];
+        case "probation":
+          return ["Probation period: 3 months", "Full salary during probation", "Performance review at end of period", "Possible conversion to permanent position"];
+        case "job":
+          return ["Permanent employment", "Full benefits package", "Annual performance review", "Standard company policies apply"];
+        default:
+          return [];
+      }
+    }
+  
+    private getContractDuration(contractType: string): string {
+      switch (contractType) {
+        case "trainee": return "6 months";
+        case "probation": return "3 months";
+        case "job": return "Permanent";
+        default: return "N/A";
+      }
+    }
+  
+    private getContractConditions(contractType: string): string[] {
+      switch (contractType) {
+        case "trainee":
+          return ["Completion certificate upon successful training", "Possible job offer after training"];
+        case "probation":
+          return ["Employment subject to successful probation completion", "Standard notice period applies"];
+        case "job":
+          return ["Standard notice period: 30 days", "Confidentiality agreement applies"];
+        default:
+          return [];
+      }
+    }
+  
+    private getContractTitle(contractType: string): string {
+      switch (contractType) {
+        case "trainee": return "TRAINEE EMPLOYMENT CONTRACT";
+        case "probation": return "PROBATION EMPLOYMENT CONTRACT";
+        case "job": return "EMPLOYMENT CONTRACT";
+        default: return "CONTRACT";
+      }
+    }
+  
     // Open modal with application ID
     openGenerateContractModal() {
       // Load contracts for this application

@@ -10,9 +10,8 @@
             <div class="daterangepick form-control w-auto d-flex align-items-center">
                 <app-date-range-picker></app-date-range-picker>
             </div>
-            <button (click)="openGenerateContractModal()" type="button"
-                class="btn btn-primary btn-label d-flex justify-content-center gap-1"><i data-bs-toggle="tooltip"
-                    title="ion-filing" class="ion-filing"></i> My Contracts </button>
+            <button (click)="openGenerateContractModal(data._id)"></button> type="button" class="btn btn-primary btn-label d-flex justify-content-center gap-1"><i
+                    data-bs-toggle="tooltip" title="ion-filing" class="ion-filing"></i> My Contracts</button>
 
             <a href="javascript:void(0);" class="btn btn-icon btn-outline-light shadow" data-bs-toggle="tooltip"
                 data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i
@@ -335,9 +334,9 @@
 
 
 
-<div #getContractCanvas class="offcanvas offcanvas-end offcanvas-small" tabindex="-1" id="offcanvas_contracts">
+<div #generateContractCanvas class="offcanvas offcanvas-end offcanvas-small" tabindex="-1" id="offcanvas_contracts">
     <div class="offcanvas-header border-bottom">
-        <h5 class="fw-semibold">Get All Contracts</h5>
+        <h5 class="fw-semibold">Generate Contracts</h5>
         <button type="button"
             class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
             aria-label="Close" (click)="closeGenerateContractModal()">
@@ -346,11 +345,43 @@
     </div>
 
     <div class="offcanvas-body">
+        <!-- Loading State for Generation -->
+        <div class="text-center py-3" *ngIf="isGenerating">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Generating...</span>
+            </div>
+            <p class="text-muted mt-2">Generating contract...</p>
+        </div>
 
+        <!-- Contract Generation Buttons -->
+        <div class="row g-3 mb-4" *ngIf="!isGenerating">
+            <div class="col-12">
+                <button class="btn btn-primary w-100 d-flex align-items-center justify-content-center py-3"
+                    (click)="generateTraineeContract()" [disabled]="isGenerating">
+                    <i class="ti ti-file-text me-2"></i>
+                    <span>{{ hasTraineeContract ? 'Regenerate Trainee Contract' : 'Generate Trainee Contract' }}</span>
+                </button>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-success w-100 d-flex align-items-center justify-content-center py-3"
+                    (click)="generateProbationContract()" [disabled]="isGenerating">
+                    <i class="ti ti-file-text me-2"></i>
+                    <span>{{ hasProbationContract ? 'Regenerate Probation Contract' : 'Generate Probation Contract'
+                        }}</span>
+                </button>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-info w-100 d-flex align-items-center justify-content-center py-3"
+                    (click)="generateJobContract()" [disabled]="isGenerating">
+                    <i class="ti ti-file-text me-2"></i>
+                    <span>{{ hasJobContract ? 'Regenerate Job Contract' : 'Generate Job Contract' }}</span>
+                </button>
+            </div>
+        </div>
 
-        <!-- get Contracts Section -->
-        <div class="get-contracts-section" *ngIf="hasgetContracts && !isGenerating">
-            <h6 class="fw-semibold mb-3 text-muted">get Contracts</h6>
+        <!-- Generated Contracts Section -->
+        <div class="generated-contracts-section" *ngIf="hasGeneratedContracts && !isGenerating">
+            <h6 class="fw-semibold mb-3 text-muted">Generated Contracts</h6>
 
             <!-- Trainee Contract Card -->
             <div class="contract-card card border-0 shadow-sm mb-3" *ngIf="hasTraineeContract"
@@ -411,9 +442,9 @@
         </div>
 
         <!-- Empty State -->
-        <div class="text-center py-5" *ngIf="!hasgetContracts && !isGenerating">
+        <div class="text-center py-5" *ngIf="!hasGeneratedContracts && !isGenerating">
             <i class="ti ti-files-off display-4 text-muted mb-3"></i>
-            <p class="text-muted">No contracts get yet.</p>
+            <p class="text-muted">No contracts generated yet. Click on the buttons above to generate contracts.</p>
         </div>
     </div>
 </div>
