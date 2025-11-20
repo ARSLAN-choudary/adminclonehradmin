@@ -167,7 +167,7 @@ export class UploadDocumentsComponent implements OnInit {
 
       // SECTION 8: RIGHT TO WORK IN GEORGIA
       rightToWork: this.fb.group({
-        allowedToWork: ["yes", [Validators.required]],
+        allowedToWork: ["yes"],
         explanation: [""],
       }),
 
@@ -240,6 +240,33 @@ export class UploadDocumentsComponent implements OnInit {
           }
         });
     });
+
+    const citizenshipCtrl = this.personalDetails.get("citizenship");
+    const allowedCtrl = this.rightToWork.get("allowedToWork");
+
+    citizenshipCtrl?.valueChanges.subscribe((value) => {
+      if (value === "georgian") {
+        // Georgian → NOT required
+        allowedCtrl?.clearValidators();
+        allowedCtrl?.setValue("yes");
+      } else {
+        // Non-Georgian → required
+        allowedCtrl?.setValidators([Validators.required]);
+        allowedCtrl?.setValue(null); // force user to choose Yes/No
+      }
+      allowedCtrl?.updateValueAndValidity({ emitEvent: false });
+    });
+
+    // Run once for initial value too
+    const initialCitizenship = citizenshipCtrl?.value;
+    if (initialCitizenship === "georgian") {
+      allowedCtrl?.clearValidators();
+      allowedCtrl?.setValue("yes");
+    } else {
+      allowedCtrl?.setValidators([Validators.required]);
+      allowedCtrl?.updateValueAndValidity({ emitEvent: false });
+    }
+
     const t = new Date();
     const month = ("0" + (t.getMonth() + 1)).slice(-2);
     const day = ("0" + t.getDate()).slice(-2);

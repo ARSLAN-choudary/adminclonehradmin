@@ -654,6 +654,7 @@
         </div>
 
         <!-- SECTION 8: RIGHT TO WORK IN GEORGIA -->
+        @if (personalDetails.get('citizenship')?.value !== 'georgian') {
         <div class="form-section" formGroupName="rightToWork">
             <h2> RIGHT TO WORK IN GEORGIA</h2>
             <p class="section-description">For non-Georgian citizens only</p>
@@ -690,6 +691,8 @@
                 </div>
             </div>
         </div>
+        }
+
 
         <!-- SECTION 9: DOCUMENT UPLOAD -->
         <div class="form-section">
