@@ -462,7 +462,7 @@
                             <td>R{{data._id | slice:-3 | uppercase}}</td>
                             <td>{{ data.userNameEnglish }}</td>
                             <td class="job-tittle">{{ data.position }}</td>
-                            <td>{{ data.location.split(',')[1] }}</td>
+                            <td>{{ getRegion(data?.location) }}</td>
                             <td>{{ data.email }}</td>
                             <td>{{ data.createdAt | date }}</td>
                             <td>

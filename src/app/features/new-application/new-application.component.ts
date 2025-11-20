@@ -1479,7 +1479,9 @@ export class NewApplicationComponent implements OnInit {
         }
 
         // MAP OTHER APPLICATION SECTIONS
+
         this.docData = this.mapApiResponseToDocData(userData);
+        console.log(this.docData);
       },
       error: (err) => {
         this.toastr.error("Failed to load user details");
@@ -1507,6 +1509,11 @@ export class NewApplicationComponent implements OnInit {
     this.renderer.appendChild(document.body, this.docsBackdrop);
   }
   // Add this new method to map API response to your docData structure
+
+  getRegion(location?: string | null): string {
+    if (!location) return "";
+    return location.split(",")[1]?.trim() || "";
+  }
   private mapApiResponseToDocData(userData: any): any[] {
     return [
       {
