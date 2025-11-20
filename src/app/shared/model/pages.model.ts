@@ -459,6 +459,10 @@ export interface newApplicationDataTable {
   email: string;
   createdAt: string;
   status: string;
+  position:string
+  role:string,
+  userNameEnglish:string,
+  location:string
 }
 
 export interface companiesDataTable {

@@ -445,9 +445,9 @@
 
                         <tr>
                             <th mat-sort-header="_id"> Reference no</th>
-                            <th mat-sort-header="firstName"> Employer Name</th>
-                            <th mat-sort-header="jobTitle">Job Title</th>
-                            <th mat-sort-header="mobile">mobile</th>
+                            <th mat-sort-header="firstName">Applicant Name</th>
+                            <th mat-sort-header="jobTitle">Position</th>
+                            <th mat-sort-header="mobile">Location</th>
                             <th mat-sort-header="email">email</th>
                             <th mat-sort-header="createdAt">Submission Date</th>
                             <th mat-sort-header="status">Status</th>
@@ -460,9 +460,9 @@
                         @for (data of tableData ; track $index ) {
                         <tr class="odd" id="`id-{{$index}}`">
                             <td>R{{data._id | slice:-3 | uppercase}}</td>
-                            <td>{{ data.firstName }}</td>
-                            <td class="job-tittle">{{ data.jobTitle }}</td>
-                            <td>{{ data.mobile }}</td>
+                            <td>{{ data.userNameEnglish }}</td>
+                            <td class="job-tittle">{{ data.position }}</td>
+                            <td>{{ data.location }}</td>
                             <td>{{ data.email }}</td>
                             <td>{{ data.createdAt | date }}</td>
                             <td>
