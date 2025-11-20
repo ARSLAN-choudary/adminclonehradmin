@@ -1,0 +1,209 @@
+<!-- document-upload.component.html -->
+<div class="document-upload-container">
+    <!-- SECTION: DOCUMENT UPLOAD -->
+    <div class="form-section">
+        <h2>DOCUMENT UPLOAD</h2>
+        <p class="section-description">Capture clear images of your documents using your camera</p>
+
+        <div *ngIf="!showCamera">
+            <div class="row">
+                <!-- Passport -->
+                <div class="col-md-6 mb-3">
+                    <div class="doc-card card" [class.active]="activeDocType === 'passport'"
+                        (click)="selectDocType('passport')">
+                        <div class="card-body">
+                            <h3>Passport</h3>
+                            <p>
+                                Status:
+                                <span [class.text-success]="form.get('passport.uploaded')?.value"
+                                    [class.text-warning]="!form.get('passport.uploaded')?.value">
+                                    {{ form.get('passport.uploaded')?.value ? 'Captured' : 'Not captured' }}
+                                </span>
+                            </p>
+                            <div class="doc-image-wrapper" *ngIf="form.get('passport.dataUrl')?.value as img">
+                                <img [src]="img" alt="Passport preview" class="doc-image img-fluid rounded" />
+                                <button type="button" class="doc-image-remove btn btn-danger btn-sm"
+                                    (click)="clearDoc('passport', $event)">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Residence Card -->
+                <div class="col-md-6 mb-3">
+                    <div class="doc-card card" [class.active]="activeDocType === 'residenceCard'"
+                        (click)="selectDocType('residenceCard')">
+                        <div class="card-body">
+                            <h3>Residence Card</h3>
+                            <p>
+                                Status:
+                                <span [class.text-success]="form.get('residenceCard.uploaded')?.value"
+                                    [class.text-warning]="!form.get('residenceCard.uploaded')?.value">
+                                    {{ form.get('residenceCard.uploaded')?.value ? 'Captured' : 'Not captured' }}
+                                </span>
+                            </p>
+                            <div class="doc-image-wrapper" *ngIf="form.get('residenceCard.dataUrl')?.value as img">
+                                <img [src]="img" alt="Residence card preview" class="doc-image img-fluid rounded" />
+                                <button type="button" class="doc-image-remove btn btn-danger btn-sm"
+                                    (click)="clearDoc('residenceCard', $event)">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Card -->
+                <div class="col-md-6 mb-3">
+                    <div class="doc-card card" [class.active]="activeDocType === 'healthCard'"
+                        (click)="selectDocType('healthCard')">
+                        <div class="card-body">
+                            <h3>Health Card</h3>
+                            <p>
+                                Status:
+                                <span [class.text-success]="form.get('healthCard.uploaded')?.value"
+                                    [class.text-warning]="!form.get('healthCard.uploaded')?.value">
+                                    {{ form.get('healthCard.uploaded')?.value ? 'Captured' : 'Not captured' }}
+                                </span>
+                            </p>
+                            <div class="doc-image-wrapper" *ngIf="form.get('healthCard.dataUrl')?.value as img">
+                                <img [src]="img" alt="Health card preview" class="doc-image img-fluid rounded" />
+                                <button type="button" class="doc-image-remove btn btn-danger btn-sm"
+                                    (click)="clearDoc('healthCard', $event)">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Certificate -->
+                <div class="col-md-6 mb-3">
+                    <div class="doc-card card" [class.active]="activeDocType === 'healthCertificate'"
+                        (click)="selectDocType('healthCertificate')">
+                        <div class="card-body">
+                            <h3>Health Certificate</h3>
+                            <p>
+                                Status:
+                                <span [class.text-success]="form.get('healthCertificate.uploaded')?.value"
+                                    [class.text-warning]="!form.get('healthCertificate.uploaded')?.value">
+                                    {{ form.get('healthCertificate.uploaded')?.value ? 'Captured' : 'Not captured' }}
+                                </span>
+                            </p>
+                            <div class="doc-image-wrapper" *ngIf="form.get('healthCertificate.dataUrl')?.value as img">
+                                <img [src]="img" alt="Health certificate preview" class="doc-image img-fluid rounded" />
+                                <button type="button" class="doc-image-remove btn btn-danger btn-sm"
+                                    (click)="clearDoc('healthCertificate', $event)">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Documents -->
+            <div formArrayName="additionalDocuments"
+                *ngFor="let doc of additionalDocumentsForms.controls; let i = index">
+                <div [formGroupName]="i" class="doc-card card mb-3">
+                    <div class="card-body">
+                        <h3>Additional Document {{i + 1}}</h3>
+                        <div class="mb-3">
+                            <label class="form-label">Document Name</label>
+                            <input type="text" class="form-control" formControlName="documentName"
+                                [placeholder]="'Document ' + (i + 1)" [id]="'additionalDocName' + i"
+                                [name]="'additionalDocName' + i">
+                            <div *ngIf="doc.get('documentName')?.invalid && doc.get('documentName')?.touched"
+                                class="text-danger small">
+                                Document name is required
+                            </div>
+                        </div>
+                        <p>
+                            Status:
+                            <span [class.text-success]="doc.get('uploaded')?.value"
+                                [class.text-warning]="!doc.get('uploaded')?.value">
+                                {{ doc.get('uploaded')?.value ? 'Captured' : 'Not captured' }}
+                            </span>
+                        </p>
+                        <div class="doc-image-wrapper" *ngIf="doc.get('dataUrl')?.value as img">
+                            <img [src]="img" [alt]="'Additional document ' + (i + 1) + ' preview'"
+                                class="doc-image img-fluid rounded" />
+                            <button type="button" class="doc-image-remove btn btn-danger btn-sm"
+                                (click)="clearAdditionalDoc(i, $event)">
+                                ✕
+                            </button>
+                        </div>
+                        <div class="my-2 flex justify-content-center align-items-center flex-wrap">
+                            <button type="button" class="btn btn-outline-primary btn-sm m-1"
+                                (click)="selectAdditionalDocType(i)" [disabled]="!doc.get('documentName')?.valid">
+                                Capture Document {{i + 1}}
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm m-1"
+                                (click)="removeAdditionalDocument(i)" *ngIf="additionalDocumentsForms.length > 1">
+                                Remove Document
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-primary mb-3" (click)="addAdditionalDocument()">
+                + Add Another Document
+            </button>
+
+            <!-- Status Summary -->
+            <div class="status-summary alert" [class.alert-success]="allRequiredDocumentsUploaded"
+                [class.alert-warning]="!allRequiredDocumentsUploaded">
+                <div class="d-flex align-items-center">
+                    <i class="ti" [class.ti-check]="allRequiredDocumentsUploaded"
+                        [class.ti-alert-circle]="!allRequiredDocumentsUploaded" class="me-2"></i>
+                    <span>
+                        {{ allRequiredDocumentsUploaded ?
+                        'All documents captured and ready!' :
+                        'Please capture all required documents' }}
+                    </span>
+                </div>
+            </div>
+
+            <p class="hint text-muted mt-3">
+                {{ hint }}
+            </p>
+        </div>
+
+        <!-- Camera overlay -->
+        <div class="camera-overlay" *ngIf="showCamera">
+            <div class="camera-header">
+                <div class="camera-title">
+                    {{ getCameraTitle() }}
+                </div>
+                <button type="button" class="camera-close btn-close" (click)="onCloseCamera()"></button>
+            </div>
+
+            <div class="camera-content">
+                <div class="camera-box">
+                    <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
+                        (initError)="handleCameraInitError($event)" [allowCameraSwitch]="true"
+                        [captureImageData]="false">
+                    </webcam>
+                </div>
+
+                <div class="camera-hint-pill alert"
+                    [class.alert-info]="qualityStatus === 'unknown' || qualityStatus === 'good'"
+                    [class.alert-warning]="qualityStatus === 'blurry' || qualityStatus === 'too_far' || qualityStatus === 'too_close'">
+                    {{ hint }}
+                </div>
+
+                <div class="camera-actions">
+                    <button type="button" class="btn btn-outline-secondary" (click)="onCloseCamera()">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" (click)="triggerSnapshot()">
+                        Capture {{ getCameraTitle() }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -42,6 +42,6 @@ export const CONFIG = {
 
   uploadContract: BASE_URL_API + "/api/users/uploadcontract",
   getUploadContract: BASE_URL_API + "/api/users/usercontract",
-  updateApplicationDocuments: BASE_URL_API + "/api/users/updateDocument",
+  getUploadContract: BASE_URL_API + "/api/users/usercontract",
 
 };

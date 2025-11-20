@@ -247,8 +247,8 @@ export class BackendService {
   getApplicationById(id: string) {
     return this.http.get(`${CONFIG.applicationDetail}/${id}`);
   }
-  updateApplicationDocuments(payload:any) {
-    return this.http.post(`${CONFIG.updateApplicationDocuments}`, payload);
+  updateApplicationDocuments(id: string,payload:any) {
+    return this.http.get(`${CONFIG.updateApplicationDocuments}`, payload);
   }
 
 // contract  

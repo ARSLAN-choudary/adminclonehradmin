@@ -247,15 +247,13 @@ export class BackendService {
   getApplicationById(id: string) {
     return this.http.get(`${CONFIG.applicationDetail}/${id}`);
   }
-  updateApplicationDocuments(payload:any) {
-    return this.http.post(`${CONFIG.updateApplicationDocuments}`, payload);
-  }
 
 // contract  
   uploadContract(payload: any): Observable<any> {
     return this.http.post(CONFIG.uploadContract, payload);
   }
 
+  updateApplicationDocuments
   getUploadContract(id: any): Observable<any> {
     const url = `${CONFIG.getUploadContract}/${id}`;
     return this.http.get(url, {});
