@@ -471,7 +471,92 @@ export class DashboardComponent {
   
  
   
-   
+    // Generate PDF and return as Blob
+    private generateContractPDF(contractData: any, fileName: string, contractType: string): Promise<Blob> {
+      return new Promise((resolve) => {
+        const doc = new jsPDF("p", "pt", "a4");
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const margin = 40;
+        let yPosition = 60;
+  
+        // Title
+        doc.setFontSize(20);
+        doc.setFont("", "bold");
+        doc.text(
+          `${this.getContractTitle(contractType)}`,
+          pageWidth / 2,
+          yPosition,
+          { align: "center" }
+        );
+        yPosition += 40;
+  
+        // Employee Details
+        doc.setFontSize(12);
+        doc.setFont("", "bold");
+        doc.text("Employee Details:", margin, yPosition);
+        yPosition += 25;
+  
+        doc.setFont("", "normal");
+        doc.text(`Name: ${this.employeeData.name}`, margin, yPosition);
+        yPosition += 20;
+        doc.text(`Position: ${this.employeeData.position}`, margin, yPosition);
+        yPosition += 20;
+        doc.text(`Department: ${this.employeeData.department}`, margin, yPosition);
+        yPosition += 20;
+        doc.text(
+          `Start Date: ${this.employeeData.startDate.toLocaleDateString()}`,
+          margin,
+          yPosition
+        );
+        yPosition += 20;
+        doc.text(`Email: ${this.employeeData.email}`, margin, yPosition);
+        yPosition += 30;
+  
+        // Contract Terms
+        doc.setFont("", "bold");
+        doc.text("Contract Terms:", margin, yPosition);
+        yPosition += 25;
+  
+        doc.setFont("", "normal");
+        doc.text(
+          `Duration: ${this.getContractDuration(contractType)}`,
+          margin,
+          yPosition
+        );
+        yPosition += 20;
+        doc.text(`Salary: ${this.employeeData.salary}`, margin, yPosition);
+        yPosition += 30;
+  
+        // Terms and Conditions
+        const terms = this.getContractTerms(contractType);
+        doc.setFont("", "bold");
+        doc.text("Terms & Conditions:", margin, yPosition);
+        yPosition += 25;
+  
+        doc.setFont("", "normal");
+        terms.forEach((term) => {
+          if (yPosition > 700) {
+            doc.addPage();
+            yPosition = 60;
+          }
+          doc.text(`• ${term}`, margin + 10, yPosition);
+          yPosition += 20;
+        });
+  
+        // get Date
+        yPosition += 20;
+        doc.text(
+          `get on: ${new Date().toLocaleDateString()}`,
+          margin,
+          yPosition
+        );
+  
+        // Convert to Blob
+        const pdfBlob = doc.output('blob');
+        resolve(pdfBlob);
+      });
+    }
+  
     // Download existing contract
     downloadContract(contractType: string) {
       let contract: any = null;
@@ -502,7 +587,15 @@ export class DashboardComponent {
     }
   
  
-
+    private getContractTitle(contractType: string): string {
+      switch (contractType) {
+        case "trainee": return "TRAINEE EMPLOYMENT CONTRACT";
+        case "probation": return "PROBATION EMPLOYMENT CONTRACT";
+        case "job": return "EMPLOYMENT CONTRACT";
+        default: return "CONTRACT";
+      }
+    }
+  
     // Open modal with application ID
     openGenerateContractModal() {
       // Load contracts for this application
