@@ -529,12 +529,23 @@ export class UploadDocumentsComponent implements OnInit {
   get educationForms() {
     return this.form.get("education") as FormArray;
   }
+futureDateValidator(control: AbstractControl) {
+    if (!control.value) return null;
+    
 
+    const selected = new Date(control.value + "-01");
+    const today = new Date();
+
+    if (selected > today) {
+      return { futureDate: true };
+    }
+    return null;
+  }
   addEducation() {
     const educationGroup = this.fb.group(
       {
-        from: ["", [Validators.required]],
-        to: ["", [Validators.required]],
+        from: ["", [Validators.required,this.futureDateValidator]],
+        to: ["", [Validators.required,this.futureDateValidator]],
         institution: ["", [Validators.required]],
         qualification: ["", [Validators.required]],
         notes: [""],
@@ -554,14 +565,15 @@ export class UploadDocumentsComponent implements OnInit {
     return this.form.get("workExperience") as FormArray;
   }
 
+  
   addWorkExperience() {
     const workGroup = this.fb.group(
       {
         companyName: ["", [Validators.required]],
         cityCountry: ["", [Validators.required]],
         jobTitle: ["", [Validators.required]],
-        employmentPeriodFrom: ["", [Validators.required]],
-        employmentPeriodTo: ["", [Validators.required]],
+        employmentPeriodFrom: ["", [Validators.required,this.futureDateValidator]],
+        employmentPeriodTo: ["", [Validators.required,this.futureDateValidator]],
         grossSalary: [""],
         reasonForLeaving: [""],
         stillWorking: [false],
