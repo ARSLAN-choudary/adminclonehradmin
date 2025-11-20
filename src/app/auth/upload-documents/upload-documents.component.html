@@ -27,6 +27,29 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label required">User Name (Georgian / ქართული)</label>
+                        <input type="text" class="form-control" formControlName="userNameGeorgian"
+                            placeholder="Enter your full name in Georgian" id="userNameGeorgian"
+                            name="userNameGeorgian">
+                        <div class="text-danger mt-1"
+                            *ngIf="personalDetails.get('userNameGeorgian')?.invalid && personalDetails.get('userNameGeorgian')?.touched">
+                            <span *ngIf="personalDetails.get('userNameGeorgian')?.errors?.['required']">This
+                                field is required</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Surname (Georgian / ქართული) </label>
+                        <input type="text" class="form-control" formControlName="surnameGeorgian"
+                            placeholder="Enter your full name in Georgian" id="surnameGeorgian" name="surnameGeorgian">
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-6">
@@ -50,6 +73,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                         <!-- Country Dropdown - Show when NOT Georgian -->
                         <div *ngIf="personalDetails.get('citizenship')?.value !== 'georgian'" class="mt-2">
@@ -368,7 +392,8 @@
                             <div class="mb-3">
                                 <label class="form-label required">Employment Period From</label>
                                 <input type="month" class="form-control" formControlName="employmentPeriodFrom"
-                                    [id]="'employmentPeriodFrom' + i" [name]="'employmentPeriodFrom' + i" [max]="todayMonth">
+                                    [id]="'employmentPeriodFrom' + i" [name]="'employmentPeriodFrom' + i"
+                                    [max]="todayMonth">
                                 <div class="text-danger mt-1"
                                     *ngIf="work.get('employmentPeriodFrom')?.invalid && work.get('employmentPeriodFrom')?.touched">
                                     This field is required
@@ -380,7 +405,8 @@
                             <div class="mb-3">
                                 <label class="form-label required">Employment Period To</label>
                                 <input type="month" class="form-control" formControlName="employmentPeriodTo"
-                                    [id]="'employmentPeriodTo' + i" [name]="'employmentPeriodTo' + i" [max]="todayMonth">
+                                    [id]="'employmentPeriodTo' + i" [name]="'employmentPeriodTo' + i"
+                                    [max]="todayMonth">
                                 <div class="text-danger mt-1"
                                     *ngIf="work.get('employmentPeriodTo')?.invalid && work.get('employmentPeriodTo')?.touched">
                                     This field is required
@@ -534,7 +560,8 @@
                 <div class="mb-3">
                     <label class="form-label required">Account Number (IBAN)</label>
                     <input type="text" class="form-control" formControlName="accountNumber"
-                        placeholder="GE00 TBBC 0000 0000 0000 0000" id="accountNumber" name="accountNumber"  (input)="formatIBAN($event)"  maxlength="29">
+                        placeholder="GE00 TBBC 0000 0000 0000 0000" id="accountNumber" name="accountNumber"
+                        (input)="formatIBAN($event)" maxlength="29">
                     <small class="form-text text-muted">Format: GE00 TBBC 0000 0000 0000 0000</small>
                     <div class="text-danger mt-1"
                         *ngIf="bankDetails.get('accountNumber')?.invalid && bankDetails.get('accountNumber')?.touched">

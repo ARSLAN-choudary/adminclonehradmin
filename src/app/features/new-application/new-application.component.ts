@@ -1438,81 +1438,74 @@ export class NewApplicationComponent implements OnInit {
   }
   docData: any[] = [];
   // DOCS OFFCANVAS
-openDocs(user: any) {
-  // this.currentUserId = user.userId;
-  this.currentAppId = user._id;
+  openDocs(user: any) {
+    // this.currentUserId = user.userId;
+    this.currentAppId = user._id;
 
-  this.backend.getApplicationById(user._id).subscribe({
-    next: (apiRes: any) => {
-      const userData = apiRes.data;
-      this.currentUserDocs = Object.entries(userData.documents)
-        .filter(([key, value]: any) => {
-          return (
-            key !== "additional" &&
-            value.url &&
-            value.url.trim() !== ""
-          );
-        })
-        .map(([key, value]: any, index) => ({
-          id: index + 1,
-          name: key.toUpperCase(),
-          uploadDate: userData.createdAt,
-          previewUrl: value.url,
-          status: value.status,
-          fileType: value.url ? "image" : "unknown",
-          key: key,
-        }));
-      if (
-        userData.documents.additional &&
-        Array.isArray(userData.documents.additional)
-      ) {
-        const additionalDocs = userData.documents.additional
-          .filter((doc: any) => doc.url && doc.url.trim() !== "")
-          .map((doc: any, index: number) => ({
-            id: this.currentUserDocs.length + index + 1,
-            name: doc.name || `ADDITIONAL_DOC_${index + 1}`,
-            uploadDate: doc.uploadDate || userData.createdAt,
-            previewUrl: doc.url,
-            status: doc.status || "pending",
-            fileType: "image",
-
-             key: `additional[${index}]`,
+    this.backend.getApplicationById(user._id).subscribe({
+      next: (apiRes: any) => {
+        const userData = apiRes.data;
+        this.currentUserDocs = Object.entries(userData.documents)
+          .filter(([key, value]: any) => {
+            return key !== "additional" && value.url && value.url.trim() !== "";
+          })
+          .map(([key, value]: any, index) => ({
+            id: index + 1,
+            name: key.toUpperCase(),
+            uploadDate: userData.createdAt,
+            previewUrl: value.url,
+            status: value.status,
+            fileType: value.url ? "image" : "unknown",
+            key: key,
           }));
+        if (
+          userData.documents.additional &&
+          Array.isArray(userData.documents.additional)
+        ) {
+          const additionalDocs = userData.documents.additional
+            .filter((doc: any) => doc.url && doc.url.trim() !== "")
+            .map((doc: any, index: number) => ({
+              id: this.currentUserDocs.length + index + 1,
+              name: doc.name || `ADDITIONAL_DOC_${index + 1}`,
+              uploadDate: doc.uploadDate || userData.createdAt,
+              previewUrl: doc.url,
+              status: doc.status || "pending",
+              fileType: "image",
 
-        this.currentUserDocs = [
-          ...this.currentUserDocs,
-          ...additionalDocs,
-        ];
-      }
+              key: `additional[${index}]`,
+            }));
 
-      // MAP OTHER APPLICATION SECTIONS
-      this.docData = this.mapApiResponseToDocData(userData);
-    },
-    error: (err) => {
-      this.toastr.error("Failed to load user details");
-      console.error("Error loading user details:", err);
-    },
-  });
+          this.currentUserDocs = [...this.currentUserDocs, ...additionalDocs];
+        }
 
-  const panel = this.docsCanvas.nativeElement;
-  this.renderer.addClass(panel, "show");
-  this.renderer.setStyle(panel, "visibility", "visible");
-  this.renderer.setAttribute(panel, "aria-modal", "true");
-  this.renderer.removeAttribute(panel, "aria-hidden");
-  this.renderer.setStyle(document.body, "overflow", "hidden");
+        // MAP OTHER APPLICATION SECTIONS
+        this.docData = this.mapApiResponseToDocData(userData);
+      },
+      error: (err) => {
+        this.toastr.error("Failed to load user details");
+        console.error("Error loading user details:", err);
+      },
+    });
 
-  // BACKDROP
-  this.docsBackdrop = this.renderer.createElement("div");
-  this.renderer.addClass(this.docsBackdrop, "offcanvas-backdrop");
-  this.renderer.addClass(this.docsBackdrop, "fade");
-  this.renderer.addClass(this.docsBackdrop, "show");
+    const panel = this.docsCanvas.nativeElement;
+    this.renderer.addClass(panel, "show");
+    this.renderer.setStyle(panel, "visibility", "visible");
+    this.renderer.setAttribute(panel, "aria-modal", "true");
+    this.renderer.removeAttribute(panel, "aria-hidden");
+    this.renderer.setStyle(document.body, "overflow", "hidden");
 
-  if (this.docsBackdrop) {
-    this.docsBackdrop.addEventListener("click", () => this.closeDocs());
+    // BACKDROP
+    this.docsBackdrop = this.renderer.createElement("div");
+    this.renderer.addClass(this.docsBackdrop, "offcanvas-backdrop");
+    this.renderer.addClass(this.docsBackdrop, "fade");
+    this.renderer.addClass(this.docsBackdrop, "show");
+
+    if (this.docsBackdrop) {
+      this.docsBackdrop.addEventListener("click", () => this.closeDocs());
+    }
+
+    this.renderer.appendChild(document.body, this.docsBackdrop);
   }
-
-  this.renderer.appendChild(document.body, this.docsBackdrop);
-}
   // Add this new method to map API response to your docData structure
   private mapApiResponseToDocData(userData: any): any[] {
     return [
@@ -1524,10 +1517,19 @@ openDocs(user: any) {
             value: userData.userNameEnglish || "N/A",
           },
           {
-            label: "Surname (Georgian)",
+            label: "Surname (English)",
+            value: userData.surnameEnglish || "N/A",
+          },
+          {
+            label: "Given Name  (Georgian / ქართული)",
+            value: userData.userNameGeorgian || "N/A",
+          },
+          {
+            label: "Surname  (Georgian / ქართული)",
             value: userData.surnameGeorgian || "N/A",
           },
-          { label: "Citizenship", value: userData.location || "N/A" },
+          { label: "City/Region", value: userData.location || "N/A" },
+          { label: "Citizenship", value: userData.citizenship || "N/A" },
           {
             label: "Document Type",
             value: this.formatDocumentType(userData.documentType) || "N/A",
@@ -1765,44 +1767,42 @@ openDocs(user: any) {
     this.showPreview = false;
     this.selectedDoc = null;
   }
-approve(doc: any) {
+  approve(doc: any) {
+    let payload: any = {
+      applicationId: this.currentAppId,
+      status: "approved",
+    };
 
-  let payload: any = {
-    applicationId: this.currentAppId,
-    status: "approved",
-  };
+    if (doc.key.startsWith("additional[")) {
+      const index = Number(doc.key.match(/\[(\d+)\]/)[1]);
 
-  if (doc.key.startsWith("additional[")) {
-    const index = Number(doc.key.match(/\[(\d+)\]/)[1]);
+      payload.documentKey = "additional";
+      payload.index = index;
+    } else {
+      payload.documentKey = doc.key;
+    }
 
-    payload.documentKey = "additional";
-    payload.index = index;
-  } else {
-    payload.documentKey = doc.key;
+    this.backend.updateDocStatus(payload).subscribe({
+      next: (res: any) => {
+        const msg = res?.meta?.message || "Document approved successfully";
+        this.toastr.success(msg, "Success");
+
+        this.currentUserDocs = this.currentUserDocs.map((d) =>
+          d.key === doc.key ? { ...d, status: "approved" } : d
+        );
+
+        this.getTableData(this.skip, this.pageSize);
+        this.closePreview();
+      },
+      error: (err) => {
+        const errorMsg =
+          err?.error?.meta?.message ||
+          err?.error?.message ||
+          "Something went wrong";
+        this.toastr.error(errorMsg, "Error");
+      },
+    });
   }
-
-  this.backend.updateDocStatus(payload).subscribe({
-    next: (res: any) => {
-      const msg = res?.meta?.message || "Document approved successfully";
-      this.toastr.success(msg, "Success");
-
-      this.currentUserDocs = this.currentUserDocs.map((d) =>
-        d.key === doc.key ? { ...d, status: "approved" } : d
-      );
-
-      this.getTableData(this.skip, this.pageSize);
-      this.closePreview();
-    },
-    error: (err) => {
-      const errorMsg =
-        err?.error?.meta?.message ||
-        err?.error?.message ||
-        "Something went wrong";
-      this.toastr.error(errorMsg, "Error");
-    },
-  });
-}
-
 
   getSafeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -1922,59 +1922,56 @@ approve(doc: any) {
     this.showRejectModal = true;
   }
 
-submitRejectReason() {
-  let finalReason = this.selectedReason;
+  submitRejectReason() {
+    let finalReason = this.selectedReason;
 
-  if (!finalReason) {
-    this.toastr.error("Please select a reason.");
-    return;
-  }
-
-  if (finalReason === "other") {
-    if (!this.customReason.trim()) {
-      this.toastr.error("Please type a comment.");
+    if (!finalReason) {
+      this.toastr.error("Please select a reason.");
       return;
     }
-    finalReason = this.customReason;
-  }
 
-  let payload: any = {
-    applicationId: this.currentAppId,
-    status: "rejected",
-    remarks: finalReason,
-  };
-
-  if (this.currentRejectDoc.key.startsWith("additional[")) {
-    const index = Number(
-      this.currentRejectDoc.key.match(/\[(\d+)\]/)[1]
-    );
-
-    payload.documentKey = "additional";
-    payload.index = index;
-  } else {
-    payload.documentKey = this.currentRejectDoc.key;
-  }
-
-  this.backend.updateDocStatus(payload).subscribe({
-    next: (res: any) => {
-      if (res?.status === "success" || res?.success === true) {
-        this.currentRejectDoc.status = "rejected";
-
-        this.toastr.success("Document rejected successfully");
-        this.showRejectModal = false;
-        this.getTableData(this.skip, this.pageSize);
-      } else {
-        this.toastr.error(res?.message || "Document not added!");
-        this.showRejectModal = false;
+    if (finalReason === "other") {
+      if (!this.customReason.trim()) {
+        this.toastr.error("Please type a comment.");
+        return;
       }
-    },
-    error: (err) => {
-      this.showRejectModal = false;
-      this.toastr.error(err?.error?.message || "Document not added!");
-    },
-  });
-}
+      finalReason = this.customReason;
+    }
 
+    let payload: any = {
+      applicationId: this.currentAppId,
+      status: "rejected",
+      remarks: finalReason,
+    };
+
+    if (this.currentRejectDoc.key.startsWith("additional[")) {
+      const index = Number(this.currentRejectDoc.key.match(/\[(\d+)\]/)[1]);
+
+      payload.documentKey = "additional";
+      payload.index = index;
+    } else {
+      payload.documentKey = this.currentRejectDoc.key;
+    }
+
+    this.backend.updateDocStatus(payload).subscribe({
+      next: (res: any) => {
+        if (res?.status === "success" || res?.success === true) {
+          this.currentRejectDoc.status = "rejected";
+
+          this.toastr.success("Document rejected successfully");
+          this.showRejectModal = false;
+          this.getTableData(this.skip, this.pageSize);
+        } else {
+          this.toastr.error(res?.message || "Document not added!");
+          this.showRejectModal = false;
+        }
+      },
+      error: (err) => {
+        this.showRejectModal = false;
+        this.toastr.error(err?.error?.message || "Document not added!");
+      },
+    });
+  }
 
   closeRejectModal() {
     this.showRejectModal = false;

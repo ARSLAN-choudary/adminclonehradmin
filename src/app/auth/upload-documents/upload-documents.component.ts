@@ -100,6 +100,8 @@ export class UploadDocumentsComponent implements OnInit {
       personalDetails: this.fb.group({
         userNameEnglish: ["", [Validators.required]],
         surnameEnglish: ["", [Validators.required]],
+        userNameGeorgian: ["", [Validators.required]],
+        surnameGeorgian: ["", [Validators.required]],
         citizenship: ["georgian", [Validators.required]],
         documentType: ["georgianId", [Validators.required]],
         documentNumber: ["", [Validators.required]],
@@ -655,6 +657,8 @@ export class UploadDocumentsComponent implements OnInit {
       // Personal Details - only include required fields
       userNameEnglish: personal.userNameEnglish || "",
       surnameEnglish: personal.surnameEnglish || "",
+      userNameGeorgian: personal.userNameGeorgian || "",
+      surnameGeorgian: personal.surnameGeorgian || "",
       documentType: personal.documentType,
       documentNumber: parseInt(personal.documentNumber) || 0,
       email: personal.emailAddress,
