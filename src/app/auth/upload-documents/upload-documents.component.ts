@@ -109,9 +109,9 @@ export class UploadDocumentsComponent implements OnInit {
         gender: ["male", [Validators.required]],
         maritalStatus: ["single", [Validators.required]],
         contactNumber: [
-          "",
-          [Validators.required, Validators.pattern(/^\+995\s?\d{9}$/)],
-        ],
+  "+995",  
+  [Validators.required, Validators.pattern(/^\+995\d{9}$/)]
+],
         emailAddress: ["", [Validators.required, Validators.email]],
         legalHomeAddress: this.fb.group({
           streetBuildingApartment: ["", [Validators.required]],
@@ -159,7 +159,7 @@ export class UploadDocumentsComponent implements OnInit {
         relationship: ["", [Validators.required]],
         address: ["", [Validators.required]],
         contactNumber: [
-          "",
+          "+995",
           [Validators.required, Validators.pattern(/^\+995\s?\d{9}$/)],
         ],
         notes: [""],
@@ -239,6 +239,8 @@ export class UploadDocumentsComponent implements OnInit {
             });
           }
         });
+
+        
     });
 
     const citizenshipCtrl = this.personalDetails.get("citizenship");
@@ -276,20 +278,36 @@ export class UploadDocumentsComponent implements OnInit {
     this.personalDetails.patchValue({
       emailAddress: this.email,
     });
+
+    this.enforceGeorgianPrefix('personalDetails.contactNumber');
+  this.enforceGeorgianPrefix('emergencyContact.contactNumber');
   }
 
   // Custom validators
-  private dateRangeValidator(): ValidatorFn {
-    return (group: AbstractControl) => {
-      const from = group.get("from")?.value;
-      const to = group.get("to")?.value;
+private dateRangeValidator(): ValidatorFn {
+  return (group: AbstractControl) => {
+    const from = group.get("from")?.value;
+    const to = group.get("to")?.value;
 
-      if (from && to && new Date(from) > new Date(to)) {
-        return { dateRangeInvalid: true };
-      }
-      return null;
-    };
-  }
+    if (!from || !to) return null;
+
+    const fromDate = new Date(from + "-01");
+    const toDate = new Date(to + "-01");
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (fromDate > today || toDate > today) {
+      return { futureDate: true };
+    }
+
+    if (fromDate > toDate) {
+      return { dateRangeInvalid: true };
+    }
+
+    return null;
+  };
+}
 
   private employmentPeriodValidator(): ValidatorFn {
     return (group: AbstractControl) => {
@@ -1450,4 +1468,54 @@ export class UploadDocumentsComponent implements OnInit {
       .get("accountNumber")
       ?.setValue(formatted, { emitEvent: false });
   }
+
+
+  validateDOB() {
+  const dob = new Date(this.personalDetails.value.dateOfBirth);
+  const today = new Date(this.today);
+
+  if (dob > today) {
+    this.personalDetails.get('dateOfBirth')?.setErrors({ futureDate: true });
+  }
+}
+
+validateNoFuture(controlName: string, formGroup: any) {
+  const selectedValue = formGroup.get(controlName)?.value;
+
+  if (!selectedValue) return;
+
+  // Convert to date (for both type="date" and type="month")
+  const selected = new Date(selectedValue + "-01");
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+
+  if (selected > today) {
+    formGroup.get(controlName)?.setErrors({ futureDate: true });
+  }
+}
+
+
+
+
+  enforceGeorgianPrefix(controlPath: string) {
+  const ctrl = this.form.get(controlPath);
+
+  ctrl?.valueChanges.subscribe(val => {
+    if (!val) return;
+
+    if (!val.startsWith('+995')) {
+      ctrl.setValue('+995' + val.replace(/\+995/g, ''), {
+        emitEvent: false
+      });
+    }
+  });
+}
+
+moveCursorToEnd(event: any) {
+  const input = event.target;
+  setTimeout(() => {
+    input.setSelectionRange(input.value.length, input.value.length);
+  });
+}
 }
