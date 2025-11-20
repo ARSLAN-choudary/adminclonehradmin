@@ -187,8 +187,8 @@ export class NewApplicationComponent implements OnInit {
 
   currentUserDocs: any[] = [];
   limit: number = 10;
-openedIndex: number | null = 0;   
-docsOpen: boolean = false;
+  openedIndex: number | null = 0;
+  docsOpen: boolean = false;
 
   private EXCEL_TYPE =
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -1848,13 +1848,13 @@ docsOpen: boolean = false;
     return this.currentUserDocs.filter((d) => d.status === "rejected").length;
   }
 
-toggleSection(i: number) {
-  this.openedIndex = this.openedIndex === i ? null : i;
-}
+  toggleSection(i: number) {
+    this.openedIndex = this.openedIndex === i ? null : i;
+  }
 
-toggleDocs() {
-  this.docsOpen = !this.docsOpen;
-}
+  toggleDocs() {
+    this.docsOpen = !this.docsOpen;
+  }
 
   isTraineeApproved: boolean = false;
 
