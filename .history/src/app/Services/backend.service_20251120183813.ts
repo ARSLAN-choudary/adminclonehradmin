@@ -248,16 +248,50 @@ export class BackendService {
     return this.http.get(`${CONFIG.applicationDetail}/${id}`);
   }
 
-// contract  
-  uploadContract(payload: any): Observable<any> {
-    return this.http.post(CONFIG.uploadContract, payload);
+// contracts   
+  uploadContract(payload: UploadContractPayload): Observable<ContractResponse> {
+    const formData = new FormData();
+
+    formData.append('applicationId', payload.applicationId);
+
+    if (payload.trainee) {
+      formData.append('trainee', payload.trainee, payload.trainee.name);
+    }
+
+    if (payload.probation) {
+      formData.append('probation', payload.probation, payload.probation.name);
+    }
+
+    if (payload.job) {
+      formData.append('job', payload.job, payload.job.name);
+    }
+
+    return this.http.post<ContractResponse>(CONFIG.uploadContract, formData);
   }
 
-
-  getUploadContract(id: any): Observable<any> {
+  getUploadContract(id: string): Observable<ContractResponse> {
     const url = `${CONFIG.getUploadContract}/${id}`;
-    return this.http.get(url, {});
+    return this.http.post<ContractResponse>(url, {});
   }
 
+  updateUploadContract(id: string, payload: UploadContractPayload): Observable<ContractResponse> {
+    const formData = new FormData();
 
+    formData.append('applicationId', payload.applicationId);
+
+    if (payload.trainee) {
+      formData.append('trainee', payload.trainee, payload.trainee.name);
+    }
+
+    if (payload.probation) {
+      formData.append('probation', payload.probation, payload.probation.name);
+    }
+
+    if (payload.job) {
+      formData.append('job', payload.job, payload.job.name);
+    }
+
+    const url = `${CONFIG.updateUploadContract}/${id}`;
+    return this.http.post<ContractResponse>(url, formData);
+  }
 }

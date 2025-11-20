@@ -137,9 +137,13 @@ export class NewApplicationComponent implements OnInit {
 
   isGenerating = false;
   currentApplicationId: string = '';
+  contracts: any[] = []; // Store contracts from backend
 
-  // Store contracts from backend
-  contracts: any[] = [];
+  // Existing contracts from backend
+  traineeContract: ContractData | null = null;
+  probationContract: ContractData | null = null;
+  jobContract: ContractData | null = null;
+
   // Sample employee data - replace with actual data from your service
   employeeData = {
     name: "John Doe",
@@ -2095,8 +2099,6 @@ export class NewApplicationComponent implements OnInit {
 
   // Open modal with application ID
   openGenerateContractModal(applicationId: string) {
-    // Load contracts for this application
-    this.loadContracts(applicationId);
     this.currentApplicationId = applicationId;
 
     const el = this.generateContractCanvas.nativeElement;
@@ -2116,7 +2118,8 @@ export class NewApplicationComponent implements OnInit {
       this.renderer.appendChild(document.body, this.backdropEl);
     }
 
-
+    // Load contracts for this application
+    this.loadContracts(applicationId);
   }
 
   closeGenerateContractModal() {

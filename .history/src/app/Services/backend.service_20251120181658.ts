@@ -2,24 +2,12 @@ import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { CONFIG } from "../../config";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-interface UploadContractPayload {
-  applicationId: string;
-  trainee?: File;
-  probation?: File;
-  job?: File;
-}
-
-interface ContractResponse {
-  success: boolean;
-  data: any;
-  message?: string;
-}
 
 @Injectable({
   providedIn: "root",
 })
 export class BackendService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getBoltTokenFromServer(clientId: string, clientSecret: string) {
     const body = new URLSearchParams();
@@ -183,9 +171,13 @@ export class BackendService {
   updateCompany(payload: any): Observable<any> {
     return this.http.put(CONFIG.updateCompany, payload);
   }
+  uploadContract(payload: any): Observable<any> {
+    return this.http.post(CONFIG.uploadContract, payload);
+  }
+  uploadContract(payload: any): Observable<any> {
+    return this.http.post(CONFIG.uploadContract, payload);
+  }
 
-
- 
   deleteUser(id: any): Observable<any> {
     const url = `${CONFIG.deleteUser}/${id}`;
     return this.http.delete(url);
@@ -234,30 +226,19 @@ export class BackendService {
     return this.http.post(CONFIG.verifyOtp, payload);
   }
 
-  updateDocStatus(payload: any) {
-    return this.http.post(CONFIG.updateDocStatus, payload);
+ updateDocStatus(payload: any) {
+  return this.http.post(CONFIG.updateDocStatus, payload); 
   }
-  uploadDocuments(payload: any) {
-    return this.http.post(CONFIG.uploadDocuments, payload);
+ uploadDocuments(payload: any) {
+  return this.http.post(CONFIG.uploadDocuments, payload); 
   }
-  userDetail(userId: any) {
-    return this.http.post(`${CONFIG.userDetail}/${userId}`, {});
+ userDetail(userId: any) {
+   return this.http.post(`${CONFIG.userDetail}/${userId}`, {}); 
   }
 
   getApplicationById(id: string) {
-    return this.http.get(`${CONFIG.applicationDetail}/${id}`);
-  }
-
-// contract  
-  uploadContract(payload: any): Observable<any> {
-    return this.http.post(CONFIG.uploadContract, payload);
-  }
-
-
-  getUploadContract(id: any): Observable<any> {
-    const url = `${CONFIG.getUploadContract}/${id}`;
-    return this.http.get(url, {});
-  }
+  return this.http.get(`${CONFIG.applicationDetail}/${id}`);
+}
 
 
 }
