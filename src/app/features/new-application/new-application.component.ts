@@ -1554,7 +1554,7 @@ export class NewApplicationComponent implements OnInit {
             label: "Gender",
             value: this.formatGender(userData.gender) || "N/A",
           },
-          { label: "Marital Status", value: userData.maritalStatus }, // This field doesn't exist in API
+          { label: "Marital Status", value: userData.martialStatus }, // This field doesn't exist in API
           { label: "Contact Number", value: userData.phone || "N/A" },
           { label: "Email Address", value: userData.email || "N/A" },
           { label: "Legal Home Address", value: userData.legalAdress || "N/A" },
