@@ -1610,6 +1610,11 @@ docsOpen: boolean = false;
             label: "Languages",
             value: this.formatLanguages(userData.languages) || "N/A",
           },
+        ],
+      },
+      {
+        section: "Work Status",
+        fields: [
           {
             label: "Allowed to Work",
             value: userData.allowedToWork ? "Yes" : "No",
