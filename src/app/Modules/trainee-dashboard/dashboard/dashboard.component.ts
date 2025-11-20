@@ -28,6 +28,24 @@ export interface ChartOptions {
   colors: any;
   grid: ApexGrid | any;
 }
+interface TrainingModule {
+  id: number;
+  title: string;
+  subtitle: string;
+  level: string;
+  completed: number;
+  total: number;
+  progress: number; // 0–100
+  nextAction: string;
+}
+
+interface TrainingTask {
+  id: number;
+  title: string;
+  description: string;
+  status: "Not Started" | "In Progress" | "Completed";
+  progress: number; // 0–100
+}
 @Component({
   selector: "app-dashboard",
   imports: [
@@ -263,5 +281,119 @@ export class DashboardComponent {
       const currentUrl = window.location.href;
       this.firebaseStore.updateUrlByAppId(this.appId, currentUrl);
     }
+  }
+
+  onTrainingProgressClick(module: TrainingModule) {
+    // Step through 0 → 25 → 50 → 75 → 100
+    const steps = [0, 25, 50, 75, 100];
+    const currentIndex = steps.findIndex((s) => s === module.progress);
+    const nextIndex = (currentIndex + 1) % steps.length;
+    const nextProgress = steps[nextIndex];
+
+    module.progress = nextProgress;
+    module.completed = Math.round((module.total * nextProgress) / 100);
+
+    if (nextProgress === 100) {
+      module.nextAction = "All steps completed";
+    } else if (nextProgress === 0) {
+      module.nextAction = "Start first lesson";
+    } else {
+      module.nextAction = "Continue where you left off";
+    }
+  }
+
+  // ===== Training interactions (click on task items) =====
+  onTrainingTaskClick(task: TrainingTask) {
+    if (task.status === "Not Started") {
+      task.status = "In Progress";
+      task.progress = 40;
+    } else if (task.status === "In Progress") {
+      task.status = "Completed";
+      task.progress = 100;
+    } else {
+      task.status = "Not Started";
+      task.progress = 0;
+    }
+  }
+
+  getTaskBadgeClass(status: TrainingTask["status"]): string {
+    switch (status) {
+      case "Completed":
+        return "bg-success";
+      case "In Progress":
+        return "bg-warning text-dark";
+      default:
+        return "bg-secondary";
+    }
+  }
+  // ===== Training progress cards data =====
+  trainingProgress: TrainingModule[] = [
+    {
+      id: 1,
+      title: "Frontend Fundamentals (Angular)",
+      subtitle: "Core · SPA Development",
+      level: "Intermediate",
+      completed: 3,
+      total: 6,
+      progress: 50,
+      nextAction: "Finish reactive forms & routing module",
+    },
+    {
+      id: 2,
+      title: "Backend APIs & Microservices",
+      subtitle: "Node.js / .NET · REST",
+      level: "Beginner",
+      completed: 2,
+      total: 5,
+      progress: 40,
+      nextAction: "Implement one secured endpoint",
+    },
+    {
+      id: 3,
+      title: "Clean Code & Best Practices",
+      subtitle: "SOLID · Refactoring · Reviews",
+      level: "Advanced",
+      completed: 4,
+      total: 4,
+      progress: 100,
+      nextAction: "All topics completed – apply in code reviews",
+    },
+  ];
+
+  // ===== Training tasks list data =====
+  trainingTasks: TrainingTask[] = [
+    {
+      id: 1,
+      title: "Complete Git & Branching Workflow",
+      description: "Finish feature-branch, PR & code review module",
+      status: "In Progress",
+      progress: 50,
+    },
+    {
+      id: 2,
+      title: "Implement API Integration for Dashboard",
+      description: "Connect Angular service to /reports backend endpoint",
+      status: "Not Started",
+      progress: 0,
+    },
+    {
+      id: 3,
+      title: "Write Unit Tests for Auth Module",
+      description: "Cover login & token refresh flows with tests",
+      status: "Completed",
+      progress: 100,
+    },
+  ];
+
+  // Overall % for header badge
+  get overallTrainingProgress(): number {
+    if (!this.trainingProgress.length) return 0;
+    const sum = this.trainingProgress.reduce((acc, m) => acc + m.progress, 0);
+    return Math.round(sum / this.trainingProgress.length);
+  }
+
+  // Completed tasks counter
+  get completedTasks(): number {
+    return this.trainingTasks.filter((t) => t.status === "Completed").length;
   }
 }

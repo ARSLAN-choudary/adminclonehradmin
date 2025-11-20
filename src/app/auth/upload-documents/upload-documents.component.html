@@ -108,15 +108,14 @@
                 </div>
 
                 <div class="col-md-6">
-                 <div class="mb-3">
+                    <div class="mb-3">
                         <label class="form-label required">Date of Birth</label>
                         <input type="date" class="form-control" formControlName="dateOfBirth" id="dateOfBirth"
-                            name="dateOfBirth" [max]="today"   [max]="today"
-       (change)="validateDOB()">
-                        <div class="text-danger mt-1" 
-     *ngIf="personalDetails.get('dateOfBirth')?.errors?.['futureDate']">
-    Date cannot be in the future.
-</div>
+                            name="dateOfBirth" [max]="today" [max]="today" (change)="validateDOB()">
+                        <div class="text-danger mt-1"
+                            *ngIf="personalDetails.get('dateOfBirth')?.errors?.['futureDate']">
+                            Date cannot be in the future.
+                        </div>
 
                     </div>
                 </div>
@@ -184,15 +183,17 @@
 
             <div class="row">
                 <div class="col-md-6">
-                   <div class="mb-3">
+                    <div class="mb-3">
                         <label class="form-label required">Contact Number </label>
                         <input type="tel" class="form-control" formControlName="contactNumber"
-                            placeholder="+995583916300" id="contactNumber" name="contactNumber" maxlength="13" (click)="moveCursorToEnd($event)" (focus)="moveCursorToEnd($event)">
+                            placeholder="+995583916300" id="contactNumber" name="contactNumber" maxlength="13"
+                            (click)="moveCursorToEnd($event)" (focus)="moveCursorToEnd($event)">
                         <div class="text-danger mt-1"
                             *ngIf="personalDetails.get('contactNumber')?.invalid && personalDetails.get('contactNumber')?.touched">
                             <span *ngIf="personalDetails.get('contactNumber')?.errors?.['required']">This field is
                                 required</span>
-                            <span *ngIf="personalDetails.get('contactNumber')?.errors?.['pattern']">Enter a valid number like +995123456789</span>
+                            <span *ngIf="personalDetails.get('contactNumber')?.errors?.['pattern']">Enter a valid number
+                                like +995123456789</span>
                         </div>
                     </div>
                 </div>
@@ -273,17 +274,22 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                          <div class="mb-3">
-                                <label class="form-label  required">From (MM/YYYY)</label>
+                            <div class="mb-3">
+                                <label class="form-label required">From (MM/YYYY)</label>
                                 <input type="month" class="form-control" formControlName="from"
-                                    [id]="'educationFrom' + i" [name]="'educationFrom' + i" [max]="todayMonth" >
-                                <div class="text-danger mt-1"
-                                    *ngIf="education.get('from')?.invalid && education.get('from')?.touched">
+                                    [id]="'educationFrom' + i" [name]="'educationFrom' + i" [max]="todayMonth" />
+
+                                <!-- Required error -->
+                                <div class="text-danger mt-1" *ngIf="education.get('from')?.hasError('required') 
+            && (education.get('from')?.dirty || education.get('from')?.touched)">
                                     This field is required
                                 </div>
-                                <div class="text-danger mt-1" *ngIf="education.errors?.['futureDate']">
-  The selected date cannot be in the future.
-</div>
+
+                                <!-- Future date error -->
+                                <div class="text-danger mt-1" *ngIf="education.get('from')?.hasError('futureDate') 
+            && (education.get('from')?.dirty || education.get('from')?.touched)">
+                                    The selected date cannot be in the future.
+                                </div>
 
                             </div>
                         </div>
@@ -292,14 +298,25 @@
                             <div class="mb-3">
                                 <label class="form-label required">To (MM/YYYY)</label>
                                 <input type="month" class="form-control" formControlName="to" [id]="'educationTo' + i"
-                                    [name]="'educationTo' + i" [max]="todayMonth">
-                                <div class="text-danger mt-1"
-                                    *ngIf="education.get('to')?.invalid && education.get('to')?.touched">
+                                    [name]="'educationTo' + i" [max]="todayMonth" />
+
+                                <!-- Required error -->
+                                <div class="text-danger mt-1" *ngIf="education.get('to')?.hasError('required') 
+            && (education.get('to')?.dirty || education.get('to')?.touched)">
                                     This field is required
                                 </div>
+
+                                <!-- Future date error -->
+                                <div class="text-danger mt-1" *ngIf="education.get('to')?.hasError('futureDate') 
+            && (education.get('to')?.dirty || education.get('to')?.touched)">
+                                    The selected date cannot be in the future.
+                                </div>
+
                             </div>
                         </div>
                     </div>
+
+                    <!-- Date range validation (unchanged) -->
                     <div class="text-danger mt-1" *ngIf="education.hasError('dateRangeInvalid')">
                         To date must be after From date
                     </div>
@@ -308,7 +325,7 @@
                         <label class="form-label required">Institution</label>
                         <input type="text" class="form-control" formControlName="institution"
                             placeholder="School / College / University" [id]="'institution' + i"
-                            [name]="'institution' + i">
+                            [name]="'institution' + i" />
                         <div class="text-danger mt-1"
                             *ngIf="education.get('institution')?.invalid && education.get('institution')?.touched">
                             This field is required
@@ -319,7 +336,7 @@
                         <label class="form-label required">Qualification / Degree</label>
                         <input type="text" class="form-control" formControlName="qualification"
                             placeholder="Degree or qualification earned" [id]="'qualification' + i"
-                            [name]="'qualification' + i">
+                            [name]="'qualification' + i" />
                         <div class="text-danger mt-1"
                             *ngIf="education.get('qualification')?.invalid && education.get('qualification')?.touched">
                             This field is required
@@ -329,13 +346,13 @@
                     <div class="mb-3">
                         <label class="form-label">Notes (Optional)</label>
                         <input type="text" class="form-control" formControlName="notes" placeholder="Additional notes"
-                            [id]="'educationNotes' + i" [name]="'educationNotes' + i">
+                            [id]="'educationNotes' + i" [name]="'educationNotes' + i" />
                     </div>
 
                     <div class="mb-3">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" formControlName="currentlyStudying"
-                                [id]="'currentlyStudying' + i" [name]="'currentlyStudying' + i">
+                                [id]="'currentlyStudying' + i" [name]="'currentlyStudying' + i" />
                             <label class="form-check-label" [for]="'currentlyStudying' + i">
                                 Currently Studying here
                             </label>
@@ -399,10 +416,16 @@
                                 <input type="month" class="form-control" formControlName="employmentPeriodFrom"
                                     [id]="'employmentPeriodFrom' + i" [name]="'employmentPeriodFrom' + i"
                                     [max]="todayMonth">
-                                <div class="text-danger mt-1"
-                                    *ngIf="work.get('employmentPeriodFrom')?.invalid && work.get('employmentPeriodFrom')?.touched">
+                                <div class="text-danger mt-1" *ngIf="work.get('employmentPeriodFrom')?.hasError('required') 
+         && (work.get('employmentPeriodFrom')?.dirty || work.get('employmentPeriodFrom')?.touched)">
                                     This field is required
                                 </div>
+
+                                <div class="text-danger mt-1" *ngIf="work.get('employmentPeriodFrom')?.hasError('futureDate') 
+         && (work.get('employmentPeriodFrom')?.dirty || work.get('employmentPeriodFrom')?.touched)">
+                                    The selected date cannot be in the future.
+                                </div>
+
                             </div>
                         </div>
 
@@ -412,10 +435,16 @@
                                 <input type="month" class="form-control" formControlName="employmentPeriodTo"
                                     [id]="'employmentPeriodTo' + i" [name]="'employmentPeriodTo' + i"
                                     [max]="todayMonth">
-                                <div class="text-danger mt-1"
-                                    *ngIf="work.get('employmentPeriodTo')?.invalid && work.get('employmentPeriodTo')?.touched">
+                                <div class="text-danger mt-1" *ngIf="work.get('employmentPeriodTo')?.hasError('required') 
+         && (work.get('employmentPeriodTo')?.dirty || work.get('employmentPeriodTo')?.touched)">
                                     This field is required
                                 </div>
+
+                                <div class="text-danger mt-1" *ngIf="work.get('employmentPeriodTo')?.hasError('futureDate') 
+         && (work.get('employmentPeriodTo')?.dirty || work.get('employmentPeriodTo')?.touched)">
+                                    The selected date cannot be in the future.
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -636,16 +665,18 @@
                     </div>
                 </div>
 
-               <div class="mb-3">
+                <div class="mb-3">
                     <label class="form-label required">Contact Number</label>
-                    <input type="tel" class="form-control" formControlName="contactNumber"  name="emergencyContactNumber" id="emergencyContactNumber"
-                        (click)="moveCursorToEnd($event)" (focus)="moveCursorToEnd($event)" maxlength="13" />
+                    <input type="tel" class="form-control" formControlName="contactNumber" name="emergencyContactNumber"
+                        id="emergencyContactNumber" (click)="moveCursorToEnd($event)" (focus)="moveCursorToEnd($event)"
+                        maxlength="13" />
 
                     <div class="text-danger mt-1"
                         *ngIf="emergencyContact.get('contactNumber')?.invalid && emergencyContact.get('contactNumber')?.touched">
                         <span *ngIf="emergencyContact.get('contactNumber')?.errors?.['required']">This field is
                             required</span>
-                        <span *ngIf="emergencyContact.get('contactNumber')?.errors?.['pattern']">Enter a valid number like +995123456789</span>
+                        <span *ngIf="emergencyContact.get('contactNumber')?.errors?.['pattern']">Enter a valid number
+                            like +995123456789</span>
                     </div>
                 </div>
 
