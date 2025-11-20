@@ -61,6 +61,8 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
       this.sub = this.firebaseStore
         .watchUserById(this.appId)
         .subscribe((resp) => {
+          console.log(resp);
+
           const queryParams: any = { email: this.email };
           if (this.fromApp) queryParams.from = "app";
 
@@ -75,6 +77,16 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
             resp.documentsRejected === false
           ) {
             this.router.navigate(["/trainee-dashboard"], {
+              queryParams,
+            });
+          } else if (
+            resp &&
+            resp.role === "USER" &&
+            resp.termsAndCondition === true &&
+            resp.nda === true &&
+            resp.documentsRejected === true
+          ) {
+            this.router.navigate(["/resubmit-docs"], {
               queryParams,
             });
           } else if (
@@ -100,7 +112,6 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
         });
     });
   }
-
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();

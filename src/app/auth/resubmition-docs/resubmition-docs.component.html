@@ -9,7 +9,9 @@
     </div>
 
     <!-- SECTION: DOCUMENT UPLOAD -->
-    <div class="form-section" *ngIf="!isLoading && hasRejectedDocuments">
+    <!-- SECTION: DOCUMENT UPLOAD -->
+    <form class="form-section" *ngIf="!isLoading && hasRejectedDocuments" [formGroup]="form">
+
         <h2>UPDATE REJECTED DOCUMENTS</h2>
 
         <!-- Info Alert -->
@@ -216,5 +218,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>

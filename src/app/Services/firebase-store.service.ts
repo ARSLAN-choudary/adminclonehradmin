@@ -1,5 +1,11 @@
 import { Injectable } from "@angular/core";
-import { Firestore, doc, getDoc, onSnapshot, setDoc } from "@angular/fire/firestore";
+import {
+  Firestore,
+  doc,
+  getDoc,
+  onSnapshot,
+  setDoc,
+} from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 
 export interface UserDoc {
@@ -9,9 +15,10 @@ export interface UserDoc {
   role?: string;
   deviceId?: string;
   appId?: string;
-  termsAndCondition:boolean;
-  nda:boolean;
-  documentsRejected:boolean
+  termsAndCondition: boolean;
+  nda: boolean;
+  documentsRejected: boolean;
+  
 }
 
 @Injectable({
