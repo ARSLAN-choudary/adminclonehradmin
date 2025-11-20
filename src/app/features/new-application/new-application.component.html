@@ -450,6 +450,7 @@
                             <th mat-sort-header="mobile">Region</th>
                             <th mat-sort-header="email">email</th>
                             <th mat-sort-header="createdAt">Submission Date</th>
+                            <th mat-sort-header="status">Role</th>
                             <th mat-sort-header="status">Status</th>
                             <th mat-sort-header="status" class="text-center"></th>
                             <th class="text-center">Doc Status</th>
@@ -465,6 +466,8 @@
                             <td>{{ getRegion(data?.location) }}</td>
                             <td>{{ data.email }}</td>
                             <td>{{ data.createdAt | date }}</td>
+                            <td>{{ data.role }}</td>
+
                             <td>
                                 <span class="badge badge-pill badge-status cursor-pointer" (click)="toggleStatus(data)"
                                     [ngClass]="{'bg-success': data.status === 'active', 'bg-danger': data.status === 'inactive'}">
