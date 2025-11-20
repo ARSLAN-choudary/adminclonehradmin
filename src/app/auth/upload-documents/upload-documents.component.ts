@@ -109,9 +109,9 @@ export class UploadDocumentsComponent implements OnInit {
         gender: ["male", [Validators.required]],
         maritalStatus: ["single", [Validators.required]],
         contactNumber: [
-  "+995",  
-  [Validators.required, Validators.pattern(/^\+995\d{9}$/)]
-],
+          "+995",
+          [Validators.required, Validators.pattern(/^\+995\d{9}$/)],
+        ],
         emailAddress: ["", [Validators.required, Validators.email]],
         legalHomeAddress: this.fb.group({
           streetBuildingApartment: ["", [Validators.required]],
@@ -239,8 +239,6 @@ export class UploadDocumentsComponent implements OnInit {
             });
           }
         });
-
-        
     });
 
     const citizenshipCtrl = this.personalDetails.get("citizenship");
@@ -279,35 +277,35 @@ export class UploadDocumentsComponent implements OnInit {
       emailAddress: this.email,
     });
 
-    this.enforceGeorgianPrefix('personalDetails.contactNumber');
-  this.enforceGeorgianPrefix('emergencyContact.contactNumber');
+    this.enforceGeorgianPrefix("personalDetails.contactNumber");
+    this.enforceGeorgianPrefix("emergencyContact.contactNumber");
   }
 
   // Custom validators
-private dateRangeValidator(): ValidatorFn {
-  return (group: AbstractControl) => {
-    const from = group.get("from")?.value;
-    const to = group.get("to")?.value;
+  private dateRangeValidator(): ValidatorFn {
+    return (group: AbstractControl) => {
+      const from = group.get("from")?.value;
+      const to = group.get("to")?.value;
 
-    if (!from || !to) return null;
+      if (!from || !to) return null;
 
-    const fromDate = new Date(from + "-01");
-    const toDate = new Date(to + "-01");
+      const fromDate = new Date(from + "-01");
+      const toDate = new Date(to + "-01");
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-    if (fromDate > today || toDate > today) {
-      return { futureDate: true };
-    }
+      if (fromDate > today || toDate > today) {
+        return { futureDate: true };
+      }
 
-    if (fromDate > toDate) {
-      return { dateRangeInvalid: true };
-    }
+      if (fromDate > toDate) {
+        return { dateRangeInvalid: true };
+      }
 
-    return null;
-  };
-}
+      return null;
+    };
+  }
 
   private employmentPeriodValidator(): ValidatorFn {
     return (group: AbstractControl) => {
@@ -1469,53 +1467,49 @@ private dateRangeValidator(): ValidatorFn {
       ?.setValue(formatted, { emitEvent: false });
   }
 
-
   validateDOB() {
-  const dob = new Date(this.personalDetails.value.dateOfBirth);
-  const today = new Date(this.today);
+    const dob = new Date(this.personalDetails.value.dateOfBirth);
+    const today = new Date(this.today);
 
-  if (dob > today) {
-    this.personalDetails.get('dateOfBirth')?.setErrors({ futureDate: true });
+    if (dob > today) {
+      this.personalDetails.get("dateOfBirth")?.setErrors({ futureDate: true });
+    }
   }
-}
 
-validateNoFuture(controlName: string, formGroup: any) {
-  const selectedValue = formGroup.get(controlName)?.value;
+  validateNoFuture(controlName: string, formGroup: any) {
+    const selectedValue = formGroup.get(controlName)?.value;
 
-  if (!selectedValue) return;
+    if (!selectedValue) return;
 
-  // Convert to date (for both type="date" and type="month")
-  const selected = new Date(selectedValue + "-01");
-  const today = new Date();
+    // Convert to date (for both type="date" and type="month")
+    const selected = new Date(selectedValue + "-01");
+    const today = new Date();
 
-  today.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
 
-  if (selected > today) {
-    formGroup.get(controlName)?.setErrors({ futureDate: true });
+    if (selected > today) {
+      formGroup.get(controlName)?.setErrors({ futureDate: true });
+    }
   }
-}
-
-
-
 
   enforceGeorgianPrefix(controlPath: string) {
-  const ctrl = this.form.get(controlPath);
+    const ctrl = this.form.get(controlPath);
 
-  ctrl?.valueChanges.subscribe(val => {
-    if (!val) return;
+    ctrl?.valueChanges.subscribe((val) => {
+      if (!val) return;
 
-    if (!val.startsWith('+995')) {
-      ctrl.setValue('+995' + val.replace(/\+995/g, ''), {
-        emitEvent: false
-      });
-    }
-  });
-}
+      if (!val.startsWith("+995")) {
+        ctrl.setValue("+995" + val.replace(/\+995/g, ""), {
+          emitEvent: false,
+        });
+      }
+    });
+  }
 
-moveCursorToEnd(event: any) {
-  const input = event.target;
-  setTimeout(() => {
-    input.setSelectionRange(input.value.length, input.value.length);
-  });
-}
+  moveCursorToEnd(event: any) {
+    const input = event.target;
+    setTimeout(() => {
+      input.setSelectionRange(input.value.length, input.value.length);
+    });
+  }
 }

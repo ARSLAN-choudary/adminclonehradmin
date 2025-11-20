@@ -198,7 +198,7 @@ export class TwoStepVerificationComponent implements OnInit, OnDestroy {
           if (this.deviceId) queryParams.deviceId = this.deviceId;
           if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
           if (res.data?.details?._id)
-            queryParams.userId = res.data?.details?._id;
+            queryParams.appId = res.data?.details?._id;
           this.router.navigate(["/waiting-for-approval"], {
             queryParams,
           });
