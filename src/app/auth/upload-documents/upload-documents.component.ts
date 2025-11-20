@@ -224,9 +224,8 @@ export class UploadDocumentsComponent implements OnInit {
 
       this.updateUrl();
 
-      this.sub = this.firebaseStore
-        .watchUserById(this.appId)
-        .subscribe((resp) => {
+      this.sub = this.firebaseStore.watchUserById(this.appId).subscribe({
+        next: (resp) => {
           const queryParams: any = { email: this.email };
           if (this.fromApp) queryParams.from = "app";
 
@@ -263,7 +262,11 @@ export class UploadDocumentsComponent implements OnInit {
               queryParams,
             });
           }
-        });
+        },
+        error: (err) => {
+          this.router.navigate(["/app-register"], {});
+        },
+      });
     });
 
     const citizenshipCtrl = this.personalDetails.get("citizenship");

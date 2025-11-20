@@ -9,7 +9,12 @@ import {
   NgApexchartsModule,
   ApexGrid,
 } from "ng-apexcharts";
-import { ActivatedRoute, ResolveEnd, Router, RouterLink } from "@angular/router";
+import {
+  ActivatedRoute,
+  ResolveEnd,
+  Router,
+  RouterLink,
+} from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
@@ -79,7 +84,7 @@ export class DashboardComponent {
   public chartOptions3: Partial<ChartOptions> | any;
   public chartOptions4: Partial<ChartOptions> | any;
 
-  // contract 
+  // contract
   private backdropEl?: HTMLElement;
   @ViewChild("getContractCanvas", { static: true })
   getContractCanvas!: ElementRef<HTMLElement>;
@@ -288,17 +293,14 @@ export class DashboardComponent {
       }
 
       if (!this.appId || !this.email) {
-       this.router.navigate(["/app-register"], {})
-      
-        
+        this.router.navigate(["/app-register"], {});
+
         console.warn("⚠️ appId missing");
-        return;
       }
 
       this.updateUrl();
-      this.sub = this.firebaseStore
-        .watchUserById(this.appId)
-        .subscribe((resp) => {
+      this.sub = this.firebaseStore.watchUserById(this.appId).subscribe({
+        next: (resp) => {
           console.log("1", resp);
 
           const queryParams: any = { email: this.email };
@@ -307,7 +309,7 @@ export class DashboardComponent {
           if (this.deviceId) queryParams.deviceId = this.deviceId;
           if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
           if (this.appId) queryParams.appId = this.appId;
-         if (
+          if (
             resp &&
             resp.role === "USER" &&
             resp.termsAndCondition === true &&
@@ -331,7 +333,6 @@ export class DashboardComponent {
             resp &&
             resp.role === "USER" &&
             resp.status === "inactive"
-
           ) {
             this.router.navigate(["/waiting-for-approval"], {
               queryParams,
@@ -347,7 +348,11 @@ export class DashboardComponent {
               queryParams,
             });
           }
-        });
+        },
+        error: (err) => {
+          this.router.navigate(["/app-register"], {});
+        },
+      });
     });
   }
   ngOnDestroy(): void {
@@ -475,20 +480,19 @@ export class DashboardComponent {
     return this.trainingTasks.filter((t) => t.status === "Completed").length;
   }
 
-  // contract  
-
+  // contract
 
   // Helper methods to get specific contracts
   get traineeContract(): any {
-    return this.contracts.find(contract => contract.name === 'trainee');
+    return this.contracts.find((contract) => contract.name === "trainee");
   }
 
   get probationContract(): any {
-    return this.contracts.find(contract => contract.name === 'probation');
+    return this.contracts.find((contract) => contract.name === "probation");
   }
 
   get jobContract(): any {
-    return this.contracts.find(contract => contract.name === 'job');
+    return this.contracts.find((contract) => contract.name === "job");
   }
 
   get hasTraineeContract(): boolean {
@@ -511,23 +515,20 @@ export class DashboardComponent {
   loadContracts(appId: string) {
     this.backendService.getUploadContract(appId).subscribe({
       next: (res: any) => {
-        if (res.status === 'success') {
+        if (res.status === "success") {
           this.contracts = res.data || [];
-          console.log('Loaded contracts:', this.contracts);
+          console.log("Loaded contracts:", this.contracts);
         } else {
           this.contracts = [];
-          console.error('Failed to load contracts:', res.message);
+          console.error("Failed to load contracts:", res.message);
         }
       },
       error: (error) => {
-        console.error('Error loading contracts:', error);
+        console.error("Error loading contracts:", error);
         this.contracts = [];
-      }
+      },
     });
   }
-
-
-
 
   // Download existing contract
   downloadContract(contractType: string) {
@@ -547,9 +548,9 @@ export class DashboardComponent {
 
     if (contract && contract.url) {
       // Download from backend URL
-      window.open(contract.url, '_blank');
+      window.open(contract.url, "_blank");
     } else {
-      console.warn('Contract not found or no URL available');
+      console.warn("Contract not found or no URL available");
     }
   }
 
@@ -558,13 +559,10 @@ export class DashboardComponent {
     return new Date(dateString).toLocaleDateString();
   }
 
-
-
   // Open modal with application ID
   openGenerateContractModal() {
     // Load contracts for this application
     this.loadContracts(this.appId);
-
 
     const el = this.getContractCanvas.nativeElement;
     this.renderer.addClass(el, "show");
@@ -579,11 +577,11 @@ export class DashboardComponent {
     this.renderer.addClass(this.backdropEl, "show");
 
     if (this.backdropEl) {
-      this.backdropEl.addEventListener("click", () => this.closeGenerateContractModal());
+      this.backdropEl.addEventListener("click", () =>
+        this.closeGenerateContractModal()
+      );
       this.renderer.appendChild(document.body, this.backdropEl);
     }
-
-
   }
 
   closeGenerateContractModal() {
@@ -605,9 +603,11 @@ export class DashboardComponent {
           this.renderer.removeChild(document.body, this.backdropEl);
           this.backdropEl = undefined;
         }
-        document.querySelectorAll(".offcanvas-backdrop.fade.show").forEach((backdrop) =>
-          this.renderer.removeChild(document.body, backdrop)
-        );
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
         this.renderer.removeStyle(panel, "transform");
 
         panel.removeEventListener("transitionend", onTransition);

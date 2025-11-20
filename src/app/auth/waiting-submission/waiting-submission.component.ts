@@ -60,7 +60,8 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
 
       this.sub = this.firebaseStore
         .watchUserById(this.appId)
-        .subscribe((resp) => {
+        .subscribe({
+          next: (resp) => {
           console.log(resp);
 
           const queryParams: any = { email: this.email };
@@ -109,10 +110,14 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
               queryParams,
             });
           }
-        });
+        },
+        error: (err) => {
+          this.router.navigate(["/app-register"], {
+          });
+        }
+      });
     });
   }
-
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
   }

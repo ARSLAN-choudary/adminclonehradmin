@@ -52,7 +52,8 @@ export class TermsAndConditionsComponent implements OnInit {
 
       this.sub = this.firebaseStore
         .watchUserById(this.appId)
-        .subscribe((resp) => {
+        .subscribe({
+          next: (resp) => {
           const queryParams: any = { email: this.email };
           if (this.fromApp) queryParams.from = "app";
 
@@ -89,7 +90,12 @@ export class TermsAndConditionsComponent implements OnInit {
               queryParams,
             });
           }
-        });
+        },
+        error: (err) => {
+          this.router.navigate(["/app-register"], {
+          });
+        }
+      });
     });
   }
 

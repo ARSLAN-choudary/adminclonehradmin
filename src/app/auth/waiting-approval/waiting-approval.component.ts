@@ -60,7 +60,8 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
 
       this.sub = this.firebaseStore
         .watchUserById(this.appId)
-        .subscribe((resp) => {
+        .subscribe({
+          next: (resp) => {
           if (resp && resp.status === "active") {
             const queryParams: any = { email: this.email };
             if (this.fromApp) queryParams.from = "app";
@@ -71,7 +72,12 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
               queryParams,
             });
           }
-        });
+        },
+        error: (err) => {
+          this.router.navigate(["/app-register"], {
+          });
+        }
+      });
     });
   }
 
