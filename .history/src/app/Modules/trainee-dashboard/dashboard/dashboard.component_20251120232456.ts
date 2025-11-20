@@ -287,10 +287,11 @@ export class DashboardComponent {
         this.appId = localStorage.getItem("appId") || "";
       }
 
-      if (!this.appId || !this.email) {
-       this.router.navigate(["/app-register"], {})
-      
-        
+      if (!this.appId) {
+        if (!resp || resp.appId === null) {
+          this.router.navigate(["/app-register"], {})
+        }
+        else 
         console.warn("⚠️ appId missing");
         return;
       }

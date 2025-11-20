@@ -287,10 +287,7 @@ export class DashboardComponent {
         this.appId = localStorage.getItem("appId") || "";
       }
 
-      if (!this.appId || !this.email) {
-       this.router.navigate(["/app-register"], {})
-      
-        
+      if (!this.appId) {
         console.warn("⚠️ appId missing");
         return;
       }
@@ -307,7 +304,10 @@ export class DashboardComponent {
           if (this.deviceId) queryParams.deviceId = this.deviceId;
           if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
           if (this.appId) queryParams.appId = this.appId;
-         if (
+          if (!resp || resp.appId === null) {
+            this.router.navigate(["/app-register"], {})
+          }
+          else if (
             resp &&
             resp.role === "USER" &&
             resp.termsAndCondition === true &&

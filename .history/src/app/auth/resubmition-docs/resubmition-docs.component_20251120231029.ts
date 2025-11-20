@@ -540,7 +540,7 @@ export class ResubmitionDocsComponent implements OnInit {
             if (this.deviceId) queryParams.deviceId = this.deviceId;
             if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
             if (this.appId) queryParams.appId = this.appId;
-            this.router.navigate(["/waiting-for-application-submission"], {
+            this.router.navigate(["/"], {
               queryParams,
             });
           }
