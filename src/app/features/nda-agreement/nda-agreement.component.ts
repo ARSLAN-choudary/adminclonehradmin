@@ -41,10 +41,7 @@ export class NdaAgreementComponent implements OnInit {
         this.appId = localStorage.getItem("appId") || "";
       }
 
-      if (!this.appId) {
-        console.warn("⚠️ appId missing");
-        return;
-      }
+     
 
       this.updateUrl();
 

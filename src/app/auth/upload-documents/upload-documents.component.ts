@@ -112,7 +112,10 @@ export class UploadDocumentsComponent implements OnInit {
           "+995",
           [Validators.required, Validators.pattern(/^\+995\d{9}$/)],
         ],
-        emailAddress: ["", [Validators.required, Validators.email]],
+        emailAddress: [
+          { value: "", disabled: true },
+          [Validators.required, Validators.email],
+        ],
         legalHomeAddress: this.fb.group({
           streetBuildingApartment: ["", [Validators.required]],
           village: [""],
@@ -215,11 +218,6 @@ export class UploadDocumentsComponent implements OnInit {
       } else {
         this.email = localStorage.getItem("email") || "";
         this.appId = localStorage.getItem("appId") || "";
-      }
-
-      if (!this.appId) {
-        console.warn("⚠️ appId missing");
-        return;
       }
 
       this.updateUrl();
@@ -1538,14 +1536,48 @@ export class UploadDocumentsComponent implements OnInit {
 
   enforceGeorgianPrefix(controlPath: string) {
     const ctrl = this.form.get(controlPath);
+    if (!ctrl) return;
 
-    ctrl?.valueChanges.subscribe((val) => {
-      if (!val) return;
+    // Initial value
+    if (!ctrl.value) {
+      ctrl.setValue("+995", { emitEvent: false });
+    }
 
-      if (!val.startsWith("+995")) {
-        ctrl.setValue("+995" + val.replace(/\+995/g, ""), {
-          emitEvent: false,
-        });
+    ctrl.valueChanges.subscribe((raw: string) => {
+      if (raw == null) return;
+
+      // Remove spaces
+      let val = raw.replace(/\s+/g, "");
+
+      // 1) User is trying to delete / edit inside prefix:
+      // '', '+', '+9', '+99' → always snap back to '+995'
+      if (!val || val.length < 4 || /^\+9{0,3}$/.test(val)) {
+        if (val !== "+995") {
+          ctrl.setValue("+995", { emitEvent: false });
+        }
+        return;
+      }
+
+      // 2) Already in correct format: "+995" followed by digits
+      if (/^\+995\d*$/.test(val)) {
+        // Cut to max 9 digits after +995
+        const normalized = val.slice(0, 4 + 9); // "+995" + 9 digits
+        if (normalized !== raw) {
+          ctrl.setValue(normalized, { emitEvent: false });
+        }
+        return;
+      }
+
+      // 3) Any other messy case → rebuild:
+      const digits = val.replace(/\D/g, ""); // all digits
+      // If it starts with 995, drop that once (we will add prefix back)
+      let rest = digits.startsWith("995") ? digits.slice(3) : digits;
+      rest = rest.slice(0, 9); // max 9 digits
+
+      const finalVal = "+995" + rest;
+
+      if (finalVal !== raw) {
+        ctrl.setValue(finalVal, { emitEvent: false });
       }
     });
   }
@@ -1556,4 +1588,18 @@ export class UploadDocumentsComponent implements OnInit {
       input.setSelectionRange(input.value.length, input.value.length);
     });
   }
+
+  isMobile = window.innerWidth < 768;
+
+  videoOptions: MediaTrackConstraints = this.isMobile
+    ? {
+        width: { ideal: 480 },
+        height: { ideal: 640 },
+        facingMode: { ideal: "environment" },
+      }
+    : {
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        facingMode: { ideal: "environment" },
+      };
 }

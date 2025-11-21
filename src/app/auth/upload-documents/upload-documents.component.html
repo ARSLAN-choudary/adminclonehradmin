@@ -892,13 +892,14 @@
                     <div class="camera-title">
                         {{ getCameraTitle() }}
                     </div>
-                    <button type="button" class="camera-close btn-close" (click)="onCloseCamera()"></button>
+                    <button type="button" class="camera-close btn-close " (click)="onCloseCamera()"></button>
                 </div>
 
                 <div class="camera-content">
                     <div class="camera-box">
-                        <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
-                            (initError)="handleCameraInitError($event)"></webcam>
+                        <webcam [trigger]="triggerObservable" [videoOptions]="videoOptions"
+                            (imageCapture)="handleImage($event)" (initError)="handleCameraInitError($event)">
+                        </webcam>
                     </div>
 
                     <div class="camera-hint-pill alert alert-info">

@@ -51,11 +51,7 @@ export class WaitingSubmissionComponent implements OnInit, OnDestroy {
         this.appId = localStorage.getItem("appId") || "";
       }
 
-      if (!this.appId) {
-        console.warn("⚠️ appId missing");
-        return;
-      }
-
+     
       this.updateUrl();
 
       this.sub = this.firebaseStore

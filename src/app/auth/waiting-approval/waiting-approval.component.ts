@@ -51,10 +51,7 @@ export class WaitingApprovalComponent implements OnInit, OnDestroy {
         this.appId = localStorage.getItem("appId") || "";
       }
 
-      if (!this.appId) {
-        console.warn("⚠️ appId missing");
-        return;
-      }
+    
 
       this.updateUrl();
 

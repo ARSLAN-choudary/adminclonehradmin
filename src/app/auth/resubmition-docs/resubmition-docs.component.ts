@@ -121,13 +121,14 @@ export class ResubmitionDocsComponent implements OnInit {
       }
 
       if (!this.appId) {
+        this.router.navigate(["/app-register"], {});
         console.warn("⚠️ appId missing");
         return;
       }
 
       this.updateUrl();
+      this.loadUserApplication();
     });
-    this.loadUserApplication();
   }
 
   // ========== LOAD USER APPLICATION ==========
