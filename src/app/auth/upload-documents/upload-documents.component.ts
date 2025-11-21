@@ -86,6 +86,19 @@ export class UploadDocumentsComponent implements OnInit {
   today: string = "";
   todayMonth: string = "";
 
+  isMobile = window.innerWidth < 768;
+
+  videoOptions: MediaTrackConstraints = this.isMobile
+    ? {
+        width: { ideal: 480 },
+        height: { ideal: 640 },
+        facingMode: { ideal: "environment" },
+      }
+    : {
+        width: { ideal: 480 },
+        height: { ideal: 640 },
+        facingMode: { ideal: "environment" },
+      };
   constructor(
     private fb: FormBuilder,
     private backend: BackendService,
@@ -112,10 +125,7 @@ export class UploadDocumentsComponent implements OnInit {
           "+995",
           [Validators.required, Validators.pattern(/^\+995\d{9}$/)],
         ],
-        emailAddress: [
-          { value: "", disabled: true },
-          [Validators.required, Validators.email],
-        ],
+        emailAddress: ["", [Validators.required, Validators.email]],
         legalHomeAddress: this.fb.group({
           streetBuildingApartment: ["", [Validators.required]],
           village: [""],
@@ -956,12 +966,16 @@ export class UploadDocumentsComponent implements OnInit {
       // Transform form data to match backend schema
       const transformedData = this.transformFormData(formValue);
 
+      console.log("transfomdata", transformedData);
+
       // console.log("=== TRANSFORMED DATA FOR BACKEND ===");
       // console.log("appId:", appId);
       // console.log(JSON.stringify(transformedData, null, 2));
 
       // Create FormData with all data as simple fields
       const formData = this.createFormData(transformedData);
+
+      console.log("formdata", formData);
 
       // Call backend service
       this.backend.uploadDocuments(formData).subscribe({
@@ -1588,18 +1602,4 @@ export class UploadDocumentsComponent implements OnInit {
       input.setSelectionRange(input.value.length, input.value.length);
     });
   }
-
-  isMobile = window.innerWidth < 768;
-
-  videoOptions: MediaTrackConstraints = this.isMobile
-    ? {
-        width: { ideal: 480 },
-        height: { ideal: 640 },
-        facingMode: { ideal: "environment" },
-      }
-    : {
-        width: { ideal: 1280 },
-        height: { ideal: 720 },
-        facingMode: { ideal: "environment" },
-      };
 }

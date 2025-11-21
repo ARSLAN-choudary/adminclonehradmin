@@ -202,7 +202,7 @@
                     <div class="mb-3">
                         <label class="form-label required">Email Address</label>
                         <input type="email" class="form-control" formControlName="emailAddress"
-                            placeholder="your.email@example.com" id="emailAddress" name="emailAddress">
+                            placeholder="your.email@example.com" id="emailAddress" name="emailAddress" [readonly]="true">
                         <div class="text-danger mt-1"
                             *ngIf="personalDetails.get('emailAddress')?.invalid && personalDetails.get('emailAddress')?.touched">
                             <span *ngIf="personalDetails.get('emailAddress')?.errors?.['required']">This field is

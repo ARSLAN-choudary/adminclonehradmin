@@ -1,78 +1,185 @@
 <div class="account-page bg-light">
     <div class="main-wrapper">
-        <div class="px-3">
-            <div class="row vh-100 g-0 py-3" >
-
-                <div class="col-lg-7 d-flex flex-column align-items-center justify-content-between ">
-
-                    <!-- TERMS CARD -->
-                    <div class="d-flex flex-column flex-grow-1 w-100">
-                        <div class="border-0 rounded-4 p-4 mx-auto shadow-sm bg-white" style="max-width: 420px;">
-
-                            <h3 class="h5 fw-bold text-primary text-center mb-3">Terms & Conditions</h3>
-                            <p class="text-muted small text-center mb-4">
-                                You must agree to all terms before continuing.
-                            </p>
-
-                            <!-- SCROLLABLE TERMS -->
-                            <div style=" overflow-y: auto;" class="mb-3 pe-2">
-
-                                <div class="form-check mb-3 custom-check">
-                                    <input type="checkbox" class="form-check-input" id="term1" [(ngModel)]="term1">
-                                    <label class="form-check-label" for="term1">
-                                        I confirm that all information provided is accurate and truthful.
-                                    </label>
-                                </div>
-
-                                <div class="form-check mb-3 custom-check">
-                                    <input type="checkbox" class="form-check-input" id="term2" [(ngModel)]="term2">
-                                    <label class="form-check-label" for="term2">
-                                        I understand that false documents may result in rejection.
-                                    </label>
-                                </div>
-
-                                <div class="form-check mb-3 custom-check">
-                                    <input type="checkbox" class="form-check-input" id="term3" [(ngModel)]="term3">
-                                    <label class="form-check-label" for="term3">
-                                        I consent to the processing of my data for application review.
-                                    </label>
-                                </div>
-
-                                <div class="form-check mb-3 custom-check">
-                                    <input type="checkbox" class="form-check-input" id="term4" [(ngModel)]="term4">
-                                    <label class="form-check-label" for="term4">
-                                        I accept the privacy policy and agree to the terms of service.
-                                    </label>
-                                </div>
-
-                                <!-- NEW CONDITION -->
-                                <div class="form-check mb-3 custom-check">
-                                    <input type="checkbox" class="form-check-input" id="term5" [(ngModel)]="term5">
-                                    <label class="form-check-label" for="term5">
-                                        I acknowledge that additional verification may be required, and I will provide
-                                        any requested documents.
-                                    </label>
-                                </div>
-
-                            </div>
-
-
-                            <!-- BUTTONS -->
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <button class="btn btn-outline-secondary" (click)="goBack()">Back</button>
-
-                                <button class="btn btn-primary" [disabled]="!allChecked()" (click)="agreeAndContinue()">
-                                    Agree & Continue
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
+      <div class="px-3">
+        <div class="row vh-100 g-0 py-3">
+          <!-- LEFT SIDE -->
+          <div class="col-lg-7 d-flex flex-column align-items-center justify-content-between">
+            <!-- TERMS CARD -->
+            <div class="d-flex flex-column flex-grow-1 w-100">
+              <div
+                class="border-0 rounded-4 p-4 mx-auto shadow-sm bg-white"
+                style="max-width: 420px;"
+              >
+                <h3 class="h5 fw-bold text-primary text-center mb-3">
+                  Terms & Conditions
+                </h3>
+                <p class="text-muted small text-center mb-4">
+                  You must agree to all terms before continuing.
+                </p>
+  
+                <!-- SCROLLABLE TERMS -->
+                <div style="max-height: 260px; overflow-y: auto;" class="mb-3 pe-2">
+  
+                  <div class="form-check mb-3 custom-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="term1"
+                      [checked]="term1"
+                      (click)="onTermClick('term1', $event)"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="term1"
+                    >
+                      I confirm that all information provided is accurate and truthful.
+                    </label>
+                  </div>
+  
+                  <div class="form-check mb-3 custom-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="term2"
+                      [checked]="term2"
+                      (click)="onTermClick('term2', $event)"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="term2"
+                    >
+                      I understand that false documents may result in rejection.
+                    </label>
+                  </div>
+  
+                  <div class="form-check mb-3 custom-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="term3"
+                      [checked]="term3"
+                      (click)="onTermClick('term3', $event)"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="term3"
+                    >
+                      I consent to the processing of my data for application review.
+                    </label>
+                  </div>
+  
+                  <div class="form-check mb-3 custom-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="term4"
+                      [checked]="term4"
+                      (click)="onTermClick('term4', $event)"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="term4"
+                    >
+                      I accept the privacy policy and agree to the terms of service.
+                    </label>
+                  </div>
+  
+                  <div class="form-check mb-3 custom-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="term5"
+                      [checked]="term5"
+                      (click)="onTermClick('term5', $event)"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="term5"
+                    >
+                      I acknowledge that additional verification may be required, and I will
+                      provide any requested documents.
+                    </label>
+                  </div>
+  
+                  <!-- NDA -->
+                  <div class="form-check mb-3 custom-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="term6"
+                      [checked]="term6"
+                      (click)="onTermClick('term6', $event)"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="term6"
+                    >
+                      I agree to the Non-Disclosure Agreement (NDA) regarding confidential
+                      information.
+                    </label>
+                  </div>
                 </div>
-
-                <div class="col-lg-5 account-bg-06 d-none d-lg-block "></div>
-
+  
+                <!-- BUTTONS -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <button class="btn btn-outline-secondary" (click)="goBack()">Back</button>
+  
+                  <button
+                    class="btn btn-primary"
+                    [disabled]="!allChecked()"
+                    (click)="agreeAndContinue()"
+                  >
+                    Agree & Continue
+                  </button>
+                </div>
+              </div>
             </div>
+          </div>
+  
+          <!-- RIGHT SIDE ILLUSTRATION -->
+          <div class="col-lg-5 account-bg-06 d-none d-lg-block"></div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+  
+  <!-- MODAL (opens when user clicks a term checkbox) -->
+  <div class="custom-modal-backdrop" *ngIf="activeTermKey as key">
+    <div class="custom-modal">
+      <div class="custom-modal-header">
+        <h5 class="mb-0">
+          {{ termsContent[key].title }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="closeModal()"
+        ></button>
+      </div>
+  
+      <div class="custom-modal-body">
+        <p class="mb-0">
+          {{ termsContent[key].detail }}
+        </p>
+      </div>
+  
+      <div class="custom-modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="closeModal()"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="agreeCurrentTerm()"
+        >
+          I Agree
+        </button>
+      </div>
+    </div>
+  </div>
+  
