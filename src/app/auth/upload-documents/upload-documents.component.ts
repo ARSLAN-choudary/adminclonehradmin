@@ -96,7 +96,7 @@ export class UploadDocumentsComponent implements OnInit {
       }
     : {
         width: { ideal: 480 },
-        height: { ideal: 640 },
+        height: { ideal: 500 },
         facingMode: { ideal: "environment" },
       };
   constructor(
