@@ -18,6 +18,7 @@ import { ToggleService } from "../../Services/toggle.service";
 })
 export class AppRegisterComponent implements OnInit {
   // --- Signals ---
+  appId: any;
   country = signal<string>("");
   isLoading: boolean = false;
   position = signal<string>("");
@@ -48,10 +49,12 @@ export class AppRegisterComponent implements OnInit {
 
   constructor(
     private router: Router,
+
     private route: ActivatedRoute,
     private authService: AuthService,
     private http: HttpClient,
-    private fbService: FirebaseStoreService,
+    private firebaseStore: FirebaseStoreService,
+
     private toggle: ToggleService
   ) {}
 
@@ -64,9 +67,6 @@ export class AppRegisterComponent implements OnInit {
       this.fcmToken = params["fcmToken"] || "";
     });
 
-    console.log("fcm", this.fcmToken);
-    console.log("DID", this.deviceId);
-
     this.detectUserCountry();
   }
 
@@ -77,7 +77,6 @@ export class AppRegisterComponent implements OnInit {
         const countryName = data.country;
         this.country.set(countryName);
         this.getCountryList(countryName);
-        console.log("countryName", countryName);
       },
       error: (err) => console.error("❌ Failed to detect country:", err),
     });
@@ -91,7 +90,6 @@ export class AppRegisterComponent implements OnInit {
       next: (res: any) => {
         if (res.data[0]?.positions) {
           this.countryPositions = res.data[0]?.positions;
-          console.log("this.countryPositions", this.countryPositions);
         } else {
           this.noPositionAvailable = res.message;
         }
@@ -116,6 +114,16 @@ export class AppRegisterComponent implements OnInit {
     this.email.set(event.target.value);
   }
 
+  //   {
+  //     "status": "success",
+  //     "message": "Email already registered",
+  //     "data": {
+  //         "appId": "691f4f8842f9b33f48fbe108",
+  //         "email": "sajihi4999@bablace.com",
+  //         "status": "active",
+  //         "role": "USER"
+  //     }
+  // }
   // --- Send OTP ---
   sendOtp() {
     if (!this.email()) return;
@@ -135,15 +143,114 @@ export class AppRegisterComponent implements OnInit {
       next: async (res: any) => {
         this.loading.set(false);
         localStorage.setItem("email", this.email());
-
-        // ✅ Forward "from=app" param if it exists
-        const queryParams: any = { email: this.email() };
-        if (this.fromApp) queryParams.from = "app";
-        if (this.deviceId) queryParams.deviceId = this.deviceId;
-        if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
-        this.router.navigate(["/two-step-verification"], {
-          queryParams,
-        });
+        if (res.data.appId) {
+          localStorage.setItem("appId", res.data.appId);
+        }
+        if (
+          res.status === "success" &&
+          res.data.appId &&
+          res.data.status === "active" &&
+          res.data.role === "USER" &&
+          res.data.documentsRejected === false &&
+          res.data.nda === true &&
+          res.data.termsAndCondition === true
+        ) {
+          this.appId = res.data.appId;
+          this.updateUrl();
+          const queryParams: any = { email: this.email() };
+          if (this.fromApp) queryParams.from = "app";
+          if (this.deviceId) queryParams.deviceId = this.deviceId;
+          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+          if (this.appId) queryParams.appId = this.appId;
+          this.router.navigate(["/waiting-for-application-submission"], {
+            queryParams,
+          });
+        } else if (
+          res.status === "success" &&
+          res.data.appId &&
+          res.data.status === "active" &&
+          res.data.role === "USER" &&
+          res.data.documentsRejected === false &&
+          res.data.nda === false &&
+          res.data.termsAndCondition === false
+        ) {
+          this.appId = res.data.appId;
+          this.updateUrl();
+          const queryParams: any = { email: this.email() };
+          if (this.fromApp) queryParams.from = "app";
+          if (this.deviceId) queryParams.deviceId = this.deviceId;
+          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+          if (this.appId) queryParams.appId = this.appId;
+          this.router.navigate(["/upload-docs"], {
+            queryParams,
+          });
+        } else if (
+          res.status === "success" &&
+          res.data.appId &&
+          res.data.status === "active" &&
+          res.data.role === "USER" &&
+          res.data.documentsRejected === true &&
+          res.data.nda === true &&
+          res.data.termsAndCondition === true
+        ) {
+          this.appId = res.data.appId;
+          this.updateUrl();
+          const queryParams: any = { email: this.email() };
+          if (this.fromApp) queryParams.from = "app";
+          if (this.deviceId) queryParams.deviceId = this.deviceId;
+          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+          if (this.appId) queryParams.appId = this.appId;
+          this.router.navigate(["/resubmit-docs"], {
+            queryParams,
+          });
+        } else if (
+          res.status === "success" &&
+          res.data.appId &&
+          res.data.status === "active" &&
+          res.data.role === "TRAINEE" &&
+          res.data.documentsRejected === true &&
+          res.data.nda === true &&
+          res.data.termsAndCondition === true
+        ) {
+          this.appId = res.data.appId;
+          this.updateUrl();
+          const queryParams: any = { email: this.email() };
+          if (this.fromApp) queryParams.from = "app";
+          if (this.deviceId) queryParams.deviceId = this.deviceId;
+          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+          if (this.appId) queryParams.appId = this.appId;
+          this.router.navigate(["/resubmit-docs"], {
+            queryParams,
+          });
+        } else if (
+          res.status === "success" &&
+          res.data.appId &&
+          res.data.status === "active" &&
+          res.data.role === "TRAINEE" &&
+          res.data.documentsRejected === false &&
+          res.data.nda === true &&
+          res.data.termsAndCondition === true
+        ) {
+          this.appId = res.data.appId;
+          this.updateUrl();
+          const queryParams: any = { email: this.email() };
+          if (this.fromApp) queryParams.from = "app";
+          if (this.deviceId) queryParams.deviceId = this.deviceId;
+          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+          if (this.appId) queryParams.appId = this.appId;
+          this.router.navigate(["/trainee-dashboard"], {
+            queryParams,
+          });
+        } else {
+          // ✅ Forward "from=app" param if it exists
+          const queryParams: any = { email: this.email() };
+          if (this.fromApp) queryParams.from = "app";
+          if (this.deviceId) queryParams.deviceId = this.deviceId;
+          if (this.fcmToken) queryParams.fcmToken = this.fcmToken;
+          this.router.navigate(["/two-step-verification"], {
+            queryParams,
+          });
+        }
 
         // if (this.deviceId) {
         //   const currentUrl = window.location.href;
@@ -163,7 +270,6 @@ export class AppRegisterComponent implements OnInit {
       },
       error: (err: any) => {
         this.loading.set(false);
-        console.log(err);
         if (err.error.data.status === "active") {
           if (err.error.data.role === "TRAINEE") {
             this.router.navigate(["/trainee-dashboard"]);
@@ -204,5 +310,11 @@ export class AppRegisterComponent implements OnInit {
         this.showAppDownloadDialog.set(true);
       }
     }, 1000);
+  }
+  private updateUrl() {
+    if (this.appId) {
+      const currentUrl = window.location.href;
+      this.firebaseStore.updateUrlByAppId(this.appId, currentUrl);
+    }
   }
 }

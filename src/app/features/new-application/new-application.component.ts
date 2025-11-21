@@ -125,12 +125,12 @@ export class NewApplicationComponent implements OnInit {
     numeric: true,
     sensitivity: "base",
   });
-  
+
   @ViewChild("generateContractCanvas", { static: true })
   generateContractCanvas!: ElementRef<HTMLElement>;
-
+  applicantRole: string = "USER";
   isGenerating = false;
-  currentApplicationId: string = '';
+  currentApplicationId: string = "";
 
   // Store contracts from backend
   contracts: any[] = [];
@@ -266,7 +266,6 @@ export class NewApplicationComponent implements OnInit {
   }
 
   ngOnInit() {
-   
     this.addNewApplicationForm = this.fb.group({
       company: [null, Validators.required],
       applicationType: [null, Validators.required],
@@ -392,8 +391,6 @@ export class NewApplicationComponent implements OnInit {
     return item._id ?? item.id ?? index;
   }
 
-
-
   onDateRangeChange(event: { startDate: Date; endDate: Date }) {
     this.startDate = this.formatDate(event.startDate);
     this.endDate = this.formatDate(event.endDate);
@@ -512,7 +509,7 @@ export class NewApplicationComponent implements OnInit {
       this.renderer.appendChild(document.body, this.backdropEl);
     }
   }
- 
+
   closeEditApplication() {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
@@ -1064,6 +1061,7 @@ export class NewApplicationComponent implements OnInit {
     this.backend.getApplicationById(user._id).subscribe({
       next: (apiRes: any) => {
         const userData = apiRes.data;
+        this.applicantRole = userData.role;
         this.currentUserDocs = Object.entries(userData.documents)
           .filter(([key, value]: any) => {
             return key !== "additional" && value.url && value.url.trim() !== "";
@@ -1100,7 +1098,7 @@ export class NewApplicationComponent implements OnInit {
         // MAP OTHER APPLICATION SECTIONS
 
         this.docData = this.mapApiResponseToDocData(userData);
-        console.log(this.docData);
+        // console.log(this.docData);
       },
       error: (err) => {
         this.toastr.error("Failed to load user details");
@@ -1351,6 +1349,7 @@ export class NewApplicationComponent implements OnInit {
       document.activeElement.blur();
     }
 
+    this.applicantRole = "USER";
     const panel = this.docsCanvas.nativeElement;
 
     this.renderer.removeClass(panel, "show");
@@ -1490,8 +1489,11 @@ export class NewApplicationComponent implements OnInit {
 
     this.backend.updateUser(payload).subscribe({
       next: (res: any) => {
+        console.log(res);
+
         if (res?.status === "success" || res?.success === true) {
           this.isTraineeApproved = true;
+          this.applicantRole = res.role;
 
           this.toastr.success(res.message || "Status updated");
           this.getTableData(this.skip, this.pageSize);
@@ -1612,7 +1614,8 @@ export class NewApplicationComponent implements OnInit {
     this.showRejectModal = false;
     this.selectedReason = "";
     this.customReason = "";
-  } gotoLink() {
+  }
+  gotoLink() {
     const baseUrl = window.location.origin;
     window.open(`${baseUrl}/userDetails`, "_blank");
   }
@@ -1744,22 +1747,19 @@ export class NewApplicationComponent implements OnInit {
   //   },
   // ];
 
-
-
-  // contract  
-
+  // contract
 
   // Helper methods to get specific contracts
   get traineeContract(): any {
-    return this.contracts.find(contract => contract.name === 'trainee');
+    return this.contracts.find((contract) => contract.name === "trainee");
   }
 
   get probationContract(): any {
-    return this.contracts.find(contract => contract.name === 'probation');
+    return this.contracts.find((contract) => contract.name === "probation");
   }
 
   get jobContract(): any {
-    return this.contracts.find(contract => contract.name === 'job');
+    return this.contracts.find((contract) => contract.name === "job");
   }
 
   get hasTraineeContract(): boolean {
@@ -1782,56 +1782,61 @@ export class NewApplicationComponent implements OnInit {
   loadContracts(applicationId: string) {
     this.backendService.getUploadContract(applicationId).subscribe({
       next: (res: any) => {
-        if (res.status === 'success') {
+        if (res.status === "success") {
           this.contracts = res.data || [];
-          console.log('Loaded contracts:', this.contracts);
+          console.log("Loaded contracts:", this.contracts);
         } else {
           this.contracts = [];
-          console.error('Failed to load contracts:', res.message);
+          console.error("Failed to load contracts:", res.message);
         }
       },
       error: (error) => {
-        console.error('Error loading contracts:', error);
+        console.error("Error loading contracts:", error);
         this.contracts = [];
-      }
+      },
     });
   }
 
   // Generate Trainee Contract
   async generateTraineeContract() {
     if (!this.currentApplicationId) {
-      console.error('No application ID selected');
+      console.error("No application ID selected");
       return;
     }
 
     this.isGenerating = true;
     try {
       const contractData = await this.generateContractForm("trainee");
-      const fileName = `Trainee_Contract_${this.employeeData.name}_${Date.now()}.pdf`;
+      const fileName = `Trainee_Contract_${
+        this.employeeData.name
+      }_${Date.now()}.pdf`;
 
       // Create form data for file upload
       const formData = new FormData();
-      formData.append('applicationId', this.currentApplicationId);
+      formData.append("applicationId", this.currentApplicationId);
 
       // Generate PDF and convert to blob
-      const pdfBlob = await this.generateContractPDF(contractData, fileName, 'trainee');
-      formData.append('trainee', pdfBlob, fileName);
+      const pdfBlob = await this.generateContractPDF(
+        contractData,
+        fileName,
+        "trainee"
+      );
+      formData.append("trainee", pdfBlob, fileName);
 
       // Upload to backend
       this.backendService.uploadContract(formData).subscribe({
         next: (res: any) => {
-          console.log('Trainee contract uploaded successfully:', res);
+          console.log("Trainee contract uploaded successfully:", res);
           // Reload contracts to get updated list
           this.loadContracts(this.currentApplicationId);
         },
         error: (error) => {
-          console.error('Error uploading trainee contract:', error);
+          console.error("Error uploading trainee contract:", error);
         },
         complete: () => {
           this.isGenerating = false;
-        }
+        },
       });
-
     } catch (error) {
       console.error("Error generating trainee contract:", error);
       this.isGenerating = false;
@@ -1841,34 +1846,39 @@ export class NewApplicationComponent implements OnInit {
   // Generate Probation Contract
   async generateProbationContract() {
     if (!this.currentApplicationId) {
-      console.error('No application ID selected');
+      console.error("No application ID selected");
       return;
     }
 
     this.isGenerating = true;
     try {
       const contractData = await this.generateContractForm("probation");
-      const fileName = `Probation_Contract_${this.employeeData.name}_${Date.now()}.pdf`;
+      const fileName = `Probation_Contract_${
+        this.employeeData.name
+      }_${Date.now()}.pdf`;
 
       const formData = new FormData();
-      formData.append('applicationId', this.currentApplicationId);
+      formData.append("applicationId", this.currentApplicationId);
 
-      const pdfBlob = await this.generateContractPDF(contractData, fileName, 'probation');
-      formData.append('probation', pdfBlob, fileName);
+      const pdfBlob = await this.generateContractPDF(
+        contractData,
+        fileName,
+        "probation"
+      );
+      formData.append("probation", pdfBlob, fileName);
 
       this.backendService.uploadContract(formData).subscribe({
         next: (res: any) => {
-          console.log('Probation contract uploaded successfully:', res);
+          console.log("Probation contract uploaded successfully:", res);
           this.loadContracts(this.currentApplicationId);
         },
         error: (error) => {
-          console.error('Error uploading probation contract:', error);
+          console.error("Error uploading probation contract:", error);
         },
         complete: () => {
           this.isGenerating = false;
-        }
+        },
       });
-
     } catch (error) {
       console.error("Error generating probation contract:", error);
       this.isGenerating = false;
@@ -1878,34 +1888,39 @@ export class NewApplicationComponent implements OnInit {
   // Generate Job Contract
   async generateJobContract() {
     if (!this.currentApplicationId) {
-      console.error('No application ID selected');
+      console.error("No application ID selected");
       return;
     }
 
     this.isGenerating = true;
     try {
       const contractData = await this.generateContractForm("job");
-      const fileName = `Job_Contract_${this.employeeData.name}_${Date.now()}.pdf`;
+      const fileName = `Job_Contract_${
+        this.employeeData.name
+      }_${Date.now()}.pdf`;
 
       const formData = new FormData();
-      formData.append('applicationId', this.currentApplicationId);
+      formData.append("applicationId", this.currentApplicationId);
 
-      const pdfBlob = await this.generateContractPDF(contractData, fileName, 'job');
-      formData.append('job', pdfBlob, fileName);
+      const pdfBlob = await this.generateContractPDF(
+        contractData,
+        fileName,
+        "job"
+      );
+      formData.append("job", pdfBlob, fileName);
 
       this.backendService.uploadContract(formData).subscribe({
         next: (res: any) => {
-          console.log('Job contract uploaded successfully:', res);
+          console.log("Job contract uploaded successfully:", res);
           this.loadContracts(this.currentApplicationId);
         },
         error: (error) => {
-          console.error('Error uploading job contract:', error);
+          console.error("Error uploading job contract:", error);
         },
         complete: () => {
           this.isGenerating = false;
-        }
+        },
       });
-
     } catch (error) {
       console.error("Error generating job contract:", error);
       this.isGenerating = false;
@@ -1913,7 +1928,11 @@ export class NewApplicationComponent implements OnInit {
   }
 
   // Generate PDF and return as Blob
-  private generateContractPDF(contractData: any, fileName: string, contractType: string): Promise<Blob> {
+  private generateContractPDF(
+    contractData: any,
+    fileName: string,
+    contractType: string
+  ): Promise<Blob> {
     return new Promise((resolve) => {
       const doc = new jsPDF("p", "pt", "a4");
       const pageWidth = doc.internal.pageSize.getWidth();
@@ -1942,7 +1961,11 @@ export class NewApplicationComponent implements OnInit {
       yPosition += 20;
       doc.text(`Position: ${this.employeeData.position}`, margin, yPosition);
       yPosition += 20;
-      doc.text(`Department: ${this.employeeData.department}`, margin, yPosition);
+      doc.text(
+        `Department: ${this.employeeData.department}`,
+        margin,
+        yPosition
+      );
       yPosition += 20;
       doc.text(
         `Start Date: ${this.employeeData.startDate.toLocaleDateString()}`,
@@ -1993,7 +2016,7 @@ export class NewApplicationComponent implements OnInit {
       );
 
       // Convert to Blob
-      const pdfBlob = doc.output('blob');
+      const pdfBlob = doc.output("blob");
       resolve(pdfBlob);
     });
   }
@@ -2016,9 +2039,9 @@ export class NewApplicationComponent implements OnInit {
 
     if (contract && contract.url) {
       // Download from backend URL
-      window.open(contract.url, '_blank');
+      window.open(contract.url, "_blank");
     } else {
-      console.warn('Contract not found or no URL available');
+      console.warn("Contract not found or no URL available");
     }
   }
 
@@ -2046,11 +2069,26 @@ export class NewApplicationComponent implements OnInit {
   private getContractTerms(contractType: string): string[] {
     switch (contractType) {
       case "trainee":
-        return ["Training period: 6 months", "Monthly stipend provided", "Mentorship program included", "Performance evaluation every 2 months"];
+        return [
+          "Training period: 6 months",
+          "Monthly stipend provided",
+          "Mentorship program included",
+          "Performance evaluation every 2 months",
+        ];
       case "probation":
-        return ["Probation period: 3 months", "Full salary during probation", "Performance review at end of period", "Possible conversion to permanent position"];
+        return [
+          "Probation period: 3 months",
+          "Full salary during probation",
+          "Performance review at end of period",
+          "Possible conversion to permanent position",
+        ];
       case "job":
-        return ["Permanent employment", "Full benefits package", "Annual performance review", "Standard company policies apply"];
+        return [
+          "Permanent employment",
+          "Full benefits package",
+          "Annual performance review",
+          "Standard company policies apply",
+        ];
       default:
         return [];
     }
@@ -2058,21 +2096,34 @@ export class NewApplicationComponent implements OnInit {
 
   private getContractDuration(contractType: string): string {
     switch (contractType) {
-      case "trainee": return "6 months";
-      case "probation": return "3 months";
-      case "job": return "Permanent";
-      default: return "N/A";
+      case "trainee":
+        return "6 months";
+      case "probation":
+        return "3 months";
+      case "job":
+        return "Permanent";
+      default:
+        return "N/A";
     }
   }
 
   private getContractConditions(contractType: string): string[] {
     switch (contractType) {
       case "trainee":
-        return ["Completion certificate upon successful training", "Possible job offer after training"];
+        return [
+          "Completion certificate upon successful training",
+          "Possible job offer after training",
+        ];
       case "probation":
-        return ["Employment subject to successful probation completion", "Standard notice period applies"];
+        return [
+          "Employment subject to successful probation completion",
+          "Standard notice period applies",
+        ];
       case "job":
-        return ["Standard notice period: 30 days", "Confidentiality agreement applies"];
+        return [
+          "Standard notice period: 30 days",
+          "Confidentiality agreement applies",
+        ];
       default:
         return [];
     }
@@ -2080,10 +2131,14 @@ export class NewApplicationComponent implements OnInit {
 
   private getContractTitle(contractType: string): string {
     switch (contractType) {
-      case "trainee": return "TRAINEE EMPLOYMENT CONTRACT";
-      case "probation": return "PROBATION EMPLOYMENT CONTRACT";
-      case "job": return "EMPLOYMENT CONTRACT";
-      default: return "CONTRACT";
+      case "trainee":
+        return "TRAINEE EMPLOYMENT CONTRACT";
+      case "probation":
+        return "PROBATION EMPLOYMENT CONTRACT";
+      case "job":
+        return "EMPLOYMENT CONTRACT";
+      default:
+        return "CONTRACT";
     }
   }
 
@@ -2106,11 +2161,11 @@ export class NewApplicationComponent implements OnInit {
     this.renderer.addClass(this.backdropEl, "show");
 
     if (this.backdropEl) {
-      this.backdropEl.addEventListener("click", () => this.closeGenerateContractModal());
+      this.backdropEl.addEventListener("click", () =>
+        this.closeGenerateContractModal()
+      );
       this.renderer.appendChild(document.body, this.backdropEl);
     }
-
-
   }
 
   closeGenerateContractModal() {
@@ -2132,9 +2187,11 @@ export class NewApplicationComponent implements OnInit {
           this.renderer.removeChild(document.body, this.backdropEl);
           this.backdropEl = undefined;
         }
-        document.querySelectorAll(".offcanvas-backdrop.fade.show").forEach((backdrop) =>
-          this.renderer.removeChild(document.body, backdrop)
-        );
+        document
+          .querySelectorAll(".offcanvas-backdrop.fade.show")
+          .forEach((backdrop) =>
+            this.renderer.removeChild(document.body, backdrop)
+          );
         this.renderer.removeStyle(panel, "transform");
 
         panel.removeEventListener("transitionend", onTransition);
