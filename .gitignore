@@ -9,7 +9,6 @@ coverage/
 dist/template
 .angular/cache/19.2.15/template
 # IDEs
-.vscode/
 .idea/
 
 # Logs
@@ -24,3 +23,7 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
+branch_structure.json
