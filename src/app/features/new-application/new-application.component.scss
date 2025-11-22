@@ -76,6 +76,23 @@
   cursor: pointer;
 }
 
+.dropdown-toggle{
+  min-width: 216.98px !important;
+}
+ .dropdown-btn-custom {
+        display: flex;
+        align-items: center;
+        justify-content: center; /* text center */
+        position: relative;
+        padding-right: 2rem; /* right space for icon */
+    }
+
+    .dropdown-btn-custom::after {
+        position: absolute;
+        right: 0.75rem; /* icon right end */
+        top: 50%;
+        transform: translateY(-50%);
+    }
 .approve-btn {
   transition: background-color 0.2s ease, opacity 0.2s ease;
 }

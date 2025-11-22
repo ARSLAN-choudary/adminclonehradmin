@@ -1,6 +1,10 @@
 <!-- Sidebar -->
-<div class="sidebar" id="sidebar" (mouseover)="miniSideBarMouseHover('over')" (mouseout)="miniSideBarMouseHover('out')"
-    (focus)="miniSideBarMouseHover('over')" (blur)="miniSideBarMouseHover('out')" tabindex="0">
+<div class="sidebar" id="sidebar" 
+    (mouseover)="miniSideBarMouseHover('over')" 
+    (mouseout)="miniSideBarMouseHover('out')"
+    (focus)="miniSideBarMouseHover('over')" 
+    (blur)="miniSideBarMouseHover('out')" tabindex="0">
+
     <div class="sidebar-logo">
         <div>
             <!-- Logo Normal -->
@@ -18,6 +22,7 @@
                 <img src="/assets/img/largeLogo.png" alt="Logo">
             </a>
         </div>
+
         <button class="sidenav-toggle-btn btn border-0 p-0 active" id="toggle_btn" (click)="onToggleSidebar()">
             <i class="ti ti-arrow-bar-to-left"></i>
         </button>
@@ -34,19 +39,22 @@
                 <ul>
                     @for (mainTittle of side_bar_data; track mainTittle) {
                     <li class="menu-title">
-                        <span>{{ mainTittle.tittle }}</span>
+                        <span>{{ mainTittle.tittle }}jjhhj</span>
                     </li>
+
                     <li>
                         <ul>
                             @for (menu of mainTittle?.menu; track menu) {
+
                             @if (menu?.hasSubRoute === false) {
                             <li [class.active]="base === menu.base">
-                                <a [routerLink]="menu?.route" (click)="expandSubMenus(menu)"><i class="ti"
-                                        [class]="'ti-' + menu.icon"></i>
+                                <a [routerLink]="menu?.route" (click)="expandSubMenus(menu)">
+                                    <i class="ti" [class]="'ti-' + menu.icon"></i>
                                     <span>{{ menu?.menuValue }}</span>
                                 </a>
                             </li>
                             }
+
                             @if (menu.hasSubRoute === true) {
                             <li class="submenu">
                                 <a href="javascript:void(0)" (click)="expandSubMenus(menu)"
@@ -56,57 +64,76 @@
                                     <span>{{ menu.menuValue }}</span>
                                     <span class="menu-arrow"></span>
                                 </a>
-                                <ul [ngClass]=" menu.showSubRoute === true
-                                                ? 'd-block'
-                                                : 'd-none'
-                                            ">
+
+                                <ul [ngClass]=" menu.showSubRoute === true ? 'd-block' : 'd-none' ">
                                     @for (subMenus of menu.subMenus; track subMenus) {
                                     <li>
                                         <a [routerLink]="subMenus.route"
-                                            [class.active]="page===subMenus.base || base === subMenus.base"
-                                            (click)="close()">{{
-                                            subMenus.menuValue
-                                            }}</a>
+                                           [class.active]="page===subMenus.base || base === subMenus.base"
+                                           (click)="close()">
+                                            {{ subMenus.menuValue }}
+                                        </a>
                                     </li>
                                     }
                                 </ul>
                             </li>
                             }
+
                             @if (menu.hasSubRouteTwo === true) {
                             <li class="submenu">
                                 <a href="javascript:void(0);" (click)="openMenu(menu)"
                                     [ngClass]="{'subdrop' : openMenuItem === menu}"
-                                    [class.active]="base === menu.base"><i class="ti"
-                                        [class]="'ti-' + menu.icon"></i><span>
-                                        {{ menu.menuValue }}</span><span class="menu-arrow"></span></a>
+                                    [class.active]="base === menu.base">
+                                    <i class="ti" [class]="'ti-' + menu.icon"></i>
+                                    <span>{{ menu.menuValue }}</span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+
                                 <ul [ngClass]="openMenuItem === menu ? 'show-sub-menu' : 'hide-sub-menu'">
                                     @for (subMenus of menu.subMenus; track subMenus) {
+
                                     @if (subMenus.customSubmenuTwo === false) {
-                                    <li><a [routerLink]="subMenus.route" (click)="openSubmenuOne(subMenus)"
-                                            [class.active]="page===subMenus.base">{{ subMenus.menuValue }}</a>
+                                    <li>
+                                        <a [routerLink]="subMenus.route" 
+                                           (click)="openSubmenuOne(subMenus)"
+                                           [class.active]="page===subMenus.base">
+                                            {{ subMenus.menuValue }}
+                                        </a>
                                     </li>
                                     }
+
                                     @if (subMenus.customSubmenuTwo === true) {
                                     <li class="submenu submenu-two">
-                                        <a href="javascript:void(0);" [class.active]=""
-                                            (click)="openSubmenuOne(subMenus)"
-                                            [ngClass]="{'subdrop' : openSubmenuOneItem === subMenus}">
+                                        <a href="javascript:void(0);" 
+                                           (click)="openSubmenuOne(subMenus)"
+                                           [ngClass]="{'subdrop' : openSubmenuOneItem === subMenus}">
                                             {{ subMenus.menuValue }}
                                             <span class="menu-arrow inside-submenu"></span>
                                         </a>
-                                        <ul
-                                            [ngClass]="openSubmenuOneItem === subMenus ? 'show-sub-menu' : 'hide-sub-menu'">
+
+                                        <!-- SUBMENU TWO LIST START -->
+                                        <ul [ngClass]="openSubmenuOneItem === subMenus ? 'show-sub-menu' : 'hide-sub-menu'">
                                             @for (subMenuTwo of subMenus.subMenusTwo; track subMenuTwo) {
                                             <li>
                                                 <a [routerLink]="subMenuTwo.route"
-                                                    [class.active]="page ===subMenuTwo.base">{{
-                                                    subMenuTwo.menuValue
-                                                    }} </a>
+                                                   [class.active]="page === subMenuTwo.base">
+                                                    {{ subMenuTwo.menuValue }}
+                                                </a>
                                             </li>
                                             }
+
+                                            <!-- ⭐ STATIC FIELD (ADDED) -->
+                                            <li>
+                                                <a href="javascript:void(0);" class="text-primary fw-semibold">
+                                                    Static Field
+                                                </a>
+                                            </li>
                                         </ul>
+                                        <!-- SUBMENU TWO LIST END -->
+
                                     </li>
                                     }
+
                                     }
                                 </ul>
                             </li>
@@ -117,7 +144,6 @@
                     </li>
 
                     }
-
 
                 </ul>
             </div>
