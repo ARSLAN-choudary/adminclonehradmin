@@ -1,14 +1,13 @@
-<div class="account-page bg-light">
-    <div class="main-wrapper">
-      <div class="px-3">
-        <div class="row vh-100 g-0 py-3">
+<div class="account-page bg-light centeralized">
+    <div class="main-wrapper centeralized">
+      <div class="px-3 centeralized">
+        <div class="row main-table-row g-0 py-3">
           <!-- LEFT SIDE -->
-          <div class="col-lg-7 d-flex flex-column align-items-center justify-content-between">
+          <div class="col-lg-7 d-flex flex-column align-items-center justify-content-center">
             <!-- TERMS CARD -->
-            <div class="d-flex flex-column flex-grow-1 w-100">
+            <div class="d-flex flex-column flex-grow-1 w-100 justify-content-center">
               <div
-                class="border-0 rounded-4 p-4 mx-auto shadow-sm bg-white"
-                style="max-width: 420px;"
+                class="border-0 rounded-4 p-3 mx-auto shadow-sm d-flex justify-content-center flex-column condition-table" 
               >
                 <h3 class="h5 fw-bold text-primary text-center mb-3">
                   Terms & Conditions
@@ -18,7 +17,7 @@
                 </p>
   
                 <!-- SCROLLABLE TERMS -->
-                <div style="max-height: 260px; overflow-y: auto;" class="mb-3 pe-2">
+                <div class="mb-3 pe-2 terms-scroll">
   
                   <div class="form-check mb-3 custom-check">
                     <input
@@ -121,7 +120,7 @@
                 </div>
   
                 <!-- BUTTONS -->
-                <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="d-flex justify-content-between align-items-center">
                   <button class="btn btn-outline-secondary" (click)="goBack()">Back</button>
   
                   <button
